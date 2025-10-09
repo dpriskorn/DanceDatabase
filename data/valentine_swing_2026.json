@@ -1,0 +1,34 @@
+{
+  "id": "valentine-swing-2026",
+  "dance_type_qid": "Q1057898",
+  "start_time": "2026-02-13T00:00:00Z",
+  "end_time": "2026-02-16T00:00:00Z",
+  "registration_opens": null,
+  "registration_closes": null,
+  "fully_booked": false,
+  "dance_qid": "Q1738733",
+  "organizer": {
+    "qid": "",
+    "description": "Leif Carlsson and Susanne Karlsson"
+  },
+  "label": {
+    "sv": "Valentine Swing 2026",
+    "en": "Valentine Swing 2026"
+  },
+  "description": {
+    "sv": "Valentine Swing är ett dansläger för West Coast Swing som hålls 13–16 februari 2026 på Johannesbergs Slott, Rimbo. Inkluderar workshops, fester och tävlingar med olika prisnivåer (early, normal, late bird).",
+    "en": "Valentine Swing is a West Coast Swing dance camp held on February 13–16, 2026, at Johannesbergs Slott, Rimbo. Includes workshops, parties, and competitions with various pricing tiers (early, normal, late bird)."
+  },
+  "coordinates": {
+    "lat": 59.7361,
+    "lon": 18.1903
+  },
+  "venue_qid": "Q105239271",
+  "facebook_link": "https://www.facebook.com/valentineswing",
+  "website": "https://valentineswing.se",
+  "location": "Johannesbergs Slott 1, 762 95 Rimbo, Sweden",
+  "image": "https://valentineswing.se/images/johannesbergs_slott.jpg",
+  "price_early": "Intern.: 1600 SEK (Nordic: SOLD OUT)",
+  "price_normal": "Intern.: 1800 SEK (Nordic: SOLD OUT)",
+  "price_late": "Intern.: 2000 SEK, Nordic: 2100 SEK"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "rock_the_barn_2026",
+  "dance_type_qid": "Q1057898",
+  "start_time": "2026-07-17T00:00:00Z",
+  "end_time": "2026-07-20T23:59:59Z",
+  "registration_opens": null,
+  "registration_closes": null,
+  "organizer": {
+    "qid": "",
+    "description": "West Coast Swing Umeå"
+  },
+  "label": {
+    "en": "Rock the Barn 2026",
+    "sv": "Rock the Barn 2026"
+  },
+  "description": {
+    "en": "Workshops all day and social dancing all night in Northern Sweden. Opportunity to compete for WSDC points. Accommodation available on-site or nearby school, nearest hotels in Umeå. Bring warm and cool clothes for temperatures between 7°C and 25°C.",
+    "sv": "Vi kommer att dansa på workshops hela dagen och dansa socialt hela natten i norra Sverige. Möjlighet att tävla om WSDC-poäng. Boende finns på plats eller i närliggande skola, närmaste hotell finns i Umeå. Ta med både varma och svala kläder för temperaturer mellan 7°C och 25°C."
+  },
+  "coordinates": {
+    "lat": 63.736111,
+    "lon": 18.190278
+  },
+  "venue_qid": "Q136465660",
+  "facebook_link": "",
+  "website": "https://rockthebarn.se/",
+  "location": "Gräsmyr Loge, Fällan 29, 91495 Gräsmyr, Sweden",
+  "image": "",
+  "price_early": "",
+  "price_normal": "",
+  "price_late": "",
+  "weekly_recurring": false
+}

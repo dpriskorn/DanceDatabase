@@ -1,0 +1,59 @@
+{
+  "id": "community_swing_2025",
+  "dance_type_qid": "Q1057898",
+  "start_time": "2025-11-15T00:00:00Z",
+  "end_time": "2025-11-16T23:59:59Z",
+  "registration_opens": "2025-09-24T16:00:00Z",
+  "registration_closes": "2025-11-14T16:00:00Z",
+  "organizer": {
+    "qid": "",
+    "description": "WCS Umeå"
+  },
+  "label": {
+    "sv": "Community Swing 2025",
+    "en": "Community Swing 2025"
+  },
+  "description": {
+    "sv": "Välkomna till WCS Umeås första Community Swing-helg! Helgen är fylld med workshops med alla våra instruktörer. Lördagkväll blir det socialdans. Helgen är öppen för alla medlemmar och är gratis.",
+    "en": "Welcome to WCS Umeå's first Community Swing weekend. The weekend is filled with workshops with our instructors. Saturday evening features a social dance. Open to all members and free of charge."
+  },
+  "coordinates": {
+    "lat": 63.8280,
+    "lng": 20.2590
+  },
+  "venue_qid": "Q10497392",
+  "event_series_qid": "",
+  "facebook_link": "",
+  "website": "https://www.wcs-umea.se",
+  "location": "Umeå Folkets Hus, Umeå, Sweden",
+  "image": "",
+  "price_early": "Free for members",
+  "price_normal": "",
+  "price_late": "",
+  "schedule": {
+    "days": [
+      {
+        "date": "2025-11-15T00:00:00Z",
+        "items": [
+          {"name": "Workshop", "start_time": "2025-11-15T10:00:00Z", "end_time": "2025-11-15T11:00:00Z"},
+          {"name": "Workshop", "start_time": "2025-11-15T11:15:00Z", "end_time": "2025-11-15T12:15:00Z"},
+          {"name": "Lunch break", "start_time": "2025-11-15T12:15:00Z", "end_time": "2025-11-15T13:45:00Z"},
+          {"name": "Workshop", "start_time": "2025-11-15T13:45:00Z", "end_time": "2025-11-15T14:45:00Z"},
+          {"name": "Workshop", "start_time": "2025-11-15T15:00:00Z", "end_time": "2025-11-15T16:00:00Z"},
+          {"name": "Social dance", "start_time": "2025-11-15T19:00:00Z", "end_time": "2025-11-15T22:00:00Z"}
+        ]
+      },
+      {
+        "date": "2025-11-16T00:00:00Z",
+        "items": [
+          {"name": "Workshop", "start_time": "2025-11-16T10:00:00Z", "end_time": "2025-11-16T11:00:00Z"},
+          {"name": "Workshop", "start_time": "2025-11-16T11:15:00Z", "end_time": "2025-11-16T12:15:00Z"},
+          {"name": "Lunch break", "start_time": "2025-11-16T12:15:00Z", "end_time": "2025-11-16T13:45:00Z"},
+          {"name": "Workshop", "start_time": "2025-11-16T13:45:00Z", "end_time": "2025-11-16T14:45:00Z"},
+          {"name": "Workshop", "start_time": "2025-11-16T15:00:00Z", "end_time": "2025-11-16T16:00:00Z"},
+          {"name": "Mingle & Tea dance", "start_time": "2025-11-16T16:00:00Z", "end_time": "2025-11-16T18:00:00Z"}
+        ]
+      }
+    ]
+  }
+}

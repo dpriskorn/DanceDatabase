@@ -1,0 +1,34 @@
+{
+  "id": "dansveckan_2026",
+  "dance_type_qid": "Q808399",
+  "start_time": "2026-06-27T00:00:00Z",
+  "end_time": "2026-07-04T23:59:59Z",
+  "registration_opens": "2025-10-10T00:00:00Z",
+  "registration_closes": "2026-04-30T23:59:59Z",
+  "organizer": {
+    "qid": "Q10570784",
+    "description": "Lundegård Camping & Stugby"
+  },
+  "label": {
+    "sv": "Dansveckan 2026",
+    "en": "Dance Week 2026"
+  },
+  "description": {
+    "sv": "Dansveckan på Lundegård är sommarens stora dansfest. Logdansen på Lundegård har en anrik historia och idag är Dansveckan en av Sveriges mest välbesökta dansevenemang med 1-2 dansband per kväll.",
+    "en": "Dance Week at Lundegård is the big summer dance festival. The log dance at Lundegård has a long history, and today Dance Week is one of Sweden's most attended dance events with 1-2 dance bands per evening."
+  },
+  "coordinates": {
+    "lat": 55.7080,
+    "lng": 13.1860
+  },
+  "venue_qid": "Q10570784",
+  "event_series_qid": "Q10727272",
+  "facebook_link": "https://www.facebook.com/DansveckanLundegard",
+  "website": "https://www.lundegard.se",
+  "location": "Lundegård, Sweden",
+  "image": "",
+  "price_early": "10% deposit by 31 October",
+  "price_normal": "Final payment by 30 April",
+  "price_late": "",
+  "schedule": null
+}

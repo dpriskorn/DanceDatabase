@@ -29,3 +29,6 @@ It's not a website.
 2) Something that runs in Kubernetes and is reliable and scalable
 3) FAIR data with GUPRIs
 4) Graph data and statistics
+
+# License
+All code is under GPLv3 and all data in data/ is licensed CC0.
