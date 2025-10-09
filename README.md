@@ -1,8 +1,8 @@
 # Dance Database
 
-This is an attempt to create a backbone 
+This is an attempt to create a data backbone 
 for the Scandinavian social dance community 
-which the author is very happy to be a part of.
+which the author is happy to be a part of.
 
 ## Vision
 One place where event organizers publish their events which can then be fanned out to mulitple applications and used in LLMs
@@ -23,3 +23,9 @@ It's not a website.
 
 ## What Dance Database should provide
 1) A UI that make it easy for event organizers to add events 
+2) A stable service run by donations
+
+## Nice to have
+2) Something that runs in Kubernetes and is reliable and scalable
+3) FAIR data with GUPRIs
+4) Graph data and statistics
