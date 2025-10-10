@@ -1,8 +1,3 @@
-"""
-I decided not to include the following
-email: str = ""
-phone: str = ""
-"""
 import glob
 import json
 from datetime import datetime
