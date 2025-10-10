@@ -1,16 +1,18 @@
+"""
+I decided not to include the following
+email: str = ""
+phone: str = ""
+"""
 import glob
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict, List
-
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, ConfigDict
 
 
 class Organizer(BaseModel):
-    qid: str = ""
     description: str = ""
-    website: str = ""
+    official_website: str = ""
 
 
 class EventItem(BaseModel):
@@ -24,36 +26,70 @@ class EventItem(BaseModel):
 class ScheduleDay(BaseModel):
     """Represents the schedule for a single day."""
     date: datetime
-    items: List[EventItem] = []
+    items: list[EventItem] = []
 
 
 class Schedule(BaseModel):
     """Represents the full schedule for the event."""
-    days: List[ScheduleDay] = []
+    days: list[ScheduleDay] = []
+
+
+class WikidataIdentifiers(BaseModel):
+    """Wikidata does not have compatible items and properties for everything in our model"""
+    dance_style_qid: str = Field("", description="Wikidata QID for dance type (e.g. Q1057898)")
+    venue_qid: str = Field("", description="Wikidata QID for venue")
+    event_series_qid: str = Field("", description="Wikidata QID for event series")
+
+
+class DanceDatabaseIdentifiers(BaseModel):
+    """DanceDatabase should have identifiers for everything in our model, but might not"""
+    event_qid: str = Field("", description="DanceDatabase QID for the event")
+    organizer_qid: str = Field("", description="DanceDatabase QID for the organizer")
+    dance_style_qid: str = Field("", description="DanceDatabase QID for the dance style")
+    venue_qid: str = Field("", description="DanceDatabase QID for the venue")
+    event_series_qid: str = Field("", description="DanceDatabase QID for event series")
+
+
+class Identifiers(BaseModel):
+    wikidata: WikidataIdentifiers = WikidataIdentifiers()
+    dancedatabase: DanceDatabaseIdentifiers = DanceDatabaseIdentifiers()
 
 
 class DanceEvent(BaseModel):
-    """Structured representation of a dance event."""
+    """Structured representation of a dance event.
+    Times are in CEST/CET"""
+    model_config = ConfigDict(extra="forbid")
+
     id: str = Field(..., description="Unique identifier for the event")
-    dance_type_qid: Optional[str] = Field(None, description="Wikidata QID for dance type (e.g. Q1057898)")
-    start_time_utc: Optional[datetime] = None
-    end_time_utc: Optional[datetime] = None
-    registration_opens: Optional[datetime] = None
-    registration_closes: Optional[datetime] = None
-    organizer: Organizer = Organizer()
-    label: Dict[str, str] = Field(..., description="Labels in different languages (sv, en)")
-    description: Dict[str, str] = Field(..., description="Descriptions in different languages (sv, en)")
-    coordinates: Optional[Dict[str, float]] = None
-    venue_qid: str = ""
-    event_series_qid: str = ""
+    label: dict[str, str] = Field(..., description="Language keyed labels")
+    description: dict[str, str] = Field(..., description="Language keyed descriptions")
+    coordinates: dict[str, float] | None = Field(None, description="Optional coordinates with latitude and longitude")
+    schedule: dict[str, Schedule] = Field({}, description="Optional language keyed schedule for the event")
+
+    # time
+    last_update: datetime | None = Field(None, description="Timestamp of the last update")
+    start_time: datetime | None = Field(None, description="Event start time")
+    end_time: datetime | None = Field(None, description="Event end time")
+    registration_opens: datetime | None = Field(None, description="When registration opens")
+    registration_closes: datetime | None = Field(None, description="When registration closes")
+    organizer: Organizer = Field(Organizer(), description="Organizer of the event")
+
+    # str
     facebook_link: str = ""
-    website: str = ""
+    official_website: str = ""
+    registration_website: str = ""
+    schedule_website: str = ""
+    venue_website: str = ""
     location: str = ""
     image: str = ""
     price_early: str = ""
     price_normal: str = ""
     price_late: str = ""
-    schedule: Optional[Schedule] = None
+
+    # bool
+    cancelled: bool = False
+    fully_booked: bool = False
+    weekly_recurring: bool = False
 
 
 # ---- Validation script ----

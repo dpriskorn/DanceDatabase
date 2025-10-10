@@ -19,7 +19,7 @@ A little like https://musicbrainz.org/ is for CDs.
 
 ## What Dance Database is not
 It is not meant to be used by dancers directly.
-It's not a website.
+It's not a official_website.
 
 ## What Dance Database should provide
 1) A UI that make it easy for event organizers to add events 

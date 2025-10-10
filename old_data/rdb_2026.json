@@ -1,6 +1,6 @@
 {
   "id": "rock_the_barn_2026",
-  "dance_type_qid": "Q1057898",
+  "dance_style_qid": "Q1057898",
   "start_time": "2026-07-17T00:00:00Z",
   "end_time": "2026-07-20T23:59:59Z",
   "registration_opens": null,
@@ -23,7 +23,7 @@
   },
   "venue_qid": "Q136465660",
   "facebook_link": "",
-  "website": "https://rockthebarn.se/",
+  "official_website": "https://rockthebarn.se/",
   "location": "Gräsmyr Loge, Fällan 29, 91495 Gräsmyr, Sweden",
   "image": "",
   "price_early": "",

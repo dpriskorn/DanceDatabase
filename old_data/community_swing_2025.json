@@ -1,6 +1,6 @@
 {
   "id": "community_swing_2025",
-  "dance_type_qid": "Q1057898",
+  "dance_style_qid": "Q1057898",
   "start_time": "2025-11-15T00:00:00Z",
   "end_time": "2025-11-16T23:59:59Z",
   "registration_opens": "2025-09-24T16:00:00Z",
@@ -24,7 +24,7 @@
   "venue_qid": "Q10497392",
   "event_series_qid": "",
   "facebook_link": "",
-  "website": "https://www.wcs-umea.se",
+  "official_website": "https://www.wcs-umea.se",
   "location": "Umeå Folkets Hus, Umeå, Sweden",
   "image": "",
   "price_early": "Free for members",

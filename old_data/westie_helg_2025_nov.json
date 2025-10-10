@@ -1,6 +1,6 @@
 {
   "id": "wcs_helgintensiv_sundsvall_2025_11",
-  "dance_type_qid": "Q1057898",
+  "dance_style_qid": "Q1057898",
   "start_time": "2025-11-22T08:30:00Z",
   "end_time": "2025-11-23T14:30:00Z",
   "registration_opens": "2025-09-10T18:00:00Z",
@@ -20,7 +20,7 @@
   "coordinates": null,
   "venue_qid": "",
   "facebook_link": "https://www.facebook.com/events/1878651703003237/",
-  "website": "https://onbeat.dance/westievision/helgintensiv-connect-and-extend",
+  "official_website": "https://onbeat.dance/westievision/helgintensiv-connect-and-extend",
   "location": "Trafikgatan 54, Sundsvall, Sweden",
   "image": "",
   "price_early": "990 SEK",

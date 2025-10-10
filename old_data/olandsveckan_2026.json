@@ -1,6 +1,6 @@
 {
   "id": "dansveckan_2026",
-  "dance_type_qid": "Q808399",
+  "dance_style_qid": "Q808399",
   "start_time": "2026-06-27T00:00:00Z",
   "end_time": "2026-07-04T23:59:59Z",
   "registration_opens": "2025-10-10T00:00:00Z",
@@ -24,7 +24,7 @@
   "venue_qid": "Q10570784",
   "event_series_qid": "Q10727272",
   "facebook_link": "https://www.facebook.com/DansveckanLundegard",
-  "website": "https://www.lundegard.se",
+  "official_website": "https://www.lundegard.se",
   "location": "Lundegård, Sweden",
   "image": "",
   "price_early": "10% deposit by 31 October",
