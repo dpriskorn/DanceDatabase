@@ -6,7 +6,7 @@
   "registration_opens": null,
   "registration_closes": null,
   "fully_booked": false,
-  "dance_qid": "Q1738733",
+  "event_series_qid": "Q1738733",
   "organizer": {
     "qid": "",
     "description": "Leif Carlsson and Susanne Karlsson"
