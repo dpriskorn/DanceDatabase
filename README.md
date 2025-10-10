@@ -1,8 +1,10 @@
 # Dance Database
 
-This is an attempt to create a data backbone 
+[The Dance Database](https://dance.wikibase.cloud/wiki/Main_Page) is a new open data backbone 
 for the Scandinavian social dance community 
 which the author is happy to be a part of.
+
+This repository has scripts to help populate and fix issues in the database.
 
 ## Vision
 One place where event organizers publish their events which can then be fanned out to mulitple applications and used in LLMs by everyone.

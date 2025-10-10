@@ -17,7 +17,6 @@ os.makedirs(output_folder, exist_ok=True)
 settings = get_project_settings()
 settings.set("FEED_FORMAT", "json")      # output format
 settings.set("FEED_EXPORT_ENCODING", "utf-8")  # UTF-8 encoding
-# FEED_URI will be set per spider
 
 # Dynamically import all spiders from models/spiders/
 spiders_module = import_module(SPIDERS_PACKAGE)
@@ -35,7 +34,13 @@ for spider_name in spider_names:
 
     # Set output file per spider
     output_file = os.path.join(output_folder, f"{spider_name}.json")
-    settings.set("FEED_URI", output_file)
+
+    # Remove old file if it exists (to overwrite)
+    if os.path.exists(output_file):
+        os.remove(output_file)
+
+    # Use absolute path to ensure Scrapy writes where expected
+    settings.set("FEED_URI", f"file://{os.path.abspath(output_file)}")
 
     # Schedule the spider
     process.crawl(spider_class)

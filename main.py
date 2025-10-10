@@ -31,18 +31,18 @@ class Schedule(BaseModel):
 
 class WikidataIdentifiers(BaseModel):
     """Wikidata does not have compatible items and properties for everything in our model"""
-    dance_style_qid: str = Field("", description="Wikidata QID for dance type (e.g. Q1057898)")
-    venue_qid: str = Field("", description="Wikidata QID for venue")
-    event_series_qid: str = Field("", description="Wikidata QID for event series")
+    dance_style: str = Field("", description="Wikidata QID for dance type (e.g. Q1057898)")
+    venue: str = Field("", description="Wikidata QID for venue")
+    event_series: str = Field("", description="Wikidata QID for event series")
 
 
 class DanceDatabaseIdentifiers(BaseModel):
     """DanceDatabase should have identifiers for everything in our model, but might not"""
-    event_qid: str = Field("", description="DanceDatabase QID for the event")
-    organizer_qid: str = Field("", description="DanceDatabase QID for the organizer")
-    dance_style_qid: str = Field("", description="DanceDatabase QID for the dance style")
-    venue_qid: str = Field("", description="DanceDatabase QID for the venue")
-    event_series_qid: str = Field("", description="DanceDatabase QID for event series")
+    event: str = Field("", description="DanceDatabase QID for the event")
+    organizer: str = Field("", description="DanceDatabase QID for the organizer")
+    dance_style: str = Field("", description="DanceDatabase QID for the dance style")
+    venue: str = Field("", description="DanceDatabase QID for the venue")
+    event_series: str = Field("", description="DanceDatabase QID for event series")
 
 
 class Identifiers(BaseModel):
