@@ -8,6 +8,8 @@ from bs4 import BeautifulSoup
 from pydantic import BaseModel, Field
 import json
 
+from models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer
+
 CET = timezone(timedelta(hours=1))
 logger = logging.getLogger(__name__)
 
@@ -25,7 +27,7 @@ class Dansgladje(BaseModel):
     description: Optional[str] = None
 
     # store all events
-    events: List[dict] = Field(default_factory=list)
+    events: List[DanceEvent] = Field(default_factory=list)
 
     # === Utility ===
     def clean_text(self, text: Optional[str]) -> str:
@@ -135,34 +137,39 @@ class Dansgladje(BaseModel):
         venue_qid = self.map_venue_qid(self.description)
         now = datetime.now().replace(microsecond=0).isoformat()
 
-        event = {
-            "id": url.split("/")[-1],
-            "label": {"sv": metadata["label_sv"]},
-            "description": {"sv": self.description},
-            "start_time": self.start_time.isoformat() if self.start_time else None,
-            "end_time": self.end_time.isoformat() if self.end_time else None,
-            "location": self.location,
-            "registration_open": self.check_registration(url),
-            "last_update": now,
-            "identifiers": {
-                "dancedatabase": {
-                    "venue": venue_qid,
-                    "dance_style": "Q23",
-                    "organizer": "Q24",
-                }
-            },
-            "organizer": {
-                "description": "Dansglädje",
-                "official_website": "https://dansgladje.nu",
-            },
-        }
+        event = DanceEvent(
+            id=url.split("/")[-1],
+            label={"sv": metadata["label_sv"]},
+            description={"sv": self.description},
+            start_time=self.start_time,
+            end_time=self.end_time,
+            location=self.location or "",
+            registration_open=self.check_registration(url),
+            last_update=now,
+            identifiers=Identifiers(
+                dancedatabase=DanceDatabaseIdentifiers(
+                    venue=venue_qid,
+                    dance_style="Q23",
+                    organizer="Q24",
+                )
+            ),
+            organizer=Organizer(
+                description="Dansglädje",
+                official_website="https://dansgladje.nu",
+            ),
+        )
         self.events.append(event)
 
     # === Export ===
     def export_to_json(self):
         Path(self.folder).mkdir(parents=True, exist_ok=True)
         file_path = Path(self.folder) / f"{self.__class__.__name__.lower()}.json"
-        json_data = json.dumps(self.events, indent=2, default=str, ensure_ascii=False)
+        # Convert each Pydantic model to a plain dict
+        data = [event.model_dump(mode="json") for event in self.events]
+
+        # Serialize to JSON (Pydantic already handles datetimes nicely)
+        json_data = json.dumps(data, indent=2, ensure_ascii=False)
+
         file_path.write_text(json_data, encoding="utf-8")
         print(f"Exported {len(self.events)} events to {file_path}")
 
