@@ -85,6 +85,8 @@ class DanceEvent(BaseModel):
     cancelled: bool = False
     fully_booked: bool = False
     weekly_recurring: bool = False
+    advance_registration_required: bool = False
+    registration_open: bool = False
 
 
 # ---- Validation script ----
