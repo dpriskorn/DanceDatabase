@@ -4,7 +4,7 @@ import datetime
 from pathlib import Path
 
 import config
-from models.scrapers.dansgladje import Dansgladje
+from src.models.scrapers.dansgladje import Dansgladje
 
 logging.basicConfig(level=config.loglevel)
 
@@ -13,7 +13,7 @@ SPIDERS_PACKAGE = "models.scrapers"
 
 # Create output folder with today's date
 today = datetime.date.today().strftime("%Y%m%d")
-output_folder = Path("data") / today
+output_folder = Path("../../data") / today
 os.makedirs(output_folder, exist_ok=True)
 
 # run scrapers sequentially

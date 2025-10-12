@@ -8,7 +8,7 @@ import logging
 import config
 
 # ---- Setup logging ----
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # ---- Configure your Wikibase instance ----
@@ -36,7 +36,7 @@ ORDER BY ?itemLabel ?item
 """
 
 # ---- Run SPARQL query ----
-results = execute_sparql_query(endpoint_url=config['SPARQL_ENDPOINT_URL'])
+results = execute_sparql_query(query=sparql_query, endpoint=wbi_config['SPARQL_ENDPOINT_URL'])
 
 # ---- Group clashing items by label ----
 clashes = defaultdict(list)
@@ -59,7 +59,8 @@ for label, qids in clashes.items():
                 qids=qids,
                 login=login_instance,
                 is_bot=True,
-                ignore_conflicts=None
+                ignore_conflicts=["description"],
+                tags="wikibaseintegrator"
             )
             logger.info(f"Merged qids, see recent changes in the wikibase for an overview")
 

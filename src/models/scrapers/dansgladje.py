@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from pydantic import BaseModel, Field
 import json
 
-from models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer
+from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer
 
 CET = timezone(timedelta(hours=1))
 logger = logging.getLogger(__name__)

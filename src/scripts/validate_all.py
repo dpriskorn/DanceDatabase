@@ -1,12 +1,11 @@
 # ---- Validation script ----
-import glob
 import json
 from pathlib import Path
 from pydantic import ValidationError  # ✅ correct import (not from _pydantic_core)
 
-from models.dance_event import DanceEvent
+from src.models.dance_event import DanceEvent
 
-data_folder = Path("data")
+data_folder = Path("../../data")
 
 # ✅ include subfolders recursively and match json files correctly
 json_files = list(data_folder.rglob("*.json"))
