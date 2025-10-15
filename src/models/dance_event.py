@@ -1,6 +1,10 @@
 from datetime import datetime
+from decimal import Decimal
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, condecimal
+
+
+# TODO adapt this to schema.org?
 
 
 class Organizer(BaseModel):
@@ -43,6 +47,7 @@ class DanceDatabaseIdentifiers(BaseModel):
     event_series: str = Field("", description="DanceDatabase QID for event series")
 
 
+# noinspection PyArgumentList
 class Identifiers(BaseModel):
     wikidata: WikidataIdentifiers = WikidataIdentifiers()
     dancedatabase: DanceDatabaseIdentifiers = DanceDatabaseIdentifiers()
@@ -76,9 +81,11 @@ class DanceEvent(BaseModel):
     venue_website: str = ""
     location: str = ""
     image: str = ""
-    price_early: str = ""
-    price_normal: str = ""
-    price_late: str = ""
+
+    # prices
+    price_early: condecimal(max_digits=10, decimal_places=2) = Field(Decimal("0.00"), description="Early bird price")
+    price_normal: condecimal(max_digits=10, decimal_places=2) = Field(Decimal("0.00"), description="Normal price")
+    price_late: condecimal(max_digits=10, decimal_places=2) = Field(Decimal("0.00"), description="Late price")
 
     # bool
     cancelled: bool = False

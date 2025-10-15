@@ -55,7 +55,7 @@ for label, qids in clashes.items():
     response = input("Continue with merge? (y/n)")
     if response != "n":
         try:
-            wbi_helpers.merge_items(
+            to_id = wbi_helpers.merge_items_and_create_redirect(
                 qids=qids,
                 login=login_instance,
                 is_bot=True,
@@ -63,6 +63,7 @@ for label, qids in clashes.items():
                 tags="wikibaseintegrator"
             )
             logger.info(f"Merged qids, see recent changes in the wikibase for an overview")
+            # Suppose merge returned 'merged_to' as the surviving QID
 
         except Exception as e:
             logger.error(f"Error merging {qids}: {e}")
