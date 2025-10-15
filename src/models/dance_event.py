@@ -59,6 +59,7 @@ class DanceEvent(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     id: str = Field(..., description="Unique identifier for the event")
+    source: str = Field(default_factory=str, description="Source for event")
     label: dict[str, str] = Field(..., description="Language keyed labels")
     description: dict[str, str] = Field(..., description="Language keyed descriptions")
     coordinates: dict[str, float] | None = Field(None, description="Optional coordinates with latitude and longitude")
@@ -83,9 +84,9 @@ class DanceEvent(BaseModel):
     image: str = ""
 
     # prices
-    price_early: condecimal(max_digits=10, decimal_places=2) = Field(Decimal("0.00"), description="Early bird price")
-    price_normal: condecimal(max_digits=10, decimal_places=2) = Field(Decimal("0.00"), description="Normal price")
-    price_late: condecimal(max_digits=10, decimal_places=2) = Field(Decimal("0.00"), description="Late price")
+    price_early: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Early bird price")
+    price_normal: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Normal price")
+    price_late: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Late price")
 
     # bool
     cancelled: bool = False

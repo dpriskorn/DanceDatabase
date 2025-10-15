@@ -196,6 +196,7 @@ class CogworkEvent(BaseModel):
 
         self.dance_event = DanceEvent(
             id=self.event_id,
+            source="CogWork at http://dans.se",
             label={"sv": self.event_metadata["label_sv"]},
             description={"sv": self.description},
             start_time=self.start_time,
@@ -216,10 +217,14 @@ class CogworkEvent(BaseModel):
             ),
         )
 
+    def parse_shop_page(self):
+        self.check_registration()
+        self.parse_price()
+
     def fetch_and_parse(self):
         """Entrypoint"""
         self.fetch_event_page()
         self.extract_event_metadata()
-        self.check_registration()
+        self.parse_shop_page()
         self.parse_into_dance_event()
 
