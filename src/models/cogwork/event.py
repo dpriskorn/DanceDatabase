@@ -1,13 +1,13 @@
 import logging
 import re
 from datetime import datetime, timezone, timedelta
-from typing import Optional
+from typing import Optional, cast
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, AnyUrl
 
-from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer
+from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks
 
 CET = timezone(timedelta(hours=1))
 logger = logging.getLogger(__name__)
@@ -196,7 +196,7 @@ class CogworkEvent(BaseModel):
 
         self.dance_event = DanceEvent(
             id=self.event_id,
-            source="CogWork at http://dans.se",
+            # source="CogWork at http://dans.se",
             label={"sv": self.event_metadata["label_sv"]},
             description={"sv": self.description},
             start_time=self.start_time,
@@ -211,10 +211,17 @@ class CogworkEvent(BaseModel):
                     venue=venue_qid,
                     dance_style=self.dance_style_qid,
                     organizer=self.organizer_qid,
+                    source="Q484",
                 )
             ),
             organizer=Organizer(
             ),
+            event_links=EventLinks(
+                sources=cast(list[AnyUrl], [
+                    self.event_url,
+                    self.shop_url
+                ])
+            )
         )
 
     def parse_shop_page(self):
