@@ -1,0 +1,368 @@
+[
+  {
+    "id": "260400",
+    "label": {
+      "sv": "M&M Fox Night 12.2"
+    },
+    "description": {
+      "sv": "Välkommen till M&M Fox Night 12.2 på Galaxy i Vallentuna. \\nDu som anmäler dig skall älska att dansa modern fox.\\nFör att vi alla skall få en lyckad danskväll är det viktigt att alla som är antagna kommer.\\nVid förhinder är det viktigt att ni i tidigt skede meddelar oss detta (svara på antagninsmailet) Avhopp senast 260420 får återbet.\\nVi bjuder på smörgåsar och fika \\nAmbidansare antas enbart med singelanmälan (om plats finns)\\nOBS...Biljetten är personlig, går ej att sälja vidare. Så ta med Körkort eller ID-kort när du kommer\\nAdressen Sports Club Vallentuna (ingång Galaxy) Tellusvägen 21 186 36 VALLENTUNA\\nParkering finns i anslutning (bild finns på eventet på fb)\\nKommunalt Tbana 14 (Mörby Centrum). Gå av vid Stockholms Östra och byt till Roslagsbanan 27 mot Ormsta. Gå av på Vallentuna station. Sedan promenad på cirka 9min.\\nHotell i närheten\\nHotell Norrort – Hotell Norrort i Vallentuna\\n \\nNi kan nå oss på info@dansgladje.nu\\n \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q24",
+        "dance_styles": [
+          "Q23",
+          "Q23"
+        ],
+        "venue": "Q19",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/260400",
+        "https://dans.se/dansgladje/shop/?event=260400"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:20:37",
+    "start_time": "2026-04-25T18:00:00+01:00",
+    "end_time": "2026-04-26T02:00:00+01:00",
+    "location": "Vallentuna",
+    "price_early": null,
+    "price_normal": "250",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "260398",
+    "label": {
+      "sv": "M&M Fox Night 12.1"
+    },
+    "description": {
+      "sv": "Välkommen till M&M Fox Night 12.1 på Galaxy i Vallentuna. \\nDu som anmäler dig skall älska att dansa modern fox.\\nFör att vi alla skall få en lyckad danskväll är det viktigt att alla som är antagna kommer.\\nVid förhinder är det viktigt att ni i tidigt skede meddelar oss detta (svara på antagninsmailet) Avhopp sensat 260119 får återbet.\\nVi bjuder på smörgåsar och fika \\nAmbidansare antas enbart med singelanmälan (om plats finns)\\nOBS...Biljetten är personlig, går ej att sälja vidare. Så ta med Körkort eller ID-kort när du kommer\\nAdressen Sports Club Vallentuna (ingång Galaxy) Tellusvägen 21 186 36 VALLENTUNA\\nParkering finns i anslutning (bild finns på eventet på fb)\\nKommunalt Tbana 14 (Mörby Centrum). Gå av vid Stockholms Östra och byt till Roslagsbanan 27 mot Ormsta. Gå av på Vallentuna station. Sedan promenad på cirka 9min.\\nHotell i närheten\\nHotell Norrort – Hotell Norrort i Vallentuna\\n \\nNi kan nå oss på info@dansgladje.nu\\n \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q24",
+        "dance_styles": [
+          "Q23",
+          "Q23"
+        ],
+        "venue": "Q19",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/260398",
+        "https://dans.se/dansgladje/shop/?event=260398"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:20:38",
+    "start_time": "2026-01-24T18:00:00+01:00",
+    "end_time": "2026-01-25T02:00:00+01:00",
+    "location": "Vallentuna",
+    "price_early": null,
+    "price_normal": "250",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "260403",
+    "label": {
+      "sv": "M&M Fox Night Sägnernas Hus Fre & Lör"
+    },
+    "description": {
+      "sv": "Välkommen till M&M Fox Night på Sägernas Hus. \\nDu som anmäler dig skall älska att dansa modern fox.\\nFör att vi alla skall få en lyckad danskväll är det viktigt att alla som är antagna kommer.\\nVid förhinder är det viktigt att ni i tidigt skede meddelar oss detta (svara på antagninsmailet) Avhopp senast 240518 får återbet.\\nVi bjuder på smörgåsar och fika \\nAmbidansare antas enbart med singelanmälan (om plats finns)\\nOBS...Biljetten är personlig, går ej att sälja vidare. Så ta med Körkort eller ID-kort när du kommer\\nAdressen Sägnernas Hus Svenstorp Sörgården 565 94 SANDHEM\\nParkering finns i anslutning.\\nBoende i närheten Boende – Sägnernas hus (sagnernashus.se)\\nDom tar även emot bokning ang husbil och husvagn\\nNi kan nå oss på info@dansgladje.nu\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q24",
+        "dance_styles": [
+          "Q23",
+          "Q23"
+        ],
+        "venue": "Q21",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/260403",
+        "https://dans.se/dansgladje/shop/?event=260403"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:20:39",
+    "start_time": "2026-05-22T18:00:00+01:00",
+    "end_time": "2026-05-30T02:00:00+01:00",
+    "location": "Sägnernas Hus",
+    "price_early": null,
+    "price_normal": "500",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "260402",
+    "label": {
+      "sv": "M&M Fox Night Sägnernas Hus Lör"
+    },
+    "description": {
+      "sv": "Välkommen till M&M Fox Night på Sägernas Hus. \\nDu som anmäler dig skall älska att dansa modern fox.\\nFör att vi alla skall få en lyckad danskväll är det viktigt att alla som är antagna kommer.\\nVid förhinder är det viktigt att ni i tidigt skede meddelar oss detta (svara på antagninsmailet) Avhopp senast 240518 får återbet.\\nVi bjuder på smörgåsar och fika \\nAmbidansare antas enbart med singelanmälan (om plats finns)\\nOBS...Biljetten är personlig, går ej att sälja vidare. Så ta med Körkort eller ID-kort när du kommer\\nAdressen Sägnernas Hus Svenstorp Sörgården 565 94 SANDHEM\\nParkering finns i anslutning.\\nBoende i närheten Boende – Sägnernas hus (sagnernashus.se)\\nDom tar även emot bokning ang husbil och husvagn\\nNi kan nå oss på info@dansgladje.nu\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q24",
+        "dance_styles": [
+          "Q23",
+          "Q23"
+        ],
+        "venue": "Q21",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/260402",
+        "https://dans.se/dansgladje/shop/?event=260402"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:20:40",
+    "start_time": "2026-05-23T18:00:00+01:00",
+    "end_time": "2026-05-24T02:00:00+01:00",
+    "location": "Sägnernas Hus",
+    "price_early": null,
+    "price_normal": "250",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "260401",
+    "label": {
+      "sv": "M&M Fox Night Sägnernas Hus Fre"
+    },
+    "description": {
+      "sv": "Välkommen till M&M Fox Night på Sägernas Hus. \\nDu som anmäler dig skall älska att dansa modern fox.\\nFör att vi alla skall få en lyckad danskväll är det viktigt att alla som är antagna kommer.\\nVid förhinder är det viktigt att ni i tidigt skede meddelar oss detta (svara på antagninsmailet) Avhopp senast 240518 får återbet.\\nVi bjuder på smörgåsar och fika \\nAmbidansare antas enbart med singelanmälan (om plats finns)\\nOBS...Biljetten är personlig, går ej att sälja vidare. Så ta med Körkort eller ID-kort när du kommer\\nAdressen Sägnernas Hus Svenstorp Sörgården 565 94 SANDHEM\\nParkering finns i anslutning.\\nBoende i närheten Boende – Sägnernas hus (sagnernashus.se)\\nDom tar även emot bokning ang husbil och husvagn\\nNi kan nå oss på info@dansgladje.nu\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q24",
+        "dance_styles": [
+          "Q23",
+          "Q23"
+        ],
+        "venue": "Q21",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/260401",
+        "https://dans.se/dansgladje/shop/?event=260401"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:20:41",
+    "start_time": "2026-05-22T18:00:00+01:00",
+    "end_time": "2026-05-23T02:00:00+01:00",
+    "location": "Sägnernas Hus",
+    "price_early": null,
+    "price_normal": "250",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "257076",
+    "label": {
+      "sv": "M&M Fox Night 11.4"
+    },
+    "description": {
+      "sv": "Välkommen till M&M Fox Night 11.4 på Galaxy i Vallentuna. \\nDu som anmäler dig skall älska att dansa modern fox.\\nFör att vi alla skall få en lyckad danskväll är det viktigt att alla som är antagna kommer.\\nVid förhinder är det viktigt att ni i tidigt skede meddelar oss detta (svara på antagninsmailet) Avhopp sensat 251117 får återbet.\\nVi bjuder på smörgåsar och fika \\nAmbidansare antas enbart med singelanmälan (om plats finns)\\nOBS...Biljetten är personlig, går ej att sälja vidare. Så ta med Körkort eller ID-kort när du kommer\\nAdressen Sports Club Vallentuna (ingång Galaxy) Tellusvägen 21 186 36 VALLENTUNA\\nParkering finns i anslutning (bild finns på eventet på fb)\\nKommunalt Tbana 14 (Mörby Centrum). Gå av vid Stockholms Östra och byt till Roslagsbanan 27 mot Ormsta. Gå av på Vallentuna station. Sedan promenad på cirka 9min.\\nHotell i närheten\\nHotell Norrort – Hotell Norrort i Vallentuna\\n \\nNi kan nå oss på info@dansgladje.nu\\n \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q24",
+        "dance_styles": [
+          "Q23",
+          "Q23"
+        ],
+        "venue": "Q19",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257076",
+        "https://dans.se/dansgladje/shop/?event=257076"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:20:43",
+    "start_time": "2025-11-22T18:00:00+01:00",
+    "end_time": "2025-11-23T02:00:00+01:00",
+    "location": "Vallentuna",
+    "price_early": null,
+    "price_normal": "200",
+    "price_late": null,
+    "weekly_recurring": false
+  }
+]

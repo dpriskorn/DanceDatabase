@@ -1,0 +1,367 @@
+[
+  {
+    "id": "254429",
+    "label": {
+      "sv": "Parträning Bugg, måndagar - FULLT!"
+    },
+    "description": {
+      "sv": "Ett träningstillfälle för er som vill utvecklas som par. Träningstillfällena inleds med en genomgång av temat/ett fokusområde och följs sedan av träning med möjlighet till individuell feedback. Det är fullt möjligt att anmäla sig och hänga med på den här träningen närsomhelst under terminen så länge det finns platser kvar.\\nAntal träningstillfällen: 17 ggr à 1,5 timmar\\nAvgift: Studerande, pensionär 300.-, övriga 500.- . Medlemsavgift 200:- för 2025 tillkommer om du inte redan är medlem i Altira.\\nKursen äger rum i Altiras lokaler på Bergsgatan 126. Ytterskor är inte tillåtna på dansgolvet. Kom ihåg att ta med inneskor/dansskor.\\nVÄLKOMNA!\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q71",
+        "dance_styles": [
+          "Q485"
+        ],
+        "venue": "Q71",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/254429",
+        "https://dans.se/altira/shop/?event=254429"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": true,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:21:13",
+    "start_time": "2025-08-25T18:30:00+01:00",
+    "end_time": "2025-12-15T20:00:00+01:00",
+    "location": "Sundsvall, Altiras lokal (Bergsgatan 126, 853 50 Sundsvall)",
+    "price_early": null,
+    "price_normal": "0",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "257490",
+    "label": {
+      "sv": "Foxkurs teknik, onsdagar (start 22/10)"
+    },
+    "description": {
+      "sv": "Fox Teknik passar dig som har ett stort intresse av modern fox och vill utveckla din foxteknik. Du får ta del av övningar för bättre kommunikation, hållning och balans. Vi lär ut teknik genom turer och nya rörelsemönster med inspiration från andra danser och visar hur man kan variera dessa byggstenar i linje med musikens rytm och karaktär.\\nOlika ledarpar kommer att bjuda på favoriter från sina egna verktygslådor. Vi kan därmed utlova en mycket variationsrik och spännande kurs där du får lära dig och öva på tekniker som ger dig frihet att själv skapa nya sekvenser som passar ditt rörelsemönster.\\nFörkunskaper: Du är väl förtrogen med terminologin inom modern fox, har gått flera kurser på fortsättningsnivå och socialdansar regelbundet.\\nKursen kostar 500 kr för 8 tillfällen à 1,5 h (studerande, eller pensionär, 300 kr). Medlemsavgift 200 kr tillkommer om du inte redan är medlem i dansklubben Altira. \\nKursen äger rum i Altiras lokal på Bergsgatan 126. Ytterskor är inte tillåtna på dansgolvet. Kom ihåg att ta med inneskor. \\nVÄLKOMMEN \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q71",
+        "dance_styles": [
+          "Q23",
+          "Q23",
+          "Q4"
+        ],
+        "venue": "Q71",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257490",
+        "https://dans.se/altira/shop/?event=257490"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:21:15",
+    "start_time": "2025-10-22T18:00:00+01:00",
+    "end_time": "2025-12-17T19:25:00+01:00",
+    "location": "SUNDSVALL, Altiras lokal (Bergsgatan 126, 853 50 Sundsvall)",
+    "price_early": null,
+    "price_normal": "0",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "256457",
+    "label": {
+      "sv": "FoxKiz (Avancerad Fox med Kizombainslag) 21-22 februari med Ronie Saleh"
+    },
+    "description": {
+      "sv": "Den 21-22 Februari 2026 kommer  Ronie Saleh med partner till oss på Altira och håller i en helgkurs i FoxKiz – en blandning av modern fox med influenser från bland annat kizomba och bachata.\\nRonie har över tio års erfarenhet av att undervisa både i Sverige och internationellt. Han är känd för sin pedagogiska metodik där  dansglädje, kreativitet och musikaltiet står i fokus.\\nRonie lär aldrig ut långa slingor, utan anser att man blir en skickligare dansare, både som förare och följare, om man istället lär sig olika variationer av steg.\\nKursen vänder sig till dig som dansar modern social fox regelbundet och har en trygg grundteknik – och som vill utmana dig själv för att ta din dansupplevelse till en helt ny nivå.\\n \\nFÖRKUNSKAPER\\nDetta är en fortsättningskurs som riktar sig till dig som har vana av modern social fox, dansar regelbundet och har en god grundteknik. Du bör ha gått en eller flera foxkurser tidigare.\\n \\nDATUM & TID:\\nFredag 19 februari\\n19.00-22.00 Dansklubben Altira anordnar FoxFriday (socialdans med foxvänlig musik). Alla kursdeltagare är varmt välkomna.\\n \\nLördag 20 februari\\n9.00 Registrering öppnar\\n9.30 Musik spelas, frivillig uppvärmning\\n10.00-16.00 Kurs (Lunch 12:30)\\n19.00 till ca 23.00 Socialdans för kursdeltagare med musik från Ronies fox-spellista.\\n \\nSöndag 21 februari\\n09.30 Musik spelas, frivillig uppvärmning\\n10.00-15.00 Kurs (Lunch 12:30)\\n \\nPLATS:\\nDansklubben Altiras kurslokal,  Bergsgatan 126, Sundsvall.\\n \\nFÖRTÄRING:\\nVi kommer att ha ungefär en timmes paus för lunch lördag och söndag samt några vattenpauser. Ta med egen lunch. Kylmöjligheter finns. En rekommendation är att ta med mat som inte behöver värmas. Pizzeria Diamanten finns i samma hus som danslokalen, Sibylla finns tvärs över vägen, ICA och Coop finns i närheten.\\nKaffe och frukt finns framme under hela dagen (ingår i kursavgiften).\\n \\nKURSAVGIFT:\\n1400 kr för medlemmar i Altira, 1500 kr för icke medlemmar, socialdans ingår i avgiften.\\nOBS! Om du vill nyttja medlemsrabatt och inte redan är medlem behöver du fylla i medlemsansökan via www.altira.nu så snart som möjligt (inom en vecka efter din anmälan). Skulle du av någon anledning inte bli antagen till kursen löser vi detta på bästa sätt i efterhand. \\n \\nANMÄLAN - ANTAGNING - BETALNING:\\nNär du blivit antagen erhåller du en bekräftelse och betalningsinstruktioner via e-post. Kursen fylls på med jämnt antal förare/följare. Singelanmälda paras ihop i turordning.\\n \\nMEDTAG:\\nVattenflaska, lunch, inneskor lämpliga att dansa i.\\nVälkomna!\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q71",
+        "dance_styles": [
+          "Q23",
+          "Q23",
+          "Q4"
+        ],
+        "venue": "Q71",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/256457",
+        "https://dans.se/altira/shop/?event=256457"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:21:18",
+    "start_time": "2026-02-21T10:00:00+01:00",
+    "end_time": "2026-02-22T15:00:00+01:00",
+    "location": "SUNDSVALL, Altiras lokal (Bergsgatan 126, 853 50 Sundsvall)",
+    "price_early": null,
+    "price_normal": "0",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "257456",
+    "label": {
+      "sv": "Foxkurs fortsättning (steg 2), torsdagar"
+    },
+    "description": {
+      "sv": "För dig som gått nybörjarkurs i fox eller inte dansat på ett tag ges här möjlighet att utveckla din moderna fox med fördjupad grundteknik, musikanpassning och enkla turer. Vi fokuserar på att ha roligt och att med enkla tekniker ge en grund för en avslappnad, lekfull dans.\\nFörkunskaper: du bör ha gått en nybörjarkurs i modern fox eller ha motsvarande kunskaper.\\nKursen kostar 500kr för 8 tillfällen à 1 timme och 25 minuter (300 kr för dig som är studerande eller pensionär). Medlemsavgift 200 kr för 2025 tillkommer om du inte redan är medlem i Dansklubben Altira.\\nKursen äger rum i Altiras lokal på Bergsgatan 126. Ytterskor är inte tillåtna på dansgolvet. Kom ihåg att ta med inneskor/dansskor.\\nVÄLKOMNA!\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q71",
+        "dance_styles": [
+          "Q23",
+          "Q23"
+        ],
+        "venue": "Q71",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257456",
+        "https://dans.se/altira/shop/?event=257456"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:21:20",
+    "start_time": "2025-10-02T18:00:00+01:00",
+    "end_time": "2025-11-27T19:25:00+01:00",
+    "location": "SUNDSVALL, Altiras lokal (Bergsgatan 126, 853 50 Sundsvall)",
+    "price_early": null,
+    "price_normal": "0",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "261002",
+    "label": {
+      "sv": "Bugg fortsättning (steg 2), söndagar (start 2 november)"
+    },
+    "description": {
+      "sv": "BUGG FORTSÄTTNING\\nDenna kurs bygger på att du behärskar grunderna i bugg såsom grundsteg och förning (tryck och drag & flaggning). Det blir övning och repetition samt att vi lär oss om buggens variationer.\\nFörkunskaper: Bugg nybörjare  Kurstillfällen: 8 ggr à 1,5 timme\\nKursen kostar 500 kr för 8 tillfällen à 1,5 h (studerande eller pensionär 300 kr). Medlemsavgift 200 kr för 2025 tillkommer om du inte redan är medlem i Dansklubben Altira.\\nKursen äger rum i Altiras lokal på Bergsgatan 126. Ytterskor är inte tillåtna på dansgolvet. Kom ihåg att ta med inneskor/dansskor.\\n  VÄLKOMNA!\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q71",
+        "dance_styles": [
+          "Q485"
+        ],
+        "venue": "Q71",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/261002",
+        "https://dans.se/altira/shop/?event=261002"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:21:21",
+    "start_time": "2025-11-02T17:30:00+01:00",
+    "end_time": "2025-12-21T19:00:00+01:00",
+    "location": "Sundsvall, Altiras lokal (Bergsgatan 126, 853 50 Sundsvall)",
+    "price_early": null,
+    "price_normal": "0",
+    "price_late": null,
+    "weekly_recurring": false
+  },
+  {
+    "id": "262745",
+    "label": {
+      "sv": "Bugg inspiration, 22-23 november med Anton & Isabell"
+    },
+    "description": {
+      "sv": "Den 22-23 november kommer våra tävlingsdansare Anton och Isabell hålla en inspirationskurs i bugg. Har du gått någon av våra fortsättningskurser blir detta en helg för dig. Det kommer bjudas på en rad olika variationer av snurrar och stegkombinationer som kan ge din dans lite extra krydda.\\nFörkunskaper: Bugg fortsättning (eller motsvarande)  Kurstillfällen: 2 ggr à 5 timmar\\nKursen kostar 500 kr (studerande eller pensionär 300 kr). Medlemsavgift 200 kr för 2025 tillkommer om du inte redan är medlem i Dansklubben Altira.\\nKursen äger rum i Altiras lokal på Bergsgatan 126. Ytterskor är inte tillåtna på dansgolvet. Kom ihåg att ta med inneskor/dansskor.\\n  VÄLKOMNA!\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q71",
+        "dance_styles": [
+          "Q485"
+        ],
+        "venue": "Q71",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "event_links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/262745",
+        "https://dans.se/altira/shop/?event=262745"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-25T16:21:23",
+    "start_time": "2025-11-22T10:00:00+01:00",
+    "end_time": "2025-11-23T15:00:00+01:00",
+    "location": "Sundsvall, Altiras lokal (Bergsgatan 126, 853 50 Sundsvall)",
+    "price_early": null,
+    "price_normal": "0",
+    "price_late": null,
+    "weekly_recurring": false
+  }
+]
