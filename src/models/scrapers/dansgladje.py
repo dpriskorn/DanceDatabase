@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class DansgladjeEvent(CogworkEvent):
-    dance_style_qid: str = "Q23"
     organizer_qid: str = "Q24"
     venue_qid_map: dict[str, str] = {
         "Galaxy i Vallentuna": "Q19",

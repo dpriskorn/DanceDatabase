@@ -41,7 +41,7 @@ class DanceDatabaseIdentifiers(BaseModel):
     """DanceDatabase should have identifiers for everything in our model, but might not"""
     event: str = Field("", description="DanceDatabase QID for the event")
     organizer: str = Field("", description="DanceDatabase QID for the organizer")
-    dance_style: str = Field("", description="DanceDatabase QID for the dance style")
+    dance_styles: list[str] = Field(default_factory=list, description="DanceDatabase QIDs for the dance styles")
     venue: str = Field("", description="DanceDatabase QID for the venue")
     event_series: str = Field("", description="DanceDatabase QID for event series")
     source: str = Field(default_factory=str, description="DanceDatabase QID for data source")
