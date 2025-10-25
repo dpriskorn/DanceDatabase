@@ -51,6 +51,9 @@ class CogworkOrganizer(BaseModel):
         for url in self.event_links:
             event = self.event_class(event_url=url, organizer_slug=self.organizer_slug)
             event.fetch_and_parse()
+            # todo handle skipped event
+            if event.skip:
+                continue
             if event.dance_event is None:
                 raise Exception("event.dance_event was None")
             self.events.append(event.dance_event)
