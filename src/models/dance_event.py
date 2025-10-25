@@ -84,6 +84,15 @@ class EventLinks(BaseModel):
     )
 
 
+class Registration(BaseModel):
+    cancelled: bool = Field(False, description="Whether the event was cancelled at scrape time")
+    fully_booked: bool = Field(False, description="Whether it was fully booked at scrape time")
+    registration_opens: datetime | None = Field(None, description="When registration opens")
+    registration_closes: datetime | None = Field(None, description="When registration closes")
+    advance_registration_required: bool = Field(False, description="Whether advance registration is mandatory")
+    registration_open: bool = Field(False, description="Whether registration was open at scrape time")
+
+
 class DanceEvent(BaseModel):
     """Structured representation of a dance event.
     Times are in CEST/CET"""
@@ -97,14 +106,13 @@ class DanceEvent(BaseModel):
     schedule: dict[str, Schedule] = Field({}, description="Optional language keyed schedule for the event")
     identifiers: Identifiers = Identifiers()
     event_links: EventLinks = EventLinks()
+    registration: Registration = Registration()
+    organizer: Organizer = Field(Organizer(), description="Organizer of the event")
 
     # time
     last_update: datetime | None = Field(None, description="Timestamp of the last update")
     start_time: datetime | None = Field(None, description="Event start time")
     end_time: datetime | None = Field(None, description="Event end time")
-    registration_opens: datetime | None = Field(None, description="When registration opens")
-    registration_closes: datetime | None = Field(None, description="When registration closes")
-    organizer: Organizer = Field(Organizer(), description="Organizer of the event")
 
     # str
     location: str = ""
@@ -115,8 +123,4 @@ class DanceEvent(BaseModel):
     price_late: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Late price")
 
     # bool
-    cancelled: bool = False
-    fully_booked: bool = False
     weekly_recurring: bool = False
-    advance_registration_required: bool = False
-    registration_open: bool = False

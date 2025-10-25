@@ -7,7 +7,8 @@ import requests
 from bs4 import BeautifulSoup
 from pydantic import BaseModel, Field, AnyUrl
 
-from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks
+from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
+    Registration
 
 CET = timezone(timedelta(hours=1))
 logger = logging.getLogger(__name__)
@@ -202,10 +203,13 @@ class CogworkEvent(BaseModel):
             start_time=self.start_time,
             end_time=self.end_time,
             location=self.location or "",
-            registration_open=self.registration_open,
-            registration_opens=self.registration_opens,
             price_normal=self.price_normal,
             last_update=now,
+            registration=Registration(
+                registration_open=self.registration_open,
+                registration_opens=self.registration_opens,
+                advance_registration_required=True,
+            ),
             identifiers=Identifiers(
                 dancedatabase=DanceDatabaseIdentifiers(
                     venue=venue_qid,
