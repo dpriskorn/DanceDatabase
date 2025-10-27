@@ -1,0 +1,633 @@
+[
+  {
+    "id": "253735",
+    "label": {
+      "sv": "Tango Fortsättningskurs"
+    },
+    "description": {
+      "sv": "Fortsättningskurs i Argentinsk Tango\\nKursledare: Basia med gästinstruktörer\\nTisdagar 18:30-20:30\\n17 tillfällen där 3 kommer att vara milongor.\\nTa din Tango till nästa nivå!\\nDen här kursen är för dig som vill utvecklas och fördjupa din dans. Vi hämtar inspiration från kända dansare och arbetar med praktiska tekniska detaljer som gör din tango ännu mer behaglig och njutbar- både för dig och din partner.\\nDu får lära dig att kombinera steg på nya sätt och upptäcka fler möjligheter i dansen. Kursen innehåller även grundteknik för tangovals och milonga, med fokus på deras unika rytmer och känsla.\\nMellan lektionerna anordnas öppna milongor, där du får möjlighet att träna, socialisera och uppleva tango i en avslappnad miljö.\\nTa med vattenflaska & bekväma skor som inte färgar av sig.\\nVarmt välkommen att fortsätta din reas i tangons värld!\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q492"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/253735",
+        "https://dans.se/nimbusdk/shop/?event=253735"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:35",
+    "start_timestamp": "2025-09-09T18:30:00+01:00",
+    "end_timestamp": "2025-12-09T20:30:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus dansklubb",
+    "price_early": null,
+    "price_normal": "700",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "257276",
+    "label": {
+      "sv": "Line Dance Grundkurs"
+    },
+    "description": {
+      "sv": "Line Dance grundkurs kurs måndagar kl 17:30-18:45, 12 tillfällen med start 1/9\\nKursledare: Annette & Bettan\\nDu behöver inte ha dansat tidigare & ingen danspartner krävs då vi dansar på led. Dansen passar alla! män, kvinnor & barn, ung som gammal.\\nEn rolig dans, med bra musik som är bra för minnet\\nTa med bekväma skor.\\nTänk på miljön & ta med egen vattenflaska.\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q491"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257276",
+        "https://dans.se/nimbusdk/shop/?event=257276"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:37",
+    "start_timestamp": "2025-09-01T17:30:00+01:00",
+    "end_timestamp": "2025-11-17T18:45:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus dansklubb",
+    "price_early": null,
+    "price_normal": "650",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "257067",
+    "label": {
+      "sv": "Tango Nybörjare"
+    },
+    "description": {
+      "sv": "Grundskurs i Argentinsk Tango\\nKursledare: Tomas Burvall och Catarina Colsmyr\\nTisdagar 17:15-18:15\\n14 tillfällen\\nBörja er härliga Tangoresa\\nLär er i lugn takt grundtekniker i den Argentinska Tangon.\\nEn dans ni kan ta med er på resor över hela värden.\\nTa med vattenflaska & bekväma skor som inte färgar av sig.\\nVarmt välkommen att fortsätta din reas i tangons värld!\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q492"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257067",
+        "https://dans.se/nimbusdk/shop/?event=257067"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:38",
+    "start_timestamp": "2025-09-09T17:15:00+01:00",
+    "end_timestamp": "2025-12-09T18:15:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs",
+    "price_early": null,
+    "price_normal": "650",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "251356",
+    "label": {
+      "sv": "Bugg Steg 2"
+    },
+    "description": {
+      "sv": "\\nBugg steg 2- Glädje, teknik och variaton\\nKursledare: Tessan & Fredde\\nstart: 11/9 Torsdagar 19:30-21. 10 gånger.\\nVälkommen till nästa nivå i din buggresa!\\nDen här kursen riktar sig till dig som har grundläggande kunskaper i bugg och vill utvecklas vidare med fokus på glädje, teknik och samspel. Vi bygger vidare på grundstegen och introducerar nya, enkla figurer som du sedan får kombinera till egna turer.\\nDu får även verktygen för att minimera drag och tryck i dansen för att skapa ett följsamt och roligt dansflöde. Vårt mål är att stärka både känslan för musiken och samspelet mellan förare och följare- och framför allt att spripa dansglädje!\\nMissa inte denna chans till att öka på din repertoar och få en grymt rolig termin med en enorm dansglädje och utveckling!\\nEndast 40 platser så först till kvarn! Glöm inte vattenflaskan.\\nHoppas vi syns på dansgolvet!\\n/Tessan & Fredde\\n \\n \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q485"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/251356",
+        "https://dans.se/nimbusdk/shop/?event=251356"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:39",
+    "start_timestamp": "2025-09-11T19:30:00+01:00",
+    "end_timestamp": "2025-11-20T21:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus Dansklubb",
+    "price_early": null,
+    "price_normal": "650",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "253543",
+    "label": {
+      "sv": "Bugg träning"
+    },
+    "description": {
+      "sv": "Bugg träning på onsdagar. Perfekt tillfälle att träna din bugg.\\nDrop in, ingen anmälan och bara att dyka upp.\\nSwisha vid entre.\\n\\n * 25 kr per medlem\\n * 50 kr för icke medlem \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q485"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/253543",
+        "https://dans.se/nimbusdk/shop/?event=253543"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:41",
+    "start_timestamp": "2025-09-03T19:30:00+01:00",
+    "end_timestamp": "2025-12-10T21:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus Dansklubb",
+    "price_early": null,
+    "price_normal": "0",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "257275",
+    "label": {
+      "sv": "Line Dance Fortsättning"
+    },
+    "description": {
+      "sv": "Line Dance fortsättning\\nKursledare Annette Hagberg & Elisabeth Bettan Persson\\nStart 31/8  Söndagar kl 16:00-17:30\\nDu behöver ha gått minst en grundkurs så att du kan grundstegen.\\nTänk på miljön & ta me egen vattenflaska.\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q491"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257275",
+        "https://dans.se/nimbusdk/shop/?event=257275"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:42",
+    "start_timestamp": "2025-08-31T16:00:00+01:00",
+    "end_timestamp": "2025-11-16T17:30:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus dansklubb",
+    "price_early": null,
+    "price_normal": "650",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "257508",
+    "label": {
+      "sv": "Lindy Hop fortsättning Helgkurs"
+    },
+    "description": {
+      "sv": "Lindy Hop Fortsättning Helgkurs\\nLindy Hop kurs Lördag 6/12 kl 10-15:30, och Söndag 7/12 kl 10-15:30. Totalt 8 timmars undervisning. Dessutom Socialdans på lördag kl 16-18 \\nHamregallerian, Edelsbergsvägen 19, Bollnäs.\\nKursledare: Walter Andersson & Elisabetta Perotti.\\nVälkommen till en kurs i Lindy Hop på medelnivå.\\nBetoning på flyt i dansen, musikanpassning, lekfullhet, några nya variationer och dans till snabbare tempo.\\nExempel på innehåll:\\nGrundsteg, gung och känsla. Lite jazzsteg, varianter på charleston, swingouter och kickar. Föra/Följa övningar, musikanpassning och snabbare tempo. Några nya variationer (turer).\\nFör att delta behöver du ha gått en grundkurs i Lindy Hop och behärska 6:or och 8:or samt kunna föra eller följa enklare turer.\\nFör att kunna hålla en hög kvalitet på kursen är deltagarantalet begränsat till 15 par. Vi kommer att försöka få till en så jämn fördelning mellan förare och följare som möjligt.\\nVarmt Välkomna\\n \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q4"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257508",
+        "https://dans.se/nimbusdk/shop/?event=257508"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:44",
+    "start_timestamp": "2025-12-06T10:00:00+01:00",
+    "end_timestamp": "2025-12-07T15:30:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus Dansklubb",
+    "price_early": null,
+    "price_normal": "950",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "245390",
+    "label": {
+      "sv": "ForsFox-Kurs"
+    },
+    "description": {
+      "sv": "ForsFox Kurs Välkommen till en kurs som tar Din egna fox till nya dimensioner!  Skapa den variation DU vill, med verktygen, synsätten och tänket som gör det tydligt, rent och möjligt. Få infallsvinklar att laborera med!  ForsFox kurs bygger på de analyser och insikter Magnus har gjort under sin dansresa sen 2011. \\n- \"Jag vill förmedla synsätt och bakomliggande tankemönster för hur du kan skapa det du själv vill i din fox\".  Kursen är byggd så den utgår helt från dig själv, hur du själv hittar dina rörelsemönster och tolkningar.  Vad gör en förare tydlig och bra, vad kännetecknar en lyhörd och bra följare? Allt från perspektivet ForsFox har av dansen. Det är varken rätt eller fel - det är ETT sätt att se på dansen. \\n\"Det är endast den egna fantasin som sätter gränserna.\" Magnus guidar dig in ett dans-tänk, håll i dig: Här finns äntligen friheten att dansa i din egna rörelse och känsla!\\nKursen riktar sig till nästan alla, oavsett nivå. En \"nybörjare\", som gått några få kurser, får förståelsen för det tekniska bakom. Den avancerade får mer synsätt / förståelse för dansen Fox, ur ForsFox perspektiv. Du lägger dig på den nivån du själv vill i kursen! Är du följare som vill börja föra? DET HÄR ÄR KURSEN FÖR DIG! \\nOmdömen från tidigare deltagare ”Den absolut bästa kurs jag gått!” ”Konceptet ger snabb utveckling” ”Pedagogisk, den röda tråden\"\\nPå kvällen är det socialdans som ingår för alla som gått kursen kl 18-23\\nTa gärna med skor som inte färgar av sig & vattenflaska. Det finns kylskåp, micro & Pizzeria i närheten.\\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q23",
+          "Q4"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/245390",
+        "https://dans.se/nimbusdk/shop/?event=245390"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:45",
+    "start_timestamp": "2025-11-15T10:00:00+01:00",
+    "end_timestamp": "2025-11-15T17:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus Dansklubb",
+    "price_early": null,
+    "price_normal": "750",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "253536",
+    "label": {
+      "sv": "Bugg steg 3 / InspirationsBugg"
+    },
+    "description": {
+      "sv": "Kurs: Bugg steg 3 / InspirationsBugg\\n \\nKursledare: Anneli & Henrik (uddaveckor) + gästinstruktörer (jämna veckor)\\n \\nAntal gånger: 10st\\n \\nÄr du sugen på att utveckla din bugg? Ta den ett steg längre?\\nDå har du kommit rätt! \\n \\nKrav på förkunskaper:\\nDu ska ha gått minst Bugg steg 1 och Bugg steg 2 tidigare, eller ha motsvarande kunskapsnivå.\\n \\nKursinnehåll:\\nDenna kurs håller ett bredare tema med flera olika kursledare som turas om att hålla kurs, perfekt för dig som vill ta din bugg till nästa nivå med exmpelvis figurer, turer, hesiteringar och musikanpassningar.\\nTräna på svänget i dansen. Vi kommer också att jobba en del med tips och några trix som man kan använda i sitt buggande.\\nVårat mål är att ni skall få en bredare repertoar i eran dans och att ni förstår buggen så mycket bättre efter terminens slut! \\n \\nAntagning:\\nFör att kunna erbjuda bästa möjliga kursupplevelse strävar vi alltid efter en jämn fördelning mellan dansroller vid antagning till våra kurser.\\nAntagningen sker enligt principen först till kvarn, vilket innebär att platserna tilldelas i den ordning anmälningarna inkommit, fram till dess att kursen är fulltecknad.\\nVid paranmälan antas båda deltagarna samtidigt.\\nSingelanmälningar matchas i turordning med nästa singelanmälan med motsatt dansroll innan de antas.\\nDet är tillåtet att bara dansa med en och samma person under kursens gång. Inget vi rekommenderar men det är fullt ut okej! \\n \\n \\nÖvrig info:\\nTa med egen vattenflaska, inneskor helst utan svart sula (vi är rädda om vårat golv) \\n \\n \\n \\nVarmt välkommen\\n \\n \\n"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q485"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/253536",
+        "https://dans.se/nimbusdk/shop/?event=253536"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": false
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:46",
+    "start_timestamp": "2025-09-10T17:45:00+01:00",
+    "end_timestamp": "2025-11-19T19:15:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs, Nimbus Dansklubb",
+    "price_early": null,
+    "price_normal": "650",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "257070",
+    "label": {
+      "sv": "Tango Marcelo Almirón En Tango Två Stilar"
+    },
+    "description": {
+      "sv": ""
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q161",
+        "dance_styles": [
+          "Q492"
+        ],
+        "venue": "Q161",
+        "event_series": "",
+        "source": "Q484"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": null,
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://dans.se/event/257070",
+        "https://dans.se/nimbusdk/shop/?event=257070"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "",
+      "official_website": ""
+    },
+    "last_update": "2025-10-27T10:29:47",
+    "start_timestamp": "2025-11-29T10:00:00+01:00",
+    "end_timestamp": "2025-11-29T16:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Bollnäs",
+    "price_early": null,
+    "price_normal": "600",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  }
+]

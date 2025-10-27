@@ -1,0 +1,872 @@
+[
+  {
+    "id": "valentine-events/Valentineswing26",
+    "label": {
+      "sv": "Valentine Swing 2026"
+    },
+    "description": {
+      "sv": "Valentine Swing Castle edition is BACK!!\nThe yearly LOVE dance festival of Valentine Swing will be back on the 13-16th of February in 2026. Again we are heading to the UNIQUE hotel Venue of Johannesbergs Castle and it is going to be one of a kind for an event!!\nSo come and meet old and new friends, top instructors and heaps of social dancing. And remember, Valentine swing is all about socializing, and meeting new people and old friends all in the name of LOVE and FRIENDSHIP.\n\n\nVisit webbpage for more information:\nwww.ValentineSwing.dance\n\n“What's a royal ball? After all, I suppose it would be frightfully dull, and boring, and completely ... completely wonderful.” - - - Cinderella\n\nA warm welcome to Valentine Swing in 2026\n/ The Valentine team"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q500",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q504",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/valentine-events/Valentineswing26",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/valentine-events"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "Valentine events",
+      "official_website": "https://onbeat.dance/club/valentine-events"
+    },
+    "last_update": "2025-10-27T10:30:29+01:00",
+    "start_timestamp": "2026-02-13T18:00:00+01:00",
+    "end_timestamp": "2026-02-16T03:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Johannesberg Castle",
+    "price_early": null,
+    "price_normal": null,
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 1
+  },
+  {
+    "id": "wcs-pitea/traning-ht-2025",
+    "label": {
+      "sv": "Träningsgruppen HT 2025"
+    },
+    "description": {
+      "sv": "Varmt välkommen till träningsgruppen i West Coast Swing hösten 2025\n\nANMÄLAN ÄR ÖPPEN!\n\nMålgrupp:\nTräningsgruppen lämpar sig för dig som tidigare gått minst 2 fortsättningskurser och känner dig bekväm med takt, timing, grundturerna till fullo och några variationer av dessa. Är du osäker vilken nivå som passar dig får du gärna prata med våra instruktörer så vi kan hjälpa dig.\n\nTid:\nTorsdagar 4/9 till och med 4/12. Torsdag 25/9 utgår. Preliminärt 13 tillfällen.\n\nKl 19:00 - 20:00 Socialdans med tidigare gruppen samt uppvärmning och avprickning\nKl 20:00 - 21:15 Träningsgruppen\n\nPlats:\nNorrfjärdens Folkets Hus, Porsnästorget 6, 94532 Norrfjärden\n\nLedare:\nTori Fjällström, Johan Lidberg, Robin Larsson, Susanna Kivilgim, Kenneth Nilsson, Henrik Öhlund\nAndra ledare kan förekomma enstaka gånger.\n\nPris:\nOrdinarie pris: 900kr\nUnder 20år eller heltidsstudent: 450kr\n\nKrav på medlemsskap i WCS Piteå\n\nAnmälan och betalning sker i förväg på:\nhttps://yggdrasil.dance/wcs-pitea/traning-ht-2025\n\nOm det är första gången du registrerar dig på Yggdrasil, kolla skräpposten om du saknar bekräftelsemail.\n\nArrangör:\nWest Coast Swing Piteå, Ideell förening"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q499",
+        "dance_styles": [
+          "Q15",
+          "Q4"
+        ],
+        "venue": "Q502",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcs-pitea/traning-ht-2025",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcs-pitea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Piteå",
+      "official_website": "https://onbeat.dance/club/wcs-pitea"
+    },
+    "last_update": "2025-10-27T10:30:29+01:00",
+    "start_timestamp": "2025-09-04T20:00:00+01:00",
+    "end_timestamp": "2025-12-04T21:15:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Norrfjärdens Folkets hus",
+    "price_early": null,
+    "price_normal": "900",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 13
+  },
+  {
+    "id": "wcs-pitea/fortsattning-ht-2025",
+    "label": {
+      "sv": "Fortsättningskurs HT 2025"
+    },
+    "description": {
+      "sv": "Varmt välkommen till fortsättningskurs i West Coast Swing hösten 2025\n\nANMÄLAN ÄR ÖPPEN!\n\nMålgrupp:\nDu som tidigare har gått minst en grundkurs och är bekant med turerna left side pass, under arm, suger push, suger tuck och whip. Denna termin kommer vi gå igenom nytt material jämfört med tidigare termin. Det innebär att du som gått fortsättningskursen tidigare rekommenderas att gå den en termin till.\n\nTid:\nTorsdagar 18/9 till och med 4/12. Torsdag 25/9 utgår. Preliminärt 11 tillfällen.\n\nKl 17:45 - 18:00 Lokalen öppnar, avprickning och uppvärmning.\nKl 18:00 - 19:00 Fortsättningskurs\nKl 19:00 - 20:00 Möjlighet till socialdans med nästa grupp.\n\nPlats:\nNorrfjärdens Folkets Hus, Porsnästorget 6, 94532 Norrfjärden\n\nLedare:\nJohan Lidberg, Tori Fjällström, Robin Larsson, Susanna Kivilgim, Henrik Ölund. Andra instruktörer kan förekomma enstaka gånger.\n\nPris:\nOrdinarie pris: 700kr\nUnder 20år eller heltidsstudent: 350kr\nOm du även deltar i träningsgruppen: 300kr. (justeras i efterhand)\n\nKrav på medlemsskap i WCS Piteå\n\nAnmälan och betalning sker i förväg på:\nhttps://onbeat.dance/wcs-pitea/fortsattning-ht-2025\n\nOm det är första gången du registrerar dig på Onbeat (tidigare Yggdrasil), kolla skräpposten om du saknar bekräftelsemail.\n\nArrangör:\nWest Coast Swing Piteå, Ideell förening"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q499",
+        "dance_styles": [
+          "Q15",
+          "Q4"
+        ],
+        "venue": "Q502",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcs-pitea/fortsattning-ht-2025",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcs-pitea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Piteå",
+      "official_website": "https://onbeat.dance/club/wcs-pitea"
+    },
+    "last_update": "2025-10-27T10:30:29+01:00",
+    "start_timestamp": "2025-09-18T18:00:00+01:00",
+    "end_timestamp": "2025-12-04T19:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Norrfjärdens Folkets hus",
+    "price_early": null,
+    "price_normal": "700",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 11
+  },
+  {
+    "id": "wcsskelleftea/fortsattningskurs-steg2-ht-25",
+    "label": {
+      "sv": "Steg 2 Fortsättningskurs"
+    },
+    "description": {
+      "sv": "I denna kurs går vi igenom fler nya turer/variationer på grundturerna, jobbar mer med förningstillfällen (stretch, compression) samt ger exempel på hur vi kan dansa till olika typer av musik och lägga till individuell styling. Innehållet i denna kurs kan variera vilket gör att du kan gå denna kurs flera gånger och ändå få med dig något nytt.  \nKräver genomgången steg 1-kurs eller att du har likvärdiga kunskaper (du känner till grundrytmerna och kan föra/följa grundturerna samt starter step). Om du bara varit på ”prova på” rekommenderar vi att du först går nybörjarkursen för att få en ordentlig teknisk grund."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q122",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsskelleftea/fortsattningskurs-steg2-ht-25",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsskelleftea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-09-24T20:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Skellefteå (del av WCS Umeå)",
+      "official_website": "https://onbeat.dance/club/wcsskelleftea"
+    },
+    "last_update": "2025-10-27T10:30:29+01:00",
+    "start_timestamp": "2025-10-14T18:30:00+01:00",
+    "end_timestamp": "2025-11-18T20:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Klemensnäs Folkets Hus",
+    "price_early": null,
+    "price_normal": "590",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 6
+  },
+  {
+    "id": "wcsumea/HT25Novice",
+    "label": {
+      "sv": "Tävlingsträning: Newcomer/Novice (Torsdagar)"
+    },
+    "description": {
+      "sv": "Vill utveckla din dans för att tävla i Newcomer eller Novice? Då är detta kursen för dig! Vi rekommenderar att du gått Steg 3 minst en gång samt att du har börjat tävla eller vill börja tävla. Du behöver inte ha några WSDC-poäng för att vara med på kursen.\n\nVi fokuserar på tävlingsrelevant träning med särskilt fokus på Timing, Teamwork och Technique – de tre grundpelarna för att lyckas på tävling. Kursen är ledarledd och består till stor del av praktiska övningar. Innehållet är anpassat för att möta de behov som uppstår i de två första tävlingskategorierna: Newcomer och Novice.\n\nEfter kursen finns möjlighet till egen träning mellan 19:00–20:30, likt förra terminens upplägg för torsdagarna."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/HT25Novice",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2025-08-28T18:00:00+01:00",
+    "end_timestamp": "2025-12-18T19:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus",
+    "price_early": null,
+    "price_normal": "1120",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 14
+  },
+  {
+    "id": "wcsumea/HT25Intermediate",
+    "label": {
+      "sv": "Tävlingsträning: Intermediate+  (Torsdagar)"
+    },
+    "description": {
+      "sv": "Tävlar du i Intermediate eller högre? Då är detta träningen för dig!\n\nFör att delta krävs att du har minst 16 WSDC-poäng i Novice och därmed är berättigad att tävla i Intermediate eller högre. Fokus ligger på att vidareutveckla din dans för tävling på högre nivå – både tekniskt och musikaliskt.\n\nTräningen är deltagarledd – det innebär att gruppen tillsammans ansvarar för innehållet. Ni turas om att hålla i övningar, fokus eller planerar fri träning beroende på behov och vilja inom gruppen. Av denna anledning är också priset för denna kurs reducerad.\n\nFrån kl.19 har vi som tidigare termin egen träning så kom innan kursen och värm upp!"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/HT25Intermediate",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": null,
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2025-08-28T20:30:00+01:00",
+    "end_timestamp": "2025-12-18T21:30:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus",
+    "price_early": null,
+    "price_normal": "560",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 14
+  },
+  {
+    "id": "wcsumea/HT25Steg3_2",
+    "label": {
+      "sv": "Steg 3: Fördjupning, Veckokurs"
+    },
+    "description": {
+      "sv": "Välkommen på fortsättningskurs i West Coast Swing! \n\nTEMA: TEAMWORK\nKursledare: Emelie & Chris\n\nDenna kurs är till för dig som önskar nytt material, variationer, styling och har gått Steg 1 och 2 eller motsvarande. Kursinnehållet förändras för varje kursomgång med tanken att du ska gå denna kurs många gånger och fortfarande få med dig något nytt.\n\nVi fortsätter bygga på turerna som du redan kan och börjar jobba med mer komplicerade turer och koncept. Här kommer vi också jobba med musikanpassning både med val av turer för förare och styling för följare.\n\nExempel på turer: Shadow position. Roll in to closed. Rock and go. Individuell styling. Olika handfattningar. Variationer på starter step (basic, tap step-trippel, hitch-and-go).  Sweetheart. Basic turer i closed position. Show time. Passing tuck. Whip variationer (reverse, underarm turn).\n\nExempel på koncept: Förläng 6-count patterns till 8-count. Individuell styling. Timing. Weight transfers. Resisted release. Phrase change med mera. Active/passive lead."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/HT25Steg3_2",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-10-17T18:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2025-11-04T20:15:00+01:00",
+    "end_timestamp": "2025-12-16T21:15:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus",
+    "price_early": null,
+    "price_normal": "560",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 7
+  },
+  {
+    "id": "wcsumea/HT25Steg2_2",
+    "label": {
+      "sv": "Steg 2: Fortsättning, Veckokurs"
+    },
+    "description": {
+      "sv": "Har du gått nybörjarkursen? Då är detta nästa kurs för dig! Kursinnehållet är mer eller mindre samma varje kursomgång och är en direkt fortsättning från nybörjarkursen. \n\nVi går främst genom nya turer under denna kurs, samt börjar med individuell styling. Om du bara varit på ”prova på” klasser så rekommenderar vi att du går nybörjarkursen först för att få en ordentlig teknisk grund.\n\nKursledare: Johanna & Marcus\n\nTurer: Roll-in roll-out (+ olika handfattningar). Outside turn. Whip med Outside turn. Hip catch. Slingshot.\n\nKoncept: Keep momentum. Posting/Floating anchor. Body lead."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/HT25Steg2_2",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-10-17T18:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2025-11-04T18:00:00+01:00",
+    "end_timestamp": "2025-12-16T19:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus",
+    "price_early": null,
+    "price_normal": "560",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 7
+  },
+  {
+    "id": "wcsumea/HT25Steg4_2",
+    "label": {
+      "sv": "Steg 4: Utmaning, Veckorkurs"
+    },
+    "description": {
+      "sv": "Mot senare delen av kursen tränar vi mer med den partner vi anmälde oss, alternativt den vi blir ihopparad med när kursen börjar, för att träna inför uppvisningen. Det kommer även bli något extra träningstillfälle någon/några tisdagar i januari.\n\nKursledare: Sara & Johannes\n\nAudition krävs för att bli antagen på denna kurs! Syftet med audition är att säkerställa att dansaren har de förkunskaper som krävs för den högsta nivån. Under audition kommer dansaren testas på både olika turer, samt hur väl de utför tekniska moment. Inför detta kurstillfälle kommer en audition ske på Folkets Hus den 21a oktober.\n\nExempel på turer: Whip variationer med passiv förning. Telemark. Fly-by. Dips. Ducks. Rides. One-foot spins.\n\nExempel på koncept: Phrase changes, Leverage, Acceleration and deceleration, contact improvisation, Dansa till olika tempo, Dansa till olika musikstilar, Active/passive lead, Synkoperingar, förlängningar förare/följar initierade. Blues/Swung rytm."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/HT25Steg4_2",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-10-17T18:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2025-11-04T20:15:00+01:00",
+    "end_timestamp": "2025-12-16T21:15:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus",
+    "price_early": null,
+    "price_normal": "560",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 7
+  },
+  {
+    "id": "wcsumea/HT25Teknik_2",
+    "label": {
+      "sv": "Teknik, Veckokurs"
+    },
+    "description": {
+      "sv": "Under kursen fokuserar vi främst på teknik samt att finslipa den kunskap du har. Varje kurstillfälle kommer att ha ett specifikt tema och det kommer vara mycket tid för att träna och nöta snarare än att få mycket ny input. Du ska vara öppen för att diskutera och analysera din dans samt villig att träna vissa moment självständigt, utan partner. Målet med kursen är att fördjupa din dansteknik samt hitta verktyg för att utveckla din egen dansstil.\n\nVi rekommenderar att du tagit steg 3 minst 1 gånger för att delta på denna kurs.\n\nKursledare: Jennie & Matvey\n\nExempel på koncept: Critical timing, Connection strength (bone, muscle, air), Weight transfers (partial, full, delayed), Active/passive lead."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/HT25Teknik_2",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-10-17T18:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2025-11-04T18:00:00+01:00",
+    "end_timestamp": "2025-12-16T19:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus",
+    "price_early": null,
+    "price_normal": "560",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 7
+  },
+  {
+    "id": "wcsumea/community-swing-25",
+    "label": {
+      "sv": "Community Swing 2025"
+    },
+    "description": {
+      "sv": "[English version below]\n\nVälkomna till WCS Umeås första Community Swing-helg! Gör er redo för en hel helg med massa workshops med alla våra egna instruktörer från föreningen. Dagtid kommer vi ha 2 rum parallellt med workshops på olika nivåer, så det finns något för alla. På eftermiddagen umgås vi och äter tillsammans (ingår ej), och på lördagkväll blir det socialdans.\n\nSå kom och dansa med oss! Våra instruktörer har förberett ett smörgåsbord av workshops av allt från connection och teknik till switching. Helgen är öppen för alla våra medlemmar, och är gratis.\n\nPreliminärt schema  \nLördag  \n10:00 - 11:00 Workshop  \n11:15 - 12:15 Workshop  \n12:15 - 13:45 Lunchrast  \n13:45 - 14:45 Workshop  \n15:00 - 16:00 Workshop  \n19:00 - 22:00 Socialdans\n\nSöndag  \n10:00 - 11:00 Workshop  \n11:15 - 12:15 Workshop  \n12:15 - 13:45 Lunchrast  \n13:45 - 14:45 Workshop  \n15:00 - 16:00 Workshop  \nFrån 16:00 Mingle & Tea dance\n\n========================================\n\nWelcome to WCS Umeå's first Community Swing weekend. Get ready for a weekend filled with tons of workshops with our very own instructors. During the day, we will have workshops at different levels in 2 rooms in parallel, so there will be something for everyone. Later in the afternoon, we will hang out together and have dinner (not included), and on Saturday evening, there will be a social.\n\nCome and dance with us! Our instructors have prepared a smörgåsbord of workshops, from connection through technique to switching. The weekend is open for all our members, and it is free.\n\nPreliminary schedule  \nSaturday  \n10:00 - 11:00 Workshop  \n11:15 - 12:15 Workshop  \n12:15 - 13:45 Lunch break  \n13:45 - 14:45 Workshop  \n15:00 - 16:00 Workshop  \n19:00 - 22:00 Social\n\nSunday  \n10:00 - 11:00 Workshop  \n11:15 - 12:15 Workshop  \n12:15 - 13:45 Lunch break  \n13:45 - 14:45 Workshop  \n15:00 - 16:00 Workshop  \nFrom 16:00 Mingle & Tea dance"
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q4"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/community-swing-25",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-09-24T18:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2025-11-15T10:00:00+01:00",
+    "end_timestamp": "2025-11-16T20:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus",
+    "price_early": null,
+    "price_normal": null,
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "wcsumea/uww2026",
+    "label": {
+      "sv": "Umeå Westie Weekend 2026"
+    },
+    "description": {
+      "sv": "One of the biggest social events in Sweden! We’re looking forward to a weekend full of workshops and social dancing with you and our great instructors.\n\nTeachers:\nMaxence Martin & Virginie Grondin\nJula Palenga & Ibirocay Regueira\nEvelina Lundberg & Victor Aitman\nClement Turpain & Evgenia Itkina\n\nLevels:\nOBS! When you couple register with someone you have to register on the same workshop level.\n\nLevel 2\nFor those who know the basics in West Coast Swing.\nYou should know the basic 6 count and 8 count patterns: sugar push, under arm turn, left side pass, sugar tuck, and whip. This level is suitable for those who have taken at least a beginner course.\n\nLevel 3\nFor those who have been dancing regularly for at least one or two years.\nYou should feel confident dancing on the social floor, and changing between patterns is not a problem for you. This level is suitable for those who have taken at least one or more intermediate courses (fortsättningskurs).\n\nLevel 4\nThis is a level for those who have been dancing for a longer time.\nYou should have danced WCS for at least 3 years, have points in the Novice division according to WSDC ranking, or have equivalent knowledge in case you don’t compete.\n\nLevel 5\nYou have been dancing for a long time and travel regularly to bigger dance events.\nYou should have at least 10 Novice points. In case you don’t compete, you can enter this level through auditions.\n\nLevel 6\nThis level is for the most experienced dancers who want to be challenged.\nYou should compete in the Intermediate division according to WSDC ranking and have a minimum of 5 Intermediate points to take this level. In case you don’t compete or don’t meet the criteria, you can enter this level through auditions."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q16",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q17",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/wcsumea/uww2026",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/wcsumea"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-10-15T18:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "WCS Umeå",
+      "official_website": "https://onbeat.dance/club/wcsumea"
+    },
+    "last_update": "2025-10-27T10:30:30+01:00",
+    "start_timestamp": "2026-01-23T19:00:00+01:00",
+    "end_timestamp": "2026-01-25T23:59:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Umeå Folkets Hus, Umeå",
+    "price_early": null,
+    "price_normal": null,
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 0
+  },
+  {
+    "id": "westievision/fortsattning-medel-HT25",
+    "label": {
+      "sv": "WCS Fortsättning Medel Hösten 2025"
+    },
+    "description": {
+      "sv": "Kursen vänder sig till dig som tidigare gått minst 1 grundkurs inom WCS och vill jobba vidare med teknik och fler turer i dansen."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q477",
+        "dance_styles": [
+          "Q15"
+        ],
+        "venue": "Q505",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/westievision/fortsattning-medel-HT25",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/westievision"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-10-05T20:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "Westie Vision Sundsvall",
+      "official_website": "https://onbeat.dance/club/westievision"
+    },
+    "last_update": "2025-10-27T10:30:31+01:00",
+    "start_timestamp": "2025-11-04T18:00:00+01:00",
+    "end_timestamp": "2025-12-09T19:00:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Trafikgatan 54",
+    "price_early": null,
+    "price_normal": "660",
+    "price_late": null,
+    "weekly_recurring": true,
+    "number_of_occasions": 6
+  },
+  {
+    "id": "westievision/helgintensiv-connect-and-extend",
+    "label": {
+      "sv": "WCS Helgintensiv Connect and Extend 22-23/11"
+    },
+    "description": {
+      "sv": "Varmt välkomna till höstens andra helgintensiv tillsammans med oss i Westie Vision i Sundsvall! \n\nDenna gång gästas vi av advanced-dansaren Robin Larsson från Piteå som kommer att instruera tillsammans med Viktoria! Robin och Viktoria har instruerat mycket tillsammans under 2019-2023 i flera städer uppe i Norrland och gör nu en come back som instruerande par hos oss i Sundsvall. \n\nTemat för helgen blir connection och förlängningar. Vi kommer att jobba en hel del med teknik för bättre connection, och genom det  öppna upp möjligheten att förlänga turer och bygga/skapa dansen tillsammans med partner.  \n \nNivå: Du ska vara en van WCS-dansare och gått minst 3 fortsättningskurser tidigare. Du bör känna dig säker i din socialdans och börjat jobba mer med delay, elasticitet och musikalitet.\n\nLördag:\n10.30-15.30 Kurs\n19-20 Workshop\n20-23 Socialdans\n\nSöndag\n10.30 - 15.30 Kurs\n\nAnmälan öppnar onsdag den 10 september kl 20.00. Vi har endast plats för 20 par, så se till att hitta en partner och vara redo."
+    },
+    "coordinates": null,
+    "schedule": {},
+    "identifiers": {
+      "wikidata": {
+        "dance_style": "",
+        "venue": "",
+        "event_series": ""
+      },
+      "dancedatabase": {
+        "event": "",
+        "organizer": "Q477",
+        "dance_styles": [
+          "Q4"
+        ],
+        "venue": "Q505",
+        "event_series": "",
+        "source": "Q501"
+      }
+    },
+    "links": {
+      "facebook": null,
+      "official_website": "https://onbeat.dance/westievision/helgintensiv-connect-and-extend",
+      "registration_website": null,
+      "schedule_website": null,
+      "venue_website": null,
+      "image": null,
+      "sources": [
+        "https://onbeat.dance/club/westievision"
+      ]
+    },
+    "registration": {
+      "cancelled": false,
+      "fully_booked": false,
+      "registration_opens": "2025-09-10T20:00:00+01:00",
+      "registration_closes": null,
+      "advance_registration_required": true,
+      "registration_open": true
+    },
+    "organizer": {
+      "description": "Westie Vision Sundsvall",
+      "official_website": "https://onbeat.dance/club/westievision"
+    },
+    "last_update": "2025-10-27T10:30:31+01:00",
+    "start_timestamp": "2025-11-22T10:30:00+01:00",
+    "end_timestamp": "2025-11-23T15:30:00+01:00",
+    "start_time": "",
+    "end_time": "",
+    "location": "Trafikgatan 54",
+    "price_early": null,
+    "price_normal": "990",
+    "price_late": null,
+    "weekly_recurring": false,
+    "number_of_occasions": 1
+  }
+]
