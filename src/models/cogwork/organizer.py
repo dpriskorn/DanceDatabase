@@ -4,17 +4,17 @@ from typing import List
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel, Field
+from pydantic import Field
 
-from src.models.dance_event import DanceEvent
 from src.models.cogwork.event import CogworkEvent
+from src.models.dance_event import DanceEvent
+from src.models.organizer import Organizer
 
 
-class CogworkOrganizer(BaseModel):
+class CogworkOrganizer(Organizer):
     """Abstract class for an organizer in CogWork"""
     organizer_slug: str = Field(description="Organizer in Cogwork, e.g. 'dansgladje'")
     event_class: CogworkEvent
-    json_output_folder: Path
     base_url: str = "https://dans.se"
     event_links: List[str] = Field(default_factory=list)
 
@@ -44,7 +44,7 @@ class CogworkOrganizer(BaseModel):
     # noinspection PyArgumentList,PyCallingNonCallable
     def start(self):
         """Fetch all events and export them."""
-        print("Fetching calendar links...")
+        print(f"Fetching calendar links for {self.__class__.__name__}...")
         self.parse_calendar_links(self.fetch_calendar_page())
 
         print(f"Found {len(self.event_links)} event links. Fetching events...")
@@ -60,15 +60,3 @@ class CogworkOrganizer(BaseModel):
         print("Exporting events to JSON...")
         self.export_to_json()
 
-    # === Export ===
-    def export_to_json(self):
-        Path(self.json_output_folder).mkdir(parents=True, exist_ok=True)
-        file_path = Path(self.json_output_folder) / f"{self.__class__.__name__.lower()}.json"
-        # Convert each Pydantic model to a plain dict
-        data = [event.model_dump(mode="json") for event in self.events]
-
-        # Serialize to JSON (Pydantic already handles datetimes nicely)
-        json_data = json.dumps(data, indent=2, ensure_ascii=False)
-
-        file_path.write_text(json_data, encoding="utf-8")
-        print(f"Exported {len(self.events)} events to {file_path}")

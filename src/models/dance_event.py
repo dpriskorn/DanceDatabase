@@ -105,22 +105,26 @@ class DanceEvent(BaseModel):
     coordinates: dict[str, float] | None = Field(None, description="Optional coordinates with latitude and longitude")
     schedule: dict[str, Schedule] = Field({}, description="Optional language keyed schedule for the event")
     identifiers: Identifiers = Identifiers()
-    event_links: EventLinks = EventLinks()
+    links: EventLinks = EventLinks()
     registration: Registration = Registration()
     organizer: Organizer = Field(Organizer(), description="Organizer of the event")
 
     # time
     last_update: datetime | None = Field(None, description="Timestamp of the last update")
-    start_time: datetime | None = Field(None, description="Event start time")
-    end_time: datetime | None = Field(None, description="Event end time")
+    start_timestamp: datetime | None = Field(None, description="Event start timestamp")
+    end_timestamp: datetime | None = Field(None, description="Event end timestamp")
+    start_time: str = Field(default_factory=str, description="Event start time, e.g. '10:00'")
+    end_time: str = Field(default_factory=str, description="Event end time, e.g. '16:00'")
 
     # str
     location: str = ""
 
     # prices
+    # todo add currency based on schema.org
     price_early: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Early bird price")
     price_normal: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Normal price")
     price_late: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Late price")
 
     # bool
     weekly_recurring: bool = False
+    number_of_occasions: int = 0

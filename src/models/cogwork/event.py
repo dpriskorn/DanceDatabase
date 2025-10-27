@@ -1,16 +1,16 @@
 import logging
 import re
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 from typing import Optional, cast
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel, Field, AnyUrl, validator
+from pydantic import BaseModel, Field, AnyUrl
 
+from config import CET
 from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
     Registration
 
-CET = timezone(timedelta(hours=1))
 logger = logging.getLogger(__name__)
 DANCE_STYLE_MAP = {
     "fox": "Q23",
@@ -249,8 +249,8 @@ class CogworkEvent(BaseModel):
             # source="CogWork at http://dans.se",
             label={"sv": self.event_metadata["label_sv"]},
             description={"sv": self.description},
-            start_time=self.start_time,
-            end_time=self.end_time,
+            start_timestamp=self.start_time,
+            end_timestamp=self.end_time,
             location=self.location or "",
             price_normal=self.price_normal,
             last_update=now,
@@ -270,7 +270,7 @@ class CogworkEvent(BaseModel):
             ),
             organizer=Organizer(
             ),
-            event_links=EventLinks(
+            links=EventLinks(
                 sources=cast(list[AnyUrl], [
                     self.event_url,
                     self.shop_url

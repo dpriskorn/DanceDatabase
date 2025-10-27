@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 from pydantic import ValidationError  # ✅ correct import (not from _pydantic_core)
 
+from src.models.onbeat.organizers import OnbeatOrganizers
 from src.models.scrapers.altira import Altira
 from src.models.scrapers.dansgladje import Dansgladje
 from src.models.scrapers.bdk import Bdk
@@ -76,6 +77,12 @@ start = time.time()
 gas = Gasasteget(json_output_folder=output_folder)
 gas.start()
 logger.info(f"Gasasteget finished in {time.time() - start:.2f} seconds")
+
+start = time.time()
+onb = OnbeatOrganizers(json_output_folder=output_folder)
+onb.start()
+logger.info(f"Gasasteget finished in {time.time() - start:.2f} seconds")
+
 
 logger.info(f"All scrapers finished in {time.time() - start_total:.2f} seconds")
 
