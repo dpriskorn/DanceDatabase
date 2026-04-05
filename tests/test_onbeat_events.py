@@ -396,3 +396,24 @@ class TestParseEvents:
         with patch("click.confirm", return_value=True):
             events = event.parse_events()
         assert len(events) == 0
+
+    def test_parse_events_calls_find_cards_when_empty(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.organizer_name = "Test"
+        object.__setattr__(event, 'cards', None)
+        def mock_find_cards():
+            object.__setattr__(event, 'cards', [])
+        object.__setattr__(event, 'find_cards', mock_find_cards)
+        events = event.parse_events()
+        assert event.cards == []
+
+    def test_parse_events_calls_parse_community_when_empty(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        object.__setattr__(event, 'organizer_name', "")
+        event.cards = [MagicMock()]
+        object.__setattr__(event, 'parse_community_name', MagicMock())
+        no_courses = MagicMock()
+        no_courses.get_text.return_value = "Sorry"
+        event.cards[0].find.return_value = no_courses
+        events = event.parse_events()
+        event.parse_community_name.assert_called_once()
