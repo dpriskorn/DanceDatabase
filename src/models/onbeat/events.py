@@ -51,7 +51,8 @@ class OnbeatEvents(BaseModel):
             "Trafikgatan 54": "Q505",
             "Klemensnäs Folkets Hus": "Q122",
             "Umeå Folkets Hus": "Q17",
-            "Kulturhus tio14": "Q518"
+            "Kulturhus tio14": "Q518",
+            "Hälsans Hus": "Q519"
         },
         description="Mapping of place to QID in DanceDatabase (case-insensitive)")
 
