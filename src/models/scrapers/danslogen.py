@@ -61,7 +61,7 @@ class DanslogenTableRow(BaseModel):
     @classmethod
     def from_row(cls, row: Tag) -> Optional['DanslogenTableRow']:
         cells = row.find_all('td')
-        if len(cells) < 10:
+        if len(cells) < 9:
             return None
 
         weekday = cells[0].get_text(strip=True)
@@ -71,9 +71,15 @@ class DanslogenTableRow(BaseModel):
         band_val = cells[3].get_text(strip=True)
         venue_val = cells[4].get_text(strip=True)
         ort_val = cells[5].get_text(strip=True)
-        kommun_val = cells[7].get_text(strip=True)
-        lan_val = cells[8].get_text(strip=True)
-        ovrigt_val = cells[9].get_text(strip=True)
+
+        if len(cells) == 10:
+            kommun_val = cells[7].get_text(strip=True)
+            lan_val = cells[8].get_text(strip=True)
+            ovrigt_val = cells[9].get_text(strip=True)
+        else:
+            kommun_val = cells[6].get_text(strip=True) if len(cells) > 6 else ""
+            lan_val = cells[7].get_text(strip=True) if len(cells) > 7 else ""
+            ovrigt_val = ""
 
         if not band_val or not band_val.strip():
             return None
