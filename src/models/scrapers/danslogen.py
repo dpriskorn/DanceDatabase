@@ -453,6 +453,8 @@ class Danslogen:
         if not table_row:
             return None
 
+        logger.debug("Parsed row: %s", table_row.model_dump())
+
         weekday = table_row.weekday
         day = table_row.day
         time_text = table_row.time
