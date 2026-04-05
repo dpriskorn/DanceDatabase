@@ -50,7 +50,8 @@ class OnbeatEvents(BaseModel):
             "Johannesbergs Castle": "Q504",
             "Trafikgatan 54": "Q505",
             "Klemensnäs Folkets Hus": "Q122",
-            "Umeå Folkets Hus": "Q17"
+            "Umeå Folkets Hus": "Q17",
+            "Kulturhus tio14": "Q518"
         },
         description="Mapping of place to QID in DanceDatabase (case-insensitive)")
 
@@ -128,7 +129,7 @@ class OnbeatEvents(BaseModel):
             self.organizer_name = header.get_text(strip=True)
             self.organizer_qid = self.map_community_qid(text=self.organizer_name)
             if not self.organizer_qid:
-                raise Exception("could not match organizer qid")
+                logger.warning("Could not match organizer qid for community: %s", self.organizer_name)
             logger.debug("Parsed community name: %s", self.organizer_name)
 
     @staticmethod

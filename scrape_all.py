@@ -2,9 +2,9 @@ import logging
 import os
 import datetime
 import time
+import subprocess
 from pathlib import Path
 
-from src.models.onbeat.organizers import OnbeatOrganizers
 from src.models.scrapers.altira import Altira
 from src.models.scrapers.dansgladje import Dansgladje
 from src.models.scrapers.bdk import Bdk
@@ -82,10 +82,10 @@ gas = Gasasteget(json_output_folder=output_folder)
 gas.start()
 logger.info(f"Gasasteget finished in {time.time() - start:.2f} seconds")
 
+# Run onbeat scraper
 start = time.time()
-onb = OnbeatOrganizers(json_output_folder=output_folder)
-onb.start()
-logger.info(f"Gasasteget finished in {time.time() - start:.2f} seconds")
+subprocess.run(["python", "scrape_onbeat.py"], check=True)
+logger.info(f"Onbeat finished in {time.time() - start:.2f} seconds")
 
 
 logger.info(f"All scrapers finished in {time.time() - start_total:.2f} seconds")
