@@ -6,3 +6,5 @@ old_data
 *.json
 *.txt
 *.html
+*__pycache__*
+/coverage_html/
