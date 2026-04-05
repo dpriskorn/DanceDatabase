@@ -274,8 +274,8 @@ class OnbeatEvents(BaseModel):
             try:
                 price_normal = Decimal(details["price"].replace("SEK", "").replace("kr", "").replace(",", ".").strip())
             except Exception:
-                logger.warning(f"Could not parse price '{details["price"]}' into Decimal")
-                price_normal = None
+                logger.warning(f"Could not parse price '{details["price"]}' - defaulting to 0")
+                price_normal = Decimal(0)
 
             dance_event_organizer = Organizer(
                 description=self.organizer_name,
