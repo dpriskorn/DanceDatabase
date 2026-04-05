@@ -22,6 +22,7 @@ Scrapers for various dance event sources:
 | Forsfox | `src/models/scrapers/forsfox.py` |
 | Fox Unlimited | `src/models/scrapers/foxunlimited.py` |
 | Fox4u | `src/models/scrapers/fox4u.py` |
+| Fmsab | `src/models/scrapers/fmsab.py` |
 | Wannadance | `src/models/scrapers/wannadance.py` |
 | Nimbusdk | `src/models/scrapers/nimbusdk.py` |
 | Gasasteget | `src/models/scrapers/gasasteget.py` |
@@ -36,6 +37,14 @@ poetry run python main.py
 ```
 
 Output goes to `data/YYYYMMDD/` with JSON files per source.
+
+## Validate
+
+```bash
+poetry run python validate_data.py
+```
+
+Validates all JSON files in `data/` against the schema.
 
 ## License
 
