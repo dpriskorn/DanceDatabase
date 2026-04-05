@@ -57,7 +57,8 @@ class OnbeatEvents(BaseModel):
             "Hälsans Hus": "Q519",
             "Bergnäsgården": "Q50",
             "Gnistan Folkets Hus": "Q520",
-            "Bollsta Folkets Hus": "Q522"
+            "Bollsta Folkets Hus": "Q522",
+            "Gräsmyr Loge": "Q101"
         },
         description="Mapping of place to QID in DanceDatabase (case-insensitive)")
 
