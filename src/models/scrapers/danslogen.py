@@ -381,12 +381,29 @@ class Danslogen:
         time_text = cells[1].get_text(strip=True)
         start_time, end_time = self.parse_time_range(time_text)
 
-        band = cells[2].get_text(strip=True)
-        venue = cells[3].get_text(strip=True)
-        ort = cells[4].get_text(strip=True)
-        kommun = cells[5].get_text(strip=True)
-        lan = cells[6].get_text(strip=True)
-        ovrigt = cells[7].get_text(strip=True) if len(cells) > 7 else ""
+        if time_text and "-" in time_text and time_text[0].isdigit():
+            band_idx = 2
+            venue_idx = 3
+        else:
+            band_idx = 2
+            venue_idx = 3
+
+        band = cells[band_idx].get_text(strip=True)
+        venue = cells[venue_idx].get_text(strip=True)
+        ort = cells[5].get_text(strip=True)
+        kommun = cells[6].get_text(strip=True)
+        lan = cells[7].get_text(strip=True)
+        ovrigt = cells[8].get_text(strip=True) if len(cells) > 8 else ""
+
+        if not band or not band.strip():
+            logger.debug("Skipping row with empty band")
+            return None
+
+        if not venue or not venue.strip():
+            venue = ort
+            ort = cells[6].get_text(strip=True) if len(cells) > 6 else ""
+            kommun = cells[7].get_text(strip=True) if len(cells) > 7 else ""
+            lan = cells[8].get_text(strip=True) if len(cells) > 8 else ""
 
         band_qid = self.map_band_qid(band)
         if not band_qid:
