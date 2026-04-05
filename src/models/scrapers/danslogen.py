@@ -71,8 +71,8 @@ class DanslogenTableRow(BaseModel):
         band_val = cells[3].get_text(strip=True)
         venue_val = cells[4].get_text(strip=True)
         ort_val = cells[5].get_text(strip=True)
-        kommun_val = cells[6].get_text(strip=True)
-        lan_val = cells[7].get_text(strip=True)
+        kommun_val = cells[7].get_text(strip=True)
+        lan_val = cells[8].get_text(strip=True)
         ovrigt_val = cells[9].get_text(strip=True)
 
         if not band_val or not band_val.strip():
