@@ -20,7 +20,7 @@ from src.models.dance_event import (
     Organizer,
     Registration,
 )
-from scripts.wikidata_client import WikidataClient
+from scripts.dancedb_client import DancedbClient
 
 logger = logging.getLogger(__name__)
 
@@ -323,7 +323,7 @@ class Danslogen:
     def __init__(self, month: str = "april"):
         self.month = month.lower()
         self.events: List[DanceEvent] = []
-        self.wikidata_client = WikidataClient()
+        self.dancedb_client = DancedbClient()
 
     def fetch_month(self, month: str) -> None:
         url = f"{self.baseurl}/dansprogram/{month}"
@@ -414,7 +414,7 @@ class Danslogen:
         band_qid = self.map_band_qid(band)
         if not band_qid:
             try:
-                band_qid = self.wikidata_client.get_or_create_band(band)
+                band_qid = self.dancedb_client.get_or_create_band(band)
             except (click.Abort, KeyboardInterrupt):
                 logger.info("Aborted by user")
                 raise
