@@ -1,5 +1,6 @@
 import logging
 import sys
+import os
 from datetime import datetime
 from typing import List, Optional
 
@@ -404,9 +405,9 @@ class Danslogen:
         if not band_qid:
             try:
                 band_qid = self.dancedb_client.get_or_create_band(band)
-            except (click.Abort, KeyboardInterrupt):
-                logger.info("Aborted by user")
-                raise
+            except KeyboardInterrupt:
+                logger.info("Aborted by user, exiting...")
+                sys.exit(0)
             except Exception as e:
                 logger.warning("Could not get/create band '%s': %s. Skipping event.", band, e)
                 return None
@@ -420,8 +421,8 @@ class Danslogen:
             try:
                 new_qid = click.prompt(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)")
             except (click.Abort, KeyboardInterrupt):
-                logger.info("Aborted by user")
-                raise
+                logger.info("Aborted by user, exiting...")
+                sys.exit(0)
             if new_qid.lower() == 'skip':
                 logger.warning("Skipping event with unknown venue: %s", venue_full)
                 return None

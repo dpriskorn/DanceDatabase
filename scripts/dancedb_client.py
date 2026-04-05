@@ -46,8 +46,11 @@ class DancedbClient:
             return None
 
     def create_band(self, band_name: str) -> str:
-        if not click.confirm(f"Create new band '{band_name}' on DanceDB?"):
-            raise Exception(f"User declined to create band: {band_name}")
+        try:
+            if not click.confirm(f"Create new band '{band_name}' on DanceDB?"):
+                raise Exception(f"User declined to create band: {band_name}")
+        except click.Abort:
+            raise KeyboardInterrupt()
 
         try:
             new_item = wbi_helpers.create_item(
