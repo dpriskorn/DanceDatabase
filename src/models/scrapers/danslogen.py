@@ -372,7 +372,7 @@ class Danslogen:
 
     def parse_row(self, row: Tag, month: str) -> Optional[DanceEvent]:
         cells = row.find_all("td")
-        if len(cells) < 7:
+        if len(cells) < 8:
             return None
 
         weekday_day = cells[0].get_text(strip=True)
@@ -390,20 +390,25 @@ class Danslogen:
 
         band_qid = self.map_band_qid(band)
         if not band_qid:
-            if click.confirm(f"Unknown band: '{band}'. Skip this event?", default=True):
+            venue_full = f"{venue}, {ort}" if ort else venue
+            new_qid = click.prompt(f"Unknown band: '{band}' at {venue_full}\nEnter new QID for band (or 'skip' to skip event)")
+            if new_qid.lower() == 'skip':
                 logger.warning("Skipping event with unknown band: %s", band)
                 return None
-            else:
-                raise Exception(f"Unknown band: {band}")
+            band_qid = new_qid
+            self.event_class.band_qid_map[band] = band_qid
+            logger.info("Added band mapping: %s -> %s", band, band_qid)
 
         venue_qid = self.map_venue_qid(venue)
         if not venue_qid:
             venue_full = f"{venue}, {ort}" if ort else venue
-            if click.confirm(f"Unknown venue: '{venue_full}'. Skip this event?", default=True):
+            new_qid = click.prompt(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)")
+            if new_qid.lower() == 'skip':
                 logger.warning("Skipping event with unknown venue: %s", venue_full)
                 return None
-            else:
-                raise Exception(f"Unknown venue: {venue_full}")
+            venue_qid = new_qid
+            self.event_class.venue_qid_map[venue] = venue_qid
+            logger.info("Added venue mapping: %s -> %s", venue, venue_qid)
 
         date = self.parse_date(day, month)
         if not date:
