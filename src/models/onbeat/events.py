@@ -55,7 +55,8 @@ class OnbeatEvents(BaseModel):
             "Kulturhus tio14": "Q518",
             "Talavidskolan": "Q518",
             "Hälsans Hus": "Q519",
-            "Bergnäsgården": "Q50"
+            "Bergnäsgården": "Q50",
+            "Gnistan Folkets Hus": "Q520"
         },
         description="Mapping of place to QID in DanceDatabase (case-insensitive)")
 
