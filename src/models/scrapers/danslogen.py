@@ -390,10 +390,10 @@ class Danslogen:
         start_time, end_time = self.parse_time_range(time_text)
 
         if is_r7166:
-            band = cells[3].get_text(strip=True)
-            venue = cells[5].get_text(strip=True) if cells[5].get_text(strip=True) else cells[6].get_text(strip=True)
-            ort = cells[6].get_text(strip=True)
-            kommun = cells[7].get_text(strip=True)
+            band = cells[4].get_text(strip=True)
+            venue = cells[6].get_text(strip=True)
+            ort = cells[7].get_text(strip=True)
+            kommun = cells[8].get_text(strip=True)
             lan = ""
             ovrigt = ""
         else:
