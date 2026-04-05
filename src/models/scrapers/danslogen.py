@@ -1,4 +1,5 @@
 import logging
+import sys
 from datetime import datetime
 from typing import List, Optional
 
@@ -6,6 +7,8 @@ import click
 import requests
 from bs4 import BeautifulSoup, Tag
 from pydantic import BaseModel, AnyUrl, Field
+
+sys.path.insert(0, str(__file__).rsplit('/', 1)[0] + '/../../')
 
 import config
 from config import CET
@@ -17,6 +20,7 @@ from src.models.dance_event import (
     Organizer,
     Registration,
 )
+from scripts.wikidata_client import WikidataClient
 
 logger = logging.getLogger(__name__)
 
@@ -319,6 +323,7 @@ class Danslogen:
     def __init__(self, month: str = "april"):
         self.month = month.lower()
         self.events: List[DanceEvent] = []
+        self.wikidata_client = WikidataClient()
 
     def fetch_month(self, month: str) -> None:
         url = f"{self.baseurl}/dansprogram/{month}"
@@ -408,18 +413,17 @@ class Danslogen:
 
         band_qid = self.map_band_qid(band)
         if not band_qid:
-            venue_full = f"{venue}, {ort}" if ort else venue
             try:
-                new_qid = click.prompt(f"Unknown band: '{band}' at {venue_full}\nEnter new QID for band (or 'skip' to skip event)")
+                band_qid = self.wikidata_client.get_or_create_band(band)
             except (click.Abort, KeyboardInterrupt):
                 logger.info("Aborted by user")
                 raise
-            if new_qid.lower() == 'skip':
-                logger.warning("Skipping event with unknown band: %s", band)
+            except Exception as e:
+                logger.warning("Could not get/create band '%s': %s. Skipping event.", band, e)
                 return None
-            band_qid = new_qid
-            self.event_class.band_qid_map[band] = band_qid
-            logger.info("Added band mapping: %s -> %s", band, band_qid)
+            if band_qid:
+                self.event_class.band_qid_map[band] = band_qid
+                logger.info("Added band mapping: %s -> %s", band, band_qid)
 
         venue_qid = self.map_venue_qid(venue)
         if not venue_qid:
