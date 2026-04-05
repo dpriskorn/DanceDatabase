@@ -61,6 +61,9 @@ class OnbeatEvents(BaseModel):
             "Gräsmyr Loge": "Q101"
         },
         description="Mapping of place to QID in DanceDatabase (case-insensitive)")
+    price_override_map: dict[str, Decimal] = {
+        "rockthebarn": Decimal("1800"),
+    }
 
     # Instance attributes to hold intermediate parsed data
     soup: Optional[BeautifulSoup] = None
@@ -271,11 +274,19 @@ class OnbeatEvents(BaseModel):
             start_dt = self.parse_datetime(details["start_date"], self.start_time)
             end_dt = self.parse_datetime(details["end_date"], self.end_time)
 
-            try:
-                price_normal = Decimal(details["price"].replace("SEK", "").replace("kr", "").replace(",", ".").strip())
-            except Exception:
-                logger.warning(f"Could not parse price '{details["price"]}' - defaulting to 0")
-                price_normal = Decimal(0)
+            price_normal = None
+            for key, override_price in self.price_override_map.items():
+                if key.lower() in label_sv.lower():
+                    price_normal = override_price
+                    logger.debug(f"Using price override {override_price} for event {label_sv}")
+                    break
+
+            if price_normal is None:
+                try:
+                    price_normal = Decimal(details["price"].replace("SEK", "").replace("kr", "").replace(",", ".").strip())
+                except Exception:
+                    logger.warning(f"Could not parse price '{details["price"]}' - defaulting to 0")
+                    price_normal = Decimal(0)
 
             dance_event_organizer = Organizer(
                 description=self.organizer_name,
