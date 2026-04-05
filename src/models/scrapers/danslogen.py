@@ -64,16 +64,27 @@ class DanslogenTableRow(BaseModel):
         if len(cells) < 9:
             return None
 
-        weekday = cells[0].get_text(strip=True)
-        day = cells[1].get_text(strip=True)
-
-        time_val = cells[2].get_text(strip=True)
-        band_val = cells[3].get_text(strip=True)
-        venue_val = cells[4].get_text(strip=True)
-        ort_val = cells[5].get_text(strip=True)
-        kommun_val = cells[6].get_text(strip=True)
-        lan_val = cells[7].get_text(strip=True)
-        ovrigt_val = cells[9].get_text(strip=True)
+        # Handle rows where first cell is empty (row spans weekday/day from previous)
+        if cells[0].get_text(strip=True) == "":
+            weekday = cells[1].get_text(strip=True)
+            day = cells[2].get_text(strip=True)
+            time_val = cells[3].get_text(strip=True)
+            band_val = cells[4].get_text(strip=True)
+            venue_val = cells[5].get_text(strip=True)
+            ort_val = cells[6].get_text(strip=True)
+            kommun_val = cells[7].get_text(strip=True)
+            lan_val = cells[8].get_text(strip=True)
+            ovrigt_val = cells[9].get_text(strip=True) if len(cells) > 9 else ""
+        else:
+            weekday = cells[0].get_text(strip=True)
+            day = cells[1].get_text(strip=True)
+            time_val = cells[2].get_text(strip=True)
+            band_val = cells[3].get_text(strip=True)
+            venue_val = cells[4].get_text(strip=True)
+            ort_val = cells[5].get_text(strip=True)
+            kommun_val = cells[6].get_text(strip=True)
+            lan_val = cells[7].get_text(strip=True)
+            ovrigt_val = cells[8].get_text(strip=True)
 
         if not band_val or not band_val.strip():
             return None
