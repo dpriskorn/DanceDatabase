@@ -316,6 +316,16 @@ class TestHasNoCoursesMessageEdge:
         assert result is False
 
 
+class TestParseTimeRangeEdgeCases:
+    def test_logs_warning_on_split_error(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        bad_value = MagicMock()
+        bad_value.strip.side_effect = AttributeError("mock error")
+        with patch("src.models.onbeat.events.logger") as mock_logger:
+            event.parse_time_range(bad_value)
+            mock_logger.warning.assert_called()
+
+
 class TestPriceOverrideMap:
     def test_rockthebarn_price_override_exists(self):
         event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
@@ -325,3 +335,11 @@ class TestPriceOverrideMap:
     def test_price_override_map_is_populated(self):
         event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
         assert len(event.price_override_map) >= 1
+
+
+class TestMapVenueQidCaseInsensitive:
+    def test_venue_qid_map_values_are_strings(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        for key, qid in event.venue_qid_map.items():
+            assert isinstance(key, str), f"Key {key} is not a string"
+            assert isinstance(qid, str), f"QID {qid} is not a string"

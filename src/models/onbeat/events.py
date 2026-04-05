@@ -165,8 +165,8 @@ class OnbeatEvents(BaseModel):
         if not value:
             return
 
-        value = value.strip()
         try:
+            value = value.strip()
             if " - " in value:
                 start_str, end_str = [t.strip() for t in value.split(" - ", 1)]
                 self.start_time = start_str
