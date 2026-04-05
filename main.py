@@ -16,6 +16,7 @@ import config
 from src.models.scrapers.fox4u import Fox4u
 from src.models.scrapers.forsfox import Forsfox
 from src.models.scrapers.foxunlimited import Foxunlimited
+from src.models.scrapers.fmsab import Fmsab
 from src.models.scrapers.gasasteget import Gasasteget
 from src.models.scrapers.nimbusdk import Nimbusdk
 from src.models.scrapers.wannadance import Wannadance
@@ -57,6 +58,11 @@ start = time.time()
 fu = Foxunlimited(json_output_folder=output_folder)
 fu.start()
 logger.info(f"Foxunlimited finished in {time.time() - start:.2f} seconds")
+
+start = time.time()
+fmsab = Fmsab(json_output_folder=output_folder)
+fmsab.start()
+logger.info(f"Fmsab finished in {time.time() - start:.2f} seconds")
 
 start = time.time()
 f4u = Fox4u(json_output_folder=output_folder)
