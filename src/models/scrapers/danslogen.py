@@ -7,7 +7,7 @@ from typing import List, Optional
 import click
 import requests
 from bs4 import BeautifulSoup, Tag
-from pydantic import BaseModel, AnyUrl, Field
+from pydantic import BaseModel, AnyUrl, Field, field_validator
 
 sys.path.insert(0, str(__file__).rsplit('/', 1)[0] + '/../../')
 
@@ -24,6 +24,73 @@ from src.models.dance_event import (
 from scripts.dancedb_client import DancedbClient
 
 logger = logging.getLogger(__name__)
+
+
+class DanslogenTableRow(BaseModel):
+    weekday: str
+    day: str
+    time: str = ""
+    band: str
+    venue: str = ""
+    ort: str = ""
+    kommun: str = ""
+    lan: str = ""
+    ovrigt: str = ""
+
+    @field_validator('time', mode='before')
+    @classmethod
+    def parse_time(cls, v):
+        if not v or not v.strip():
+            return ""
+        return v.strip()
+
+    @field_validator('band', mode='before')
+    @classmethod
+    def validate_band(cls, v):
+        if not v or not v.strip():
+            raise ValueError("Band cannot be empty")
+        return v.strip()
+
+    @field_validator('venue', mode='before')
+    @classmethod
+    def validate_venue(cls, v):
+        if not v or not v.strip():
+            return ""
+        return v.strip()
+
+    @classmethod
+    def from_row(cls, row: Tag) -> Optional['DanslogenTableRow']:
+        cells = row.find_all('td')
+        if len(cells) < 5:
+            return None
+
+        weekday_day = cells[0].get_text(strip=True)
+        parts = weekday_day.split(maxsplit=1)
+        weekday = parts[0] if parts else ""
+        day = parts[1] if len(parts) > 1 else ""
+
+        time_val = cells[1].get_text(strip=True)
+        band_val = cells[2].get_text(strip=True)
+        venue_val = cells[3].get_text(strip=True)
+        ort_val = cells[4].get_text(strip=True)
+        kommun_val = cells[5].get_text(strip=True) if len(cells) > 5 else ""
+        lan_val = cells[6].get_text(strip=True) if len(cells) > 6 else ""
+        ovrigt_val = cells[7].get_text(strip=True) if len(cells) > 7 else ""
+
+        if not band_val or not band_val.strip():
+            return None
+
+        return cls(
+            weekday=weekday,
+            day=day,
+            time=time_val,
+            band=band_val,
+            venue=venue_val,
+            ort=ort_val,
+            kommun=kommun_val,
+            lan=lan_val,
+            ovrigt=ovrigt_val
+        )
 
 
 class DanslogenEvent(BaseModel):
@@ -377,29 +444,26 @@ class Danslogen:
             return None
 
     def parse_row(self, row: Tag, month: str) -> Optional[DanceEvent]:
-        cells = row.find_all("td")
-        if len(cells) < 8:
+        try:
+            table_row = DanslogenTableRow.from_row(row)
+        except ValueError:
+            logger.debug("Skipping invalid row")
             return None
 
-        weekday_day = cells[0].get_text(strip=True)
-        weekday, day = self.parse_weekday_day(weekday_day)
+        if not table_row:
+            return None
 
-        time_text = cells[3].get_text(strip=True) if cells[3].get_text(strip=True) else cells[1].get_text(strip=True)
+        weekday = table_row.weekday
+        day = table_row.day
+        time_text = table_row.time
+        band = table_row.band
+        venue = table_row.venue or table_row.ort
+        ort = table_row.ort
+        kommun = table_row.kommun
+        lan = table_row.lan
+        ovrigt = table_row.ovrigt
+
         start_time, end_time = self.parse_time_range(time_text)
-
-        band = cells[4].get_text(strip=True)
-        venue = cells[5].get_text(strip=True)
-        ort = cells[6].get_text(strip=True)
-        kommun = cells[7].get_text(strip=True)
-        lan = cells[8].get_text(strip=True)
-        ovrigt = cells[9].get_text(strip=True) if len(cells) > 9 else ""
-
-        if not band or not band.strip():
-            logger.debug("Skipping row with empty band")
-            return None
-
-        if not venue or not venue.strip():
-            venue = ort
 
         band_qid = self.map_band_qid(band)
         if not band_qid:
