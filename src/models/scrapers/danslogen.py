@@ -409,7 +409,11 @@ class Danslogen:
         band_qid = self.map_band_qid(band)
         if not band_qid:
             venue_full = f"{venue}, {ort}" if ort else venue
-            new_qid = click.prompt(f"Unknown band: '{band}' at {venue_full}\nEnter new QID for band (or 'skip' to skip event)")
+            try:
+                new_qid = click.prompt(f"Unknown band: '{band}' at {venue_full}\nEnter new QID for band (or 'skip' to skip event)")
+            except (click.Abort, KeyboardInterrupt):
+                logger.info("Aborted by user")
+                raise
             if new_qid.lower() == 'skip':
                 logger.warning("Skipping event with unknown band: %s", band)
                 return None
@@ -420,7 +424,11 @@ class Danslogen:
         venue_qid = self.map_venue_qid(venue)
         if not venue_qid:
             venue_full = f"{venue}, {ort}" if ort else venue
-            new_qid = click.prompt(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)")
+            try:
+                new_qid = click.prompt(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)")
+            except (click.Abort, KeyboardInterrupt):
+                logger.info("Aborted by user")
+                raise
             if new_qid.lower() == 'skip':
                 logger.warning("Skipping event with unknown venue: %s", venue_full)
                 return None
