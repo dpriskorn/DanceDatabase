@@ -61,7 +61,7 @@ class DanslogenTableRow(BaseModel):
     @classmethod
     def from_row(cls, row: Tag) -> Optional['DanslogenTableRow']:
         cells = row.find_all('td')
-        if len(cells) < 5:
+        if len(cells) < 9:
             return None
 
         weekday_day = cells[0].get_text(strip=True)
