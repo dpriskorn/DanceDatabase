@@ -3,6 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List, Optional
 
+import click
 import requests
 from bs4 import BeautifulSoup, Tag
 from pydantic import BaseModel, AnyUrl, Field
@@ -52,6 +53,7 @@ class OnbeatEvents(BaseModel):
             "Klemensnäs Folkets Hus": "Q122",
             "Umeå Folkets Hus": "Q17",
             "Kulturhus tio14": "Q518",
+            "Talavidskolan": "Q518",
             "Hälsans Hus": "Q519",
             "Bergnäsgården": "Q50"
         },
@@ -307,7 +309,11 @@ class OnbeatEvents(BaseModel):
             venue_text = f"{details["where"]} {description}"
             venue_qid = self.map_venue_qid(venue_text)
             if not venue_qid:
-                raise Exception(f"Could not map to a venue QID from this text: \n'{venue_text}'\nsee {self.page_url} and {event_url}")
+                if click.confirm(f"Could not map venue from:\n'{venue_text}'\nSkip this event?", default=True):
+                    logger.warning(f"Skipping event with unknown venue: {label_sv}")
+                    continue
+                else:
+                    raise Exception(f"Could not map to a venue QID from this text: \n'{venue_text}'\nsee {self.page_url} and {event_url}")
 
             # style
             style_text = f"{label_sv} {description}"
