@@ -343,3 +343,56 @@ class TestMapVenueQidCaseInsensitive:
         for key, qid in event.venue_qid_map.items():
             assert isinstance(key, str), f"Key {key} is not a string"
             assert isinstance(qid, str), f"QID {qid} is not a string"
+
+
+class TestParseEvents:
+    def test_parse_events_skips_no_courses_message(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.organizer_name = "Test"
+        event.cards = []
+        no_courses_card = MagicMock()
+        no_courses_card.find.return_value.get_text.return_value = "Sorry, no available courses"
+        event.cards = [no_courses_card]
+        events = event.parse_events()
+        assert len(events) == 0
+
+    def test_parse_events_handles_empty_card(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.organizer_name = "Test"
+        event.cards = []
+        empty_card = MagicMock()
+        title = MagicMock()
+        title.get_text.return_value = ""
+        empty_card.find.return_value = title
+        event.cards = [empty_card]
+        events = event.parse_events()
+        assert len(events) == 0
+
+    def test_parse_events_skips_unknown_venue_with_confirm(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.organizer_name = "Test"
+        event.start_time = ""
+        event.end_time = ""
+
+        card = MagicMock()
+        title = MagicMock()
+        title.get_text.return_value = "Unknown Venue Event"
+
+        p_elem = MagicMock()
+        b_elem = MagicMock()
+        b_elem.get_text.return_value = "Where:"
+        b_elem.next_sibling = None
+        p_elem.find.return_value = b_elem
+        p_elem.get_text.return_value = "Where: Unknown Place"
+
+        desc = MagicMock()
+        desc.get_text.return_value = ""
+
+        card.find.side_effect = [title, None, desc]
+        card.find_all.return_value = [p_elem]
+
+        event.cards = [card]
+
+        with patch("click.confirm", return_value=True):
+            events = event.parse_events()
+        assert len(events) == 0
