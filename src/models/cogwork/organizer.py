@@ -1,7 +1,9 @@
 import json
+from datetime import date
 from pathlib import Path
 from typing import List
 
+import click
 import requests
 from bs4 import BeautifulSoup
 from pydantic import Field
@@ -44,6 +46,16 @@ class CogworkOrganizer(Organizer):
     # noinspection PyArgumentList,PyCallingNonCallable
     def start(self):
         """Fetch all events and export them."""
+        output_file = Path(self.json_output_folder) / f"{self.__class__.__name__.lower()}.json"
+        if output_file.exists():
+            today_str = date.today().strftime("%Y-%m-%d")
+            if not click.confirm(f"[{today_str}] {output_file} already exists. Skip scraping?", default=True):
+                print(f"Removing {output_file} and continuing...")
+                output_file.unlink()
+            else:
+                print(f"Skipping {self.__class__.__name__} - already scraped today.")
+                return
+
         print(f"Fetching calendar links for {self.__class__.__name__}...")
         self.parse_calendar_links(self.fetch_calendar_page())
 
@@ -51,7 +63,6 @@ class CogworkOrganizer(Organizer):
         for url in self.event_links:
             event = self.event_class(event_url=url, organizer_slug=self.organizer_slug)
             event.fetch_and_parse()
-            # todo handle skipped event
             if event.skip:
                 continue
             if event.dance_event is None:

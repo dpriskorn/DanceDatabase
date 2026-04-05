@@ -14,12 +14,14 @@ class BdkEvent(CogworkEvent):
         "modern fox": "Q23",
         "bugg": "Q485",
         "casanovas": "Q4",
-        "socialdans": "Q4"
+        "socialdans": "Q4",
 }
     venue_qid_map: dict[str, str] = {
         "brunnahallen": "Q486",
         "stora salen": "Q486",
-        "saldovägen 2": "Q486"
+        "saldovägen 2": "Q486",
+        "Brunna Danssportklubb": "Q486",
+        "Saldovägen 2a": "Q486",
     }
 
 

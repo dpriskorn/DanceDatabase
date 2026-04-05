@@ -1,57 +1,42 @@
 # Dance Database
 
-[The Dance Database](https://dance.wikibase.cloud/wiki/Main_Page) is a new open data backbone 
-for the Scandinavian social dance community 
-which the author is happy to be a part of.
+For project vision, use cases, and goals, see [DANCE_DATABASE.md](./DANCE_DATABASE.md).
 
-This repository has scripts to help populate and fix issues in the database.
+## Setup
 
-## Vision
-One place where event organizers publish their events which can then be fanned out to mulitple applications and used in LLMs by everyone.
+```bash
+poetry install
+cp config_sample.py config.py
+# Edit config.py with your credentials
+```
 
-It's similar to what [musicbrainz](https://musicbrainz.org/) is for CDs or [Wikidata](https://www.wikidata.org/) is for notable world events.
+## Import Scripts
 
-## Use cases
-Questions the collected data should support answering
-* When does the event start and end
-* Which other events collide
-* How far from me is the event
-* What is the schedule?
-* When does registration open?
-* Are there tiered prices and what are they?
-* Who is the organizer?
-* Where can I sign up?
+Scrapers for various dance event sources:
 
-Questions it should not answer:
-* How do I get there? (can be solved via GraphHopper or similar services)
-* What did this organizer organize before? (can be solved using SPARQL)
-* Are there lodging nearby (Openstreetmap or similar can be used)
-* How can I contact the organizer (we only provide an organizer website link for now)
+| Source | Script |
+|--------|--------|
+| Dansgladje | `src/models/scrapers/dansgladje.py` |
+| BDK | `src/models/scrapers/bdk.py` |
+| Altira | `src/models/scrapers/altira.py` |
+| Forsfox | `src/models/scrapers/forsfox.py` |
+| Fox Unlimited | `src/models/scrapers/foxunlimited.py` |
+| Fox4u | `src/models/scrapers/fox4u.py` |
+| Wannadance | `src/models/scrapers/wannadance.py` |
+| Nimbusdk | `src/models/scrapers/nimbusdk.py` |
+| Gasasteget | `src/models/scrapers/gasasteget.py` |
+| Onbeat | `src/models/onbeat/organizers.py` |
 
-### Excluded data
-We decided not to include the following based on the user cases above
-email: str = ""
-phone: str = ""
+Scripts in `scripts/` process data from Dancehaps.
 
-## Goals
-1) create a versioned open specification for dance event data
-2) provide an API that anyone can use to build end user applications upon
-3) provide a database with [FAIR](https://www.go-fair.org/fair-principles/) event data
-5) increase findability for dance events
-6) non-profitability of the project
+## Running
 
-## What Dance Database is not
-* a website directly used by dancers to find dances (others do that better).
-* an image hosting service.
+```bash
+poetry run python main.py
+```
 
-## What Dance Database should provide
-1) A UI that make it easy for event organizers to add events 
-2) A stable service over time run by donations/contributions for the good of everyone in the community
+Output goes to `data/YYYYMMDD/` with JSON files per source.
 
-## Nice to have
-2) Something that runs in Kubernetes and is reliable and scalable
-3) FAIR data with GUPRIs
-4) Graph data and statistics
+## License
 
-# License
-All code is under GPLv3 and all data in data/ is licensed CC0.
+All code is under GPLv3 and all data in `data/` is licensed CC0.

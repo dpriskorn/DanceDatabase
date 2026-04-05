@@ -21,7 +21,9 @@ class AltiraEvent(CogworkEvent):
         "socialdans": "Q4"
 }
     venue_qid_map: dict[str, str] = {
-        "Altiras lokal": "Q71"
+        "Altiras lokal": "Q71",
+        "Tonhallen": "Q511",
+        "Spegelsalen": "Q512"
     }
 
 

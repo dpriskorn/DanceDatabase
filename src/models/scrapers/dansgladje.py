@@ -12,6 +12,7 @@ class DansgladjeEvent(CogworkEvent):
         "Galaxy i Vallentuna": "Q19",
         "Sägnernas Hus": "Q21",
         "Sala Folkets Park": "Q22",
+        "Liljekonvaljeholmen": "Q139",
     }
 
 

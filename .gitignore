@@ -1,1 +1,8 @@
 /config.py
+.idea
+data
+old_data
+*.csv
+*.json
+*.txt
+*.html

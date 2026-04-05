@@ -3,15 +3,18 @@ import re
 from datetime import datetime
 from typing import Optional, cast
 
+import click
 import requests
 from bs4 import BeautifulSoup
 from pydantic import BaseModel, Field, AnyUrl
 
 from config import CET
+from src.models.cogwork.enums import EventType
 from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
     Registration
 
 logger = logging.getLogger(__name__)
+
 DANCE_STYLE_MAP = {
     "fox": "Q23",
     "west coast swing": "Q15",
@@ -32,6 +35,13 @@ class CogworkEvent(BaseModel):
     # skip
     skip_sv_labels: list[str] = Field(default_factory=list, description="Ignore events with labels matching entries in this list (case-insensitive)")
     skip: bool = Field(False, description="Skip storing this event")
+
+    # event type detection
+    meeting_labels: list[str] = Field(
+        default_factory=lambda: ["årsmöte", "möte", "annual meeting", "medlemsmöte", "styrelsemöte"],
+        description="Case-insensitive phrases that indicate this is a meeting, not a dance"
+    )
+    event_type: EventType = Field(EventType.DANCE, description="Type of event: dance, meeting, or unknown")
 
     # full
     full_mapping_sv: list[str] = FULL_MAPPING
@@ -218,13 +228,33 @@ class CogworkEvent(BaseModel):
         soup = BeautifulSoup(self.shop_html, "lxml")
 
         elem = soup.find("b", string="Price")
-        if not elem:
-            logger.warning(f"No price found on {self.shop_url}")
-        else:
+        if elem:
             text = elem.parent.get_text(strip=True)
             match = re.search(r"Price\s*:\s*(\d+)", text)
             self.price_normal = int(match.group(1)) if match else 0
             logger.debug(f"Parsed price: {self.price_normal}")
+            return
+
+        text = self.shop_html
+        match = re.search(r"kostar\s+(\d+)\s*kr", text, re.IGNORECASE)
+        if match:
+            self.price_normal = int(match.group(1))
+            logger.debug(f"Parsed price from Swedish format: {self.price_normal}")
+            return
+
+        match = re.search(r"övriga\D*(\d+)", text, re.IGNORECASE)
+        if match:
+            self.price_normal = int(match.group(1))
+            logger.debug(f"Parsed price from Swedish övriga format: {self.price_normal}")
+            return
+
+        match = re.search(r"kostar\s+(\d+)\s*kr\s+för", text, re.IGNORECASE)
+        if match:
+            self.price_normal = int(match.group(1))
+            logger.debug(f"Parsed price from Swedish kostar format: {self.price_normal}")
+            return
+
+        logger.warning(f"No price found on {self.shop_url}")
 
     # === Event workflow ===
     # noinspection PyArgumentList
@@ -237,11 +267,33 @@ class CogworkEvent(BaseModel):
         venue_text = f"{self.place} {self.description}"
         venue_qid = self.map_venue_qid(venue_text)
         if not venue_qid:
-            raise Exception(f"Could not map to a venue QID from this text: \n'{venue_text}'\nsee {self.shop_url}")
-        style_text = f"{self.event_metadata["label_sv"]} {self.description}"
-        self.map_dance_style_qids(text=style_text)
-        if not self.dance_styles_qids:
-            raise Exception(f"Could not map to any dance style QIDs from this text: \n'{style_text}'\nsee {self.shop_url}")
+            logger.warning(f"Could not map to a venue QID from this text: '{venue_text}' see {self.shop_url}")
+            if click.confirm(f"Skip event? Could not map venue: '{venue_text[:50]}...'", default=True):
+                self.skip = True
+                return
+            raise Exception(f"Could not map venue QID from: '{venue_text}'")
+        style_text = f"{self.event_metadata['label_sv']} {self.description}"
+        if self.event_type == EventType.DANCE:
+            self.map_dance_style_qids(text=style_text)
+            if not self.dance_styles_qids:
+                logger.warning(f"Could not map to any dance style QIDs from this text: '{style_text}' see {self.shop_url}")
+                style_choices = list(self.dance_style_qid_map.keys())
+                default_style = "socialdans"
+                if default_style not in style_choices:
+                    default_style = style_choices[0] if style_choices else None
+                if default_style:
+                    chosen = click.prompt(
+                        f"Select dance style for: '{style_text[:50]}...'",
+                        type=click.Choice(style_choices),
+                        default=default_style
+                    )
+                    self.dance_styles_qids.add(self.dance_style_qid_map[chosen])
+                    logger.debug(f"User selected dance style: {chosen} ({self.dance_style_qid_map[chosen]})")
+                else:
+                    if click.confirm(f"Skip event? Could not map dance style from: '{style_text[:50]}...'", default=True):
+                        self.skip = True
+                        return
+                    raise Exception(f"Could not map dance style QIDs from: '{style_text}'")
         now = datetime.now().replace(microsecond=0).isoformat()
 
         self.dance_event = DanceEvent(
@@ -249,6 +301,7 @@ class CogworkEvent(BaseModel):
             # source="CogWork at http://dans.se",
             label={"sv": self.event_metadata["label_sv"]},
             description={"sv": self.description},
+            event_type=self.event_type.value,
             start_timestamp=self.start_time,
             end_timestamp=self.end_time,
             location=self.location or "",
@@ -286,6 +339,16 @@ class CogworkEvent(BaseModel):
                 self.skip = True
         logger.debug(f"Accepted: {label_sv} based on ignore list: {self.skip_sv_labels}")
 
+    def determine_event_type(self):
+        label_sv = self.event_metadata.get("label_sv", "")
+        for meeting_label in self.meeting_labels:
+            if meeting_label.lower() in label_sv.lower():
+                self.event_type = EventType.MEETING
+                logger.debug(f"Detected meeting type for '{label_sv}' matching '{meeting_label}'")
+                return
+        self.event_type = EventType.DANCE
+        logger.debug(f"Detected dance type for '{label_sv}'")
+
     def determine_full(self):
         label_sv = self.event_metadata["label_sv"]
         for full_label in self.full_mapping_sv:
@@ -304,6 +367,7 @@ class CogworkEvent(BaseModel):
         """Entrypoint"""
         self.fetch_event_page()
         self.extract_event_metadata()
+        self.determine_event_type()
         self.determine_skip()
         if not self.skip:
             self.determine_full()

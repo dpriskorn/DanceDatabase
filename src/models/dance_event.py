@@ -102,6 +102,7 @@ class DanceEvent(BaseModel):
     # source: str = Field(default_factory=str, description="Source for event")
     label: dict[str, str] = Field(..., description="Language keyed labels")
     description: dict[str, str] = Field(..., description="Language keyed descriptions")
+    event_type: str = Field("dance", description="Type of event: dance, meeting, or unknown")
     coordinates: dict[str, float] | None = Field(None, description="Optional coordinates with latitude and longitude")
     schedule: dict[str, Schedule] = Field({}, description="Optional language keyed schedule for the event")
     identifiers: Identifiers = Identifiers()

@@ -1,0 +1,572 @@
+{
+  "$defs": {
+    "DanceDatabaseIdentifiers": {
+      "description": "DanceDatabase should have identifiers for everything in our model, but might not",
+      "properties": {
+        "event": {
+          "default": "",
+          "description": "DanceDatabase QID for the event",
+          "title": "Event",
+          "type": "string"
+        },
+        "organizer": {
+          "default": "",
+          "description": "DanceDatabase QID for the organizer",
+          "title": "Organizer",
+          "type": "string"
+        },
+        "dance_styles": {
+          "description": "DanceDatabase QIDs for the dance styles",
+          "items": {
+            "type": "string"
+          },
+          "title": "Dance Styles",
+          "type": "array"
+        },
+        "venue": {
+          "default": "",
+          "description": "DanceDatabase QID for the venue",
+          "title": "Venue",
+          "type": "string"
+        },
+        "event_series": {
+          "default": "",
+          "description": "DanceDatabase QID for event series",
+          "title": "Event Series",
+          "type": "string"
+        },
+        "source": {
+          "description": "DanceDatabase QID for data source",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "title": "DanceDatabaseIdentifiers",
+      "type": "object"
+    },
+    "EventItem": {
+      "description": "Represents a single scheduled item like a course, workshop, or social dance.\nTimes are in CEST/CET",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "start_time": {
+          "format": "date-time",
+          "title": "Start Time",
+          "type": "string"
+        },
+        "end_time": {
+          "format": "date-time",
+          "title": "End Time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "start_time",
+        "end_time"
+      ],
+      "title": "EventItem",
+      "type": "object"
+    },
+    "EventLinks": {
+      "properties": {
+        "facebook": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the event's Facebook page",
+          "title": "Facebook"
+        },
+        "official_website": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the official event website",
+          "title": "Official Website"
+        },
+        "registration_website": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the registration page for the event",
+          "title": "Registration Website"
+        },
+        "schedule_website": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the event schedule or timetable",
+          "title": "Schedule Website"
+        },
+        "venue_website": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the event venue's website",
+          "title": "Venue Website"
+        },
+        "image": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to an image representing the event",
+          "title": "Image"
+        },
+        "sources": {
+          "description": "List of URLs to the source of this event information",
+          "items": {
+            "format": "uri",
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        }
+      },
+      "title": "EventLinks",
+      "type": "object"
+    },
+    "Identifiers": {
+      "properties": {
+        "wikidata": {
+          "$ref": "#/$defs/WikidataIdentifiers",
+          "default": {
+            "dance_style": "",
+            "venue": "",
+            "event_series": ""
+          }
+        },
+        "dancedatabase": {
+          "$ref": "#/$defs/DanceDatabaseIdentifiers",
+          "default": {
+            "event": "",
+            "organizer": "",
+            "dance_styles": [],
+            "venue": "",
+            "event_series": "",
+            "source": ""
+          }
+        }
+      },
+      "title": "Identifiers",
+      "type": "object"
+    },
+    "Organizer": {
+      "properties": {
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "official_website": {
+          "default": "",
+          "title": "Official Website",
+          "type": "string"
+        }
+      },
+      "title": "Organizer",
+      "type": "object"
+    },
+    "Registration": {
+      "properties": {
+        "cancelled": {
+          "default": false,
+          "description": "Whether the event was cancelled at scrape time",
+          "title": "Cancelled",
+          "type": "boolean"
+        },
+        "fully_booked": {
+          "default": false,
+          "description": "Whether it was fully booked at scrape time",
+          "title": "Fully Booked",
+          "type": "boolean"
+        },
+        "registration_opens": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "When registration opens",
+          "title": "Registration Opens"
+        },
+        "registration_closes": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "When registration closes",
+          "title": "Registration Closes"
+        },
+        "advance_registration_required": {
+          "default": false,
+          "description": "Whether advance registration is mandatory",
+          "title": "Advance Registration Required",
+          "type": "boolean"
+        },
+        "registration_open": {
+          "default": false,
+          "description": "Whether registration was open at scrape time",
+          "title": "Registration Open",
+          "type": "boolean"
+        }
+      },
+      "title": "Registration",
+      "type": "object"
+    },
+    "Schedule": {
+      "description": "Represents the full schedule for the event.",
+      "properties": {
+        "days": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ScheduleDay"
+          },
+          "title": "Days",
+          "type": "array"
+        }
+      },
+      "title": "Schedule",
+      "type": "object"
+    },
+    "ScheduleDay": {
+      "description": "Represents the schedule for a single day.",
+      "properties": {
+        "date": {
+          "format": "date-time",
+          "title": "Date",
+          "type": "string"
+        },
+        "items": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/EventItem"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "date"
+      ],
+      "title": "ScheduleDay",
+      "type": "object"
+    },
+    "WikidataIdentifiers": {
+      "description": "Wikidata does not have compatible items and properties for everything in our model",
+      "properties": {
+        "dance_style": {
+          "default": "",
+          "description": "Wikidata QID for dance type (e.g. Q1057898)",
+          "title": "Dance Style",
+          "type": "string"
+        },
+        "venue": {
+          "default": "",
+          "description": "Wikidata QID for venue",
+          "title": "Venue",
+          "type": "string"
+        },
+        "event_series": {
+          "default": "",
+          "description": "Wikidata QID for event series",
+          "title": "Event Series",
+          "type": "string"
+        }
+      },
+      "title": "WikidataIdentifiers",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Structured representation of a dance event.\nTimes are in CEST/CET",
+  "properties": {
+    "id": {
+      "description": "Unique identifier for the event",
+      "title": "Id",
+      "type": "string"
+    },
+    "label": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Language keyed labels",
+      "title": "Label",
+      "type": "object"
+    },
+    "description": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Language keyed descriptions",
+      "title": "Description",
+      "type": "object"
+    },
+    "event_type": {
+      "default": "dance",
+      "description": "Type of event: dance, meeting, or unknown",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "coordinates": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional coordinates with latitude and longitude",
+      "title": "Coordinates"
+    },
+    "schedule": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Schedule"
+      },
+      "default": {},
+      "description": "Optional language keyed schedule for the event",
+      "title": "Schedule",
+      "type": "object"
+    },
+    "identifiers": {
+      "$ref": "#/$defs/Identifiers",
+      "default": {
+        "wikidata": {
+          "dance_style": "",
+          "event_series": "",
+          "venue": ""
+        },
+        "dancedatabase": {
+          "dance_styles": [],
+          "event": "",
+          "event_series": "",
+          "organizer": "",
+          "source": "",
+          "venue": ""
+        }
+      }
+    },
+    "links": {
+      "$ref": "#/$defs/EventLinks",
+      "default": {
+        "facebook": null,
+        "official_website": null,
+        "registration_website": null,
+        "schedule_website": null,
+        "venue_website": null,
+        "image": null,
+        "sources": []
+      }
+    },
+    "registration": {
+      "$ref": "#/$defs/Registration",
+      "default": {
+        "cancelled": false,
+        "fully_booked": false,
+        "registration_opens": null,
+        "registration_closes": null,
+        "advance_registration_required": false,
+        "registration_open": false
+      }
+    },
+    "organizer": {
+      "$ref": "#/$defs/Organizer",
+      "default": {
+        "description": "",
+        "official_website": ""
+      },
+      "description": "Organizer of the event"
+    },
+    "last_update": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Timestamp of the last update",
+      "title": "Last Update"
+    },
+    "start_timestamp": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Event start timestamp",
+      "title": "Start Timestamp"
+    },
+    "end_timestamp": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Event end timestamp",
+      "title": "End Timestamp"
+    },
+    "start_time": {
+      "description": "Event start time, e.g. '10:00'",
+      "title": "Start Time",
+      "type": "string"
+    },
+    "end_time": {
+      "description": "Event end time, e.g. '16:00'",
+      "title": "End Time",
+      "type": "string"
+    },
+    "location": {
+      "default": "",
+      "title": "Location",
+      "type": "string"
+    },
+    "price_early": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,8}|(?=[\\d.]{1,11}0*$)\\d{0,8}\\.\\d{0,2}0*$)",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Early bird price",
+      "title": "Price Early"
+    },
+    "price_normal": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,8}|(?=[\\d.]{1,11}0*$)\\d{0,8}\\.\\d{0,2}0*$)",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Normal price",
+      "title": "Price Normal"
+    },
+    "price_late": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,8}|(?=[\\d.]{1,11}0*$)\\d{0,8}\\.\\d{0,2}0*$)",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Late price",
+      "title": "Price Late"
+    },
+    "weekly_recurring": {
+      "default": false,
+      "title": "Weekly Recurring",
+      "type": "boolean"
+    },
+    "number_of_occasions": {
+      "default": 0,
+      "title": "Number Of Occasions",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "label",
+    "description"
+  ],
+  "title": "DanceEvent",
+  "type": "object"
+}
