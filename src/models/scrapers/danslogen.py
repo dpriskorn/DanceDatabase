@@ -328,8 +328,12 @@ class Danslogen:
         logger.info("Fetched page: %s", url)
 
     def map_band_qid(self, band_name: str) -> Optional[str]:
-        return next((qid for key, qid in self.event_class.band_qid_map.items()
-                     if key.lower() == band_name.lower()), None)
+        try:
+            return next((qid for key, qid in self.event_class.band_qid_map.items()
+                         if key.lower() == band_name.lower()), None)
+        except Exception as e:
+            logger.warning("Error looking up band '%s' in band_qid_map: %s", band_name, e)
+            return None
 
     def map_venue_qid(self, venue_name: str) -> Optional[str]:
         return next((qid for key, qid in self.event_class.venue_qid_map.items()
@@ -483,7 +487,7 @@ class Danslogen:
                 if event:
                     events.append(event)
             except Exception as e:
-                logger.warning("Failed to parse row: %s", e)
+                logger.warning("Failed to parse row: %s (type: %s)", e, type(e).__name__)
                 continue
 
         logger.info("Parsed %d events for %s", len(events), month)
