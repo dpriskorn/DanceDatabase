@@ -103,81 +103,84 @@ class DanslogenTableRow(BaseModel):
 
 
 class DanslogenEvent(BaseModel):
-    organizer_qid: str = ""  # Danslogen is an aggregator, no QID
-    band_qid_map: dict[str, str] = Field({
-        "Allstars": "Q226",
-        "Alvenfors": "Q227",
-        "Ankies": "Q228",
-        "Avant": "Q229",
-        "BarraBazz": "Q230",
-        "Black Jack": "Q231",
-        "Blender": "Q232",
-        "Blixterz": "Q233",
-        "Boogart": "Q234",
-        "Bottleneck John": "Q235",
-        "Callinaz": "Q236",
-        "Canyons": "Q237",
-        "Casanovas": "Q238",
-        "Danzerz": "Q239",
-        "Date": "Q240",
-        "Donaldz": "Q241",
-        "Donnez": "Q242",
-        "Eloge": "Q243",
-        "Engdahls": "Q244",
-        "Excess": "Q245",
-        "Expanders": "Q246",
-        "Extract": "Q247",
-        "Fernandoz": "Q248",
-        "Frippez": "Q249",
-        "Gideons": "Q250",
-        "Guns Rosor": "Q251",
-        "Headline blues band": "Q252",
-        "Hedenskogs": "Q253",
-        "Hedins": "Q254",
-        "Highlights": "Q255",
-        "Högtryck": "Q256",
-        "Holéns": "Q257",
-        "Holidays": "Q258",
-        "Hollyz": "Q259",
-        "Jannes Svänggäng": "Q260",
-        "Jannez": "Q261",
-        "Jive": "Q262",
-        "Junix": "Q263",
-        "King Edwards Jr": "Q264",
-        "Kjellez": "Q265",
-        "Klackrent": "Q266",
-        "Kollijox": "Q267",
-        "Lars Erikssons": "Q268",
-        "Larz-Kristerz": "Q269",
-        "Lasse Stefanz": "Q270",
-        "Leif Kronlunds orkester": "Q271",
-        "Lövgrens": "Q272",
-        "Martinez": "Q273",
-        "Matz Bladhs": "Q274",
-        "Matz Rogers": "Q275",
-        "Micke Ahlgrens": "Q276",
-        "Mickes": "Q277",
-        "Ola & Jag": "Q278",
-        "Pär Norlings": "Q279",
-        "Perikles": "Q280",
-        "PH:s": "Q281",
-        "Playtones": "Q282",
-        "Samzons": "Q283",
-        "Sandbergs": "Q284",
-        "Sandins": "Q285",
-        "Sannex": "Q286",
-        "Shake": "Q287",
-        "Shine": "Q288",
-        "Sounders": "Q289",
-        "Streaplers": "Q290",
-        "Thor Görans": "Q291",
-        "Titanix": "Q292",
-        "Tomas & co": "Q293",
-        "Voize": "Q294",
-        "Wahlströms": "Q295",
-        "Xplays": "Q296",
-    })
-    venue_qid_map: dict[str, str] = Field({
+    organizer_qid: str = ""
+
+
+BAND_QID_MAP: dict[str, str] = {
+    "Allstars": "Q226",
+    "Alvenfors": "Q227",
+    "Ankies": "Q228",
+    "Avant": "Q229",
+    "BarraBazz": "Q230",
+    "Black Jack": "Q231",
+    "Blender": "Q232",
+    "Blixterz": "Q233",
+    "Boogart": "Q234",
+    "Bottleneck John": "Q235",
+    "Callinaz": "Q236",
+    "Canyons": "Q237",
+    "Casanovas": "Q238",
+    "Danzerz": "Q239",
+    "Date": "Q240",
+    "Donaldz": "Q241",
+    "Donnez": "Q242",
+    "Eloge": "Q243",
+    "Engdahls": "Q244",
+    "Excess": "Q245",
+    "Expanders": "Q246",
+    "Extract": "Q247",
+    "Fernandoz": "Q248",
+    "Frippez": "Q249",
+    "Gideons": "Q250",
+    "Guns Rosor": "Q251",
+    "Headline blues band": "Q252",
+    "Hedenskogs": "Q253",
+    "Hedins": "Q254",
+    "Highlights": "Q255",
+    "Högtryck": "Q256",
+    "Holéns": "Q257",
+    "Holidays": "Q258",
+    "Hollyz": "Q259",
+    "Jannes Svänggäng": "Q260",
+    "Jannez": "Q261",
+    "Jive": "Q262",
+    "Junix": "Q263",
+    "King Edwards Jr": "Q264",
+    "Kjellez": "Q265",
+    "Klackrent": "Q266",
+    "Kollijox": "Q267",
+    "Lars Erikssons": "Q268",
+    "Larz-Kristerz": "Q269",
+    "Lasse Stefanz": "Q270",
+    "Leif Kronlunds orkester": "Q271",
+    "Lövgrens": "Q272",
+    "Martinez": "Q273",
+    "Matz Bladhs": "Q274",
+    "Matz Rogers": "Q275",
+    "Micke Ahlgrens": "Q276",
+    "Mickes": "Q277",
+    "Ola & Jag": "Q278",
+    "Pär Norlings": "Q279",
+    "Perikles": "Q280",
+    "PH:s": "Q281",
+    "Playtones": "Q282",
+    "Samzons": "Q283",
+    "Sandbergs": "Q284",
+    "Sandins": "Q285",
+    "Sannex": "Q286",
+    "Shake": "Q287",
+    "Shine": "Q288",
+    "Sounders": "Q289",
+    "Streaplers": "Q290",
+    "Thor Görans": "Q291",
+    "Titanix": "Q292",
+    "Tomas & co": "Q293",
+    "Voize": "Q294",
+    "Wahlströms": "Q295",
+    "Xplays": "Q296",
+}
+
+VENUE_QID_MAP: dict[str, str] = {
         "Umeå Folkets Hus": "Q17",
         "Galaxy": "Q19",
         "Sägnernas Hus": "Q21",
@@ -386,11 +389,7 @@ class DanslogenEvent(BaseModel):
         "Gnistan Folkets Hus": "Q520",
         "Talavidskolan": "Q521",
         "Bollsta Folkets Hus": "Q522",
-    })
-    model_config = {"arbitrary_types_allowed": True}
-
-    soup: Optional[BeautifulSoup] = None
-    month: str = ""
+    }
 
 
 class Danslogen:
@@ -411,18 +410,18 @@ class Danslogen:
 
     def map_band_qid(self, band_name: str) -> Optional[str]:
         try:
-            return next((qid for key, qid in self.event_class.band_qid_map.items()
+            return next((qid for key, qid in BAND_QID_MAP.items()
                          if key.lower() == band_name.lower()), None)
         except Exception as e:
             logger.warning("Error looking up band '%s' in band_qid_map: %s", band_name, e)
             return None
 
     def map_venue_qid(self, venue_name: str) -> Optional[str]:
-        return next((qid for key, qid in self.event_class.venue_qid_map.items()
+        return next((qid for key, qid in VENUE_QID_MAP.items()
                      if key.lower() in venue_name.lower()), None)
 
     def add_venue_qid(self, venue_name: str, qid: str) -> None:
-        self.event_class.venue_qid_map[venue_name] = qid
+        VENUE_QID_MAP[venue_name] = qid
         logger.info("Added venue mapping: %s -> %s", venue_name, qid)
 
     def parse_weekday_day(self, text: str) -> tuple[str, str]:
@@ -487,7 +486,7 @@ class Danslogen:
                 logger.warning("Could not get/create band '%s': %s. Skipping event.", band, e)
                 return None
             if band_qid:
-                self.event_class.band_qid_map[band] = band_qid
+                BAND_QID_MAP[band] = band_qid
                 logger.info("Added band mapping: %s -> %s", band, band_qid)
 
         venue_qid = self.map_venue_qid(venue)
@@ -502,7 +501,7 @@ class Danslogen:
                 logger.warning("Skipping event with unknown venue: %s", venue_full)
                 return None
             venue_qid = new_qid
-            self.event_class.venue_qid_map[venue] = venue_qid
+            VENUE_QID_MAP[venue] = venue_qid
             logger.info("Added venue mapping: %s -> %s", venue, venue_qid)
 
         date = self.parse_date(day, month)
