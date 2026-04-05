@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup, Tag
 from pydantic import AnyUrl
 
 from src.models.danslogen.event import DanslogenEvent
-from src.models.danslogen.maps import BAND_QID_MAP, VENUE_QID_MAP
+from src.models.danslogen.maps import BAND_QID_MAP, VENUE_QID_MAP, fuzzy_match_qid
 from src.models.danslogen.table_row import DanslogenTableRow
 
 sys.path.insert(0, str(__file__).rsplit('/', 1)[0] + '/../../')
@@ -46,15 +46,33 @@ class Danslogen:
 
     def map_band_qid(self, band_name: str) -> Optional[str]:
         try:
-            return next((qid for key, qid in BAND_QID_MAP.items()
+            exact = next((qid for key, qid in BAND_QID_MAP.items()
                          if key.lower() == band_name.lower()), None)
+            if exact:
+                return exact
         except Exception as e:
             logger.warning("Error looking up band '%s' in band_qid_map: %s", band_name, e)
             return None
 
+        fuzzy = fuzzy_match_qid(band_name, BAND_QID_MAP)
+        if fuzzy:
+            matched_key, qid, score = fuzzy
+            logger.info("Fuzzy matched band '%s' to '%s' (score=%d)", band_name, matched_key, score)
+            BAND_QID_MAP[band_name] = qid
+            return qid
+        return None
+
     def map_venue_qid(self, venue_name: str) -> Optional[str]:
-        return next((qid for key, qid in VENUE_QID_MAP.items()
-                     if key.lower() in venue_name.lower()), None)
+        exact_match = next((qid for key, qid in VENUE_QID_MAP.items()
+                           if key.lower() in venue_name.lower()), None)
+        if exact_match:
+            return exact_match
+        fuzzy_result = fuzzy_match_qid(venue_name, VENUE_QID_MAP)
+        if fuzzy_result:
+            matched_key, qid, score = fuzzy_result
+            logger.info("Fuzzy matched '%s' to '%s' (score=%d)", venue_name, matched_key, score)
+            return qid
+        return None
 
     def add_venue_qid(self, venue_name: str, qid: str) -> None:
         VENUE_QID_MAP[venue_name] = qid
@@ -127,7 +145,10 @@ class Danslogen:
 
         venue_qid = self.map_venue_qid(venue)
         if not venue_qid:
-            venue_full = f"{venue}, {ort}" if ort else venue
+            if venue == ort or not ort:
+                venue_full = venue
+            else:
+                venue_full = f"{venue}, {ort}"
             try:
                 new_qid = click.prompt(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)")
             except (click.Abort, KeyboardInterrupt):

@@ -47,7 +47,7 @@ class DancedbClient:
 
     def create_band(self, band_name: str) -> str:
         try:
-            if not click.confirm(f"Create new band '{band_name}' on DanceDB?"):
+            if not click.confirm(f"Create new band '{band_name}' on DanceDB?", default=True):
                 raise Exception(f"User declined to create band: {band_name}")
         except click.Abort:
             raise KeyboardInterrupt()
