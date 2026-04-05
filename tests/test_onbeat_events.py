@@ -222,3 +222,106 @@ class TestCommunityQidMap:
     def test_inactive_community_z_dance(self):
         event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
         assert event.map_community_qid("Z Dance Experience") == "inactive"
+
+
+class TestParseDatetime:
+    def test_parses_datetime_with_time(self):
+        result = OnbeatEvents.parse_datetime("2025-04-15", "18:00")
+        assert result is not None
+        assert result.year == 2025
+        assert result.month == 4
+        assert result.day == 15
+        assert result.hour == 18
+        assert result.minute == 0
+
+    def test_parses_datetime_without_time(self):
+        result = OnbeatEvents.parse_datetime("2025-04-15", None)
+        assert result is not None
+        assert result.year == 2025
+        assert result.month == 4
+        assert result.day == 15
+
+    def test_returns_none_for_empty_date(self):
+        result = OnbeatEvents.parse_datetime("", "18:00")
+        assert result is None
+
+    def test_returns_none_for_invalid_format(self):
+        result = OnbeatEvents.parse_datetime("invalid", "18:00")
+        assert result is None
+
+
+class TestParseDatetimeRange:
+    def test_parses_range_with_start_and_end(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.parse_datetime_range("2025-04-15", "18:00 - 20:00")
+        assert event.start_date is not None
+        assert event.end_date is not None
+        assert event.start_date.hour == 18
+        assert event.end_date.hour == 20
+
+    def test_parses_single_time(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.parse_datetime_range("2025-04-15", "18:00")
+        assert event.start_date is not None
+        assert event.end_date is None
+        assert event.start_date.hour == 18
+
+    def test_parses_date_only(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.parse_datetime_range("2025-04-15", None)
+        assert event.start_date is not None
+        assert event.start_date.hour == 0
+
+    def test_handles_empty_date(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.parse_datetime_range("", "18:00")
+        assert event.start_date is None
+
+    def test_handles_invalid_format(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.parse_datetime_range("invalid", "18:00")
+        assert event.start_date is None
+
+
+class TestParseCommunityNameFetchesPage:
+    @patch("requests.get")
+    def test_fetches_page_when_soup_is_none(self, mock_get):
+        mock_response = MagicMock()
+        mock_response.text = "<html><body><div class='row mt-3'><h5><b>Test Club</b></h5></div></body></html>"
+        mock_get.return_value = mock_response
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.soup = None
+        event.parse_community_name()
+        assert event.organizer_name == "Test Club"
+        assert event.organizer_qid == ""
+
+
+class TestFindCardsFetchesPage:
+    @patch("requests.get")
+    def test_fetches_page_when_soup_is_none(self, mock_get):
+        mock_response = MagicMock()
+        mock_response.text = "<html><body><div id='clubCollapse-1'><div class='card custom-card'></div></div></body></html>"
+        mock_get.return_value = mock_response
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        event.soup = None
+        event.find_cards()
+        assert len(event.cards) == 1
+
+
+class TestHasNoCoursesMessageEdge:
+    def test_returns_false_when_msg_elem_is_none(self):
+        card = MagicMock()
+        card.find.return_value = None
+        result = OnbeatEvents.has_no_courses_message(card)
+        assert result is False
+
+
+class TestPriceOverrideMap:
+    def test_rockthebarn_price_override_exists(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        assert "rockthebarn" in event.price_override_map
+        assert event.price_override_map["rockthebarn"] == 1800
+
+    def test_price_override_map_is_populated(self):
+        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
+        assert len(event.price_override_map) >= 1
