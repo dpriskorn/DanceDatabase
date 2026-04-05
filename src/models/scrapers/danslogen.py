@@ -380,29 +380,18 @@ class Danslogen:
         if len(cells) < 8:
             return None
 
-        row_class = row.get("class") or []
-        is_r7166 = "r7166" in row_class
-
         weekday_day = cells[0].get_text(strip=True)
         weekday, day = self.parse_weekday_day(weekday_day)
 
-        time_text = cells[1].get_text(strip=True)
+        time_text = cells[3].get_text(strip=True) if cells[3].get_text(strip=True) else cells[1].get_text(strip=True)
         start_time, end_time = self.parse_time_range(time_text)
 
-        if is_r7166:
-            band = cells[4].get_text(strip=True)
-            venue = cells[6].get_text(strip=True)
-            ort = cells[7].get_text(strip=True)
-            kommun = cells[8].get_text(strip=True)
-            lan = ""
-            ovrigt = ""
-        else:
-            band = cells[3].get_text(strip=True)
-            venue = cells[4].get_text(strip=True)
-            ort = cells[5].get_text(strip=True)
-            kommun = cells[6].get_text(strip=True)
-            lan = cells[7].get_text(strip=True)
-            ovrigt = cells[8].get_text(strip=True) if len(cells) > 8 else ""
+        band = cells[4].get_text(strip=True)
+        venue = cells[5].get_text(strip=True)
+        ort = cells[6].get_text(strip=True)
+        kommun = cells[7].get_text(strip=True)
+        lan = cells[8].get_text(strip=True)
+        ovrigt = cells[9].get_text(strip=True) if len(cells) > 9 else ""
 
         if not band or not band.strip():
             logger.debug("Skipping row with empty band")
