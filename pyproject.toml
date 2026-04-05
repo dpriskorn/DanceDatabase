@@ -15,6 +15,10 @@ pydantic = "^2"
 beautifulsoup4 = "^4.14.2"
 wikibaseintegrator = "^0.12.14"
 lxml = "^6.0.2"
+opencode-sdk = "^0.2.0"
+opencode-ai = "^0.1.0a36"
+jsonschema = "^4.26.0"
+pyyaml = "^6.0"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"

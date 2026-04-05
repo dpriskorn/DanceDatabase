@@ -2,7 +2,18 @@
 
 ## Coverage Requirements
 
-**Target: 80% code coverage for all Python source files**
+**Target: 95% code coverage for all Python source files**
+
+When modifying Python code:
+1. Run coverage checks: `coverage run -m pytest && coverage report --include="src/**"`
+2. If coverage drops below 95%, add tests to improve coverage
+3. Focus on covering:
+   - New functionality added
+   - Error handling paths
+   - Edge cases
+   - Utility methods
+
+All files must maintain 95%+ coverage at all times.
 
 When modifying Python code:
 1. Run coverage checks: `coverage run -m pytest && coverage report --include="src/**"`

@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field, AnyUrl
 
 from config import CET
 from src.models.cogwork.enums import EventType
+from src.models.cogwork.price import PriceExtractor, PriceMismatchError
 from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
     Registration
 
@@ -67,7 +68,8 @@ class CogworkEvent(BaseModel):
     registration_opens: datetime = Field(None, description="Time for when registration opens")
     shop_html: str = Field("", description="HTML from the shop page of the event")
     occasions: int = Field(0, description="Number of occasions")
-    price_normal: int = Field(0, description="Price in whole SEK")
+    price_normal: Optional[int] = Field(None, description="Price in whole SEK")
+    price_reduced: Optional[int] = Field(None, description="Reduced price for students/seniors in whole SEK")
     place: str = Field("", description="Place where the event happens")
     dance_styles_qids: set[str] = Field(default_factory=set, description="Dance style QIDs in DanceDatabase")
 
@@ -188,12 +190,14 @@ class CogworkEvent(BaseModel):
         status_elem = soup.select_one(".cwRegStatus")
         if not status_elem or "opens" not in status_elem.text.lower():
             logger.debug("No registration opening time found.")
+            return
 
         text = status_elem.get_text(strip=True)
         # Example: "Registration opens mon. 13/10 19:00"
         match = re.search(r"(\d{1,2})/(\d{1,2})\s+(\d{2}:\d{2})", text)
         if not match:
             logger.debug(f"Could not parse datetime from text: {text}")
+            return
 
         day, month, time_str = match.groups()
         # Assume current year (can be improved if year is known)
@@ -222,39 +226,15 @@ class CogworkEvent(BaseModel):
         logger.debug(f"Parsed occasions: {self.occasions}")
 
     def parse_price(self) -> None:
-        """Parse and store the price from the shop HTML."""
+        """Parse and store the price from the shop HTML using PriceExtractor."""
         if not self.shop_html:
             self.fetch_shop_page()
-        soup = BeautifulSoup(self.shop_html, "lxml")
-
-        elem = soup.find("b", string="Price")
-        if elem:
-            text = elem.parent.get_text(strip=True)
-            match = re.search(r"Price\s*:\s*(\d+)", text)
-            self.price_normal = int(match.group(1)) if match else 0
-            logger.debug(f"Parsed price: {self.price_normal}")
-            return
-
-        text = self.shop_html
-        match = re.search(r"kostar\s+(\d+)\s*kr", text, re.IGNORECASE)
-        if match:
-            self.price_normal = int(match.group(1))
-            logger.debug(f"Parsed price from Swedish format: {self.price_normal}")
-            return
-
-        match = re.search(r"övriga\D*(\d+)", text, re.IGNORECASE)
-        if match:
-            self.price_normal = int(match.group(1))
-            logger.debug(f"Parsed price from Swedish övriga format: {self.price_normal}")
-            return
-
-        match = re.search(r"kostar\s+(\d+)\s*kr\s+för", text, re.IGNORECASE)
-        if match:
-            self.price_normal = int(match.group(1))
-            logger.debug(f"Parsed price from Swedish kostar format: {self.price_normal}")
-            return
-
-        logger.warning(f"No price found on {self.shop_url}")
+        try:
+            extractor = PriceExtractor(self.shop_html)
+            self.price_normal, self.price_reduced = extractor.extract()
+        except PriceMismatchError as e:
+            logger.warning(f"Price mismatch on {self.shop_url}: {e}")
+            self.skip = True
 
     # === Event workflow ===
     # noinspection PyArgumentList
@@ -306,6 +286,7 @@ class CogworkEvent(BaseModel):
             end_timestamp=self.end_time,
             location=self.location or "",
             price_normal=self.price_normal,
+            price_reduced=self.price_reduced,
             last_update=now,
             registration=Registration(
                 registration_open=self.registration_open,

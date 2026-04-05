@@ -26,7 +26,8 @@ class Fox4uEvent(CogworkEvent):
         "Sala Folkets Park": "Q22",
         "Altiras lokal": "Q71",
         "Matfors folkets hus": "Q488",
-        "Danslogen på Norra berget": "Q489"
+        "Danslogen på Norra berget": "Q489",
+        "Spegelsalen": "Q512"
     }
 
 

@@ -20,7 +20,9 @@ class ForsfoxEvent(CogworkEvent):
 }
     venue_qid_map: dict[str, str] = {
         "Kvarntorpsgården": "Q136",
-        "HällesåkersGården": "Q487"
+        "HällesåkersGården": "Q487",
+        "Tellushallen": "Q513",
+        "Attarpshallen": "Q514"
     }
 
 

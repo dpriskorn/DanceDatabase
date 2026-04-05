@@ -520,18 +520,15 @@
     "price_normal": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         },
         {
           "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,8}|(?=[\\d.]{1,11}0*$)\\d{0,8}\\.\\d{0,2}0*$)",
           "type": "string"
-        },
-        {
-          "type": "null"
         }
       ],
-      "default": null,
-      "description": "Normal price",
+      "description": "Normal price (0 or more, null not allowed)",
       "title": "Price Normal"
     },
     "price_late": {
@@ -550,6 +547,23 @@
       "default": null,
       "description": "Late price",
       "title": "Price Late"
+    },
+    "price_reduced": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,8}|(?=[\\d.]{1,11}0*$)\\d{0,8}\\.\\d{0,2}0*$)",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Reduced price for students/seniors",
+      "title": "Price Reduced"
     },
     "weekly_recurring": {
       "default": false,

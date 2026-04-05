@@ -123,8 +123,9 @@ class DanceEvent(BaseModel):
     # prices
     # todo add currency based on schema.org
     price_early: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Early bird price")
-    price_normal: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Normal price")
+    price_normal: condecimal(max_digits=10, decimal_places=2) = Field(description="Normal price (0 or more)")
     price_late: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Late price")
+    price_reduced: condecimal(max_digits=10, decimal_places=2) | None = Field(None, description="Reduced price for students/seniors")
 
     # bool
     weekly_recurring: bool = False

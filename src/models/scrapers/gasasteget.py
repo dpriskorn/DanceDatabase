@@ -19,7 +19,8 @@ class GasastegetEvent(CogworkEvent):
         "casanovas": "Q4",
         "socialdans": "Q4",
         "Gillesdanser": "Q496",
-        "Boogie Woogie": "Q497"
+        "Boogie Woogie": "Q497",
+        "salsa": "Q517",
 }
     venue_qid_map: dict[str, str] = {
         "Kvarntorpsgården": "Q136",
