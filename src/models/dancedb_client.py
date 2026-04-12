@@ -90,6 +90,7 @@ class DancedbClient:
 
         new_item = self.wbi.item.new()
         new_item.labels.set('sv', label)
+        new_item.descriptions.set('sv', 'dansställe')
 
         new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q20'))
 
