@@ -75,8 +75,9 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
 
     item.claims.add(
         datatypes.ExternalID(prop_nr="P42", value=byg_id),
-        action_if_exists=ActionIfExists.APPEND_OR_REPLACE
+        action_if_exists=ActionIfExists.REPLACE_ALL
     )
+    print("replacing all existing P42 values")
 
     if alias_needed:
         current_aliases = item.aliases.get("sv") or []
