@@ -1,3 +1,12 @@
+"""bygdegardarna_to_dancedb.py - Match bygdegardarna venues to DanceDB QIDs.
+
+This script:
+1. Fetches bygdegardarna venues from their website
+2. Fetches DanceDB venues via SPARQL
+3. Checks for true duplicates (same name within 10km or missing coordinates)
+4. Matches venues using exact, fuzzy, or coordinate matching
+"""
+
 import json
 import logging
 import math
@@ -23,6 +32,17 @@ UNMATCHED_DIR = Path("data") / "bygdegardarna" / "unmatched"
 
 
 def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """Calculate the great-circle distance between two points on Earth.
+
+    Args:
+        lat1: Latitude of first point in decimal degrees
+        lng1: Longitude of first point in decimal degrees
+        lat2: Latitude of second point in decimal degrees
+        lng2: Longitude of second point in decimal degrees
+
+    Returns:
+        Distance in kilometers
+    """
     R = 6371
     phi1, phi2 = math.radians(lat1), math.radians(lat2)
     dphi = math.radians(lat2 - lat1)
@@ -32,11 +52,23 @@ def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> fl
 
 
 def fetch_bygdegardarna() -> list[dict]:
+    """Fetch all venue locations from bygdegardarna.se website.
+
+    Returns:
+        List of venue dictionaries with position, title, and meta fields
+    """
     from src.models.bygdegardarna import fetch_markerdata
     return fetch_markerdata()
 
 
 def fetch_dancedb_venues() -> dict[str, dict]:
+    """Fetch all venue items from DanceDB wikibase via SPARQL.
+
+    Queries for venues (instance of Q20) with Swedish labels and coordinates.
+
+    Returns:
+        Dictionary mapping QID to venue data with label, lat, lng
+    """
     sparql = """
     PREFIX dd: <https://dance.wikibase.cloud/entity/>
     PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
@@ -67,6 +99,19 @@ def fetch_dancedb_venues() -> dict[str, dict]:
 
 
 def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None:
+    """Check both datasets for true duplicates.
+
+    A true duplicate is either:
+    - Same title/label with coordinates within 10km of each other
+    - Missing coordinates entirely (cannot verify uniqueness)
+
+    Args:
+        db_venues: Dictionary of DanceDB venues (QID -> label, lat, lng)
+        byg_venues: List of bygdegardarna venues
+
+    Raises:
+        Exception: If any true duplicates found in either dataset
+    """
     DUPLICATE_DISTANCE_KM = 10.0
 
     # Check DanceDB for duplicates
@@ -131,6 +176,15 @@ def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None
 
 
 def exact_match(title: str, db_venues: dict[str, dict]) -> Optional[tuple[str, str]]:
+    """Find exact title match in DanceDB venues (case-insensitive).
+
+    Args:
+        title: Venue title from bygdegardarna
+        db_venues: Dictionary of DanceDB venues
+
+    Returns:
+        Tuple of (QID, matched label) if exact match found, None otherwise
+    """
     title_lower = title.lower()
     for qid, data in db_venues.items():
         if data.get("label", "").lower() == title_lower:
@@ -138,7 +192,17 @@ def exact_match(title: str, db_venues: dict[str, dict]) -> Optional[tuple[str, s
     return None
 
 
-def fuzzy_match(title: str, db_venues: dict[str, dict], threshold: int = FUZZY_THRESHOLD):
+def fuzzy_match(title: str, db_venues: dict[str, dict], threshold: int = FUZZY_THRESHOLD) -> Optional[tuple[str, str, int]]:
+    """Find fuzzy match using token_set_ratio scoring.
+
+    Args:
+        title: Venue title from bygdegardarna
+        db_venues: Dictionary of DanceDB venues
+        threshold: Minimum score to return match (default 85)
+
+    Returns:
+        Tuple of (QID, matched label, score) if match above threshold, None otherwise
+    """
     labels = {qid: data["label"] for qid, data in db_venues.items()}
     result = process.extractOne(title, labels.keys(), scorer=fuzz.token_set_ratio)
     if result and result[1] >= threshold:
@@ -146,7 +210,18 @@ def fuzzy_match(title: str, db_venues: dict[str, dict], threshold: int = FUZZY_T
     return None
 
 
-def coordinate_matches(lat: float, lng: float, db_venues: dict[str, dict], threshold_km: float = COORD_THRESHOLD_KM):
+def coordinate_matches(lat: float, lng: float, db_venues: dict[str, dict], threshold_km: float = COORD_THRESHOLD_KM) -> list[tuple[str, str, float]]:
+    """Find DanceDB venues within specified distance of given coordinates.
+
+    Args:
+        lat: Latitude of bygdegardarna venue
+        lng: Longitude of bygdegardarna venue
+        db_venues: Dictionary of DanceDB venues
+        threshold_km: Maximum distance in km to consider (default 1.0)
+
+    Returns:
+        List of tuples (QID, label, distance_km) sorted by distance
+    """
     matches = []
     for qid, data in db_venues.items():
         if data.get("lat") and data.get("lng"):
@@ -157,6 +232,18 @@ def coordinate_matches(lat: float, lng: float, db_venues: dict[str, dict], thres
 
 
 def prompt_fuzzy_match(title: str, matched_label: str, qid: str, score: int, permalink: str) -> bool:
+    """Prompt user to confirm or reject a fuzzy match.
+
+    Args:
+        title: Original bygdegardarna venue title
+        matched_label: Matched DanceDB venue label
+        qid: Matched DanceDB QID
+        score: Fuzzy match score
+        permalink: URL to bygdegardarna venue page
+
+    Returns:
+        True if user accepts match, False if rejected
+    """
     print(f"\nPotential fuzzy match:")
     print(f'  Bygdegardarna: "{title}"')
     print(f'  DanceDB:       "{matched_label}" ({qid})')
@@ -166,9 +253,17 @@ def prompt_fuzzy_match(title: str, matched_label: str, qid: str, score: int, per
     return questionary.confirm("Accept match?").ask()
 
 
-def prompt_coordinate_matches(
-    title: str, permalink: str, options: list[tuple[str, str, float]]
-) -> Optional[str]:
+def prompt_coordinate_matches(title: str, permalink: str, options: list[tuple[str, str, float]]) -> Optional[str]:
+    """Prompt user to select from multiple coordinate-based matches.
+
+    Args:
+        title: Original bygdegardarna venue title
+        permalink: URL to bygdegardarna venue page
+        options: List of (QID, label, distance_km) tuples
+
+    Returns:
+        Selected QID, or None if user skips
+    """
     print(f"\nCoordinate matches within {COORD_THRESHOLD_KM}km:")
     print(f'  Bygdegardarna: "{title}"')
     choices = []
@@ -182,6 +277,14 @@ def prompt_coordinate_matches(
 
 
 def save_bygdegardarna(venues: list[dict]) -> None:
+    """Save bygdegardarna venues to JSON file.
+
+    Args:
+        venues: List of bygdegardarna venue dictionaries
+
+    Side effect:
+        Writes to data/bygdegardarna/YYYY-MM-DD.json
+    """
     OUTPUT_DIR.parent.mkdir(parents=True, exist_ok=True)
     today_str = date.today().strftime("%Y-%m-%d")
     path = OUTPUT_DIR.parent / f"{today_str}.json"
@@ -189,6 +292,14 @@ def save_bygdegardarna(venues: list[dict]) -> None:
 
 
 def save_dancedb_venues(venues: dict[str, dict]) -> None:
+    """Save DanceDB venues to JSON file.
+
+    Args:
+        venues: Dictionary of DanceDB venues (QID -> data)
+
+    Side effect:
+        Writes to data/dancedb/venues/YYYY-MM-DD.json
+    """
     OUTPUT_DIR.parent.parent.parent.mkdir(parents=True, exist_ok=True)
     today_str = date.today().strftime("%Y-%m-%d")
     path = Path("data") / "dancedb" / "venues" / f"{today_str}.json"
@@ -196,7 +307,18 @@ def save_dancedb_venues(venues: dict[str, dict]) -> None:
     path.write_text(json.dumps(venues, indent=2, ensure_ascii=False) + "\n")
 
 
-def main(skip_prompts: bool = False):
+def main(skip_prompts: bool = False) -> None:
+    """Main entry point for the venue matching workflow.
+
+    Args:
+        skip_prompts: If True, skip interactive prompts and auto-match
+                      exact and high-confidence fuzzy matches
+
+    Side effects:
+        - Fetches data from bygdegardarna.se and DanceDB
+        - Saves raw data to JSON files
+        - Creates enriched and unmatched output files
+    """
     print("Step 1: Fetching bygdegardarna venues...")
     byg_venues = fetch_bygdegardarna()
     print(f"Fetched {len(byg_venues)} bygdegardarna venues")
