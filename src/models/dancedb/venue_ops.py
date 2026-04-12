@@ -1,6 +1,7 @@
 """Venue operations: scrape, match, ensure exist."""
 import json
 import logging
+import urllib.parse
 from datetime import date
 from pathlib import Path
 
@@ -204,8 +205,8 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     for venue_name in new_venues:
         print(f"\n--- Creating venue: {venue_name} ---")
 
-        gmaps = f'https://www.google.com/maps/search/{venue_name.replace(" ", "+")}'
-        osm = f'https://www.openstreetmap.org/search?query={venue_name.replace(" ", "%20")}'
+        gmaps = f'https://www.google.com/maps/search/{urllib.parse.quote(venue_name, safe="")}'
+        osm = f'https://www.openstreetmap.org/search?query={urllib.parse.quote(venue_name, safe="")}'
         print(f"Google: {gmaps}")
         print(f"OSM: {osm}")
 
