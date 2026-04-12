@@ -1,4 +1,4 @@
-"""Cogwork operations: scrape and upload events from ALL sources."""
+"""Cogwork scraper commands."""
 import logging
 import sys
 from pathlib import Path
@@ -11,7 +11,7 @@ from src.models.dancedb_client import DancedbClient
 logger = logging.getLogger(__name__)
 
 
-def get_cogwork_scrapers() -> dict:
+def get_scrapers() -> dict:
     """Discover all cogwork scrapers."""
     scrapers = {}
     scraper_dir = Path(__file__).parent.parent / "cogwork" / "scrapers"
@@ -28,7 +28,7 @@ def get_cogwork_scrapers() -> dict:
     return scrapers
 
 
-def scrape_cogwork(source: str | None = None) -> None:
+def scrape(source: str | None = None) -> None:
     """Scrape cogwork events.
 
     Args:
@@ -36,7 +36,7 @@ def scrape_cogwork(source: str | None = None) -> None:
     """
     print("\n=== Scrape cogwork events ===")
 
-    scrapers = get_cogwork_scrapers()
+    scrapers = get_scrapers()
     if not scrapers:
         print("No cogwork scrapers found")
         return
@@ -58,7 +58,7 @@ def scrape_cogwork(source: str | None = None) -> None:
     print(f"\nTotal: {len(sources_to_scrape)} sources configured")
 
 
-def upload_cogwork(source: str | None = None, dry_run: bool = False) -> None:
+def upload(source: str | None = None, dry_run: bool = False) -> None:
     """Upload cogwork events to DanceDB with confirmation.
 
     Args:
@@ -67,7 +67,7 @@ def upload_cogwork(source: str | None = None, dry_run: bool = False) -> None:
     """
     print("\n=== Upload cogwork events ===")
 
-    scrapers = get_cogwork_scrapers()
+    scrapers = get_scrapers()
     if not scrapers:
         print("No cogwork scrapers found")
         return
@@ -87,3 +87,16 @@ def upload_cogwork(source: str | None = None, dry_run: bool = False) -> None:
 
     print(f"\nCogwork upload: (not fully implemented)")
     print("Use individual scrapers first, then upload via danslogen if needed")
+
+
+def run(source: str | None = None, dry_run: bool = False, upload_only: bool = False) -> None:
+    """Run scrape and optionally upload cogwork events.
+
+    Args:
+        source: Optional specific source, or None for all.
+        dry_run: If True, preview only.
+        upload_only: If True, skip scraping.
+    """
+    if not upload_only:
+        scrape(source=source)
+    upload(source=source, dry_run=dry_run)

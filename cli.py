@@ -16,14 +16,8 @@ from src.models.dancedb.event_ops import (
     scrape_danslogen,
     upload_events,
 )
-from src.models.dancedb.onbeat_ops import (
-    scrape_onbeat,
-    upload_onbeat,
-)
-from src.models.dancedb.cogwork_ops import (
-    scrape_cogwork,
-    upload_cogwork,
-)
+from src.models.commands.onbeat import run as scrape_onbeat
+from src.models.commands.cogwork import scrape as scrape_cogwork, upload as upload_cogwork
 from src.models.commands.folketshus import run as scrape_folketshus
 from src.models.dancedb.workflow import run_all
 

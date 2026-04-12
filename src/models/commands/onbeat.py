@@ -1,6 +1,5 @@
-"""Onbeat operations: scrape and upload events."""
+"""Onbeat scraper commands."""
 import logging
-import subprocess
 import sys
 
 import questionary
@@ -11,28 +10,9 @@ from src.models.dancedb_client import DancedbClient
 logger = logging.getLogger(__name__)
 
 
-def scrape_onbeat() -> None:
+def run(dry_run: bool = False) -> None:
     """Fetch onbeat events."""
     print("\n=== Scrape onbeat events ===")
-
-    result = subprocess.run(
-        ["python", "-c", 
-         "from src.models.onbeat.events import OnbeatEvents; "
-         "e = OnbeatEvents(page_url='https://onbeat.dance/kurser/'); "
-         "e.fetch(); e.parse(); print(e.events)"],
-        capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        print(result.stdout)
-        print(result.stderr)
-        raise RuntimeError("onbeat scrape failed")
-    print(result.stdout)
-    print("Onbeat events scraped")
-
-
-def upload_onbeat(dry_run: bool = False) -> None:
-    """Upload onbeat events to DanceDB with confirmation."""
-    print("\n=== Upload onbeat events ===")
 
     try:
         from src.models.onbeat.events import OnbeatEvents
@@ -40,20 +20,19 @@ def upload_onbeat(dry_run: bool = False) -> None:
         print("Error: onbeat module not available")
         return
 
-    if dry_run:
-        print("DRY RUN - no events will be uploaded")
-
+    page_url = "https://onbeat.dance/"
     try:
-        events = OnbeatEvents(page_url="https://onbeat.dance/kurser/")
-        events.fetch()
-        events.parse()
+        events = OnbeatEvents(page_url=page_url)
+        events.fetch_page()
+        events.parse_events()
         event_list = events.events
     except Exception as e:
         print(f"Error fetching onbeat events: {e}")
+        print("Note: onbeat.dance may have changed their URL structure")
         return
 
     if not event_list:
-        print("No onbeat events to upload.")
+        print("No onbeat events found.")
         return
 
     print(f"Found {len(event_list)} onbeat events")
