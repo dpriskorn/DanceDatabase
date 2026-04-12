@@ -15,15 +15,6 @@ When modifying Python code:
 
 All files must maintain 95%+ coverage at all times.
 
-When modifying Python code:
-1. Run coverage checks: `coverage run -m pytest && coverage report --include="src/**"`
-2. If coverage drops below 80%, add tests to improve coverage
-3. Focus on covering:
-   - New functionality added
-   - Error handling paths
-   - Edge cases
-   - Utility methods
-
 ## Code Style
 
 - Follow existing patterns in the codebase
@@ -31,6 +22,7 @@ When modifying Python code:
 - Use questionary for CLI prompts/interactions (NOT click)
 - Add type hints where possible
 - Keep functions small and focused
+- No comments unless requested
 
 ## Testing
 
@@ -48,24 +40,66 @@ Use conventional commits:
 - `docs:` for documentation
 - `chore:` for maintenance
 
-## DanceDB Venue Matching Workflow
+## CLI Usage
 
-When adding a new venue scraper (e.g., bygdegardarna.se), follow this workflow:
+All operations go through `cli.py`:
 
-### 1. Scrape venues
-- `scrape_venues_from_dancedb.py` → fetches venue QIDs from DanceDB wikibase via SPARQL
-- `data/dancedb/venues/YYYY-MM-DD.json` → DanceDB venues with labels + coordinates
+```bash
+poetry run python cli.py --help
+```
 
-### 2. Run scraper
-- `python scrape_<source>.py` → fetches source venues
-- `data/<source>/YYYY-MM-DD.json` → raw venue data
+### DanceDB Workflow
 
-### 3. Match to DanceDB
-- `python scrape_<source>_match.py --skip-prompts` → auto-match exact + fuzzy ≥85
-- Without `--skip-prompts` → interactive prompts with questionary
-- Output:
-  - `data/<source>/enriched/YYYY-MM-DD.json` → matched venues with QIDs
-  - `data/<source>/unmatched/YYYY-MM-DD.json` → unmatched for manual review
+#### Danslogen
+```bash
+# 1. Scrape venues with coordinates
+poetry run python cli.py scrape-bygdegardarna
+
+# 2. Scrape danslogen events
+poetry run python cli.py scrape-danslogen -m april -y 2026
+
+# 3. Match venues to DanceDB
+poetry run python cli.py match-venues --skip-prompts
+
+# 4. Upload events (prompts for each)
+poetry run python cli.py upload-events --limit 10
+
+# Or full workflow
+poetry run python cli.py run-all --dry-run
+```
+
+#### Onbeat
+```bash
+poetry run python cli.py scrape-onbeat
+poetry run python cli.py upload-onbeat
+```
+
+#### Cogwork
+```bash
+poetry run python cli.py scrape-cogwork
+poetry run python cli.py upload-cogwork
+```
+
+## Event Upload Flow
+
+All uploads follow this pattern:
+1. Parse events from source
+2. For each event: print details
+3. Prompt: Yes/Skip/Skip all/Abort
+4. If confirmed → upload to DanceDB with WBI
+5. Set properties: P1 (event), P5 (start), P6 (end), P7 (venue), P43 (status)
+
+## Event Status Detection
+
+Events are automatically scanned for cancellation status:
+- Search terms: "inställt", "avbokat", "ställt in", "inställda"
+- If found → status = Q567 (cancelled/inställt)
+- Default → status = Q566 (planned/planerat)
+- Logs INFO when cancelled detected
+
+## Venue Matching (Legacy)
+
+The venue matching workflow is handled automatically by the CLI. For reference:
 
 ### SPARQL for DanceDB
 When querying DanceDB wikibase, use these prefixes:
@@ -80,7 +114,13 @@ SELECT ?item ?itemLabel WHERE {
 }
 ```
 
-### Prompts
-Use `questionary` for interactive prompts:
-- `questionary.confirm("Accept match?").ask()` → yes/no
-- `questionary.rawselect("Select:", choices=[...]).ask()` → menu selection
+## DanceDB Properties
+
+| Property | Description | Values |
+|-----------|-------------|--------|
+| P1 | Instance of | Q20 (venue), Q2 (event) |
+| P4 | Coordinates | lat/lng |
+| P5 | Start time | timestamp |
+| P6 | End time | timestamp |
+| P7 | Venue | venue QID |
+| P43 | Status | Q566 (planned), Q567 (cancelled) |
