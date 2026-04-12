@@ -84,7 +84,12 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
             new_aliases = current_aliases + [byg_title]
             item.aliases.set("sv", new_aliases)
 
-    item.write(login=wbi.login)
+    summary_parts = [f"Added P42 ({byg_id})"]
+    if alias_needed:
+        summary_parts.append(f"alias ({byg_title})")
+    summary = "Updated from bygdegardarna.se: " + ", ".join(summary_parts)
+
+    item.write(login=wbi.login, summary=summary)
 
     base_url = "https://dance.wikibase.cloud"
     print(f"  Uploaded: {base_url}/wiki/Item:{qid}")
