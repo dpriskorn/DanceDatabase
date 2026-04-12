@@ -98,12 +98,44 @@ def fetch_dancedb_venues() -> dict[str, dict]:
     return venues
 
 
+def validate_coordinates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None:
+    """Validate that all venues have valid coordinates.
+
+    Reports statistics for each dataset showing count and percentage with coordinates.
+    Raises exception if any venue is missing coordinates.
+
+    Args:
+        db_venues: Dictionary of DanceDB venues (QID -> label, lat, lng)
+        byg_venues: List of bygdegardarna venues
+
+    Raises:
+        Exception: If any venue in either dataset is missing coordinates
+    """
+    db_with_coords = sum(1 for v in db_venues.values() if v.get("lat") and v.get("lng"))
+    db_total = len(db_venues)
+    db_pct = (db_with_coords / db_total * 100) if db_total else 0
+    print(f"  DanceDB: {db_with_coords}/{db_total} ({db_pct:.1f}%) with coordinates")
+
+    byg_with_coords = sum(
+        1 for v in byg_venues
+        if v.get("position", {}).get("lat") and v.get("position", {}).get("lng")
+    )
+    byg_total = len(byg_venues)
+    byg_pct = (byg_with_coords / byg_total * 100) if byg_total else 0
+    print(f"  Bygdegardarna: {byg_with_coords}/{byg_total} ({byg_pct:.1f}%) with coordinates")
+
+    if db_with_coords < db_total or byg_with_coords < byg_total:
+        raise Exception("Some venues missing coordinates - cannot proceed")
+
+
 def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None:
     """Check both datasets for true duplicates.
 
     A true duplicate is either:
     - Same title/label with coordinates within 10km of each other
     - Missing coordinates entirely (cannot verify uniqueness)
+
+    Note: Coordinates should be validated first using validate_coordinates().
 
     Args:
         db_venues: Dictionary of DanceDB venues (QID -> label, lat, lng)
@@ -121,9 +153,6 @@ def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None
         lat = data.get("lat")
         lng = data.get("lng")
         if label:
-            if lat is None or lng is None:
-                print(f"ERROR: DanceDB venue \"{label}\" (Q{qid}) has no coordinates")
-                raise Exception("DanceDB venue without coordinates - cannot proceed")
             label_coords[label].append((qid, lat, lng))
 
     db_true_dupes = []
@@ -152,9 +181,6 @@ def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None
         lat = venue.get("position", {}).get("lat")
         lng = venue.get("position", {}).get("lng")
         if title:
-            if lat is None or lng is None:
-                print(f"ERROR: Bygdegardarna venue \"{title}\" has no coordinates")
-                raise Exception("Bygdegardarna venue without coordinates - cannot proceed")
             title_coords[title].append((lat, lng))
 
     byg_true_dupes = []
@@ -329,7 +355,10 @@ def main(skip_prompts: bool = False) -> None:
     print(f"Fetched {len(db_venues)} DanceDB venues")
     save_dancedb_venues(db_venues)
 
-    print("\nStep 3: Checking for duplicates...")
+    print("\nStep 3: Validating coordinates...")
+    validate_coordinates(db_venues, byg_venues)
+
+    print("\nStep 4: Checking for duplicates...")
     check_duplicates(db_venues, byg_venues)
     print("No duplicates found.")
 
@@ -347,7 +376,7 @@ def main(skip_prompts: bool = False) -> None:
             print(f"Skipping - already matched today.")
             return
 
-    print(f"\nStep 4: Matching venues from {today_str}...")
+    print(f"\nStep 5: Matching venues from {today_str}...")
     enriched = []
     unmatched = []
 
