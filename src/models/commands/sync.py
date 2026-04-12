@@ -44,17 +44,13 @@ def sync_danslogen(
     print("\n[2/4] Ensure venues exist in DanceDB...")
     ensure_venues(date_str=date_str, dry_run=dry_run)
 
-    print("\n[3/4] Fetch existing events from DanceDB...")
-    existing_events = ensure_events(month=month, year=year, dry_run=dry_run)
-
-    print("\n[4/4] Upload new events to DanceDB...")
+    print("\n[3/4] Upload events to DanceDB...")
     upload_events(
         input_file=input_file,
         date_str=date_str,
         month=month,
         dry_run=dry_run,
         limit=limit,
-        existing_events=existing_events,
     )
 
     print("\n" + "=" * 50)

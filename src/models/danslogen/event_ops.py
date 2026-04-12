@@ -55,13 +55,10 @@ def upload_events(
     dry_run: bool = False,
     limit: int | None = None,
     yes: bool = False,
-    existing_events: list[dict] | None = None,
 ) -> None:
     """Upload danslogen events to DanceDB.
     
-    Args:
-        existing_events: List of events already in DanceDB (from ensure_events).
-                       Used to skip duplicates.
+    Loads existing events from data/dancedb/events/{date}.json for deduplication.
     """
     import json
     import os
@@ -75,17 +72,30 @@ def upload_events(
 
     print(f"\n=== Upload danslogen events ===")
 
+    # Load existing events from JSON for deduplication
+    from datetime import date as dt
+    from src.models.dancedb.config import EVENTS_DIR
+
+    existing_events = []
+    date_str = date_str or dt.today().strftime("%Y-%m-%d")
+    events_file = EVENTS_DIR / f"{date_str}.json"
+    if events_file.exists():
+        existing_events = json.loads(events_file.read_text())
+        print(f"Loaded {len(existing_events)} existing events from {events_file.name}")
+    else:
+        print(f"Warning: No existing events file found at {events_file}")
+        print(f"Run 'poetry run python cli.py ensure-events' first to fetch events from DanceDB")
+
     # Build lookup for existing events
     existing_lookup: dict[str, dict] = {}
-    if existing_events:
-        for e in existing_events:
-            venue_qid = e.get("venue_qid", "")
-            start_ts = e.get("start_timestamp", "")
-            label = e.get("label", "")
-            qid = e.get("qid", "")
-            if venue_qid and start_ts:
-                key = f"{venue_qid}|{start_ts[:10]}"
-                existing_lookup[key] = {"qid": qid, "label": label}
+    for e in existing_events:
+        venue_qid = e.get("venue_qid", "")
+        start_ts = e.get("start_date", e.get("start_timestamp", ""))
+        label = e.get("event_label", e.get("label", ""))
+        qid = e.get("event_qid", e.get("qid", ""))
+        if venue_qid and start_ts:
+            key = f"{venue_qid}|{start_ts[:10]}"
+            existing_lookup[key] = {"qid": qid, "label": label}
 
     print(f"Loaded {len(existing_lookup)} existing events for deduplication")
 
