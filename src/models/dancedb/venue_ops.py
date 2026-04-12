@@ -142,6 +142,7 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
 def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     """Ensure danslogen venues exist in DanceDB before uploading events."""
     import questionary
+    from rapidfuzz import process as fuzz_process
 
     from datetime import datetime
     date_str = date_str or date.today().strftime("%Y-%m-%d")
@@ -152,6 +153,18 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     if not dansevents_file.exists():
         print(f"Error: danslogen data not found: {dansevents_file}")
         return
+
+    folketshus_dir = config.data_dir / "folketshus" / "enriched"
+    folketshus_venues = {}
+    folketshus_names = []
+    if folketshus_dir.exists():
+        folketshus_files = sorted(folketshus_dir.glob("*.json"), reverse=True)
+        if folketshus_files:
+            folketshus_file = folketshus_files[0]
+            folketshus_data = json.loads(folketshus_file.read_text())
+            folketshus_venues = {v["name"].lower(): v for v in folketshus_data}
+            folketshus_names = list(folketshus_venues.keys())
+            print(f"Loaded {len(folketshus_venues)} folketshus venues for auto-match")
 
     from src.models.danslogen.venue_matcher import VenueMatcher
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
@@ -205,20 +218,40 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     for venue_name in new_venues:
         print(f"\n--- Creating venue: {venue_name} ---")
 
+        folketshus_match = None
+        venue_lower = venue_name.lower()
+        if folketshus_names:
+            fuzzy = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=80)
+            if fuzzy:
+                folketshus_match = folketshus_venues[fuzzy[0]]
+                print(f"Found in folketshus: {fuzzy[0]} ({fuzzy[1]}, external_id: {folketshus_match['external_id']})")
+
         gmaps = f'https://www.google.com/maps/search/{urllib.parse.quote(venue_name, safe="")}'
         osm = f'https://www.openstreetmap.org/search?query={urllib.parse.quote(venue_name, safe="")}'
         print(f"Google: {gmaps}")
         print(f"OSM: {osm}")
 
         coords = None
-        print("Enter coordinates (lat, lng) or press Enter to skip:")
-        coords_input = input("> ").strip()
-        if coords_input:
-            try:
-                lat, lng = map(float, coords_input.split(","))
-                coords = {"lat": lat, "lng": lng}
-            except:
-                print("Invalid format, skipping")
+        if folketshus_match:
+            if fuzzy[1] >= 90:
+                print(f"Auto-using high-confidence folketshus coords ({folketshus_match['lat']}, {folketshus_match['lng']})")
+                coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
+            else:
+                use_coords = questionary.confirm(
+                    f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?"
+                ).ask()
+                if use_coords:
+                    coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
+
+        if not folketshus_match or not coords:
+            print("Enter coordinates (lat, lng) or press Enter to skip:")
+            coords_input = input("> ").strip()
+            if coords_input:
+                try:
+                    lat, lng = map(float, coords_input.split(","))
+                    coords = {"lat": lat, "lng": lng}
+                except:
+                    print("Invalid format, skipping")
 
         if not coords:
             print("Skipping venue creation (no coordinates)")
