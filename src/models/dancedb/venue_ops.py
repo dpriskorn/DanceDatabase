@@ -15,9 +15,10 @@ logger = logging.getLogger(__name__)
 FUZZY_THRESHOLD = 85
 
 
-def create_venue(venue_name: str, lat: float, lng: float, external_ids: dict[str, str] | None = None) -> str | None:
+def create_venue(venue_name: str, lat: float, lng: float, external_ids: dict[str, str] | None = None, client=None) -> str | None:
     """Create a new venue in DanceDB."""
-    client = DancedbClient()
+    if client is None:
+        client = DancedbClient()
     return client.create_venue(venue_name=venue_name, lat=lat, lng=lng, external_ids=external_ids)
 
 
@@ -215,6 +216,12 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
     print(f"\nMissing venues: {new_venues}")
 
+    db_client = None
+    if not dry_run and new_venues:
+        print("Logging in to DanceDB...")
+        db_client = DancedbClient()
+        print("Logged in.")
+
     for venue_name in new_venues:
         print(f"\n--- Creating venue: {venue_name} ---")
 
@@ -266,7 +273,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
             print(f"[DRY RUN] Would create: {venue_name} at {coords}{ids_str}")
             continue
 
-        qid = create_venue(venue_name, coords["lat"], coords["lng"], external_ids=external_ids)
+        qid = create_venue(venue_name, coords["lat"], coords["lng"], external_ids=external_ids, client=db_client)
         if qid:
             print(f"Created: https://dance.wikibase.cloud/wiki/Item:{qid}")
             existing_venues[venue_name.lower()] = {"qid": qid, "lat": coords["lat"], "lng": coords["lng"]}
