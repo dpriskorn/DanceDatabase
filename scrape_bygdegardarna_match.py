@@ -99,11 +99,9 @@ def main(skip_prompts: bool = False):
     unmatched_file = UNMATCHED_DIR / f"{today_str}.json"
 
     if output_file.exists():
-        if not questionary.confirm(f"[{today_str}] {output_file} already exists. Skip?").ask():
-            output_file.unlink()
-        else:
-            print(f"Skipping - already matched today.")
-            return
+        print(f"Overwriting existing files for {today_str}")
+        output_file.unlink()
+        unmatched_file.unlink()
 
     print(f"Loading data from {today_str}...")
     db_venues, byg_venues = load_data(today_str)

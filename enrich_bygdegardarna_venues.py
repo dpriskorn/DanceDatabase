@@ -162,13 +162,11 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Preview without uploading")
     parser.add_argument("--start", type=int, default=1, help="Start from venue N")
     parser.add_argument("--date", default=None, help="Date for input files (YYYY-MM-DD, default: today)")
-    parser.add_argument("--skip-scrape", action="store_true", help="Skip scraping and matching")
     args = parser.parse_args()
 
     date_str = args.date or date.today().strftime("%Y-%m-%d")
 
-    if not args.skip_scrape:
-        run_scraping_and_matching(date_str)
+    run_scraping_and_matching(date_str)
 
     print(f"Loading data for {date_str}...")
     enriched = load_enriched_venues(date_str)

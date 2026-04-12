@@ -1,10 +1,7 @@
-import argparse
 import json
 import logging
 from datetime import date
 from pathlib import Path
-
-import questionary
 
 import config
 from src.models.bygdegardarna import fetch_markerdata
@@ -26,14 +23,8 @@ def main():
     output_file = OUTPUT_DIR / f"{today_str}.json"
 
     if output_file.exists():
-        if not questionary.confirm(
-            f"[{today_str}] {output_file} already exists. Skip scraping?", default=True
-        ).ask():
-            print(f"Removing {output_file} and continuing...")
-            output_file.unlink()
-        else:
-            print(f"Skipping bygdegardarna - already scraped today.")
-            return
+        print(f"Overwriting existing file {output_file}")
+        output_file.unlink()
 
     print("Fetching marker data from bygdegardarna.se...")
     venues = fetch_markerdata()
