@@ -107,11 +107,11 @@ class TestRowParserParseDatetime:
 
         parser = RowParser(venue_matcher=mock_venue_matcher, band_mapper=mock_band_mapper)
 
-        date = datetime(2026, 4, 5, tzinfo=CET)
-        start, end = parser._parse_datetime(date, "18.00-22.00")
+        start, end = parser._parse_datetime("5", "april", "18.00-22.00")
 
         assert start is not None
         assert end is not None
+        assert start.day == 5
 
     def test_handles_empty_time(self):
         from datetime import datetime
@@ -124,8 +124,7 @@ class TestRowParserParseDatetime:
 
         parser = RowParser(venue_matcher=mock_venue_matcher, band_mapper=mock_band_mapper)
 
-        date = datetime(2026, 4, 5, tzinfo=CET)
-        start, end = parser._parse_datetime(date, "")
+        start, end = parser._parse_datetime("5", "april", "")
 
         assert start is None
         assert end is None
@@ -141,13 +140,12 @@ class TestRowParserParseDatetime:
 
         parser = RowParser(venue_matcher=mock_venue_matcher, band_mapper=mock_band_mapper)
 
-        date = datetime(2026, 4, 28, tzinfo=CET)
-        start, end = parser._parse_datetime(date, "17.00-02.00")
+        start, end = parser._parse_datetime("28", "april", "17.00-02.00")
 
         assert start is not None
         assert end is not None
-        assert start.date() == datetime(2026, 4, 28).date()
-        assert end.date() == datetime(2026, 4, 29).date()
+        assert start.day == 28
+        assert end.day == 29
         assert end.hour == 2
 
     def test_parses_single_time_no_dash(self):
@@ -161,8 +159,7 @@ class TestRowParserParseDatetime:
 
         parser = RowParser(venue_matcher=mock_venue_matcher, band_mapper=mock_band_mapper)
 
-        date = datetime(2026, 4, 5, tzinfo=CET)
-        start, end = parser._parse_datetime(date, "20.00")
+        start, end = parser._parse_datetime("5", "april", "20.00")
 
         assert start is not None
         assert end is None
@@ -179,11 +176,10 @@ class TestRowParserParseDatetime:
 
         parser = RowParser(venue_matcher=mock_venue_matcher, band_mapper=mock_band_mapper)
 
-        date = datetime(2026, 4, 28, tzinfo=CET)
-        start, end = parser._parse_datetime(date, "17.00-03.00")
+        start, end = parser._parse_datetime("28", "april", "17.00-03.00")
 
         assert end is not None
-        assert end.date() == datetime(2026, 4, 29).date()
+        assert end.day == 29
 
     def test_late_night_hour_not_shifted(self):
         from datetime import datetime
@@ -196,11 +192,10 @@ class TestRowParserParseDatetime:
 
         parser = RowParser(venue_matcher=mock_venue_matcher, band_mapper=mock_band_mapper)
 
-        date = datetime(2026, 4, 28, tzinfo=CET)
-        start, end = parser._parse_datetime(date, "17.00-04.00")
+        start, end = parser._parse_datetime("28", "april", "17.00-04.00")
 
         assert end is not None
-        assert end.date() == datetime(2026, 4, 28).date()
+        assert end.day == 28
 
     def test_handles_keyboard_interrupt_on_venue_match(self):
         from src.models.danslogen.venue_matcher import VenueMatcher

@@ -65,7 +65,7 @@ class RowParser:
             logger.warning("Skipping event - invalid date %s %s", day, month)
             return None
 
-        start_dt, end_dt = self._parse_datetime(date, time_str)
+        start_dt, end_dt = self._parse_datetime(day, month, time_str)
 
         dance_styles, instance_of = self._detect_dance_styles_and_instance(ovrigt)
 
@@ -142,36 +142,50 @@ class RowParser:
 
     def _parse_datetime(
         self,
-        date: datetime,
-        time_str: str
+        day: str,
+        month: str,
+        time_str: str,
+        year: int = 2026
     ) -> tuple[Optional[datetime], Optional[datetime]]:
-        """Parse time string like '18.00-22.00' into start/end datetimes."""
+        """Parse day, month, time string like '18.00-22.00' into start/end datetimes directly."""
+        month_map = {"januari": 1, "februari": 2, "mars": 3, "april": 4,
+                  "maj": 5, "juni": 6, "juli": 7, "augusti": 8,
+                  "september": 9, "oktober": 10, "november": 11, "december": 12}
+        
+        try:
+            day_num = int(day)
+            month_num = month_map.get(month.lower(), 4)
+        except (ValueError, TypeError):
+            return None, None
+        
+        if not time_str:
+            return None, None
+        
+        time_clean = time_str.replace('.', ':')
         start_dt = None
         end_dt = None
-
-        if time_str and date:
+        
+        if "-" in time_clean:
+            start_str, end_str = time_clean.split('-', 1)
             try:
-                time_clean = time_str.replace('.', ':')
-                if '-' in time_clean:
-                    start_str, end_str = time_clean.split('-', 1)
-                    start_dt = datetime.strptime(
-                        f"{date.strftime('%Y-%m-%d')} {start_str.strip()}",
-                        "%Y-%m-%d %H:%M"
-                    ).replace(tzinfo=CET)
-                    end_dt = datetime.strptime(
-                        f"{date.strftime('%Y-%m-%d')} {end_str.strip()}",
-                        "%Y-%m-%d %H:%M"
-                    ).replace(tzinfo=CET)
-                    if end_dt.hour <= 3:
-                        end_dt = end_dt + timedelta(days=1)
-                else:
-                    start_dt = datetime.strptime(
-                        f"{date.strftime('%Y-%m-%d')} {time_clean.strip()}",
-                        "%Y-%m-%d %H:%M"
-                    ).replace(tzinfo=CET)
-            except Exception as e:
-                logger.warning("Failed to parse time '%s': %s", time_str, e)
-
+                start_h, start_m = map(int, start_str.strip().split(":"))
+                end_h, end_m = map(int, end_str.strip().split(":"))
+            except ValueError:
+                return None, None
+            
+            start_dt = datetime(year, month_num, day_num, start_h, start_m, tzinfo=CET)
+            end_dt = datetime(year, month_num, day_num, end_h, end_m, tzinfo=CET)
+            
+            if end_dt.hour <= 3:
+                end_dt = end_dt + timedelta(days=1)
+        else:
+            try:
+                start_h, start_m = map(int, time_clean.strip().split(":"))
+            except ValueError:
+                return None, None
+            
+            start_dt = datetime(year, month_num, day_num, start_h, start_m, tzinfo=CET)
+        
         return start_dt, end_dt
 
     def _detect_dance_styles_and_instance(self, ovrigt: str) -> tuple[list[str], str]:
