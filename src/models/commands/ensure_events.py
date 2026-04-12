@@ -13,6 +13,8 @@ from src.models.dancedb_client import DancedbClient
 logger = logging.getLogger(__name__)
 
 DATA_DIR = Path("data")
+EVENTS_DIR = DATA_DIR / "dancedb" / "events"
+
 
 def configure_wbi():
     """Configure wikibase-integrator."""
@@ -23,15 +25,22 @@ def configure_wbi():
     wbi_config['USER_AGENT'] = config.user_agent
 
 
-def run(month: str = "april", year: int = 2026, dry_run: bool = False) -> None:
+def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: bool = False) -> None:
     """Ensure all event venues exist in DanceDB."""
     configure_wbi()
-    logging.basicConfig(level=config.loglevel)
     
     print(f"\n=== Ensuring event venues exist for {month} {year} ===")
 
     events = fetch_events_from_dancedb()
     print(f"Found {len(events)} events in DanceDB")
+
+    if save:
+        EVENTS_DIR.mkdir(parents=True, exist_ok=True)
+        date_str = date.today().strftime("%Y-%m-%d")
+        output_file = EVENTS_DIR / f"{date_str}.json"
+        output_file.write_text(json.dumps(events, indent=2, ensure_ascii=False) + "\n")
+        print(f"Saved to {output_file}")
+        return
 
     missing_p7 = []
     venues_needed = {}
@@ -97,36 +106,52 @@ def fetch_events_from_dancedb() -> list[dict]:
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
     sparql = """
-    SELECT ?event ?eventLabel ?venue ?venueLabel WHERE { 
-      ?event <https://dance.wikibase.cloud/prop/direct/P1> <https://dance.wikibase.cloud/entity/Q2> .
-      OPTIONAL { ?event <http://www.w3.org/2000/01/rdf-schema#label> ?el FILTER(LANG(?el) = "sv") }
-      OPTIONAL { ?event <https://dance.wikibase.cloud/prop/direct/P7> ?venue }
-      OPTIONAL { ?venue <http://www.w3.org/2000/01/rdf-schema#label> ?vl FILTER(LANG(?vl) = "sv") }
-      BIND(COALESCE(?el, "") AS ?eventLabel)
-      BIND(COALESCE(?vl, "") AS ?venueLabel)
-    } LIMIT 100
+    PREFIX dd: <https://dance.wikibase.cloud/entity/>
+    PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    SELECT ?event ?eventLabel ?start_date ?venue ?venueLabel ?venueAlias WHERE {
+      ?event ddt:P1 dd:Q2 .
+
+      OPTIONAL { ?event ddt:P5 ?start_date }
+
+      OPTIONAL { ?event rdfs:label ?svLabel FILTER(LANG(?svLabel)="sv") }
+      OPTIONAL { ?event rdfs:label ?enLabel FILTER(LANG(?enLabel)="en") }
+      BIND(COALESCE(?svLabel, ?enLabel, STR(?event)) AS ?eventLabel)
+
+      OPTIONAL { ?event ddt:P7 ?venue }
+      OPTIONAL { ?venue rdfs:label ?svVenueLabel FILTER(LANG(?svVenueLabel)="sv") }
+      OPTIONAL { ?venue rdfs:alias ?svVenueAlias FILTER(LANG(?svVenueAlias)="sv") }
+      BIND(COALESCE(?svVenueLabel, "") AS ?venueLabel)
+    }
     """
+    results = execute_sparql_query(query=sparql)
     results = execute_sparql_query(query=sparql)
     events = []
 
     for binding in results["results"]["bindings"]:
         event_uri = binding.get("event", {}).get("value", "")
         event_label = binding.get("eventLabel", {}).get("value", "")
+        start_date = binding.get("start_date", {}).get("value", "")
         
         venue_qid = None
         venue_label = ""
+        venue_alias = ""
         venue_binding = binding.get("venue")
         if venue_binding:
             venue_url = venue_binding.get("value", "")
             if venue_url:
                 venue_qid = venue_url.rsplit("/", 1)[-1]
                 venue_label = binding.get("venueLabel", {}).get("value", "")
+                venue_alias = binding.get("venueAlias", {}).get("value", "")
 
         events.append({
             "event_qid": event_uri.rsplit("/", 1)[-1] if event_uri else "",
             "event_label": event_label,
+            "start_date": start_date,
             "venue_qid": venue_qid,
             "venue_label": venue_label,
+            "venue_alias": venue_alias,
         })
 
     logger.info(f"Fetched {len(events)} events from DanceDB")
@@ -138,30 +163,28 @@ def fetch_existing_venues() -> dict:
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
     sparql = """
-    SELECT ?item ?itemLabel ?alias ?geo WHERE { 
-      ?item <https://dance.wikibase.cloud/prop/direct/P1> <https://dance.wikibase.cloud/entity/Q20> .
-      OPTIONAL { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?itemLabel }
-      OPTIONAL { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?alias }
-      OPTIONAL { ?item <https://dance.wikibase.cloud/prop/direct/P4> ?geo }
+    PREFIX dd: <https://dance.wikibase.cloud/entity/>
+    PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    SELECT ?item ?itemLabel ?alias WHERE {
+      ?item ddt:P1 dd:Q20 .
+      OPTIONAL { ?item rdfs:label ?svItemLabel FILTER(LANG(?svItemLabel)="sv") }
+      OPTIONAL { ?item rdfs:alias ?svAlias FILTER(LANG(?svAlias)="sv") }
+      BIND(COALESCE(?svItemLabel, "") AS ?itemLabel)
     }
     """
     results = execute_sparql_query(query=sparql)
     existing_venues = {}
 
     for binding in results["results"]["bindings"]:
-        qid = binding["item"]["value"].rsplit("/", 1)[-1]
+        qid = binding.get("item", {}).get("value", "").rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
-        alias = binding.get("alias", {}).get("value", "")
-        geo = binding.get("geo", {}).get("value", "")
-
-        lat, lng = None, None
-        if geo:
-            coords = geo.replace("Point(", "").replace(")", "").split(" ")
-            lng, lat = float(coords[0]), float(coords[1])
+        alias = binding.get("svAlias", {}).get("value", "")
 
         label_lower = label.lower()
         if label_lower not in existing_venues:
-            existing_venues[label_lower] = {"qid": qid, "lat": lat, "lng": lng, "aliases": []}
+            existing_venues[label_lower] = {"qid": qid}
 
         if alias:
             existing_venues[label_lower].setdefault("aliases", []).append(alias.lower())

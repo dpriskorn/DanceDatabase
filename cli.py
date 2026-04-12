@@ -93,7 +93,7 @@ def main():
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
 
-# === COGWORK ===
+    # === COGWORK ===
     p = sub.add_parser("scrape-cogwork",
                       help="Fetch cogwork events from ALL sources")
     p.add_argument("-s", "--source", default=None,
