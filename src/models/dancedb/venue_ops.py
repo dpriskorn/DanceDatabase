@@ -16,7 +16,7 @@ def scrape_bygdegardarna(date_str: str | None = None) -> None:
     print(f"\n=== Step 1: Scrape bygdegardarna venues ===")
 
     result = subprocess.run(
-        ["python", "scrape_bygdegardarna.py"],
+        ["poetry", "run", "python", "scrape_bygdegardarna.py"],
         capture_output=True, text=True
     )
     if result.returncode != 0:
@@ -33,7 +33,7 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
     print(f"\n=== Step 2: Scrape DanceDB venues ===")
 
     result = subprocess.run(
-        ["python", "scrape_venues_from_dancedb.py"],
+        ["poetry", "run", "python", "scrape_venues_from_dancedb.py"],
         capture_output=True, text=True
     )
     if result.returncode != 0:
@@ -49,7 +49,7 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print(f"\n=== Step 3: Match venues ===")
 
-    cmd = ["python", "scrape_bygdegardarna_match.py", f"--date={date_str}"]
+    cmd = ["poetry", "run", "python", "scrape_bygdegardarna_match.py", f"--date={date_str}"]
     if skip_prompts:
         cmd.append("--skip-prompts")
 

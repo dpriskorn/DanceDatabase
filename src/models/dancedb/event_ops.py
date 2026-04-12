@@ -19,7 +19,7 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
     print(f"\n=== Scrape danslogen events for {month} {year} ===")
 
     result = subprocess.run(
-        ["python", "scrape_danslogen.py", f"--month={month}"],
+        ["poetry", "run", "python", "scrape_danslogen.py", f"--month={month}"],
         capture_output=True, text=True
     )
     if result.returncode != 0:
