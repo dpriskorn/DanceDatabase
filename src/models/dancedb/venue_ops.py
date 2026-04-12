@@ -50,11 +50,12 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
     PREFIX dd: <https://dance.wikibase.cloud/entity/>
     PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
     SELECT ?item ?itemLabel (GROUP_CONCAT(?svAlias; SEPARATOR = "|") AS ?aliasStr) ?geo WHERE {
       ?item ddt:P1 dd:Q20 .
       OPTIONAL { ?item rdfs:label ?svLabel FILTER(LANG(?svLabel) = "sv") }
-      OPTIONAL { ?item rdfs:alias ?svAlias FILTER(LANG(?svAlias) = "sv") }
+      OPTIONAL { ?item skos:altLabel ?svAlias FILTER(LANG(?svAlias) = "sv") }
       OPTIONAL { ?item ddt:P4 ?geo }
       BIND(COALESCE(?svLabel, "") AS ?itemLabel)
     }
