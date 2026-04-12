@@ -240,15 +240,11 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
         coords = None
         if folketshus_match:
-            if fuzzy[1] >= 90:
-                print(f"Auto-using high-confidence folketshus coords ({folketshus_match['lat']}, {folketshus_match['lng']})")
+            use_coords = questionary.confirm(
+                f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?"
+            ).ask()
+            if use_coords:
                 coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
-            else:
-                use_coords = questionary.confirm(
-                    f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?"
-                ).ask()
-                if use_coords:
-                    coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
 
         if not folketshus_match or not coords:
             print("Enter coordinates (lat, lng) or press Enter to skip:")
