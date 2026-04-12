@@ -73,6 +73,34 @@ class DancedbClient:
             return qid
         return self.create_band(band_name)
 
+    def fetch_artists_from_dancedb(self) -> list[dict]:
+        """Fetch all artist items from DanceDB (instance of Q297).
+        
+        Returns list of {qid, label, aliases}.
+        """
+        sparql = """
+        SELECT ?item ?label ?altLabel WHERE {
+            ?item ddt:P1 dd:Q225 .
+            OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
+            OPTIONAL { ?item skos:altLabel ?altLabel FILTER(LANG(?altLabel) = "sv") }
+        }
+        """
+        try:
+            results = execute_sparql_query(sparql, False)['results']['bindings']
+            artists_dict: dict[str, dict] = {}
+            for r in results:
+                qid = r['item']['value'].split('/')[-1]
+                label = r.get('label', {}).get('value', '')
+                alt_label = r.get('altLabel', {}).get('value', '')
+                if qid not in artists_dict:
+                    artists_dict[qid] = {'qid': qid, 'label': label, 'aliases': []}
+                if alt_label:
+                    artists_dict[qid].setdefault('aliases', []).append(alt_label)
+            return list(artists_dict.values())
+        except Exception as e:
+            logger.error(f"Error fetching artists: {e}")
+            return []
+
     def create_venue(
         self,
         venue_name: str,
@@ -160,6 +188,7 @@ class DancedbClient:
         status_qid: str = "Q566",
         description_sv: str = "dansevenemang",
         instance_of: str = "Q2",
+        artist_qid: str | None = None,
     ) -> str:
         """Create event item in DanceDB.
 
@@ -171,6 +200,7 @@ class DancedbClient:
         - P6: end timestamp (if provided)
         - P7: venue reference
         - P43: status (planned/cancelled)
+        - P45: artist (if provided)
 
         Returns the new QID.
         """
@@ -208,6 +238,9 @@ class DancedbClient:
             )
 
         new_item.claims.add(datatypes.Item(prop_nr='P43', value=status_qid))
+
+        if artist_qid:
+            new_item.claims.add(datatypes.Item(prop_nr='P45', value=artist_qid))
 
         if config.loglevel == logging.DEBUG:
             rich.print_json(data=new_item.get_json())

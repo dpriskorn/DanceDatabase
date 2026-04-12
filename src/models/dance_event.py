@@ -45,6 +45,7 @@ class DanceDatabaseIdentifiers(BaseModel):
     venue: str = Field("", description="DanceDatabase QID for the venue")
     event_series: str = Field("", description="DanceDatabase QID for event series")
     source: str = Field(default_factory=str, description="DanceDatabase QID for data source")
+    artist: str = Field("", description="DanceDatabase QID for the artist/band")
 
 
 # noinspection PyArgumentList

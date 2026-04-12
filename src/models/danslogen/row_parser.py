@@ -111,7 +111,8 @@ class RowParser:
                     dance_styles=dance_styles,
                     event_series="",
                     organizer="",
-                    event=""
+                    event="",
+                    artist=band_qid
                 )
             ),
             last_update=datetime.now().replace(tzinfo=CET, microsecond=0),

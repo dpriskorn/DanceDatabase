@@ -188,6 +188,7 @@ def upload_events(
             search_text = f"{label} {desc}"
             status_qid, _ = detect_event_status(search_text)
             instance_of = event.instance_of if hasattr(event, 'instance_of') else "Q2"
+            artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
 
             qid = client.create_event(
                 label_sv=label,
@@ -196,6 +197,7 @@ def upload_events(
                 end_timestamp=end_ts,
                 status_qid=status_qid,
                 instance_of=instance_of,
+                artist_qid=artist_qid,
             )
             if qid:
                 print(f"  Uploaded: https://dance.wikibase.cloud/wiki/Item:{qid}")

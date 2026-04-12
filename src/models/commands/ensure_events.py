@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 DATA_DIR = Path("data")
 EVENTS_DIR = DATA_DIR / "dancedb" / "events"
+ARTISTS_DIR = DATA_DIR / "dancedb" / "artists"
 
 
 def configure_wbi():
@@ -29,7 +30,7 @@ def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: boo
     """Ensure all event venues exist in DanceDB.
     
     Returns list of events fetched from DanceDB.
-    Always saves events to JSON file.
+    Always saves events and artists to JSON files.
     """
     configure_wbi()
     
@@ -43,6 +44,15 @@ def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: boo
     output_file = EVENTS_DIR / f"{date_str}.json"
     output_file.write_text(json.dumps(events, indent=2, ensure_ascii=False) + "\n")
     print(f"Saved to {output_file}")
+
+    client = DancedbClient()
+    artists = client.fetch_artists_from_dancedb()
+    print(f"Found {len(artists)} artists in DanceDB")
+
+    ARTISTS_DIR.mkdir(parents=True, exist_ok=True)
+    artists_file = ARTISTS_DIR / f"{date_str}.json"
+    artists_file.write_text(json.dumps(artists, indent=2, ensure_ascii=False) + "\n")
+    print(f"Saved to {artists_file}")
 
     if save:
         return events
