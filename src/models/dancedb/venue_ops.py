@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 FUZZY_THRESHOLD = 85
 
 
-def create_venue(venue_name: str, lat: float, lng: float) -> str | None:
+def create_venue(venue_name: str, lat: float, lng: float, external_ids: dict[str, str] | None = None) -> str | None:
     """Create a new venue in DanceDB."""
     client = DancedbClient()
-    return client.create_venue(venue_name=venue_name, lat=lat, lng=lng)
+    return client.create_venue(venue_name=venue_name, lat=lat, lng=lng, external_ids=external_ids)
 
 
 def scrape_bygdegardarna(date_str: str | None = None) -> None:
@@ -257,11 +257,16 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
             print("Skipping venue creation (no coordinates)")
             continue
 
+        external_ids = None
+        if folketshus_match:
+            external_ids = {"P44": folketshus_match["external_id"]}
+
         if dry_run:
-            print(f"[DRY RUN] Would create: {venue_name} at {coords}")
+            ids_str = f" (external_ids: {external_ids})" if external_ids else ""
+            print(f"[DRY RUN] Would create: {venue_name} at {coords}{ids_str}")
             continue
 
-        qid = create_venue(venue_name, coords["lat"], coords["lng"])
+        qid = create_venue(venue_name, coords["lat"], coords["lng"], external_ids=external_ids)
         if qid:
             print(f"Created: https://dance.wikibase.cloud/wiki/Item:{qid}")
             existing_venues[venue_name.lower()] = {"qid": qid, "lat": coords["lat"], "lng": coords["lng"]}

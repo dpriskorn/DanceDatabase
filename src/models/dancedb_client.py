@@ -76,6 +76,7 @@ class DancedbClient:
         ort: str = "",
         lat: float | None = None,
         lng: float | None = None,
+        external_ids: dict[str, str] | None = None,
     ) -> str:
         """Create venue item in DanceDB.
 
@@ -83,6 +84,7 @@ class DancedbClient:
         - Labels: sv (venue_name + ', ' + ort if provided)
         - P1: instance of Q20 (dansställe)
         - P4: coordinates (if lat/lng provided)
+        - External IDs (dict of prop_nr -> value, e.g. {"P44": "folkets-id"})
 
         Returns the new QID.
         """
@@ -104,6 +106,10 @@ class DancedbClient:
                     globe='http://www.wikidata.org/entity/Q2'
                 )
             )
+
+        if external_ids:
+            for prop_nr, value in external_ids.items():
+                new_item.claims.add(datatypes.ExternalID(prop_nr=prop_nr, value=value))
 
         new_item.write(login=self.wbi.login)
         qid = new_item.id
