@@ -74,11 +74,11 @@ def upload_events(
 
     # Load existing events from JSON for deduplication
     from datetime import date as dt
-    from src.models.dancedb.config import EVENTS_DIR
+    from pathlib import Path
 
     existing_events = []
     date_str = date_str or dt.today().strftime("%Y-%m-%d")
-    events_file = EVENTS_DIR / f"{date_str}.json"
+    events_file = Path("data/dancedb/events") / f"{date_str}.json"
     if events_file.exists():
         existing_events = json.loads(events_file.read_text())
         print(f"Loaded {len(existing_events)} existing events from {events_file.name}")
@@ -139,6 +139,9 @@ def upload_events(
 
         # Check for duplicate in existing events
         if existing_lookup and start_ts:
+            # Convert datetime to string if needed
+            if hasattr(start_ts, 'strftime'):
+                start_ts = start_ts.strftime("%Y-%m-%dT%H:%M:%S")
             date_key = f"{venue_qid}|{start_ts[:10]}"
             existing = existing_lookup.get(date_key)
             if existing:

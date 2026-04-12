@@ -74,17 +74,22 @@ class DancedbClient:
         return self.create_band(band_name)
 
     def fetch_artists_from_dancedb(self) -> list[dict]:
-        """Fetch all artist items from DanceDB (instance of Q297).
+        """Fetch all artist items from DanceDB (instance of Q225).
         
         Returns list of {qid, label, aliases}.
         """
         sparql = """
-        SELECT ?item ?label ?altLabel WHERE {
-            ?item ddt:P1 dd:Q225 .
-            OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
-            OPTIONAL { ?item skos:altLabel ?altLabel FILTER(LANG(?altLabel) = "sv") }
-        }
-        """
+PREFIX dd: <https://dance.wikibase.cloud/entity/>
+PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?item ?label ?altLabel WHERE {
+    ?item ddt:P1 dd:Q225 .
+    OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
+    OPTIONAL { ?item skos:altLabel ?altLabel FILTER(LANG(?altLabel) = "sv") }
+}
+"""
         try:
             results = execute_sparql_query(sparql, False)['results']['bindings']
             artists_dict: dict[str, dict] = {}
