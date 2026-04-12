@@ -101,6 +101,8 @@ def main():
                        help="Fetch folketshus och parker venues")
     p.add_argument("-d", "--date", default=None,
                   help="Date for output (YYYY-MM-DD, default: today)")
+    p.add_argument("-m", "--match", action="store_true",
+                  help="Match venues to DanceDB and create new venues")
 
     # === WORKFLOW ===
     p = sub.add_parser("run-all",
@@ -163,7 +165,7 @@ def main():
 
     # FOLKETSHUS
     elif args.command == "scrape-folketshus":
-        scrape_folketshus(date_str=getattr(args, 'date', None))
+        scrape_folketshus(date_str=getattr(args, 'date', None), match=args.match)
 
     # WORKFLOW
     elif args.command == "run-all":
