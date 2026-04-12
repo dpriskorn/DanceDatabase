@@ -51,13 +51,14 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
     PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-    SELECT ?item ?itemLabel ?geo WHERE {
+    SELECT ?item ?itemLabel (GROUP_CONCAT(?svAlias; SEPARATOR = "|") AS ?aliasStr) ?geo WHERE {
       ?item ddt:P1 dd:Q20 .
       OPTIONAL { ?item rdfs:label ?svLabel FILTER(LANG(?svLabel) = "sv") }
       OPTIONAL { ?item rdfs:alias ?svAlias FILTER(LANG(?svAlias) = "sv") }
       OPTIONAL { ?item ddt:P4 ?geo }
       BIND(COALESCE(?svLabel, "") AS ?itemLabel)
     }
+    GROUP BY ?item ?itemLabel ?geo
     ORDER BY ?itemLabel
     LIMIT 2000
     """
@@ -67,15 +68,8 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
         qid = binding["item"]["value"].rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
         
-        alias_data = binding.get("svAlias")
-        aliases = []
-        if alias_data:
-            if isinstance(alias_data, list):
-                aliases = [a.get("value", "").lower() for a in alias_data if a.get("value")]
-            else:
-                val = alias_data.get("value", "")
-                if val:
-                    aliases = [val.lower()]
+        alias_str = binding.get("aliasStr", {}).get("value", "")
+        aliases = [a.lower() for a in alias_str.split("|") if a] if alias_str else []
         
         geo = binding.get("geo", {}).get("value", "")
         lat, lng = None, None

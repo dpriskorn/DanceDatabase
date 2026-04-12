@@ -193,12 +193,13 @@ def fetch_existing_venues() -> dict:
     PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-    SELECT ?item ?itemLabel ?alias WHERE {
+    SELECT ?item ?itemLabel (GROUP_CONCAT(?svAlias; SEPARATOR = "|") AS ?aliasStr) WHERE {
       ?item ddt:P1 dd:Q20 .
       OPTIONAL { ?item rdfs:label ?svItemLabel FILTER(LANG(?svItemLabel)="sv") }
       OPTIONAL { ?item rdfs:alias ?svAlias FILTER(LANG(?svAlias)="sv") }
       BIND(COALESCE(?svItemLabel, "") AS ?itemLabel)
     }
+    GROUP BY ?item ?itemLabel
     """
     results = execute_sparql_query(query=sparql)
     existing_venues = {}
@@ -207,15 +208,8 @@ def fetch_existing_venues() -> dict:
         qid = binding.get("item", {}).get("value", "").rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
 
-        alias_data = binding.get("svAlias")
-        aliases = []
-        if alias_data:
-            if isinstance(alias_data, list):
-                aliases = [a.get("value", "").lower() for a in alias_data if a.get("value")]
-            else:
-                val = alias_data.get("value", "")
-                if val:
-                    aliases = [val.lower()]
+        alias_str = binding.get("aliasStr", {}).get("value", "")
+        aliases = [a.lower() for a in alias_str.split("|") if a] if alias_str else []
 
         label_lower = label.lower()
         if label_lower not in existing_venues:
