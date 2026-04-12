@@ -24,6 +24,7 @@ from src.models.dancedb.cogwork_ops import (
     scrape_cogwork,
     upload_cogwork,
 )
+from src.models.commands.folketshus import run as scrape_folketshus
 from src.models.dancedb.workflow import run_all
 
 
@@ -88,18 +89,24 @@ def main():
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
 
-    # === COGWORK ===
+# === COGWORK ===
     p = sub.add_parser("scrape-cogwork",
-                     help="Fetch cogwork events from ALL sources")
+                      help="Fetch cogwork events from ALL sources")
     p.add_argument("-s", "--source", default=None,
                    help="Specific source (default: all)")
 
     p = sub.add_parser("upload-cogwork",
-                     help="Upload cogwork events to DanceDB")
+                      help="Upload cogwork events to DanceDB")
     p.add_argument("-s", "--source", default=None,
                    help="Specific source (default: all)")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
+
+    # === FOLKETSHUS ===
+    p = sub.add_parser("scrape-folketshus",
+                       help="Fetch folketshus och parker venues")
+    p.add_argument("-d", "--date", default=None,
+                  help="Date for output (YYYY-MM-DD, default: today)")
 
     # === WORKFLOW ===
     p = sub.add_parser("run-all",
@@ -159,6 +166,10 @@ def main():
 
     elif args.command == "upload-cogwork":
         upload_cogwork(source=args.source, dry_run=args.dry_run)
+
+    # FOLKETSHUS
+    elif args.command == "scrape-folketshus":
+        scrape_folketshus(date_str=getattr(args, 'date', None))
 
     # WORKFLOW
     elif args.command == "run-all":
