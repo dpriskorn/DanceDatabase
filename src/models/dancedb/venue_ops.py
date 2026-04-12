@@ -41,7 +41,9 @@ def scrape_bygdegardarna(date_str: str | None = None) -> None:
 def scrape_dancedb_venues(date_str: str | None = None) -> None:
     """Fetch existing venues from DanceDB via SPARQL."""
     import json
+    from wikibaseintegrator.wbi_config import config as wbi_config
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
+    wbi_config["USER_AGENT"] = config.user_agent
 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print(f"\n=== Scrape DanceDB venues ===")
@@ -169,6 +171,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
     from src.models.danslogen.venue_matcher import VenueMatcher
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
+    wbi_config["User-Agent"] = "DanceDB/1.0 (User:So9q)"
 
     sparql = """
     PREFIX dd: <https://dance.wikibase.cloud/entity/>

@@ -9,11 +9,10 @@ from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
 import config
 
-logger = logging.getLogger(__name__)
-
 wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
 wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
 wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
+wbi_config['USER_AGENT'] = config.user_agent
 
 
 class DancedbClient:

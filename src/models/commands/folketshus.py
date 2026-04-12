@@ -134,7 +134,9 @@ def parse_venue(html: str) -> FolketshusVenue | None:
 
 def fetch_existing_venues() -> dict[str, dict]:
     """Fetch existing venues from DanceDB via SPARQL."""
+    from wikibaseintegrator.wbi_config import config as wbi_config
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
+    wbi_config["USER_AGENT"] = config.user_agent
 
     sparql = """
     PREFIX dd: <https://dance.wikibase.cloud/entity/>
