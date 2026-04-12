@@ -19,6 +19,7 @@ from src.models.dancedb.event_ops import (
 from src.models.commands.onbeat import run as scrape_onbeat
 from src.models.commands.cogwork import scrape as scrape_cogwork, upload as upload_cogwork
 from src.models.commands.folketshus import run as scrape_folketshus
+from src.models.commands.ensure_events import run as ensure_events
 from src.models.dancedb.workflow import run_all
 
 
@@ -57,6 +58,15 @@ def main():
                    help="Date for venue data (YYYY-MM-DD, default: today)")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
+
+    p = sub.add_parser("ensure-events",
+                      help="Ensure all event venues exist in DanceDB (aborts if missing)")
+    p.add_argument("-m", "--month", default="april",
+                  help="Month name (default: april)")
+    p.add_argument("-y", "--year", type=int, default=2026,
+                  help="Year (default: 2026)")
+    p.add_argument("--dry-run", action="store_true",
+                  help="Preview only, don't abort")
 
     p = sub.add_parser("upload-events",
                      help="Upload danslogen events to DanceDB")
@@ -137,6 +147,9 @@ def main():
     elif args.command == "ensure-venues":
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
         ensure_venues(date_str, dry_run=args.dry_run)
+
+    elif args.command == "ensure-events":
+        ensure_events(month=args.month, year=args.year, dry_run=args.dry_run)
 
     elif args.command == "upload-events":
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
