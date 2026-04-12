@@ -127,11 +127,16 @@ def main(skip_prompts: bool = False):
         qid = None
         match_method = None
         match_score = None
+        skip_reason = None
 
         exact = exact_match(title, db_venues)
         if exact:
             qid, matched_label = exact
             match_method = "exact"
+            if db_venues[qid].get("has_p42"):
+                skip_reason = "already has P42"
+                qid = None
+                match_method = None
         else:
             fuzzy = fuzzy_match(title, db_venues)
             if fuzzy:
@@ -147,6 +152,11 @@ def main(skip_prompts: bool = False):
                         qid = matched_qid
                         match_method = "fuzzy"
                         match_score = score
+            if qid and db_venues[qid].get("has_p42"):
+                skip_reason = "already has P42"
+                qid = None
+                match_method = None
+                match_score = None
 
         if not qid and lat and lng:
             coord_matches = coordinate_matches(lat, lng, db_venues)
@@ -160,6 +170,10 @@ def main(skip_prompts: bool = False):
                     if selected:
                         qid = selected
                         match_method = "coordinate"
+            if qid and db_venues[qid].get("has_p42"):
+                skip_reason = "already has P42"
+                qid = None
+                match_method = None
 
         if qid:
             result["qid"] = qid
@@ -167,6 +181,8 @@ def main(skip_prompts: bool = False):
             result["match_score"] = match_score
             enriched.append(result)
         else:
+            if skip_reason:
+                result["skip_reason"] = skip_reason
             unmatched.append(result)
 
         if (i + 1) % 50 == 0:

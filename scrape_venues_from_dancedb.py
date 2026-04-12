@@ -19,10 +19,11 @@ def fetch_venues() -> dict[str, dict]:
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 
-    SELECT ?item ?itemLabel ?geo WHERE {
+    SELECT ?item ?itemLabel ?geo ?p42 WHERE {
       ?item ddt:P1 dd:Q20 .
       OPTIONAL { ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel) = "sv") }
       OPTIONAL { ?item ddt:P4 ?geo }
+      OPTIONAL { ?item ddt:P42 ?p42 }
     }
     ORDER BY ?itemLabel
     LIMIT 2000
@@ -33,11 +34,12 @@ def fetch_venues() -> dict[str, dict]:
         qid = binding["item"]["value"].rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
         geo = binding.get("geo", {}).get("value", "")
+        p42 = binding.get("p42", {}).get("value", "")
         lat, lng = None, None
         if geo:
             coords = geo.replace("Point(", "").replace(")", "").split(" ")
             lng, lat = float(coords[0]), float(coords[1])
-        venues[qid] = {"label": label, "lat": lat, "lng": lng}
+        venues[qid] = {"label": label, "lat": lat, "lng": lng, "has_p42": bool(p42)}
     return venues
 
 
