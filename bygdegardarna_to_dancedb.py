@@ -333,6 +333,54 @@ def save_dancedb_venues(venues: dict[str, dict]) -> None:
     path.write_text(json.dumps(venues, indent=2, ensure_ascii=False) + "\n")
 
 
+def _print_progress(
+    processed: int,
+    total: int,
+    enriched: list[dict],
+    unmatched: list[dict],
+    matched_qids: set[str],
+    db_venues: dict[str, dict],
+    byg_venues: list[dict]
+) -> None:
+    """Print matching progress with potential matches remaining."""
+    remaining = total - processed
+    matched = len(enriched)
+    unmatched_count = len(unmatched)
+    available_qids = len(db_venues) - len(matched_qids)
+
+    byg_titles = {v.get("title", "").lower() for v in byg_venues[:processed]}
+    matched_byg_titles = {v.get("title", "").lower() for v in enriched}
+
+    fuzzy_candidates = 0
+    coord_candidates = 0
+    for venue in byg_venues[processed:]:
+        title = venue.get("title", "")
+        lat = venue.get("position", {}).get("lat")
+        lng = venue.get("position", {}).get("lng")
+
+        if title.lower() not in matched_byg_titles:
+            fuzzy = fuzzy_match(title, db_venues)
+            if fuzzy and fuzzy[0] not in matched_qids:
+                fuzzy_candidates += 1
+
+        if lat and lng and title.lower() not in matched_byg_titles:
+            coords = [(q, l, d) for q, l, d in coordinate_matches(lat, lng, db_venues)
+                      if q not in matched_qids]
+            if coords:
+                coord_candidates += 1
+
+    exact_candidates = sum(
+        1 for v in byg_venues[processed:]
+        if v.get("title", "").lower() not in matched_byg_titles
+        and exact_match(v.get("title", ""), db_venues) is not None
+        and exact_match(v.get("title", ""), db_venues)[0] not in matched_qids
+    )
+
+    print(f"  {processed}/{total} | Matched: {matched} | Unmatched: {unmatched_count} | "
+          f"Pending: {exact_candidates} exact, {fuzzy_candidates} fuzzy, {coord_candidates} coord | "
+          f"QIDs available: {available_qids}")
+
+
 def main(skip_prompts: bool = False) -> None:
     """Main entry point for the venue matching workflow.
 
@@ -370,6 +418,9 @@ def main(skip_prompts: bool = False) -> None:
     unmatched_file = UNMATCHED_DIR / f"{today_str}.json"
 
     if output_file.exists():
+        if skip_prompts:
+            print(f"Skipping - already matched today.")
+            return
         if not questionary.confirm(f"[{today_str}] {output_file} already exists. Skip?").ask():
             output_file.unlink()
         else:
@@ -379,7 +430,10 @@ def main(skip_prompts: bool = False) -> None:
     print(f"\nStep 5: Matching venues from {today_str}...")
     enriched = []
     unmatched = []
+    matched_qids: set[str] = set()
+    matched_byg_titles: set[str] = set()
 
+    total = len(byg_venues)
     for i, venue in enumerate(byg_venues):
         title = venue.get("title", "")
         permalink = venue.get("meta", {}).get("permalink", "")
@@ -392,17 +446,23 @@ def main(skip_prompts: bool = False) -> None:
             "permalink": permalink
         }
 
+        if title in matched_byg_titles:
+            unmatched.append(result)
+            if (i + 1) % 50 == 0:
+                _print_progress(i + 1, total, enriched, unmatched, matched_qids, db_venues, byg_venues)
+            continue
+
         qid = None
         match_method = None
         match_score = None
 
         exact = exact_match(title, db_venues)
-        if exact:
+        if exact and exact[0] not in matched_qids:
             qid, matched_label = exact
             match_method = "exact"
         else:
             fuzzy = fuzzy_match(title, db_venues)
-            if fuzzy:
+            if fuzzy and fuzzy[0] not in matched_qids:
                 matched_qid, matched_label, score = fuzzy
                 if skip_prompts:
                     if score >= FUZZY_THRESHOLD:
@@ -417,19 +477,23 @@ def main(skip_prompts: bool = False) -> None:
                         match_score = score
 
         if not qid and lat and lng:
-            coord_matches = coordinate_matches(lat, lng, db_venues)
-            if coord_matches:
+            coord_options = [(qid, label, dist) for qid, label, dist 
+                             in coordinate_matches(lat, lng, db_venues)
+                             if qid not in matched_qids]
+            if coord_options:
                 if skip_prompts:
-                    if len(coord_matches) == 1:
-                        qid = coord_matches[0][0]
+                    if len(coord_options) == 1:
+                        qid = coord_options[0][0]
                         match_method = "coordinate"
                 else:
-                    selected = prompt_coordinate_matches(title, permalink, coord_matches)
+                    selected = prompt_coordinate_matches(title, permalink, coord_options)
                     if selected:
                         qid = selected
                         match_method = "coordinate"
 
         if qid:
+            matched_qids.add(qid)
+            matched_byg_titles.add(title)
             result["qid"] = qid
             result["match_method"] = match_method
             result["match_score"] = match_score
@@ -438,7 +502,7 @@ def main(skip_prompts: bool = False) -> None:
             unmatched.append(result)
 
         if (i + 1) % 50 == 0:
-            print(f"Processed {i + 1}/{len(byg_venues)} venues...")
+            _print_progress(i + 1, total, enriched, unmatched, matched_qids, db_venues, byg_venues)
 
     output_file.write_text(json.dumps(enriched, indent=2, ensure_ascii=False) + "\n")
     unmatched_file.write_text(json.dumps(unmatched, indent=2, ensure_ascii=False) + "\n")
