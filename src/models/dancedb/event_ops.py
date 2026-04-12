@@ -14,45 +14,35 @@ logger = logging.getLogger(__name__)
 
 
 def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
-    """Fetch raw event rows from danslogen.se (no venue mapping)."""
-    import json
-    import requests
-    from bs4 import BeautifulSoup
-
-    print(f"\n=== Scrape danslogen events for {month} {year} ===")
-
-    url = f"https://www.danslogen.se/dansprogram/{month}"
-    print(f"Fetching: {url}")
+    """Fetch raw event rows from danslogen.se (no venue mapping).
     
-    response = requests.get(url)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, "lxml")
+    Args:
+        month: Month name or "all" for all months
+    """
+    import json
+    from src.models.danslogen.model import Danslogen
 
-    rows = []
-    tables = soup.find_all("table")
-    for table in tables:
-        for tr in table.find_all("tr"):
-            cells = [td.get_text(strip=True) for td in tr.find_all(["td", "th"])]
-            if len(cells) >= 5:
-                row = {
-                    "weekday": cells[0] if len(cells) > 0 else "",
-                    "day": cells[1] if len(cells) > 1 else "",
-                    "time": cells[2] if len(cells) > 2 else "",
-                    "band": cells[3] if len(cells) > 3 else "",
-                    "venue": cells[4] if len(cells) > 4 else "",
-                    "ort": "",
-                    "kommun": "",
-                    "lan": "",
-                    "ovrigt": "",
-                }
-                rows.append(row)
+    months_to_scrape = []
+    if month.lower() == "all":
+        months_to_scrape = ["januari", "februari", "mars", "april", "maj", "juni",
+                          "juli", "augusti", "september", "oktober", "november", "december"]
+    else:
+        months_to_scrape = [month.lower()]
 
-    print(f"Found {len(rows)} rows")
+    all_events = []
+    for m in months_to_scrape:
+        print(f"\n=== Scrape danslogen events for {m} {year} ===")
+        d = Danslogen(month=m, interactive=False)
+        events = d.scrape_month(m)
+        print(f"Found {len(events)} events")
+        all_events.extend(events)
 
-    output_file = f"data/danslogen_rows_{year}_{month}.json"
+    print(f"\nTotal: {len(all_events)} events")
+
+    output_file = f"data/danslogen_rows_{year}_{month.lower()}.json"
     Path(output_file).parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
-        json.dump(rows, f, ensure_ascii=False, indent=2)
+        json.dump([e.model_dump(mode="json") for e in all_events], f, ensure_ascii=False, indent=2)
 
     print(f"Saved to {output_file}")
 
@@ -63,8 +53,18 @@ def upload_events(
     month: str = "april",
     dry_run: bool = False,
     limit: int | None = None,
+    yes: bool = False,
 ) -> None:
     """Upload danslogen events to DanceDB."""
+    import json
+    import os
+    from src.models.dance_event import DanceEvent
+
+    is_tty = os.isatty(0)
+    if not is_tty and not yes:
+        print("Warning: Not a TTY, using --yes mode automatically")
+        yes = True
+
     print(f"\n=== Upload danslogen events ===")
 
     input_path = Path(input_file)
@@ -72,20 +72,14 @@ def upload_events(
         print(f"Error: Input file not found: {input_file}")
         return
 
-    uploader = DanslogenUploader(
-        filename=input_file,
-        date_str=date_str,
-        month=month,
-        limit=limit,
-    )
+    events_data = json.loads(input_path.read_text())
+    if limit:
+        events_data = events_data[:limit]
+        print(f"(Limited to {limit} events)")
 
-    processed, events, skipped = uploader.run(dry_run=dry_run)
+    print(f"Loaded {len(events_data)} events from {input_file}")
 
-    if dry_run:
-        print("\nDry run complete. Run without --dry-run to upload.")
-        return
-
-    if not events:
+    if not events_data:
         print("No events to upload.")
         return
 
@@ -93,28 +87,43 @@ def upload_events(
     uploaded = 0
     skip_count = 0
 
-    for i, event in enumerate(events, start=1):
-        label = event.label.get("sv", "Untitled")
-        venue_qid = event.identifiers.dancedatabase.venue
+    for i, event_dict in enumerate(events_data, start=1):
+        try:
+            event = DanceEvent.model_validate(event_dict)
+        except Exception as e:
+            logger.warning("Failed to parse event %d: %s", i, e)
+            skip_count += 1
+            continue
+
+        label = event.label.get("sv", "Untitled") if event.label else "Untitled"
+        venue_qid = event.identifiers.dancedatabase.venue if event.identifiers else None
         start_ts = event.start_timestamp
         end_ts = event.end_timestamp
 
-        print(f"\n[{i}/{len(events)}] {label}")
+        if not venue_qid:
+            logger.warning("Skipping event %d - no venue QID", i)
+            skip_count += 1
+            continue
+
+        print(f"\n[{i}/{len(events_data)}] {label}")
         print(f"  Venue: {venue_qid}")
         print(f"  Start: {start_ts}")
         print(f"  End: {end_ts}")
 
-        confirm = questionary.rawselect(
-            "Upload to DanceDB?",
-            choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
-        ).ask()
+        if yes:
+            confirm = "Yes (Recommended)"
+        else:
+            confirm = questionary.rawselect(
+                "Upload to DanceDB?",
+                choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
+            ).ask()
 
         if confirm == "Skip":
             skip_count += 1
             continue
         elif confirm == "Skip all":
-            print(f"Skipping remaining {len(events) - i} events...")
-            skip_count += len(events) - i
+            print(f"Skipping remaining {len(events_data) - i} events...")
+            skip_count += len(events_data) - i
             break
         elif confirm == "Abort":
             print("Aborting...")
@@ -136,7 +145,7 @@ def upload_events(
                 print(f"  Uploaded: https://dance.wikibase.cloud/wiki/Item:{qid}")
                 uploaded += 1
         except Exception as e:
-            logger.error(f"Error uploading event: {e}")
+            logger.error("Error uploading event: %s", e)
             skip_count += 1
 
     print(f"\nDone! Uploaded {uploaded} events, {skip_count} skipped.")

@@ -2,11 +2,10 @@ import logging
 from typing import Optional
 
 import questionary
-from wikibaseintegrator import wbi_helpers, datatypes
+from wikibaseintegrator import WikibaseIntegrator, datatypes
 from wikibaseintegrator.wbi_login import Login
 from wikibaseintegrator.wbi_config import config as wbi_config
 from wikibaseintegrator.wbi_helpers import execute_sparql_query
-from wikibaseintegrator.wbi_enums import ActionIfExists
 
 import config
 
@@ -20,6 +19,7 @@ wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
 class DancedbClient:
     def __init__(self):
         self.login = Login(user=config.username, password=config.password)
+        self.wbi = WikibaseIntegrator(login=self.login)
         self.base_url = wbi_config['WIKIBASE_URL']
 
     def search_band(self, band_name: str) -> Optional[str]:
@@ -51,18 +51,17 @@ class DancedbClient:
             raise Exception(f"User declined to create band: {band_name}")
 
         try:
-            new_item = wbi_helpers.create_item(
-                labels={'sv': band_name, 'en': band_name},
-                login=self.login
-            )
+            new_item = self.wbi.item.new()
+            new_item.labels.set('sv', band_name)
+            new_item.labels.set('en', band_name)
+            new_item.claims.add(datatypes.Item(prop_nr='P31', value='Q215380'))
+            new_item.write(login=self.wbi.login)
             qid = new_item.id
-            new_item.claims.add('P31', 'Q215380')
-            new_item.write(login=self.login)
             url = f"{self.base_url}/wiki/Item:{qid}"
-            logger.info(f"Created band '{band_name}' on DanceDB: {url}")
+            logger.info(f"Created band '{band_name}' on DanceDB: %s", url)
             return qid
         except Exception as e:
-            logger.error(f"Error creating band '{band_name}': {e}")
+            logger.error(f"Error creating band '{band_name}': %s", e)
             raise
 
     def get_or_create_band(self, band_name: str) -> Optional[str]:
@@ -89,13 +88,10 @@ class DancedbClient:
         """
         label = f"{venue_name}, {ort}" if ort else venue_name
 
-        new_item = wbi_helpers.create_item(
-            labels={'sv': label},
-            login=self.login
-        )
-        qid = new_item.id
+        new_item = self.wbi.item.new()
+        new_item.labels.set('sv', label)
 
-        new_item.claims.add('P1', 'Q20', action_if_exists=ActionIfExists.REPLACE_ALL)
+        new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q20'))
 
         if lat is not None and lng is not None:
             new_item.claims.add(
@@ -105,13 +101,13 @@ class DancedbClient:
                     longitude=lng,
                     precision=0.0001,
                     globe='http://www.wikidata.org/entity/Q2'
-                ),
-                action_if_exists=ActionIfExists.REPLACE_ALL
+                )
             )
 
-        new_item.write(login=self.login)
+        new_item.write(login=self.wbi.login)
+        qid = new_item.id
         url = f"{self.base_url}/wiki/Item:{qid}"
-        logger.info(f"Created venue '{label}' on DanceDB: {url}")
+        logger.info(f"Created venue '{label}' on DanceDB: %s", url)
         return qid
 
     def create_venue_from_mapping(
@@ -151,41 +147,38 @@ class DancedbClient:
 
         Returns the new QID.
         """
-        from datetime import datetime
+        from datetime import datetime, timezone
 
-        new_item = wbi_helpers.create_item(
-            labels={'sv': label_sv},
-            login=self.login
-        )
-        qid = new_item.id
+        new_item = self.wbi.item.new()
+        new_item.labels.set('sv', label_sv)
 
-        new_item.claims.add('P1', 'Q2', action_if_exists=ActionIfExists.REPLACE_ALL)
-        new_item.claims.add('P7', venue_qid, action_if_exists=ActionIfExists.REPLACE_ALL)
-        new_item.claims.add('P43', status_qid, action_if_exists=ActionIfExists.REPLACE_ALL)
+        new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q2'))
+        new_item.claims.add(datatypes.Item(prop_nr='P7', value=venue_qid))
 
         if start_timestamp:
+            start_time = start_timestamp.astimezone(timezone.utc).strftime('+%Y-%m-%dT00:00:00Z')
             new_item.claims.add(
                 datatypes.Time(
                     prop_nr='P5',
-                    time=start_timestamp.strftime('+%Y-%m-%dT%H:%M:%S'),
+                    time=start_time,
                     calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
                     precision=11,
-                ),
-                action_if_exists=ActionIfExists.REPLACE_ALL
+                )
             )
 
         if end_timestamp:
+            end_time = end_timestamp.astimezone(timezone.utc).strftime('+%Y-%m-%dT00:00:00Z')
             new_item.claims.add(
                 datatypes.Time(
                     prop_nr='P6',
-                    time=end_timestamp.strftime('+%Y-%m-%dT%H:%M:%S'),
+                    time=end_time,
                     calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
                     precision=11,
-                ),
-                action_if_exists=ActionIfExists.REPLACE_ALL
+                )
             )
 
-        new_item.write(login=self.login)
+        new_item.write(login=self.wbi.login)
+        qid = new_item.id
         url = f"{self.base_url}/wiki/Item:{qid}"
-        logger.info(f"Created event '{label_sv}' on DanceDB: {url}")
+        logger.info(f"Created event '{label_sv}' on DanceDB: %s", url)
         return qid

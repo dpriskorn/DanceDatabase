@@ -24,10 +24,12 @@ class VenueMatcher:
         client: Optional[DancedbClient] = None,
         byg_venues: Optional[dict[str, dict]] = None,
         db_venues: Optional[dict[str, dict]] = None,
+        interactive: bool = True,
     ):
         self.client = client
         self.byg_venues = byg_venues or {}
         self.db_venues = db_venues or {}
+        self.interactive = interactive
 
     def resolve(self, venue_name: str, ort: str = "") -> Optional[str]:
         """Resolve venue name to QID.
@@ -136,11 +138,14 @@ class VenueMatcher:
         """Create venue if coordinates available.
 
         Gets coords from bygdegardarna, or prompts user.
-        Aborts if no coords available.
+        If not interactive, returns None instead of prompting.
         """
         lat, lng = self._get_coords_from_bygdegardarna(venue_name)
 
         if lat is None or lng is None:
+            if not self.interactive:
+                return None
+
             venue_full = f"{venue_name}, {ort}" if ort else venue_name
             try:
                 coord_str = questionary.text(
@@ -163,6 +168,9 @@ class VenueMatcher:
                     raise KeyboardInterrupt()
 
         if lat is None or lng is None:
+            return None
+
+        if not self.interactive:
             return None
 
         label = f"{venue_name}, {ort}" if ort else venue_name

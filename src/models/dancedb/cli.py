@@ -31,7 +31,7 @@ def main():
     p = sub.add_parser("scrape-danslogen",
                      help="Fetch danslogen event rows")
     p.add_argument("-m", "--month", default="april",
-                   help="Month name (default: april)")
+                   help="Month name or 'all' (default: april)")
     p.add_argument("-y", "--year", type=int, default=2026,
                    help="Year (default: 2026)")
 
@@ -67,6 +67,8 @@ def main():
                    help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None,
                    help="Limit number of rows to process")
+    p.add_argument("--yes", action="store_true",
+                   help="Skip confirmation prompts")
 
     p = sub.add_parser("run-all",
                      help="Full workflow: scrape → match → upload")
@@ -108,6 +110,7 @@ def main():
             month=args.month,
             dry_run=args.dry_run,
             limit=args.limit,
+            yes=args.yes,
         )
 
     elif args.command == "run-all":

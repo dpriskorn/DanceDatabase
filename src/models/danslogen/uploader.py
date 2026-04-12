@@ -54,6 +54,7 @@ class DanslogenUploader:
             client=self.client,
             byg_venues=byg_venues,
             db_venues=db_venues,
+            interactive=not dry_run,
         )
         band_mapper = BandMapper(client=self.client)
         parser = RowParser(venue_matcher=venue_matcher, band_mapper=band_mapper)

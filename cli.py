@@ -76,6 +76,8 @@ def main():
                    help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None,
                    help="Limit number of rows to process")
+    p.add_argument("--yes", action="store_true",
+                   help="Skip confirmation prompts")
 
     # === ONBEAT ===
     p = sub.add_parser("scrape-onbeat",
@@ -141,6 +143,7 @@ def main():
             month=args.month,
             dry_run=args.dry_run,
             limit=args.limit,
+            yes=args.yes,
         )
 
     # ONBEAT

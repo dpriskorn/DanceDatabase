@@ -1,6 +1,6 @@
 import logging
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Optional
 
 import questionary
@@ -32,10 +32,11 @@ class Danslogen:
     baseurl: str = "https://www.danslogen.se"
     event_class: type[DanslogenEvent] = DanslogenEvent
 
-    def __init__(self, month: str = "april"):
+    def __init__(self, month: str = "april", interactive: bool = True):
         self.month = month.lower()
         self.events: List[DanceEvent] = []
         self.dancedb_client = DancedbClient()
+        self.interactive = interactive
 
     def fetch_month(self, month: str) -> None:
         url = f"{self.baseurl}/dansprogram/{month}"
@@ -131,6 +132,9 @@ class Danslogen:
 
         band_qid = self.map_band_qid(band)
         if not band_qid:
+            if not self.interactive:
+                logger.debug("Band '%s' not found, skipping event (non-interactive)", band)
+                return None
             try:
                 band_qid = self.dancedb_client.get_or_create_band(band)
             except KeyboardInterrupt:
@@ -145,6 +149,9 @@ class Danslogen:
 
         venue_qid = self.map_venue_qid(venue)
         if not venue_qid:
+            if not self.interactive:
+                logger.debug("Venue '%s' not found, skipping event (non-interactive)", venue)
+                return None
             if venue == ort or not ort:
                 venue_full = venue
             else:
@@ -169,9 +176,15 @@ class Danslogen:
         end_dt = None
         if date and start_time:
             try:
-                start_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {start_time}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
+                start_time_clean = start_time.replace('.', ':').replace('24:00', '00:00')
+                start_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {start_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
+                if start_time_clean != start_time:
+                    start_dt = start_dt + timedelta(days=1)
                 if end_time:
-                    end_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {end_time}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
+                    end_time_clean = end_time.replace('.', ':').replace('24:00', '00:00')
+                    end_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {end_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
+                    if end_time != end_time_clean and '24:00' in end_time:
+                        end_dt = end_dt + timedelta(days=1)
             except Exception as e:
                 logger.warning("Failed to parse datetime: %s", e)
 
