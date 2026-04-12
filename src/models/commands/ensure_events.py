@@ -51,11 +51,18 @@ def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: boo
             missing_p7.append(event["label"])
         else:
             venue_label = event.get("venue_label", "")
-            venues_needed[venue_label.lower()] = {
-                "qid": venue_qid,
-                "label": venue_label,
-                "events": event.get("event_label", ""),
-            }
+            venue_aliases = event.get("venue_aliases", [])
+            venue_lower = venue_label.lower()
+            if venue_lower in venues_needed:
+                if venue_aliases:
+                    venues_needed[venue_lower].setdefault("aliases", []).extend(venue_aliases)
+            else:
+                venues_needed[venue_lower] = {
+                    "qid": venue_qid,
+                    "label": venue_label,
+                    "events": event.get("event_label", ""),
+                    "aliases": venue_aliases,
+                }
 
     if missing_p7:
         print(f"\n=== Events missing P7 ({len(missing_p7)}) ===")
@@ -76,10 +83,22 @@ def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: boo
         if venue_lower in existing_venues:
             continue
 
+        # Check existing venues by aliases
         alias_match = any(
             venue_lower in v.get("aliases", [])
             for v in existing_venues.values()
         )
+        if alias_match:
+            continue
+
+        # Check event venue aliases
+        venue_aliases = venue_info.get("aliases", [])
+        if venue_aliases:
+            for v in existing_venues.values():
+                existing_aliases = v.get("aliases", [])
+                if any(a in existing_aliases for a in venue_aliases):
+                    alias_match = True
+                    break
         if alias_match:
             continue
 
@@ -136,14 +155,21 @@ def fetch_events_from_dancedb() -> list[dict]:
         
         venue_qid = None
         venue_label = ""
-        venue_alias = ""
+        venue_aliases = []
         venue_binding = binding.get("venue")
         if venue_binding:
             venue_url = venue_binding.get("value", "")
             if venue_url:
                 venue_qid = venue_url.rsplit("/", 1)[-1]
                 venue_label = binding.get("venueLabel", {}).get("value", "")
-                venue_alias = binding.get("venueAlias", {}).get("value", "")
+                alias_data = binding.get("venueAlias")
+                if alias_data:
+                    if isinstance(alias_data, list):
+                        venue_aliases = [a.get("value", "").lower() for a in alias_data if a.get("value")]
+                    else:
+                        val = alias_data.get("value", "")
+                        if val:
+                            venue_aliases = [val.lower()]
 
         events.append({
             "event_qid": event_uri.rsplit("/", 1)[-1] if event_uri else "",
@@ -151,7 +177,7 @@ def fetch_events_from_dancedb() -> list[dict]:
             "start_date": start_date,
             "venue_qid": venue_qid,
             "venue_label": venue_label,
-            "venue_alias": venue_alias,
+            "venue_aliases": venue_aliases,
         })
 
     logger.info(f"Fetched {len(events)} events from DanceDB")
