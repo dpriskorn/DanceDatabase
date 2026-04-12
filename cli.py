@@ -16,6 +16,14 @@ from src.models.dancedb.event_ops import (
     scrape_danslogen,
     upload_events,
 )
+from src.models.dancedb.onbeat_ops import (
+    scrape_onbeat,
+    upload_onbeat,
+)
+from src.models.dancedb.cogwork_ops import (
+    scrape_cogwork,
+    upload_cogwork,
+)
 from src.models.dancedb.workflow import run_all
 
 
@@ -23,6 +31,7 @@ def main():
     parser = argparse.ArgumentParser(description="DanceDB CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
+    # === DANSLOGEN ===
     p = sub.add_parser("scrape-bygdegardarna",
                      help="Fetch bygdegardarna venues with coordinates")
     p.add_argument("-d", "--date", default=None,
@@ -68,19 +77,43 @@ def main():
     p.add_argument("-l", "--limit", type=int, default=None,
                    help="Limit number of rows to process")
 
-    p = sub.add_parser("run-all",
-                     help="Full workflow: scrape → match → upload")
-    p.add_argument("-m", "--month", default="april",
-                   help="Month name (default: april)")
-    p.add_argument("-y", "--year", type=int, default=2026,
-                   help="Year (default: 2026)")
+    # === ONBEAT ===
+    p = sub.add_parser("scrape-onbeat",
+                     help="Fetch onbeat events")
+
+    p = sub.add_parser("upload-onbeat",
+                     help="Upload onbeat events to DanceDB")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
+
+    # === COGWORK ===
+    p = sub.add_parser("scrape-cogwork",
+                     help="Fetch cogwork events from ALL sources")
+    p.add_argument("-s", "--source", default=None,
+                   help="Specific source (default: all)")
+
+    p = sub.add_parser("upload-cogwork",
+                     help="Upload cogwork events to DanceDB")
+    p.add_argument("-s", "--source", default=None,
+                   help="Specific source (default: all)")
+    p.add_argument("--dry-run", action="store_true",
+                   help="Preview without uploading")
+
+    # === WORKFLOW ===
+    p = sub.add_parser("run-all",
+                       help="Full workflow: scrape → match → upload")
+    p.add_argument("-m", "--month", default="april",
+                    help="Month name (default: april)")
+    p.add_argument("-y", "--year", type=int, default=2026,
+                    help="Year (default: 2026)")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None,
-                   help="Limit number of rows")
+                    help="Limit number of rows")
 
     args = parser.parse_args()
 
+    # DANSLOGEN
     if args.command == "scrape-bygdegardarna":
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
         scrape_bygdegardarna(date_str)
@@ -110,6 +143,21 @@ def main():
             limit=args.limit,
         )
 
+    # ONBEAT
+    elif args.command == "scrape-onbeat":
+        scrape_onbeat()
+
+    elif args.command == "upload-onbeat":
+        upload_onbeat(dry_run=args.dry_run)
+
+    # COGWORK
+    elif args.command == "scrape-cogwork":
+        scrape_cogwork(source=args.source)
+
+    elif args.command == "upload-cogwork":
+        upload_cogwork(source=args.source, dry_run=args.dry_run)
+
+    # WORKFLOW
     elif args.command == "run-all":
         run_all(
             month=args.month,
