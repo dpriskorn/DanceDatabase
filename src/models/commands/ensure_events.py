@@ -180,14 +180,22 @@ def fetch_existing_venues() -> dict:
     for binding in results["results"]["bindings"]:
         qid = binding.get("item", {}).get("value", "").rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
-        alias = binding.get("svAlias", {}).get("value", "")
+
+        alias_data = binding.get("svAlias")
+        aliases = []
+        if alias_data:
+            if isinstance(alias_data, list):
+                aliases = [a.get("value", "").lower() for a in alias_data if a.get("value")]
+            else:
+                val = alias_data.get("value", "")
+                if val:
+                    aliases = [val.lower()]
 
         label_lower = label.lower()
         if label_lower not in existing_venues:
-            existing_venues[label_lower] = {"qid": qid}
-
-        if alias:
-            existing_venues[label_lower].setdefault("aliases", []).append(alias.lower())
+            existing_venues[label_lower] = {"qid": qid, "aliases": aliases}
+        elif aliases:
+            existing_venues[label_lower].setdefault("aliases", []).extend(aliases)
 
     logger.info(f"Fetched {len(existing_venues)} venues from DanceDB")
     return existing_venues
