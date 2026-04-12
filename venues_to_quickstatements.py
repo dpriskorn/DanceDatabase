@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 
-import click
+import questionary
 
 sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
 
@@ -36,7 +36,10 @@ def main():
             print(f"  OSM:  {osm_url}")
             print(f"  Google: {google_url}")
 
-            coord_str = click.prompt("  Coordinates (lat/lon or Enter to skip)", default="", show_default=False)
+            coord_str = questionary.text(
+                "  Coordinates (lat/lon or Enter to skip)",
+                default=""
+            ).ask()
 
             qs.write("CREATE\n")
             qs.write(f'LAST\tLsv\t"{venue_name}"\n')

@@ -5,6 +5,7 @@ Upload Danslogen scraped data to DanceDB.
 Reads from data/danslogen_rows_2026_april.json, processes bands and venues,
 and uploads events to DanceDB via DancedbClient.
 """
+import argparse
 import json
 import logging
 import sys
@@ -12,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from decimal import Decimal
 
-import click
+import questionary
 
 sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
 
@@ -83,8 +84,8 @@ def map_venue_qid(venue_name: str, ort: str = "", skip: bool = False) -> str | N
 
     venue_full = venue_name if venue_name != ort else f"{venue_name}, {ort}" if ort else venue_name
     try:
-        new_qid = click.prompt(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)")
-    except (click.Abort, KeyboardInterrupt):
+        new_qid = questionary.text(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)").ask()
+    except KeyboardInterrupt:
         raise KeyboardInterrupt()
 
     if new_qid.lower() == 'skip':
@@ -219,26 +220,27 @@ def _parse_datetime(date: datetime, time_str: str) -> tuple[datetime | None, dat
     return start_dt, end_dt
 
 
-@click.command()
-@click.option('--input', '-i', 'input_file',
-              default='data/danslogen_rows_2026_april.json',
-              help='Input JSON file with scraped rows')
-@click.option('--month', '-m', default='april',
-              help='Month name for URL construction')
-@click.option('--dry-run', is_flag=True, default=False,
-              help='Process but do not upload to DanceDB')
-@click.option('--limit', '-l', type=int, default=None,
-              help='Limit number of rows to process')
-def upload(input_file: str, month: str, dry_run: bool, limit: int | None):
-    """
-    Upload Danslogen scraped data to DanceDB.
+def main():
+    parser = argparse.ArgumentParser(description="Upload Danslogen scraped data to DanceDB")
+    parser.add_argument("--input", "-i", "input_file",
+                        default="data/danslogen_rows_2026_april.json",
+                        help="Input JSON file with scraped rows")
+    parser.add_argument("--month", "-m", default="april",
+                        help="Month name for URL construction")
+    parser.add_argument("--dry-run", action="store_true", default=False,
+                        help="Process but do not upload to DanceDB")
+    parser.add_argument("--limit", "-l", type=int, default=None,
+                        help="Limit number of rows to process")
+    args = parser.parse_args()
 
-    Reads from INPUT_FILE, processes bands and venues, and uploads events.
-    Use --dry-run to test without making changes to DanceDB.
-    """
+    input_file = args.input_file
+    month = args.month
+    dry_run = args.dry_run
+    limit = args.limit
+
     input_path = Path(input_file)
     if not input_path.exists():
-        click.echo(f"Error: Input file not found: {input_file}", err=True)
+        print(f"Error: Input file not found: {input_file}", file=sys.stderr)
         sys.exit(1)
 
     with open(input_path) as f:
@@ -247,10 +249,10 @@ def upload(input_file: str, month: str, dry_run: bool, limit: int | None):
     if limit:
         rows = rows[:limit]
 
-    click.echo(f"Processing {len(rows)} rows from {input_file}")
+    print(f"Processing {len(rows)} rows from {input_file}")
 
     if dry_run:
-        click.echo("DRY RUN - no changes will be made to DanceDB")
+        print("DRY RUN - no changes will be made to DanceDB")
 
     client = None
     if not dry_run:
@@ -271,23 +273,23 @@ def upload(input_file: str, month: str, dry_run: bool, limit: int | None):
             skipped += 1
 
         if (i + 1) % 50 == 0:
-            click.echo(f"Processed {i + 1}/{len(rows)} rows... "
+            print(f"Processed {i + 1}/{len(rows)} rows... "
                        f"{len(events)} events, {skipped} skipped")
 
-    click.echo(f"\nDone! Processed {len(rows)} rows -> {len(events)} events, {skipped} skipped")
+    print(f"\nDone! Processed {len(rows)} rows -> {len(events)} events, {skipped} skipped")
 
     if events:
         output_file = input_path.with_suffix('.events.json')
         with open(output_file, 'w') as f:
             json.dump([e.model_dump(mode='json') for e in events], f, ensure_ascii=False, indent=2)
-        click.echo(f"Wrote events to {output_file}")
+        print(f"Wrote events to {output_file}")
 
     if dry_run:
-        click.echo("\nDry run complete. Run without --dry-run to upload.")
+        print("\nDry run complete. Run without --dry-run to upload.")
 
     if not dry_run and events:
-        click.echo("\nEvents ready for upload (uploading not yet implemented)")
+        print("\nEvents ready for upload (uploading not yet implemented)")
 
 
 if __name__ == '__main__':
-    upload()
+    main()

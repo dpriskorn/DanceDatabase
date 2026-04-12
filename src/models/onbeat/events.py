@@ -3,7 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List, Optional
 
-import click
+import questionary
 import requests
 from bs4 import BeautifulSoup, Tag
 from pydantic import BaseModel, AnyUrl, Field
@@ -323,7 +323,7 @@ class OnbeatEvents(BaseModel):
             venue_text = f"{details["where"]} {description}"
             venue_qid = self.map_venue_qid(venue_text)
             if not venue_qid:
-                if click.confirm(f"Could not map venue from:\n'{venue_text}'\nSkip this event?", default=True):
+                if questionary.confirm(f"Could not map venue from:\n'{venue_text}'\nSkip this event?", default=True).ask():
                     logger.warning(f"Skipping event with unknown venue: {label_sv}")
                     continue
                 else:

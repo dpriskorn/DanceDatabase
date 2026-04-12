@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 from typing import Optional, cast
 
-import click
+import questionary
 import requests
 from bs4 import BeautifulSoup
 from pydantic import BaseModel, Field, AnyUrl
@@ -248,7 +248,7 @@ class CogworkEvent(BaseModel):
         venue_qid = self.map_venue_qid(venue_text)
         if not venue_qid:
             logger.warning(f"Could not map to a venue QID from this text: '{venue_text}' see {self.shop_url}")
-            if click.confirm(f"Skip event? Could not map venue: '{venue_text[:50]}...'", default=True):
+            if questionary.confirm(f"Skip event? Could not map venue: '{venue_text[:50]}...'", default=True).ask():
                 self.skip = True
                 return
             raise Exception(f"Could not map venue QID from: '{venue_text}'")
@@ -262,15 +262,15 @@ class CogworkEvent(BaseModel):
                 if default_style not in style_choices:
                     default_style = style_choices[0] if style_choices else None
                 if default_style:
-                    chosen = click.prompt(
+                    chosen = questionary.select(
                         f"Select dance style for: '{style_text[:50]}...'",
-                        type=click.Choice(style_choices),
+                        choices=style_choices,
                         default=default_style
-                    )
+                    ).ask()
                     self.dance_styles_qids.add(self.dance_style_qid_map[chosen])
                     logger.debug(f"User selected dance style: {chosen} ({self.dance_style_qid_map[chosen]})")
                 else:
-                    if click.confirm(f"Skip event? Could not map dance style from: '{style_text[:50]}...'", default=True):
+                    if questionary.confirm(f"Skip event? Could not map dance style from: '{style_text[:50]}...'", default=True).ask():
                         self.skip = True
                         return
                     raise Exception(f"Could not map dance style QIDs from: '{style_text}'")

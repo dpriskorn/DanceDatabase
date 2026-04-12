@@ -1,4 +1,3 @@
-import click
 import pytest
 from unittest.mock import MagicMock, patch
 
@@ -72,10 +71,10 @@ class TestDancedbClientSearchBand:
 class TestDancedbClientCreateBand:
     @patch('src.models.dancedb_client.Login')
     @patch('src.models.dancedb_client.wbi_helpers')
-    @patch('src.models.dancedb_client.click')
-    def test_create_band_user_confirms(self, mock_click, mock_wbi_helpers, mock_login):
+    @patch('src.models.dancedb_client.questionary')
+    def test_create_band_user_confirms(self, mock_questionary, mock_wbi_helpers, mock_login):
         mock_login.return_value = MagicMock()
-        mock_click.confirm.return_value = True
+        mock_questionary.confirm.return_value.ask.return_value = True
 
         mock_new_item = MagicMock()
         mock_new_item.id = 'Q999'
@@ -91,11 +90,10 @@ class TestDancedbClientCreateBand:
         mock_new_item.write.assert_called_once()
 
     @patch('src.models.dancedb_client.Login')
-    @patch('src.models.dancedb_client.click')
-    def test_create_band_user_declines(self, mock_click, mock_login):
+    @patch('src.models.dancedb_client.questionary')
+    def test_create_band_user_declines(self, mock_questionary, mock_login):
         mock_login.return_value = MagicMock()
-        mock_click.confirm.return_value = False
-        mock_click.Abort = click.Abort
+        mock_questionary.confirm.return_value.ask.return_value = False
 
         client = DancedbClient()
 
@@ -106,23 +104,10 @@ class TestDancedbClientCreateBand:
 
     @patch('src.models.dancedb_client.Login')
     @patch('src.models.dancedb_client.wbi_helpers')
-    @patch('src.models.dancedb_client.click')
-    def test_create_band_ctrl_c_converts_to_keyboard_interrupt(self, mock_click, mock_wbi_helpers, mock_login):
+    @patch('src.models.dancedb_client.questionary')
+    def test_create_band_handles_wbi_exception(self, mock_questionary, mock_wbi_helpers, mock_login):
         mock_login.return_value = MagicMock()
-        mock_click.confirm.side_effect = click.Abort()
-        mock_click.Abort = click.Abort
-
-        client = DancedbClient()
-
-        with pytest.raises(KeyboardInterrupt):
-            client.create_band('CtrlCBand')
-
-    @patch('src.models.dancedb_client.Login')
-    @patch('src.models.dancedb_client.wbi_helpers')
-    @patch('src.models.dancedb_client.click')
-    def test_create_band_handles_wbi_exception(self, mock_click, mock_wbi_helpers, mock_login):
-        mock_login.return_value = MagicMock()
-        mock_click.confirm.return_value = True
+        mock_questionary.confirm.return_value.ask.return_value = True
         mock_wbi_helpers.create_item.side_effect = Exception('WBI error')
 
         client = DancedbClient()
@@ -146,10 +131,10 @@ class TestDancedbClientGetOrCreateBand:
             mock_search.assert_called_once_with('ExistingBand')
 
     @patch('src.models.dancedb_client.Login')
-    @patch('src.models.dancedb_client.click')
-    def test_get_or_create_creates_new_band(self, mock_click, mock_login):
+    @patch('src.models.dancedb_client.questionary')
+    def test_get_or_create_creates_new_band(self, mock_questionary, mock_login):
         mock_login.return_value = MagicMock()
-        mock_click.confirm.return_value = True
+        mock_questionary.confirm.return_value.ask.return_value = True
 
         with patch.object(DancedbClient, 'search_band', return_value=None) as mock_search:
             with patch.object(DancedbClient, 'create_band', return_value='Q999') as mock_create:

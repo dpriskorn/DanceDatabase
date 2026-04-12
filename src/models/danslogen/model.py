@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 from typing import List, Optional
 
-import click
+import questionary
 import requests
 from bs4 import BeautifulSoup, Tag
 from pydantic import AnyUrl
@@ -150,8 +150,8 @@ class Danslogen:
             else:
                 venue_full = f"{venue}, {ort}"
             try:
-                new_qid = click.prompt(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)")
-            except (click.Abort, KeyboardInterrupt):
+                new_qid = questionary.text(f"Unknown venue: '{venue_full}'\nEnter new QID for venue (or 'skip' to skip event)").ask()
+            except KeyboardInterrupt:
                 logger.info("Aborted by user, exiting...")
                 sys.exit(0)
             if new_qid.lower() == 'skip':

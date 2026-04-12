@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-import click
+import questionary
 from wikibaseintegrator import wbi_helpers
 from wikibaseintegrator.wbi_login import Login
 from wikibaseintegrator.wbi_config import config as wbi_config
@@ -46,11 +46,8 @@ class DancedbClient:
             return None
 
     def create_band(self, band_name: str) -> str:
-        try:
-            if not click.confirm(f"Create new band '{band_name}' on DanceDB?", default=True):
-                raise Exception(f"User declined to create band: {band_name}")
-        except click.Abort:
-            raise KeyboardInterrupt()
+        if not questionary.confirm(f"Create new band '{band_name}' on DanceDB?", default=True).ask():
+            raise Exception(f"User declined to create band: {band_name}")
 
         try:
             new_item = wbi_helpers.create_item(

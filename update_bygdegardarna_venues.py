@@ -4,6 +4,7 @@
 Adds P42 (Bygdegårdarnas Riksförbund ID) and aliases to matched venues.
 """
 import json
+import logging
 import sys
 import time
 from datetime import date
@@ -11,12 +12,15 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import questionary
+import rich
 
 import config
 from wikibaseintegrator import WikibaseIntegrator
 from wikibaseintegrator.wbi_config import config as wbi_config
 from wikibaseintegrator.wbi_enums import ActionIfExists
 from wikibaseintegrator.wbi_login import Login
+
+logging.basicConfig(level=config.loglevel)
 
 wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
 wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
@@ -70,15 +74,27 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
         print("  [DRY RUN - skipped]")
         return
 
-    item = ItemEntity(id=qid)
-    item.get()
+    item = wbi.item.get(entity_id=qid)
+    debug_json = item.get_json()
+    rich.print_json(data=debug_json)
+    existing_p42 = item.claims.get("P42")
+    initial_count = len(existing_p42) if existing_p42 else 0
+    print(f"  Existing P42 claims: {initial_count}")
+
+    if initial_count > 0:
+        item = item.claims.remove(property="P42")
+        remaining = item.claims.get("P42")
+        remaining_count = len(remaining) if remaining else 0
+        print(f"  After remove: {remaining_count} P42 claims left")
 
     item.claims.add(
         datatypes.ExternalID(prop_nr="P42", value=byg_id),
         action_if_exists=ActionIfExists.REPLACE_ALL
     )
-    print("replacing all existing P42 values")
-
+    remaining_after = item.claims.get("P42")
+    remaining_count_after = len(remaining_after) if remaining_after else 0
+    print(f"  After add: {remaining_count_after} P42 claims")
+    exit(0)
     if alias_needed:
         current_aliases = item.aliases.get("sv") or []
         if byg_title not in current_aliases:
