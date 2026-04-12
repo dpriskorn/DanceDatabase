@@ -2,13 +2,12 @@
 import logging
 from datetime import date
 
-from src.models.dancedb.venue_ops import (
+from src.models.commands.venue_ops import (
     scrape_bygdegardarna,
     scrape_dancedb_venues,
     match_venues,
 )
-from src.models.dancedb.event_ops import (
-    scrape_danslogen,
+from src.models.danslogen.event_ops import (
     upload_events,
 )
 

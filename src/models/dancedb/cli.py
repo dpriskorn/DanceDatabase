@@ -6,13 +6,13 @@ from datetime import date
 
 sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
 
-from src.models.dancedb.venue_ops import (
+from src.models.commands.venue_ops import (
     scrape_bygdegardarna,
     scrape_dancedb_venues,
     match_venues,
     ensure_venues,
 )
-from src.models.dancedb.event_ops import (
+from src.models.danslogen.event_ops import (
     scrape_danslogen,
     upload_events,
 )

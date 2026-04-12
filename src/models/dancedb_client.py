@@ -1,7 +1,9 @@
 import logging
 from typing import Optional
 
+from datetime import datetime
 import questionary
+import rich
 from wikibaseintegrator import WikibaseIntegrator, datatypes
 from wikibaseintegrator.wbi_login import Login
 from wikibaseintegrator.wbi_config import config as wbi_config
@@ -13,6 +15,8 @@ wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
 wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
 wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
 wbi_config['USER_AGENT'] = config.user_agent
+
+logger = logging.getLogger(__name__)
 
 
 class DancedbClient:
@@ -121,7 +125,9 @@ class DancedbClient:
         if external_ids:
             for prop_nr, value in external_ids.items():
                 new_item.claims.add(datatypes.ExternalID(prop_nr=prop_nr, value=value))
-
+        if config.loglevel == logging.DEBUG:
+            rich.print_json(data=new_item.get_json())
+            input("CONTINUE? (ENTER/ctrl+c)")
         new_item.write(login=self.wbi.login)
         qid = new_item.id
         url = f"{self.base_url}/wiki/Item:{qid}"
@@ -174,29 +180,37 @@ class DancedbClient:
         new_item.descriptions.set('sv', description_sv)
 
         new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q2'))
-        new_item.claims.add(datatypes.Item(prop_nr='P7', value=venue_qid))
+        new_item.claims.add(datatypes.Item(prop_nr='P5', value=venue_qid))
 
         if start_timestamp:
+            logger.debug("Setting start timestamp to %s", start_timestamp)
             start_time = start_timestamp.astimezone(timezone.utc).strftime('+%Y-%m-%dT00:00:00Z')
             new_item.claims.add(
-                datatypes.Time(
-                    prop_nr='P5',
-                    time=start_time,
-                    calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
-                    precision=11,
+                datatypes.String(
+                    prop_nr='P32',
+                    value=start_time,
+                    # calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
+                    # precision=11,
                 )
             )
 
         if end_timestamp:
+            logger.debug("Setting end timestamp to %s", end_timestamp)
             end_time = end_timestamp.astimezone(timezone.utc).strftime('+%Y-%m-%dT00:00:00Z')
             new_item.claims.add(
-                datatypes.Time(
-                    prop_nr='P6',
-                    time=end_time,
-                    calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
-                    precision=11,
+                datatypes.String(
+                    prop_nr='P33',
+                    value=end_time,
+                    # calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
+                    # precision=11,
                 )
             )
+
+        new_item.claims.add(datatypes.Item(prop_nr='P43', value=status_qid))
+
+        if config.loglevel == logging.DEBUG:
+            rich.print_json(data=new_item.get_json())
+            input("CONTINUE? (ENTER/ctrl+c)")
 
         new_item.write(login=self.wbi.login)
         qid = new_item.id

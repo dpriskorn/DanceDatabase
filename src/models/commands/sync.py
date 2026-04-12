@@ -2,7 +2,6 @@
 import logging
 import sys
 from datetime import date
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -22,8 +21,8 @@ def sync_danslogen(
     limit: int | None = None,
 ) -> bool:
     """Sync danslogen events: scrape → ensure-venues → upload → ensure-events."""
-    from src.models.dancedb.event_ops import scrape_danslogen, upload_events
-    from src.models.dancedb.venue_ops import ensure_venues
+    from src.models.danslogen.event_ops import scrape_danslogen, upload_events
+    from src.models.commands.venue_ops import ensure_venues
     from src.models.commands.ensure_events import run as ensure_events
 
     if month is None or year is None:
@@ -67,7 +66,7 @@ def sync_bygdegardarna(
     dry_run: bool = False,
 ) -> bool:
     """Sync bygdegardarna venues: scrape → fetch-dancedb → match-venues."""
-    from src.models.dancedb.venue_ops import (
+    from src.models.commands.venue_ops import (
         scrape_bygdegardarna,
         scrape_dancedb_venues,
         match_venues,
