@@ -67,32 +67,67 @@ def fetch_dancedb_venues() -> dict[str, dict]:
 
 
 def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None:
-    db_labels = defaultdict(list)
+    DUPLICATE_DISTANCE_KM = 10.0
+
+    # Check DanceDB for duplicates
+    label_coords = defaultdict(list)
     for qid, data in db_venues.items():
-        label = data.get("label", "")
+        label = data.get("label", "").lower()
+        lat = data.get("lat")
+        lng = data.get("lng")
         if label:
-            db_labels[label.lower()].append(qid)
+            if lat is None or lng is None:
+                print(f"ERROR: DanceDB venue \"{label}\" (Q{qid}) has no coordinates")
+                raise Exception("DanceDB venue without coordinates - cannot proceed")
+            label_coords[label].append((qid, lat, lng))
 
-    byg_titles = defaultdict(int)
-    for venue in byg_venues:
-        title = venue.get("title", "")
-        if title:
-            byg_titles[title.lower()] += 1
+    db_true_dupes = []
+    for label, entries in label_coords.items():
+        if len(entries) > 1:
+            for i in range(len(entries)):
+                for j in range(i + 1, len(entries)):
+                    dist = haversine_distance(entries[i][1], entries[i][2],
+                                              entries[j][1], entries[j][2])
+                    if dist <= DUPLICATE_DISTANCE_KM:
+                        db_true_dupes.append((label, [e[0] for e in entries]))
+                        break
+            if any(d[0] == label for d in db_true_dupes):
+                break
 
-    db_dupes = {k: v for k, v in db_labels.items() if len(v) > 1}
-    byg_dupes = {k: v for k, v in byg_titles.items() if v > 1}
-
-    if db_dupes:
-        print(f"ERROR: Found {len(db_dupes)} duplicate labels in DanceDB:")
-        for label, qids in list(db_dupes.items())[:5]:
+    if db_true_dupes:
+        print(f"ERROR: Found {len(db_true_dupes)} TRUE duplicates in DanceDB (≤{DUPLICATE_DISTANCE_KM}km):")
+        for label, qids in db_true_dupes[:5]:
             print(f"  {label}: {qids}")
-        raise Exception("Duplicate labels found in DanceDB - cannot proceed")
+        raise Exception("True duplicates found in DanceDB - cannot proceed")
 
-    if byg_dupes:
-        print(f"ERROR: Found {len(byg_dupes)} duplicate titles in bygdegardarna:")
-        for title, count in list(byg_dupes.items())[:5]:
-            print(f"  {title}: {count} occurrences")
-        raise Exception("Duplicate titles found in bygdegardarna - cannot proceed")
+    # Check bygdegardarna for duplicates
+    title_coords = defaultdict(list)
+    for venue in byg_venues:
+        title = venue.get("title", "").lower()
+        lat = venue.get("position", {}).get("lat")
+        lng = venue.get("position", {}).get("lng")
+        if title:
+            if lat is None or lng is None:
+                print(f"ERROR: Bygdegardarna venue \"{title}\" has no coordinates")
+                raise Exception("Bygdegardarna venue without coordinates - cannot proceed")
+            title_coords[title].append((lat, lng))
+
+    byg_true_dupes = []
+    for title, entries in title_coords.items():
+        if len(entries) > 1:
+            for i in range(len(entries)):
+                for j in range(i + 1, len(entries)):
+                    dist = haversine_distance(entries[i][0], entries[i][1],
+                                              entries[j][0], entries[j][1])
+                    if dist <= DUPLICATE_DISTANCE_KM:
+                        byg_true_dupes.append(title)
+                        break
+
+    if byg_true_dupes:
+        print(f"ERROR: Found {len(byg_true_dupes)} TRUE duplicates in bygdegardarna (≤{DUPLICATE_DISTANCE_KM}km):")
+        for title in byg_true_dupes[:5]:
+            print(f"  {title}")
+        raise Exception("True duplicates found in bygdegardarna - cannot proceed")
 
 
 def exact_match(title: str, db_venues: dict[str, dict]) -> Optional[tuple[str, str]]:
