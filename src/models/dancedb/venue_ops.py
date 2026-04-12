@@ -175,9 +175,10 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-    SELECT ?item ?itemLabel ?geo WHERE {
+    SELECT ?item ?itemLabel ?alias ?geo WHERE {
       ?item ddt:P1 dd:Q20 .
       OPTIONAL { ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel) = "sv") }
+      OPTIONAL { ?item rdfs:alias ?alias FILTER(LANG(?alias) = "sv") }
       OPTIONAL { ?item ddt:P4 ?geo }
     }
     """
@@ -186,12 +187,17 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     for binding in results["results"]["bindings"]:
         qid = binding["item"]["value"].rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
+        alias = binding.get("alias", {}).get("value", "")
         geo = binding.get("geo", {}).get("value", "")
         lat, lng = None, None
         if geo:
             coords = geo.replace("Point(", "").replace(")", "").split(" ")
             lng, lat = float(coords[0]), float(coords[1])
-        existing_venues[label.lower()] = {"qid": qid, "lat": lat, "lng": lng}
+        label_lower = label.lower()
+        if label_lower not in existing_venues:
+            existing_venues[label_lower] = {"qid": qid, "lat": lat, "lng": lng, "aliases": []}
+        if alias:
+            existing_venues[label_lower].setdefault("aliases", []).append(alias.lower())
 
     print(f"Found {len(existing_venues)} existing venues in DanceDB")
 
@@ -201,11 +207,27 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
     new_venues = []
     matched = 0
+    existing_labels = list(existing_venues.keys())
     for venue_name in venues_needed:
-        if venue_name.lower() in existing_venues:
+        venue_lower = venue_name.lower()
+        if venue_lower in existing_venues:
             matched += 1
         else:
-            new_venues.append(venue_name)
+            alias_match = False
+            for venue_data in existing_venues.values():
+                aliases = venue_data.get("aliases", [])
+                if venue_lower in aliases:
+                    alias_match = True
+                    break
+            if alias_match:
+                matched += 1
+            else:
+                fuzzy = fuzz_process.extractOne(venue_lower, existing_labels, score_cutoff=85)
+                if fuzzy:
+                    logger.info(f"Fuzzy matched '{venue_name}' to '{fuzzy[0]}' ({fuzzy[1]}%)")
+                    matched += 1
+                else:
+                    new_venues.append(venue_name)
 
     print(f"Matched: {matched}")
     print(f"Need to create: {len(new_venues)}")
