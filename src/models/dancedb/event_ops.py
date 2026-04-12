@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import questionary
+import rich
 
 from src.models.dancedb.config import config
 from src.models.dancedb.status import detect_event_status
@@ -104,6 +105,8 @@ def upload_events(
             logger.warning("Skipping event %d - no venue QID", i)
             skip_count += 1
             continue
+
+        rich.print(event_dict)
 
         print(f"\n[{i}/{len(events_data)}] {label}")
         print(f"  Venue: {venue_qid}")

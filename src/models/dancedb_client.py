@@ -152,11 +152,13 @@ class DancedbClient:
         start_timestamp: datetime | None = None,
         end_timestamp: datetime | None = None,
         status_qid: str = "Q566",
+        description_sv: str = "dansevenemang",
     ) -> str:
         """Create event item in DanceDB.
 
         Uses wikibaseintegrator to create item with:
         - Labels: sv (label_sv)
+        - Descriptions: sv (description_sv)
         - P1: Q2 (instance of event)
         - P5: start timestamp (if provided)
         - P6: end timestamp (if provided)
@@ -169,6 +171,7 @@ class DancedbClient:
 
         new_item = self.wbi.item.new()
         new_item.labels.set('sv', label_sv)
+        new_item.descriptions.set('sv', description_sv)
 
         new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q2'))
         new_item.claims.add(datatypes.Item(prop_nr='P7', value=venue_qid))
