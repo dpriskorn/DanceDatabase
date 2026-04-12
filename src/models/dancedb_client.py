@@ -94,6 +94,18 @@ class DancedbClient:
         new_item.labels.set('sv', label)
         new_item.descriptions.set('sv', 'dansställe')
 
+        if "Folkets" in venue_name:
+            if "Folkets Park" in venue_name:
+                place = venue_name.replace("Folkets Park", "").strip()
+                alias = f"{place} Folkets Park"
+            elif "Folkets Hus" in venue_name:
+                place = venue_name.replace("Folkets Hus", "").strip()
+                alias = f"{place} Folkets Hus"
+            else:
+                alias = None
+            if alias:
+                new_item.aliases.set("sv", alias)
+
         new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q20'))
 
         if lat is not None and lng is not None:
