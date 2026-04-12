@@ -108,6 +108,23 @@ def upload_events(
             artists_lookup[a.get("qid", "")] = a
         print(f"Loaded {len(artists_lookup)} artists for display")
 
+    # Load venues from JSON for display
+    venues_lookup: dict[str, dict] = {}
+    venues_dir = Path("data/dancedb/venues")
+    venues_file = venues_dir / f"{date_str}.json"
+    if not venues_file.exists():
+        venues_files = sorted(venues_dir.glob("*.json"), reverse=True)
+        if venues_files:
+            venues_file = venues_files[0]
+    if venues_file.exists():
+        venues_data = json.loads(venues_file.read_text())
+        for qid, v in venues_data.items():
+            if isinstance(v, dict):
+                venues_lookup[qid] = v
+            else:
+                venues_lookup[qid] = {"label": v, "qid": qid}
+        print(f"Loaded {len(venues_lookup)} venues for display from {venues_file.name}")
+
     input_path = Path(input_file)
     if not input_path.exists():
         print(f"Error: Input file not found: {input_file}")
@@ -183,7 +200,9 @@ def upload_events(
         rich.print(event_dict)
 
         print(f"\n[{i}/{len(events_data)}] {label}")
-        print(f"  Venue: {venue_qid}")
+        venue_info = venues_lookup.get(venue_qid, {})
+        venue_label = venue_info.get("label", "")
+        print(f"  Venue: {venue_qid}{f' ({venue_label})' if venue_label else ''}")
         print(f"  Start: {start_ts}")
         print(f"  End: {end_ts}")
 
