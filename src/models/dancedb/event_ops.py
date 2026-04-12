@@ -1,6 +1,5 @@
 """Event operations: scrape danslogen, upload events."""
 import logging
-import subprocess
 import sys
 from pathlib import Path
 
@@ -15,19 +14,47 @@ logger = logging.getLogger(__name__)
 
 
 def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
-    """Fetch event rows from danslogen.se."""
+    """Fetch raw event rows from danslogen.se (no venue mapping)."""
+    import json
+    import requests
+    from bs4 import BeautifulSoup
+
     print(f"\n=== Scrape danslogen events for {month} {year} ===")
 
-    result = subprocess.run(
-        ["poetry", "run", "python", "scrape_danslogen.py", f"--month={month}"],
-        capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        print(result.stdout)
-        print(result.stderr)
-        raise RuntimeError("scrape_danslogen.py failed")
-    print(result.stdout)
-    print(f"Saved to data/danslogen_rows_{year}_{month}.json")
+    url = f"https://www.danslogen.se/dansprogram/{month}"
+    print(f"Fetching: {url}")
+    
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "lxml")
+
+    rows = []
+    tables = soup.find_all("table")
+    for table in tables:
+        for tr in table.find_all("tr"):
+            cells = [td.get_text(strip=True) for td in tr.find_all(["td", "th"])]
+            if len(cells) >= 5:
+                row = {
+                    "weekday": cells[0] if len(cells) > 0 else "",
+                    "day": cells[1] if len(cells) > 1 else "",
+                    "time": cells[2] if len(cells) > 2 else "",
+                    "band": cells[3] if len(cells) > 3 else "",
+                    "venue": cells[4] if len(cells) > 4 else "",
+                    "ort": "",
+                    "kommun": "",
+                    "lan": "",
+                    "ovrigt": "",
+                }
+                rows.append(row)
+
+    print(f"Found {len(rows)} rows")
+
+    output_file = f"data/danslogen_rows_{year}_{month}.json"
+    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "w") as f:
+        json.dump(rows, f, ensure_ascii=False, indent=2)
+
+    print(f"Saved to {output_file}")
 
 
 def upload_events(
