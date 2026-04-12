@@ -14,6 +14,7 @@ import config
 from src.models.dancedb_client import DancedbClient
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=config.loglevel)
 
 API_URL = "https://www.folketshusochparker.se/wp-content/themes/fhp/inc/ajax.php"
 HEADERS = {
@@ -122,6 +123,7 @@ def parse_venue(html: str) -> FolketshusVenue | None:
     name = title_attr or (h3_tag.get_text(strip=True) if h3_tag else "")
     if not name:
         logger.warning("Missing venue name")
+        logger.debug(f"Malformed HTML fragment (len={len(html)}): {html[:500]}")
         return None
     url = link.get("href", "")
     external_id = extract_external_id(url)
