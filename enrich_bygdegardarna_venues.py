@@ -1,19 +1,43 @@
 #!/usr/bin/env python3
 """enrich_bygdegardarna_venues.py - Enrich DanceDB venues with bygdegardarna data.
 
-Runs scraping/matching first (unless --skip-scrape), then adds P42 and aliases
-to matched venues.
+Runs scraping/matching first, then adds P42 and aliases to matched venues.
 """
+import json
+import logging
+import subprocess
+import sys
+import time
+from datetime import date
+from pathlib import Path
+from urllib.parse import urlparse
+
+import questionary
+import rich
+
+import config
+from wikibaseintegrator import WikibaseIntegrator
+from wikibaseintegrator.wbi_config import config as wbi_config
+from wikibaseintegrator.wbi_enums import ActionIfExists
+from wikibaseintegrator.wbi_login import Login
+
+logging.basicConfig(level=config.loglevel)
+
+wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
+wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
+wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
+
+ENRICHED_DIR = Path("data") / "bygdegardarna" / "enriched"
+DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
+
 
 def is_interactive() -> bool:
     """Check if running in interactive terminal."""
-    import sys
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def run_scraping_and_matching(date_str: str) -> None:
     """Run scraping and matching scripts."""
-    import subprocess
     print("\n=== Step 1: Scrape bygdegardarna venues ===")
     result = subprocess.run(
         ["python", "scrape_bygdegardarna.py"],
@@ -48,32 +72,6 @@ def run_scraping_and_matching(date_str: str) -> None:
     print(result.stdout)
 
 
-import json
-import logging
-import time
-from datetime import date
-from pathlib import Path
-from urllib.parse import urlparse
-
-import questionary
-import rich
-
-import config
-from wikibaseintegrator import WikibaseIntegrator
-from wikibaseintegrator.wbi_config import config as wbi_config
-from wikibaseintegrator.wbi_enums import ActionIfExists
-from wikibaseintegrator.wbi_login import Login
-
-logging.basicConfig(level=config.loglevel)
-
-wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
-wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
-wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
-
-ENRICHED_DIR = Path("data") / "bygdegardarna" / "enriched"
-DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
-
-
 def extract_bygdegardarna_id(permalink: str) -> str:
     """Extract ID from bygdegardarna permalink."""
     path = urlparse(permalink).path
@@ -100,7 +98,6 @@ def load_dancedb_venues(date_str: str) -> dict[str, dict]:
 def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_run: bool, wbi: WikibaseIntegrator) -> None:
     """Update a single DanceDB venue with P42 and alias."""
     from wikibaseintegrator import datatypes
-    from wikibaseintegrator.entities.item import ItemEntity
 
     byg_id = extract_bygdegardarna_id(permalink)
     alias_needed = byg_title.lower() != db_label.lower()
@@ -114,28 +111,11 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
         return
 
     item = wbi.item.get(entity_id=qid)
-    #debug_json = item.get_json()
-    #rich.print_json(data=debug_json)
-    # existing_p42 = item.claims.get("P42")
-    # initial_count = len(existing_p42) if existing_p42 else 0
-    # print(f"  Existing P42 claims: {initial_count}")
-    #
-    # if initial_count > 0:
-    #     # marks them as remove which does not work
-    #     item.claims.remove(property="P42")
-    #     # del item.claims.claims["P42"]
-    #     # remaining = item.claims.get("P42")
-    #     # remaining_count = len(remaining) if remaining else 0
-    #     # print(f"  After remove: {remaining_count} P42 claims left")
 
     item.claims.add(
         datatypes.ExternalID(prop_nr="P42", value=byg_id),
         action_if_exists=ActionIfExists.REPLACE_ALL
     )
-    # remaining_after = item.claims.get("P42")
-    # remaining_count_after = len(remaining_after) if remaining_after else 0
-    # print(f"  After add: {remaining_count_after} P42 claims")
-    # exit(0)
     if alias_needed:
         current_aliases = item.aliases.get("sv") or []
         if byg_title not in current_aliases:
@@ -146,7 +126,7 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
     if alias_needed:
         summary_parts.append(f"alias ({byg_title})")
     summary = "Updated from bygdegardarna.se: " + ", ".join(summary_parts)
-    # get json with the single P42 claim
+
     debug_json = item.get_json()
     rich.print_json(data=debug_json)
     input("Continue? (ENTER/ctrl+c")
