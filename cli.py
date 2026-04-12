@@ -20,6 +20,14 @@ from src.models.commands.onbeat import run as scrape_onbeat
 from src.models.commands.cogwork import scrape as scrape_cogwork, upload as upload_cogwork
 from src.models.commands.folketshus import run as scrape_folketshus
 from src.models.commands.ensure_events import run as ensure_events
+from src.models.commands.sync import (
+    sync_danslogen,
+    sync_bygdegardarna,
+    sync_onbeat,
+    sync_cogwork,
+    sync_folketshus,
+    sync_all,
+)
 from src.models.dancedb.workflow import run_all
 
 
@@ -126,6 +134,49 @@ def main():
     p.add_argument("-l", "--limit", type=int, default=None,
                     help="Limit number of rows")
 
+    # === SYNC COMMANDS ===
+    p = sub.add_parser("sync-danslogen",
+                       help="Sync danslogen: scrape → ensure-venues → upload → ensure-events")
+    p.add_argument("-m", "--month", default=None,
+                    help="Month name (default: current month)")
+    p.add_argument("-y", "--year", type=int, default=None,
+                    help="Year (default: current year)")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
+    p.add_argument("-l", "--limit", type=int, default=None,
+                    help="Limit number of events")
+
+    p = sub.add_parser("sync-bygdegardarna",
+                       help="Sync bygdegardarna: scrape → fetch-dancedb → match-venues")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
+
+    p = sub.add_parser("sync-onbeat",
+                       help="Sync onbeat: scrape + upload")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
+
+    p = sub.add_parser("sync-cogwork",
+                       help="Sync cogwork: scrape + upload")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
+
+    p = sub.add_parser("sync-folketshus",
+                       help="Sync folketshus: scrape + match")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
+
+    p = sub.add_parser("sync-all",
+                       help="Sync all sources in sequence")
+    p.add_argument("-m", "--month", default=None,
+                    help="Month name (default: current month)")
+    p.add_argument("-y", "--year", type=int, default=None,
+                    help="Year (default: current year)")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
+    p.add_argument("-l", "--limit", type=int, default=None,
+                    help="Limit number of events")
+
     args = parser.parse_args()
 
     # DANSLOGEN
@@ -183,6 +234,35 @@ def main():
     # WORKFLOW
     elif args.command == "run-all":
         run_all(
+            month=args.month,
+            year=args.year,
+            dry_run=args.dry_run,
+            limit=args.limit,
+        )
+
+    # SYNC COMMANDS
+    elif args.command == "sync-danslogen":
+        sync_danslogen(
+            month=args.month,
+            year=args.year,
+            dry_run=args.dry_run,
+            limit=args.limit,
+        )
+
+    elif args.command == "sync-bygdegardarna":
+        sync_bygdegardarna(dry_run=args.dry_run)
+
+    elif args.command == "sync-onbeat":
+        sync_onbeat(dry_run=args.dry_run)
+
+    elif args.command == "sync-cogwork":
+        sync_cogwork(dry_run=args.dry_run)
+
+    elif args.command == "sync-folketshus":
+        sync_folketshus(dry_run=args.dry_run)
+
+    elif args.command == "sync-all":
+        sync_all(
             month=args.month,
             year=args.year,
             dry_run=args.dry_run,

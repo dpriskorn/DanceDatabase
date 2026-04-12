@@ -125,24 +125,33 @@ def fetch_events_from_dancedb() -> list[dict]:
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
     sparql = """
-    PREFIX dd: <https://dance.wikibase.cloud/entity/>
-    PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dd: <https://dance.wikibase.cloud/entity/>
+PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX p: <https://dance.wikibase.cloud/prop/>
+PREFIX ps: <https://dance.wikibase.cloud/prop/statement/>
 
-    SELECT ?event ?eventLabel ?start_date ?venue ?venueLabel ?venueAlias WHERE {
-      ?event ddt:P1 dd:Q2 .
 
-      OPTIONAL { ?event ddt:P5 ?start_date }
+SELECT ?event ?eventLabel ?start_date ?venue ?venueLabel WHERE {
+    ?event ddt:P1 dd:Q2 .
 
-      OPTIONAL { ?event rdfs:label ?svLabel FILTER(LANG(?svLabel)="sv") }
-      OPTIONAL { ?event rdfs:label ?enLabel FILTER(LANG(?enLabel)="en") }
-      BIND(COALESCE(?svLabel, ?enLabel, STR(?event)) AS ?eventLabel)
-
-      OPTIONAL { ?event ddt:P7 ?venue }
-      OPTIONAL { ?venue rdfs:label ?svVenueLabel FILTER(LANG(?svVenueLabel)="sv") }
-      OPTIONAL { ?venue rdfs:alias ?svVenueAlias FILTER(LANG(?svVenueAlias)="sv") }
-      BIND(COALESCE(?svVenueLabel, "") AS ?venueLabel)
+    OPTIONAL {
+        ?event p:P32 ?statement32 .
+        ?statement32 ps:P32 ?date32 .
+        FILTER(datatype(?date32) = xsd:dateTime || datatype(?date32) = xsd:date)
     }
+
+    # Merge dates
+    BIND(COALESCE(?date7, ?date32) AS ?start_date)
+
+    OPTIONAL { ?event rdfs:label ?svLabel FILTER(LANG(?svLabel)="sv") }
+    OPTIONAL { ?event rdfs:label ?enLabel FILTER(LANG(?enLabel)="en") }
+    BIND(COALESCE(?svLabel, ?enLabel, STR(?event)) AS ?eventLabel)
+
+    OPTIONAL { ?event ddt:P5 ?venue }
+    OPTIONAL { ?venue rdfs:label ?svVenueLabel FILTER(LANG(?svVenueLabel)="sv") }
+    BIND(COALESCE(?svVenueLabel, "") AS ?venueLabel)
+}
     """
     results = execute_sparql_query(query=sparql)
     results = execute_sparql_query(query=sparql)
