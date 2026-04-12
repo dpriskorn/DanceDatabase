@@ -99,6 +99,15 @@ def upload_events(
 
     print(f"Loaded {len(existing_lookup)} existing events for deduplication")
 
+    # Load artists from JSON for display
+    artists_lookup: dict[str, dict] = {}
+    artists_file = Path("data/dancedb/artists") / f"{date_str}.json"
+    if artists_file.exists():
+        artists_data = json.loads(artists_file.read_text())
+        for a in artists_data:
+            artists_lookup[a.get("qid", "")] = a
+        print(f"Loaded {len(artists_lookup)} artists for display")
+
     input_path = Path(input_file)
     if not input_path.exists():
         print(f"Error: Input file not found: {input_file}")
@@ -129,6 +138,7 @@ def upload_events(
 
         label = event.label.get("sv", "Untitled") if event.label else "Untitled"
         venue_qid = event.identifiers.dancedatabase.venue if event.identifiers else None
+        artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
         start_ts = event.start_timestamp
         end_ts = event.end_timestamp
 
@@ -176,6 +186,11 @@ def upload_events(
         print(f"  Venue: {venue_qid}")
         print(f"  Start: {start_ts}")
         print(f"  End: {end_ts}")
+
+        if artist_qid:
+            artist_info = artists_lookup.get(artist_qid, {})
+            artist_label = artist_info.get("label", "")
+            print(f"  Artist: {artist_qid}{f' ({artist_label})' if artist_label else ''}")
 
         if yes:
             confirm = "Yes (Recommended)"
