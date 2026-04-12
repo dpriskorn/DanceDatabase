@@ -130,3 +130,59 @@ class DancedbClient:
         except Exception as e:
             logger.error(f"Error creating venue '{venue_name}': {e}")
             return None
+
+    def create_event(
+        self,
+        label_sv: str,
+        venue_qid: str,
+        start_timestamp: datetime | None = None,
+        end_timestamp: datetime | None = None,
+    ) -> str:
+        """Create event item in DanceDB.
+
+        Uses wikibaseintegrator to create item with:
+        - Labels: sv (label_sv)
+        - P1: Q2 (instance of event)
+        - P5: start timestamp (if provided)
+        - P6: end timestamp (if provided)
+        - P7: venue reference (from venue_qid)
+
+        Returns the new QID.
+        """
+        from datetime import datetime
+
+        new_item = wbi_helpers.create_item(
+            labels={'sv': label_sv},
+            login=self.login
+        )
+        qid = new_item.id
+
+        new_item.claims.add('P1', 'Q2', action_if_exists=ActionIfExists.REPLACE_ALL)
+        new_item.claims.add('P7', venue_qid, action_if_exists=ActionIfExists.REPLACE_ALL)
+
+        if start_timestamp:
+            new_item.claims.add(
+                datatypes.Time(
+                    prop_nr='P5',
+                    time=start_timestamp.strftime('+%Y-%m-%dT%H:%M:%S'),
+                    calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
+                    precision=11,
+                ),
+                action_if_exists=ActionIfExists.REPLACE_ALL
+            )
+
+        if end_timestamp:
+            new_item.claims.add(
+                datatypes.Time(
+                    prop_nr='P6',
+                    time=end_timestamp.strftime('+%Y-%m-%dT%H:%M:%S'),
+                    calendarmodel='http://www.wikidata.org/wiki/Special:Entity/Q1985787',
+                    precision=11,
+                ),
+                action_if_exists=ActionIfExists.REPLACE_ALL
+            )
+
+        new_item.write(login=self.login)
+        url = f"{self.base_url}/wiki/Item:{qid}"
+        logger.info(f"Created event '{label_sv}' on DanceDB: {url}")
+        return qid

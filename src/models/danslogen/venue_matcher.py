@@ -1,4 +1,5 @@
 import logging
+import sys
 from typing import Optional
 
 import questionary
@@ -164,10 +165,29 @@ class VenueMatcher:
         if lat is None or lng is None:
             return None
 
+        label = f"{venue_name}, {ort}" if ort else venue_name
+        print(f"\nCreate venue: \"{label}\" at ({lat}, {lng})")
+
+        confirm = questionary.rawselect(
+            "Upload to DanceDB?",
+            choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
+        ).ask()
+
+        if confirm == "Skip":
+            logger.info("Skipping venue '%s'", label)
+            return None
+        elif confirm == "Skip all":
+            logger.info("Skipping all remaining venues...")
+            return "SKIP_ALL"
+        elif confirm == "Abort":
+            print("Aborting...")
+            sys.exit(0)
+
         try:
             qid = self.client.create_venue_from_mapping(venue_name, ort, lat, lng)
             if qid:
                 logger.info("Created venue '%s' -> %s", venue_name, qid)
+                print(f"Uploaded: https://dance.wikibase.cloud/wiki/Item:{qid}")
             return qid
         except Exception as e:
             logger.error("Could not create venue '%s': %s", venue_name, e)
