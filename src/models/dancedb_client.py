@@ -159,13 +159,14 @@ class DancedbClient:
         end_timestamp: datetime | None = None,
         status_qid: str = "Q566",
         description_sv: str = "dansevenemang",
+        instance_of: str = "Q2",
     ) -> str:
         """Create event item in DanceDB.
 
         Uses wikibaseintegrator to create item with:
         - Labels: sv (label_sv)
         - Descriptions: sv (description_sv)
-        - P1: Q2 (instance of event)
+        - P1: instance_of QID (default Q2 for event)
         - P5: start timestamp (if provided)
         - P6: end timestamp (if provided)
         - P7: venue reference
@@ -179,7 +180,7 @@ class DancedbClient:
         new_item.labels.set('sv', label_sv)
         new_item.descriptions.set('sv', description_sv)
 
-        new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q2'))
+        new_item.claims.add(datatypes.Item(prop_nr='P1', value=instance_of))
         new_item.claims.add(datatypes.Item(prop_nr='P5', value=venue_qid))
 
         if start_timestamp:

@@ -13,7 +13,7 @@ output_folder.mkdir(parents=True, exist_ok=True)
 scraper = Danslogen("april")
 events = scraper.scrape_month("april")
 
-output_file = output_folder / "danslogen-april.json"
+output_file = output_folder / "april.json"
 import json
 with open(output_file, "w") as f:
     json.dump([e.model_dump(mode="json") for e in events], f, ensure_ascii=False, indent=2)

@@ -48,7 +48,7 @@ def run_all(
     match_venues(date_str, skip_prompts=True)
 
     print("\n[4/4] Uploading events to DanceDB...")
-    input_file = f"data/danslogen_rows_{year}_{month}.json"
+    input_file = f"data/danslogen/{month.lower()}.json"
     upload_events(
         input_file=input_file,
         date_str=date_str,

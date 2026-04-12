@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Optional
 
@@ -67,6 +67,8 @@ class RowParser:
 
         start_dt, end_dt = self._parse_datetime(date, time_str)
 
+        dance_styles, instance_of = self._detect_dance_styles_and_instance(ovrigt)
+
         event_id = f"danslogen-{month}-{day}-{band.lower().replace(' ', '-')}"
 
         organizer = Organizer(
@@ -106,7 +108,7 @@ class RowParser:
                 dancedatabase=DanceDatabaseIdentifiers(
                     source="",
                     venue=venue_qid,
-                    dance_styles=[],
+                    dance_styles=dance_styles,
                     event_series="",
                     organizer="",
                     event=""
@@ -117,7 +119,8 @@ class RowParser:
             price_early=None,
             coordinates=None,
             weekly_recurring=False,
-            number_of_occasions=1
+            number_of_occasions=1,
+            instance_of=instance_of
         )
 
     def _parse_date(self, day: str, month: str, year: int = 2026) -> Optional[datetime]:
@@ -158,6 +161,8 @@ class RowParser:
                         f"{date.strftime('%Y-%m-%d')} {end_str.strip()}",
                         "%Y-%m-%d %H:%M"
                     ).replace(tzinfo=CET)
+                    if end_dt.hour <= 3:
+                        end_dt = end_dt + timedelta(days=1)
                 else:
                     start_dt = datetime.strptime(
                         f"{date.strftime('%Y-%m-%d')} {time_clean.strip()}",
@@ -167,3 +172,31 @@ class RowParser:
                 logger.warning("Failed to parse time '%s': %s", time_str, e)
 
         return start_dt, end_dt
+
+    def _detect_dance_styles_and_instance(self, ovrigt: str) -> tuple[list[str], str]:
+        """Detect dance styles from ovrigt field and determine instance type.
+        
+        Returns (dance_styles list, instance_of QID)
+        - SPF → Q675 (dance_styles), Q678 (instance_of - pensionärsdans)
+        - PRO → Q676 (dance_styles), Q678 (instance_of - pensionärsdans)
+        - länsdans → Q677 (dance_styles), Q677 (instance_of - länsdans)
+        """
+        dance_styles = []
+        instance_of = "Q2"  # default: event
+        ovrigt_stripped = ovrigt.strip()
+        
+        # Check case-sensitive first (SPF, PRO)
+        if ovrigt_stripped == "SPF":
+            dance_styles.append("Q675")
+            instance_of = "Q678"  # pensionärsdans
+        elif ovrigt_stripped == "PRO":
+            dance_styles.append("Q676")
+            instance_of = "Q678"  # pensionärsdans
+        
+        # Check case-insensitive (länsdans)
+        if "länsdans" in ovrigt_stripped.lower():
+            if "Q677" not in dance_styles:
+                dance_styles.append("Q677")
+            instance_of = "Q677"  # länsdans takes precedence
+        
+        return dance_styles, instance_of

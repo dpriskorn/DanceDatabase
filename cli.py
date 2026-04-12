@@ -79,7 +79,7 @@ def main():
     p = sub.add_parser("upload-events",
                      help="Upload danslogen events to DanceDB")
     p.add_argument("-i", "--input-file",
-                   default="data/danslogen_rows_2026_april.json",
+                    default="data/danslogen/april.json",
                    help="Input JSON file")
     p.add_argument("-d", "--date", default=None,
                    help="Date for venue data (YYYY-MM-DD, default: today)")

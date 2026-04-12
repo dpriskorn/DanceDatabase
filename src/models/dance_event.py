@@ -119,6 +119,7 @@ class DanceEvent(BaseModel):
 
     # str
     location: str = ""
+    instance_of: str = "Q2"
 
     # prices
     # todo add currency based on schema.org

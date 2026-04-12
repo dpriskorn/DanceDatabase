@@ -25,8 +25,12 @@ def configure_wbi():
     wbi_config['USER_AGENT'] = config.user_agent
 
 
-def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: bool = False) -> None:
-    """Ensure all event venues exist in DanceDB."""
+def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: bool = False) -> list[dict]:
+    """Ensure all event venues exist in DanceDB.
+    
+    Returns list of events fetched from DanceDB.
+    Always saves events to JSON file.
+    """
     configure_wbi()
     
     print(f"\n=== Ensuring event venues exist for {month} {year} ===")
@@ -34,13 +38,14 @@ def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: boo
     events = fetch_events_from_dancedb()
     print(f"Found {len(events)} events in DanceDB")
 
+    EVENTS_DIR.mkdir(parents=True, exist_ok=True)
+    date_str = date.today().strftime("%Y-%m-%d")
+    output_file = EVENTS_DIR / f"{date_str}.json"
+    output_file.write_text(json.dumps(events, indent=2, ensure_ascii=False) + "\n")
+    print(f"Saved to {output_file}")
+
     if save:
-        EVENTS_DIR.mkdir(parents=True, exist_ok=True)
-        date_str = date.today().strftime("%Y-%m-%d")
-        output_file = EVENTS_DIR / f"{date_str}.json"
-        output_file.write_text(json.dumps(events, indent=2, ensure_ascii=False) + "\n")
-        print(f"Saved to {output_file}")
-        return
+        return events
 
     missing_p7 = []
     venues_needed = {}

@@ -40,8 +40,8 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
 
     print(f"\nTotal: {len(all_events)} events")
 
-    output_file = f"data/danslogen_rows_{year}_{month.lower()}.json"
-    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
+    output_file = config.danslogen_dir / f"{month.lower()}.json"
+    config.danslogen_dir.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump([e.model_dump(mode="json") for e in all_events], f, ensure_ascii=False, indent=2)
 
@@ -49,17 +49,24 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
 
 
 def upload_events(
-    input_file: str = "data/danslogen_rows_2026_april.json",
+    input_file: str = "data/danslogen/april.json",
     date_str: str | None = None,
     month: str = "april",
     dry_run: bool = False,
     limit: int | None = None,
     yes: bool = False,
+    existing_events: list[dict] | None = None,
 ) -> None:
-    """Upload danslogen events to DanceDB."""
+    """Upload danslogen events to DanceDB.
+    
+    Args:
+        existing_events: List of events already in DanceDB (from ensure_events).
+                       Used to skip duplicates.
+    """
     import json
     import os
     from src.models.dance_event import DanceEvent
+    from rapidfuzz import fuzz
 
     is_tty = os.isatty(0)
     if not is_tty and not yes:
@@ -67,6 +74,20 @@ def upload_events(
         yes = True
 
     print(f"\n=== Upload danslogen events ===")
+
+    # Build lookup for existing events
+    existing_lookup: dict[str, dict] = {}
+    if existing_events:
+        for e in existing_events:
+            venue_qid = e.get("venue_qid", "")
+            start_ts = e.get("start_timestamp", "")
+            label = e.get("label", "")
+            qid = e.get("qid", "")
+            if venue_qid and start_ts:
+                key = f"{venue_qid}|{start_ts[:10]}"
+                existing_lookup[key] = {"qid": qid, "label": label}
+
+    print(f"Loaded {len(existing_lookup)} existing events for deduplication")
 
     input_path = Path(input_file)
     if not input_path.exists():
@@ -106,6 +127,36 @@ def upload_events(
             skip_count += 1
             continue
 
+        # Check for duplicate in existing events
+        if existing_lookup and start_ts:
+            date_key = f"{venue_qid}|{start_ts[:10]}"
+            existing = existing_lookup.get(date_key)
+            if existing:
+                ratio = fuzz.ratio(label.lower(), existing["label"].lower())
+                if ratio >= 85:
+                    print(f"\n[{i}/{len(events_data)}] {label}")
+                    print(f"  SKIP (already exists: {existing['qid']})")
+                    skip_count += 1
+                    continue
+                else:
+                    print(f"\n[{i}/{len(events_data)}] {label}")
+                    print(f"  WARNING: Same venue/date but different label: {existing['label']} (fuzzy match: {ratio}%)")
+                    if not yes:
+                        confirm = questionary.rawselect(
+                            "Event may already exist. Upload anyway?",
+                            choices=["Skip", "Upload", "Skip all", "Abort"]
+                        ).ask()
+                        if confirm == "Skip":
+                            skip_count += 1
+                            continue
+                        elif confirm == "Skip all":
+                            print(f"Skipping remaining {len(events_data) - i} events...")
+                            skip_count += len(events_data) - i
+                            break
+                        elif confirm == "Abort":
+                            print("Aborting...")
+                            sys.exit(0)
+
         rich.print(event_dict)
 
         print(f"\n[{i}/{len(events_data)}] {label}")
@@ -136,6 +187,7 @@ def upload_events(
             desc = event.description.get("sv", "") if event.description else ""
             search_text = f"{label} {desc}"
             status_qid, _ = detect_event_status(search_text)
+            instance_of = event.instance_of if hasattr(event, 'instance_of') else "Q2"
 
             qid = client.create_event(
                 label_sv=label,
@@ -143,6 +195,7 @@ def upload_events(
                 start_timestamp=start_ts,
                 end_timestamp=end_ts,
                 status_qid=status_qid,
+                instance_of=instance_of,
             )
             if qid:
                 print(f"  Uploaded: https://dance.wikibase.cloud/wiki/Item:{qid}")

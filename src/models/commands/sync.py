@@ -29,7 +29,7 @@ def sync_danslogen(
         month, year = get_current_month_year()
 
     date_str = date.today().strftime("%Y-%m-%d")
-    input_file = f"data/danslogen_rows_{year}_{month}.json"
+    input_file = f"data/danslogen/{month.lower()}.json"
 
     print("\n" + "=" * 50)
     print(f"SYNC DANSLOGEN: {month} {year}")
@@ -44,17 +44,18 @@ def sync_danslogen(
     print("\n[2/4] Ensure venues exist in DanceDB...")
     ensure_venues(date_str=date_str, dry_run=dry_run)
 
-    print("\n[3/4] Upload events to DanceDB...")
+    print("\n[3/4] Fetch existing events from DanceDB...")
+    existing_events = ensure_events(month=month, year=year, dry_run=dry_run)
+
+    print("\n[4/4] Upload new events to DanceDB...")
     upload_events(
         input_file=input_file,
         date_str=date_str,
         month=month,
         dry_run=dry_run,
         limit=limit,
+        existing_events=existing_events,
     )
-
-    print("\n[4/4] Ensure all events have venues...")
-    ensure_events(month=month, year=year, dry_run=dry_run)
 
     print("\n" + "=" * 50)
     print("DANSLOGEN SYNC COMPLETE")
