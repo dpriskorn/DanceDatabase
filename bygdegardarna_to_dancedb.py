@@ -23,7 +23,7 @@ import config
 logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)
 
-DANCEDB_BASE_URL = "https://dance.wikibase.cloud/wiki/Item"
+DANCEDB_ITEM_URL = "https://dance.wikibase.cloud/wiki/Item:"
 COORD_THRESHOLD_KM = 1.0
 FUZZY_THRESHOLD = 85
 
@@ -274,7 +274,7 @@ def prompt_fuzzy_match(title: str, matched_label: str, qid: str, score: int, per
     print(f'  Bygdegardarna: "{title}"')
     print(f'  DanceDB:       "{matched_label}" ({qid})')
     print(f"  Score: {score}")
-    print(f"  DanceDB: {DANCEDB_BASE_URL}/{qid}")
+    print(f"  DanceDB: {DANCEDB_ITEM_URL}{qid}")
     print(f"  Bygdegardarna: {permalink}")
     return questionary.confirm("Accept match?").ask()
 
