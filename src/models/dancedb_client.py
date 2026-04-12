@@ -36,7 +36,7 @@ class DancedbClient:
             items = results['results']['bindings']
             if len(items) == 1:
                 qid = items[0]['item']['value'].rsplit('/', 1)[-1]
-                logger.info(f"Found band '{band_name}' on DanceDB: {self.base_url}/wiki/{qid}")
+                logger.info(f"Found band '{band_name}' on DanceDB: {self.base_url}/wiki/Item:{qid}")
                 return qid
             elif len(items) > 1:
                 logger.warning(f"Multiple matches for '{band_name}': {[i['item']['value'] for i in items]}")
@@ -60,7 +60,7 @@ class DancedbClient:
             qid = new_item.id
             new_item.claims.add('P31', 'Q215380')
             new_item.write(login=self.login)
-            url = f"{self.base_url}/wiki/{qid}"
+            url = f"{self.base_url}/wiki/Item:{qid}"
             logger.info(f"Created band '{band_name}' on DanceDB: {url}")
             return qid
         except Exception as e:

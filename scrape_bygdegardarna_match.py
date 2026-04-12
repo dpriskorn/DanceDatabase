@@ -13,7 +13,7 @@ import config
 logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)
 
-DANCEDB_BASE_URL = "https://dance.wikibase.cloud/wiki"
+DANCEDB_BASE_URL = "https://dance.wikibase.cloud/wiki/Item"
 COORD_THRESHOLD_KM = 1.0
 FUZZY_THRESHOLD = 85
 

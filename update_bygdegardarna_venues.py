@@ -83,7 +83,7 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
     item.write(login=wbi.login)
 
     base_url = "https://dance.wikibase.cloud"
-    print(f"  Uploaded: {base_url}/wiki/{qid}")
+    print(f"  Uploaded: {base_url}/wiki/Item:{qid}")
 
 
 def main():

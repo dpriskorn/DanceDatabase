@@ -123,7 +123,7 @@ def upload(input_file: str, dry_run: bool, limit: int | None):
             try:
                 new_qid = client.create_band(band_name)
                 if new_qid:
-                    url = f"https://dance.wikibase.cloud/wiki/{new_qid}"
+                    url = f"https://dance.wikibase.cloud/wiki/Item:{new_qid}"
                     click.echo(f"[{i+1}/{len(bands)}] {band_name} ({count} events) → {new_qid} (created)")
                     click.echo(f"  → {url}")
                     created.append((band_name, new_qid))
