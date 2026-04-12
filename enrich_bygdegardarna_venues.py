@@ -1,11 +1,55 @@
 #!/usr/bin/env python3
-"""update_bygdegardarna_venues.py - Update DanceDB venues with bygdegardarna data.
+"""enrich_bygdegardarna_venues.py - Enrich DanceDB venues with bygdegardarna data.
 
-Adds P42 (Bygdegårdarnas Riksförbund ID) and aliases to matched venues.
+Runs scraping/matching first (unless --skip-scrape), then adds P42 and aliases
+to matched venues.
 """
+
+def is_interactive() -> bool:
+    """Check if running in interactive terminal."""
+    import sys
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def run_scraping_and_matching(date_str: str) -> None:
+    """Run scraping and matching scripts."""
+    import subprocess
+    print("\n=== Step 1: Scrape bygdegardarna venues ===")
+    result = subprocess.run(
+        ["python", "scrape_bygdegardarna.py"],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        print(result.stdout)
+        print(result.stderr)
+        raise RuntimeError("scrape_bygdegardarna.py failed")
+    print(result.stdout)
+
+    print("\n=== Step 2: Scrape DanceDB venues ===")
+    result = subprocess.run(
+        ["python", "scrape_venues_from_dancedb.py"],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        print(result.stdout)
+        print(result.stderr)
+        raise RuntimeError("scrape_venues_from_dancedb.py failed")
+    print(result.stdout)
+
+    print("\n=== Step 3: Match venues ===")
+    result = subprocess.run(
+        ["python", "scrape_bygdegardarna_match.py", "--skip-prompts"],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        print(result.stdout)
+        print(result.stderr)
+        raise RuntimeError("scrape_bygdegardarna_match.py failed")
+    print(result.stdout)
+
+
 import json
 import logging
-import sys
 import time
 from datetime import date
 from pathlib import Path
@@ -28,11 +72,6 @@ wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
 
 ENRICHED_DIR = Path("data") / "bygdegardarna" / "enriched"
 DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
-
-
-def is_interactive() -> bool:
-    """Check if running in interactive terminal."""
-    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def extract_bygdegardarna_id(permalink: str) -> str:
@@ -75,26 +114,28 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
         return
 
     item = wbi.item.get(entity_id=qid)
-    debug_json = item.get_json()
-    rich.print_json(data=debug_json)
-    existing_p42 = item.claims.get("P42")
-    initial_count = len(existing_p42) if existing_p42 else 0
-    print(f"  Existing P42 claims: {initial_count}")
-
-    if initial_count > 0:
-        item = item.claims.remove(property="P42")
-        remaining = item.claims.get("P42")
-        remaining_count = len(remaining) if remaining else 0
-        print(f"  After remove: {remaining_count} P42 claims left")
+    #debug_json = item.get_json()
+    #rich.print_json(data=debug_json)
+    # existing_p42 = item.claims.get("P42")
+    # initial_count = len(existing_p42) if existing_p42 else 0
+    # print(f"  Existing P42 claims: {initial_count}")
+    #
+    # if initial_count > 0:
+    #     # marks them as remove which does not work
+    #     item.claims.remove(property="P42")
+    #     # del item.claims.claims["P42"]
+    #     # remaining = item.claims.get("P42")
+    #     # remaining_count = len(remaining) if remaining else 0
+    #     # print(f"  After remove: {remaining_count} P42 claims left")
 
     item.claims.add(
         datatypes.ExternalID(prop_nr="P42", value=byg_id),
         action_if_exists=ActionIfExists.REPLACE_ALL
     )
-    remaining_after = item.claims.get("P42")
-    remaining_count_after = len(remaining_after) if remaining_after else 0
-    print(f"  After add: {remaining_count_after} P42 claims")
-    exit(0)
+    # remaining_after = item.claims.get("P42")
+    # remaining_count_after = len(remaining_after) if remaining_after else 0
+    # print(f"  After add: {remaining_count_after} P42 claims")
+    # exit(0)
     if alias_needed:
         current_aliases = item.aliases.get("sv") or []
         if byg_title not in current_aliases:
@@ -105,7 +146,10 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
     if alias_needed:
         summary_parts.append(f"alias ({byg_title})")
     summary = "Updated from bygdegardarna.se: " + ", ".join(summary_parts)
-
+    # get json with the single P42 claim
+    debug_json = item.get_json()
+    rich.print_json(data=debug_json)
+    input("Continue? (ENTER/ctrl+c")
     item.write(login=wbi.login, summary=summary)
 
     base_url = "https://dance.wikibase.cloud"
@@ -114,13 +158,17 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="Update DanceDB venues with bygdegardarna data")
+    parser = argparse.ArgumentParser(description="Enrich DanceDB venues with bygdegardarna data")
     parser.add_argument("--dry-run", action="store_true", help="Preview without uploading")
     parser.add_argument("--start", type=int, default=1, help="Start from venue N")
     parser.add_argument("--date", default=None, help="Date for input files (YYYY-MM-DD, default: today)")
+    parser.add_argument("--skip-scrape", action="store_true", help="Skip scraping and matching")
     args = parser.parse_args()
 
     date_str = args.date or date.today().strftime("%Y-%m-%d")
+
+    if not args.skip_scrape:
+        run_scraping_and_matching(date_str)
 
     print(f"Loading data for {date_str}...")
     enriched = load_enriched_venues(date_str)
