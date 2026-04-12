@@ -15,6 +15,7 @@ import questionary
 import config
 from wikibaseintegrator import WikibaseIntegrator
 from wikibaseintegrator.wbi_config import config as wbi_config
+from wikibaseintegrator.wbi_enums import ActionIfExists
 from wikibaseintegrator.wbi_login import Login
 
 wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
@@ -72,7 +73,10 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
     item = ItemEntity(id=qid)
     item.get()
 
-    item.claims.add(datatypes.ExternalID(prop_nr="P42", value=byg_id))
+    item.claims.add(
+        datatypes.ExternalID(prop_nr="P42", value=byg_id),
+        action_if_exists=ActionIfExists.APPEND_OR_REPLACE
+    )
 
     if alias_needed:
         current_aliases = item.aliases.get("sv") or []
@@ -111,61 +115,65 @@ def main():
     uploaded = 0
     skip_all = False
 
-    for i, venue in enumerate(enriched, start=1):
-        if i < args.start:
-            continue
+    try:
+        for i, venue in enumerate(enriched, start=1):
+            if i < args.start:
+                continue
 
-        qid = venue.get("qid")
-        if not qid:
-            print(f"[{i}/{total}] Skipping - no QID")
-            skipped += 1
-            continue
-
-        byg_title = venue.get("title", "")
-        permalink = venue.get("permalink", "")
-
-        db_label = db_venues.get(qid, {}).get("label", "")
-
-        print(f"\n[{i}/{total}] {byg_title} → {qid}")
-
-        if skip_all:
-            print("  Skipping (skip all)")
-            skipped += 1
-            continue
-
-        if args.dry_run:
-            print("  [DRY RUN - would update]")
-            print(f"    Label (DanceDB): \"{db_label}\"")
-            print(f"    P42: \"{extract_bygdegardarna_id(permalink)}\"")
-            print(f"    Alias: \"{byg_title}\"")
-            skipped += 1
-            continue
-
-        if is_interactive():
-            choice = questionary.rawselect(
-                f"Upload to DanceDB?",
-                choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
-            ).ask()
-
-            if choice == "Skip":
+            qid = venue.get("qid")
+            if not qid:
+                print(f"[{i}/{total}] Skipping - no QID")
                 skipped += 1
                 continue
-            elif choice == "Skip all":
-                print("Skipping remaining venues...")
-                skip_all = True
-                continue
-            elif choice == "Abort":
-                print("Aborting...")
-                sys.exit(0)
-        else:
-            print("  Non-interactive mode - uploading automatically")
-            print(f"    Label (DanceDB): \"{db_label}\"")
-            print(f"    P42: \"{extract_bygdegardarna_id(permalink)}\"")
-            print(f"    Alias: \"{byg_title}\"")
 
-        update_venue(qid, byg_title, permalink, db_label, args.dry_run, wbi)
-        uploaded += 1
-        time.sleep(1)
+            byg_title = venue.get("title", "")
+            permalink = venue.get("permalink", "")
+
+            db_label = db_venues.get(qid, {}).get("label", "")
+
+            print(f"\n[{i}/{total}] {byg_title} → {qid}")
+
+            if skip_all:
+                print("  Skipping (skip all)")
+                skipped += 1
+                continue
+
+            if args.dry_run:
+                print("  [DRY RUN - would update]")
+                print(f"    Label (DanceDB): \"{db_label}\"")
+                print(f"    P42: \"{extract_bygdegardarna_id(permalink)}\"")
+                print(f"    Alias: \"{byg_title}\"")
+                skipped += 1
+                continue
+
+            if is_interactive():
+                choice = questionary.rawselect(
+                    f"Upload to DanceDB?",
+                    choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
+                ).ask()
+
+                if choice == "Skip":
+                    skipped += 1
+                    continue
+                elif choice == "Skip all":
+                    print("Skipping remaining venues...")
+                    skip_all = True
+                    continue
+                elif choice == "Abort":
+                    print("Aborting...")
+                    sys.exit(0)
+            else:
+                print("  Non-interactive mode - uploading automatically")
+                print(f"    Label (DanceDB): \"{db_label}\"")
+                print(f"    P42: \"{extract_bygdegardarna_id(permalink)}\"")
+                print(f"    Alias: \"{byg_title}\"")
+
+            update_venue(qid, byg_title, permalink, db_label, args.dry_run, wbi)
+            uploaded += 1
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nAborted.")
+        sys.exit(1)
 
     print(f"\nDone. Processed: {total}, Uploaded: {uploaded}, Skipped: {skipped}")
 
