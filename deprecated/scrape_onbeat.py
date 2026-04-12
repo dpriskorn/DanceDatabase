@@ -2,10 +2,10 @@ import logging
 import os
 import datetime
 import time
-import subprocess
 from pathlib import Path
 
 import config
+from src.models.onbeat.organizers import OnbeatOrganizers
 import validate_data
 
 logging.basicConfig(level=config.loglevel)
@@ -17,27 +17,17 @@ output_folder = Path("data") / today
 os.makedirs(output_folder, exist_ok=True)
 
 
-logger.info("Scraping started...")
+logger.info("Scraping Onbeat started...")
 
 start_total = time.time()
 
-# Run onbeat scraper
 start = time.time()
-subprocess.run(["python", "scrape_onbeat.py"], check=True)
+onb = OnbeatOrganizers(json_output_folder=output_folder)
+onb.start()
 logger.info(f"Onbeat finished in {time.time() - start:.2f} seconds")
 
-# Run danslogen scraper
-start = time.time()
-subprocess.run(["python", "scrape_danslogen.py"], check=True)
-logger.info(f"Danslogen finished in {time.time() - start:.2f} seconds")
 
-# Run cogwork scrapers
-start = time.time()
-subprocess.run(["python", "scrape_cogwork.py"], check=True)
-logger.info(f"Cogwork finished in {time.time() - start:.2f} seconds")
-
-
-logger.info(f"All scrapers finished in {time.time() - start_total:.2f} seconds")
+logger.info(f"Onbeat scraper finished in {time.time() - start_total:.2f} seconds")
 
 
 # Validate all scraped JSON files against schema
