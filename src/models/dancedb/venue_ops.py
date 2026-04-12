@@ -3,12 +3,12 @@ import json
 import logging
 import urllib.parse
 from datetime import date
-from pathlib import Path
 
 from src.models.dancedb.config import config
 from src.models.dancedb_client import DancedbClient
 from src.models.bygdegardarna import fetch_markerdata
 from src.models.danslogen.maps import VENUE_QID_MAP, fuzzy_match_qid
+from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +41,7 @@ def scrape_bygdegardarna(date_str: str | None = None) -> None:
 def scrape_dancedb_venues(date_str: str | None = None) -> None:
     """Fetch existing venues from DanceDB via SPARQL."""
     import json
-    from wikibaseintegrator.wbi_config import config as wbi_config
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
-    wbi_config["USER_AGENT"] = config.user_agent
 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print(f"\n=== Scrape DanceDB venues ===")
@@ -53,10 +51,12 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
     PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-    SELECT ?item ?itemLabel ?geo WHERE {
+    SELECT ?item ?itemLabel ?alias ?geo WHERE {
       ?item ddt:P1 dd:Q20 .
-      OPTIONAL { ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel) = "sv") }
+      OPTIONAL { ?item rdfs:label ?svLabel FILTER(LANG(?svLabel) = "sv") }
+      OPTIONAL { ?item rdfs:alias ?svAlias FILTER(LANG(?svAlias) = "sv") }
       OPTIONAL { ?item ddt:P4 ?geo }
+      BIND(COALESCE(?svLabel, "") AS ?itemLabel)
     }
     ORDER BY ?itemLabel
     LIMIT 2000
@@ -66,12 +66,27 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
     for binding in results["results"]["bindings"]:
         qid = binding["item"]["value"].rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
+        
+        alias_data = binding.get("svAlias")
+        aliases = []
+        if alias_data:
+            if isinstance(alias_data, list):
+                aliases = [a.get("value", "").lower() for a in alias_data if a.get("value")]
+            else:
+                val = alias_data.get("value", "")
+                if val:
+                    aliases = [val.lower()]
+        
         geo = binding.get("geo", {}).get("value", "")
         lat, lng = None, None
         if geo:
             coords = geo.replace("Point(", "").replace(")", "").split(" ")
             lng, lat = float(coords[0]), float(coords[1])
-        venues[qid] = {"label": label, "lat": lat, "lng": lng}
+        
+        venue_data = {"label": label, "lat": lat, "lng": lng}
+        if aliases:
+            venue_data["aliases"] = aliases
+        venues[qid] = venue_data
 
     print(f"Found {len(venues)} venues")
 
