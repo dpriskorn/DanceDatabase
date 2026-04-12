@@ -7,6 +7,7 @@ from pathlib import Path
 import questionary
 
 from src.models.dancedb.config import config
+from src.models.dancedb.status import detect_event_status
 from src.models.dancedb_client import DancedbClient
 from src.models.danslogen.uploader import DanslogenUploader
 
@@ -93,11 +94,16 @@ def upload_events(
             sys.exit(0)
 
         try:
+            desc = event.description.get("sv", "") if event.description else ""
+            search_text = f"{label} {desc}"
+            status_qid, _ = detect_event_status(search_text)
+
             qid = client.create_event(
                 label_sv=label,
                 venue_qid=venue_qid,
                 start_timestamp=start_ts,
                 end_timestamp=end_ts,
+                status_qid=status_qid,
             )
             if qid:
                 print(f"  Uploaded: https://dance.wikibase.cloud/wiki/Item:{qid}")

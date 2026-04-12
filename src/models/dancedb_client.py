@@ -137,6 +137,7 @@ class DancedbClient:
         venue_qid: str,
         start_timestamp: datetime | None = None,
         end_timestamp: datetime | None = None,
+        status_qid: str = "Q566",
     ) -> str:
         """Create event item in DanceDB.
 
@@ -145,7 +146,8 @@ class DancedbClient:
         - P1: Q2 (instance of event)
         - P5: start timestamp (if provided)
         - P6: end timestamp (if provided)
-        - P7: venue reference (from venue_qid)
+        - P7: venue reference
+        - P43: status (planned/cancelled)
 
         Returns the new QID.
         """
@@ -159,6 +161,7 @@ class DancedbClient:
 
         new_item.claims.add('P1', 'Q2', action_if_exists=ActionIfExists.REPLACE_ALL)
         new_item.claims.add('P7', venue_qid, action_if_exists=ActionIfExists.REPLACE_ALL)
+        new_item.claims.add('P43', status_qid, action_if_exists=ActionIfExists.REPLACE_ALL)
 
         if start_timestamp:
             new_item.claims.add(

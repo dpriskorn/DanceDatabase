@@ -5,6 +5,7 @@ import sys
 
 import questionary
 
+from src.models.dancedb.status import detect_event_status
 from src.models.dancedb_client import DancedbClient
 
 logger = logging.getLogger(__name__)
