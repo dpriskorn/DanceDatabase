@@ -23,7 +23,7 @@ def main():
         venues = json.load(f)
 
     with open(output_path, "w", encoding="utf-8") as qs:
-        for venue_info in venues:
+        for i, venue_info in enumerate(venues, start=1):
             venue_name = venue_info["venue"]
             ort = venue_info.get("ort", "")
             kommun = venue_info.get("kommun", "")
@@ -32,7 +32,7 @@ def main():
             osm_url = f"https://www.openstreetmap.org/search?query={search_query}"
             google_url = f"https://www.google.com/maps/search/{search_query}"
 
-            print(f"{venue_name} ({kommun})")
+            print(f"[{i}/{len(venues)}] {venue_name} ({kommun})")
             print(f"  OSM:  {osm_url}")
             print(f"  Google: {google_url}")
 
