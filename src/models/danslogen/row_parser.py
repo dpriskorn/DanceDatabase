@@ -72,7 +72,7 @@ class RowParser:
         event_id = f"danslogen-{month}-{day}-{band.lower().replace(' ', '-')}"
 
         organizer = Organizer(
-            description="Danslogen",
+            description="",
             official_website=f"https://www.danslogen.se/dansprogram/{month}",
         )
 

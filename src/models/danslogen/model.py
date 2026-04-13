@@ -195,7 +195,7 @@ class Danslogen:
                 logger.warning("Failed to parse datetime: %s", e)
 
         organizer = Organizer(
-            description="Danslogen",
+            description="",
             official_website=f"{self.baseurl}/dansprogram/{month}",
         )
 
