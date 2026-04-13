@@ -176,15 +176,21 @@ class Danslogen:
         end_dt = None
         if date and start_time:
             try:
-                start_time_clean = start_time.replace('.', ':').replace('24:00', '00:00')
-                start_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {start_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-                if start_time_clean != start_time:
+                start_time_clean = start_time.replace('.', ':')
+                if '24:00' in start_time:
+                    start_time_clean = start_time_clean.replace('24:00', '00:00')
+                    start_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {start_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
                     start_dt = start_dt + timedelta(days=1)
+                else:
+                    start_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {start_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
                 if end_time:
-                    end_time_clean = end_time.replace('.', ':').replace('24:00', '00:00')
-                    end_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {end_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-                    if end_time != end_time_clean and '24:00' in end_time:
+                    end_time_clean = end_time.replace('.', ':')
+                    if '24:00' in end_time:
+                        end_time_clean = end_time_clean.replace('24:00', '00:00')
+                        end_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {end_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
                         end_dt = end_dt + timedelta(days=1)
+                    else:
+                        end_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {end_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
             except Exception as e:
                 logger.warning("Failed to parse datetime: %s", e)
 
