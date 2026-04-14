@@ -13,6 +13,7 @@ class DanceDBConfig(BaseModel):
     bygdegardarna_dir: Path = Path("data/bygdegardarna")
     dancedb_dir: Path = Path("data/dancedb")
     danslogen_dir: Path = Path("data/danslogen")
+    wikidata_dir: Path = Path("data/wikidata")
     enrich_dir: Path = Path("data/bygdegardarna/enriched")
 
     date_str: str = "2026-04-01"

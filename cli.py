@@ -20,6 +20,7 @@ from src.models.commands.onbeat import run as scrape_onbeat
 from src.models.commands.cogwork import scrape as scrape_cogwork, upload as upload_cogwork
 from src.models.commands.folketshus import run as scrape_folketshus
 from src.models.commands.ensure_events import run as ensure_events
+from src.models.commands.wikidata_ops import scrape_wikidata_artists, match_wikidata_artists
 from src.models.commands.sync import (
     sync_danslogen,
     sync_bygdegardarna,
@@ -133,6 +134,19 @@ def main():
                     help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None,
                     help="Limit number of rows")
+
+    # === WIKIDATA ===
+    p = sub.add_parser("scrape-wikidata-artists",
+                       help="Fetch artists from Wikidata")
+    p.add_argument("-d", "--date", default=None,
+                    help="Date for output (YYYY-MM-DD, default: today)")
+
+    p = sub.add_parser("match-wikidata-artists",
+                       help="Match DanceDB artists to Wikidata and upload P3")
+    p.add_argument("-d", "--date", default=None,
+                    help="Date for Wikidata artists file (YYYY-MM-DD, default: today)")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
 
     # === SYNC COMMANDS ===
     p = sub.add_parser("sync-danslogen",
@@ -268,6 +282,15 @@ def main():
             dry_run=args.dry_run,
             limit=args.limit,
         )
+
+    # WIKIDATA
+    elif args.command == "scrape-wikidata-artists":
+        date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
+        scrape_wikidata_artists(date_str)
+
+    elif args.command == "match-wikidata-artists":
+        date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
+        match_wikidata_artists(date_str, dry_run=args.dry_run)
 
 
 if __name__ == "__main__":
