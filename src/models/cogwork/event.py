@@ -343,6 +343,8 @@ class CogworkEvent(BaseModel):
         """Parse all the data we want from the shop page"""
         self.check_registration()
         self.parse_price()
+        if self.skip:
+            return
         self.parse_place()
 
     def fetch_and_parse(self):
@@ -354,5 +356,6 @@ class CogworkEvent(BaseModel):
         if not self.skip:
             self.determine_full()
             self.parse_shop_page()
+        if not self.skip:
             self.parse_into_dance_event()
 
