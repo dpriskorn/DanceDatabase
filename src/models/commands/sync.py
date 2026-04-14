@@ -14,6 +14,44 @@ def get_current_month_year() -> tuple[str, int]:
     return month_names[today.month - 1], today.year
 
 
+def scrape_all(month: str, year: int) -> None:
+    """Scrape all data sources first."""
+    from src.models.danslogen.event_ops import scrape_danslogen
+    from src.models.commands.venue_ops import scrape_bygdegardarna
+    from src.models.commands.onbeat import run as scrape_onbeat
+    from src.models.commands.cogwork import scrape as scrape_cogwork
+    from src.models.commands.folketshus import run as scrape_folketshus
+    from src.models.commands.wikidata_ops import scrape_wikidata_artists
+
+    date_str = date.today().strftime("%Y-%m-%d")
+
+    print("\n" + "=" * 50)
+    print("SCRAPING ALL DATA SOURCES")
+    print("=" * 50)
+
+    print("\n[1/6] Scrape Wikidata artists...")
+    scrape_wikidata_artists(date_str=date_str)
+
+    print("\n[2/6] Scrape danslogen events...")
+    scrape_danslogen(month=month, year=year)
+
+    print("\n[3/6] Scrape bygdegardarna venues...")
+    scrape_bygdegardarna(date_str=date_str)
+
+    print("\n[4/6] Scrape onbeat events...")
+    scrape_onbeat(dry_run=True)
+
+    print("\n[5/6] Scrape cogwork events...")
+    scrape_cogwork(source=None)
+
+    print("\n[6/6] Scrape folketshus venues...")
+    scrape_folketshus(date_str=date_str, match=False)
+
+    print("\n" + "=" * 50)
+    print("SCRAPING COMPLETE")
+    print("=" * 50)
+
+
 def sync_danslogen(
     month: str | None = None,
     year: int | None = None,
@@ -163,7 +201,7 @@ def sync_all(
     dry_run: bool = False,
     limit: int | None = None,
 ) -> bool:
-    """Sync all sources: danslogen → bygdegardarna → onbeat → cogwork → folketshus."""
+    """Sync all sources: scrape-all → danslogen → bygdegardarna → onbeat → cogwork → folketshus."""
     if month is None or year is None:
         month, year = get_current_month_year()
 
@@ -173,6 +211,9 @@ def sync_all(
 
     if dry_run:
         print("\n*** DRY RUN - NO CHANGES WILL BE MADE ***\n")
+
+    print("\n[0/6] Scraping all data sources...")
+    scrape_all(month=month, year=year)
 
     sources = [
         ("DANSLOGEN", lambda: sync_danslogen(month=month, year=year, dry_run=dry_run, limit=limit)),

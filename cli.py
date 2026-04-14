@@ -28,6 +28,7 @@ from src.models.commands.sync import (
     sync_cogwork,
     sync_folketshus,
     sync_all,
+    scrape_all,
 )
 from src.models.dancedb.workflow import run_all
 
@@ -159,6 +160,14 @@ def main():
     p.add_argument("--dry-run", action="store_true",
                     help="Preview without uploading")
 
+    # === SCRAPE COMMANDS ===
+    p = sub.add_parser("scrape-all",
+                       help="Scrape all data sources at once")
+    p.add_argument("-m", "--month", default=None,
+                    help="Month name (default: current month)")
+    p.add_argument("-y", "--year", type=int, default=None,
+                    help="Year (default: current year)")
+
     # === SYNC COMMANDS ===
     p = sub.add_parser("sync-danslogen",
                        help="Sync danslogen: scrape → ensure-venues → upload → ensure-events")
@@ -203,6 +212,15 @@ def main():
                     help="Limit number of events")
 
     args = parser.parse_args()
+
+    # SCRAPE ALL
+    if args.command == "scrape-all":
+        month = args.month
+        year = args.year
+        if month is None or year is None:
+            from src.models.commands.sync import get_current_month_year
+            month, year = get_current_month_year()
+        scrape_all(month=month, year=year)
 
     # DANSLOGEN
     if args.command == "scrape-bygdegardarna":
