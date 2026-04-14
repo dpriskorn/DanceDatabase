@@ -65,43 +65,5 @@ def run(dry_run: bool = False) -> None:
     with open(cache_file, "w") as f:
         json.dump(cache_data, f, ensure_ascii=False, indent=2)
     print(f"Cached to {cache_file}")
-
-    if dry_run:
-        print("\nDry run complete. Run without --dry-run to upload.")
-        return
-
-    client = DancedbClient()
-    uploaded = 0
-    skipped = 0
-
-    try:
-        for i, event in enumerate(event_list, start=1):
-            label = event.label.get("sv", "Untitled") if event.label else "Untitled"
-            venue = event.location or ""
-
-            print(f"\n[{i}/{len(event_list)}] {label}")
-            print(f"  Location: {venue}")
-
-            confirm = questionary.rawselect(
-                "Upload to DanceDB?",
-                choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
-            ).ask()
-
-            if confirm == "Skip":
-                skipped += 1
-                continue
-            elif confirm == "Skip all":
-                print(f"Skipping remaining {len(event_list) - i} events...")
-                skipped += len(event_list) - i
-                break
-            elif confirm == "Abort":
-                print("Aborting...")
-                sys.exit(0)
-
-            print(f"  (Onbeat upload not implemented - skipping)")
-            skipped += 1
-    except Exception:
-        print("\nNon-interactive mode detected. Use upload-onbeat command to upload events.")
-        skipped = len(event_list)
-
-    print(f"\nDone! {len(event_list)} events parsed, {skipped} skipped.")
+    print(f"Found {len(event_list)} onbeat events")
+    print("Run 'onbeat-ensure-venues' to create missing venues, then 'upload-onbeat' to upload.")

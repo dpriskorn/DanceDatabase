@@ -376,10 +376,9 @@ class OnbeatEvents(BaseModel):
 
             description = self._parse_description(soup)
 
-            venue_text = f"{details['where']} {description}"
-            venue_qid, external_id = self.get_venue_qid(venue_text)
+            venue_qid, external_id = self.get_venue_qid(details["where"])
             if not venue_qid:
-                logger.warning(f"Could not find venue: '{venue_text}' - skipping event")
+                logger.warning(f"Could not find venue: '{details['where']}' - skipping event")
                 continue
 
             style_text = f"{api_event.name} {description}"
