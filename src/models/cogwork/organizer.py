@@ -46,15 +46,11 @@ class CogworkOrganizer(Organizer):
     # noinspection PyArgumentList,PyCallingNonCallable
     def start(self):
         """Fetch all events and export them."""
-        output_file = Path(self.json_output_folder) / f"{self.__class__.__name__.lower()}.json"
+        today_str = date.today().strftime("%Y-%m-%d")
+        output_file = Path(self.json_output_folder) / f"{today_str}.json"
         if output_file.exists():
-            today_str = date.today().strftime("%Y-%m-%d")
-            if not questionary.confirm(f"[{today_str}] {output_file} already exists. Skip scraping?", default=True).ask():
-                print(f"Removing {output_file} and continuing...")
-                output_file.unlink()
-            else:
-                print(f"Skipping {self.__class__.__name__} - already scraped today.")
-                return
+            print(f"Output file already exists: {output_file}")
+            return
 
         print(f"Fetching calendar links for {self.__class__.__name__}...")
         self.parse_calendar_links(self.fetch_calendar_page())

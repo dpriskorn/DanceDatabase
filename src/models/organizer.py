@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -9,8 +10,10 @@ class Organizer(BaseModel):
 
     # === Export ===
     def export_to_json(self):
+        from datetime import date
         Path(self.json_output_folder).mkdir(parents=True, exist_ok=True)
-        file_path = Path(self.json_output_folder) / f"{self.__class__.__name__.lower()}.json"
+        today_str = date.today().strftime("%Y-%m-%d")
+        file_path = Path(self.json_output_folder) / f"{today_str}.json"
         # Convert each Pydantic model to a plain dict
         data = [event.model_dump(mode="json") for event in self.events]
 

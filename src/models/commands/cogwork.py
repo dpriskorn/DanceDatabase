@@ -29,6 +29,7 @@ def scrape(source: str | None = None) -> None:
         source: Optional specific source, or None for all.
     """
     import importlib
+    from datetime import date
 
     from src.models.dancedb.config import config
 
@@ -49,12 +50,15 @@ def scrape(source: str | None = None) -> None:
 
     print(f"\nScraping {len(sources_to_scrape)} sources...")
 
-    output_folder = config.data_dir / "cogwork"
-    output_folder.mkdir(parents=True, exist_ok=True)
+    today = date.today().strftime("%Y-%m-%d")
+    output_base = config.data_dir / "cogwork"
 
     for name in sources_to_scrape:
         print(f"\n--- {name} ---")
         try:
+            output_folder = output_base / name
+            output_folder.mkdir(parents=True, exist_ok=True)
+
             module = importlib.import_module(f"src.models.cogwork.scrapers.{name}")
             scraper_class = getattr(module, name.capitalize())
             scraper = scraper_class(json_output_folder=output_folder)
