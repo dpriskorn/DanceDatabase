@@ -163,7 +163,7 @@ def sync_all(
     dry_run: bool = False,
     limit: int | None = None,
 ) -> bool:
-    """Sync all sources: bygdegardarna → danslogen → onbeat → cogwork → folketshus."""
+    """Sync all sources: danslogen → bygdegardarna → onbeat → cogwork → folketshus."""
     if month is None or year is None:
         month, year = get_current_month_year()
 
@@ -175,16 +175,16 @@ def sync_all(
         print("\n*** DRY RUN - NO CHANGES WILL BE MADE ***\n")
 
     sources = [
-        ("BYGDEGARDARNA", lambda: sync_bygdegardarna(dry_run=dry_run)),
         ("DANSLOGEN", lambda: sync_danslogen(month=month, year=year, dry_run=dry_run, limit=limit)),
+        ("BYGDEGARDARNA", lambda: sync_bygdegardarna(dry_run=dry_run)),
         ("ONBEAT", lambda: sync_onbeat(dry_run=dry_run)),
         ("COGWORK", lambda: sync_cogwork(dry_run=dry_run)),
         ("FOLKETSHUS", lambda: sync_folketshus(dry_run=dry_run)),
     ]
 
-    for name, func in sources:
+    for i, (name, func) in enumerate(sources, 1):
         print(f"\n{'=' * 60}")
-        print(f"SYNCING: {name}")
+        print(f"SYNCING [{i}/{len(sources)}]: {name}")
         print("=" * 60)
         try:
             func()
