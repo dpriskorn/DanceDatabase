@@ -234,6 +234,7 @@ class CogworkEvent(BaseModel):
             self.price_normal, self.price_reduced = extractor.extract()
         except PriceMismatchError as e:
             logger.warning(f"Price mismatch on {self.shop_url}: {e}")
+            logger.warning(f"Event skipped due to missing price: {self.shop_url}")
             self.skip = True
 
     # === Event workflow ===
