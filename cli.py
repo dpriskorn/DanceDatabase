@@ -96,23 +96,21 @@ def main():
 
 # === ONBEAT ===
     p = sub.add_parser("onbeat-scrape",
-                       help="Fetch onbeat events")
-
-    p = sub.add_parser("onbeat-upload",
-                       help="Upload onbeat events to DanceDB")
-    p.add_argument("--dry-run", action="store_true",
-                   help="Preview without uploading")
-
+                       help="Fetch events")
     p = sub.add_parser("onbeat-ensure-venues",
-                       help="Ensure onbeat venues exist in DanceDB")
+                       help="Ensure venues exist")
     p.add_argument("--date", default=None,
                    help="Date of scraped data (default: today)")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without creating")
+    p = sub.add_parser("onbeat-upload",
+                       help="Upload to DanceDB")
+    p.add_argument("--dry-run", action="store_true",
+                   help="Preview without uploading")
 
     # === COGWORK ===
     p = sub.add_parser("scrape-cogwork",
-                      help="Fetch cogwork events from ALL sources")
+                       help="Fetch events from ALL sources")
     p.add_argument("-s", "--source", default=None,
                    help="Specific source (default: all)")
     p.add_argument("--overwrite", action="store_true",
