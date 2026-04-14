@@ -94,14 +94,21 @@ def main():
     p.add_argument("--yes", action="store_true",
                    help="Skip confirmation prompts")
 
-    # === ONBEAT ===
+# === ONBEAT ===
     p = sub.add_parser("scrape-onbeat",
-                     help="Fetch onbeat events")
+                      help="Fetch onbeat events")
 
     p = sub.add_parser("upload-onbeat",
-                     help="Upload onbeat events to DanceDB")
+                      help="Upload onbeat events to DanceDB")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
+
+    p = sub.add_parser("onbeat-ensure-venues",
+                      help="Ensure onbeat venues exist in DanceDB")
+    p.add_argument("--date", default=None,
+                   help="Date of scraped data (default: today)")
+    p.add_argument("--dry-run", action="store_true",
+                   help="Preview without creating")
 
     # === COGWORK ===
     p = sub.add_parser("scrape-cogwork",
@@ -276,6 +283,11 @@ def main():
 
     elif args.command == "upload-onbeat":
         upload_onbeat(dry_run=args.dry_run)
+
+    elif args.command == "onbeat-ensure-venues":
+        from src.models.commands.venue_ops import onbeat_ensure_venues
+        date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
+        onbeat_ensure_venues(date_str, dry_run=args.dry_run)
 
     # COGWORK
     elif args.command == "scrape-cogwork":

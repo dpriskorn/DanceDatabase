@@ -58,31 +58,14 @@ class OnbeatEvents(BaseModel):
         "casanovas": "Q4",
         "socialdans": "Q4"
     }
-    venue_qid_map: dict[str, str] = Field({
-            "Norrfjärdens Folkets Hus": "Q502",
-            "Johannesbergs Castle": "Q504",
-            "Trafikgatan 54": "Q505",
-            "Klemensnäs Folkets Hus": "Q122",
-            "Klemensnäs folkets hus": "Q122",
-            "Umeå Folkets Hus": "Q17",
-            "Kulturhus tio14": "Q518",
-            "Talavidskolan": "Q521",
-            "Talavidskolan, Jönköping": "Q521",
-            "Hälsans Hus": "Q519",
-            "Hälsans Hus, Repslagargatan": "Q519",
-            "Bergnäsgården": "Q50",
-            "Gnistan Folkets Hus": "Q520",
-            "Gnistan Folkets Hus i Gullänget": "Q520",
-            "Bollsta Folkets Hus": "Q522",
-            "Bollsta Folkets Hus, Bollstabruk": "Q522",
-            "Gräsmyr Loge": "Q101",
-            "Sliperiet": "Q999",
-            "Teatergatan 5, Falun": "Q999"
-        },
-        description="Mapping of place to QID in DanceDatabase (case-insensitive)")
     price_override_map: dict[str, Decimal] = {
         "rockthebarn": Decimal("1800"),
     }
+
+    # Venue datasets for dynamic lookup
+    _dancedb_venues: dict = {}
+    _folketshus_venues: dict = {}
+    _bygdegardarna_venues: list = []
 
     # Instance attributes to hold intermediate parsed data
     soup: Optional[BeautifulSoup] = None
@@ -101,6 +84,105 @@ class OnbeatEvents(BaseModel):
     model_config = {
         "arbitrary_types_allowed": True  # <-- allow BeautifulSoup and Tag
     }
+
+    def _load_dancedb_venues(self) -> dict:
+        """Load venues from local DanceDB JSON cache."""
+        if self._dancedb_venues:
+            return self._dancedb_venues
+        
+        import json
+        from pathlib import Path
+        venues_file = Path("data/dancedb/venues/2026-04-12.json")
+        if venues_file.exists():
+            self._dancedb_venues = json.loads(venues_file.read_text())
+            logger.info(f"Loaded {len(self._dancedb_venues)} venues from DanceDB cache")
+        return self._dancedb_venues
+
+    def _load_folketshus_venues(self) -> dict:
+        """Load venues from Folketshus enriched JSON."""
+        if self._folketshus_venues:
+            return self._folketshus_venues
+        
+        import json
+        from pathlib import Path
+        folketshus_file = Path("data/folketshus/enriched/2026-04-14.json")
+        if folketshus_file.exists():
+            data = json.loads(folketshus_file.read_text())
+            self._folketshus_venues = {v["name"].lower(): v for v in data if v.get("qid")}
+            logger.info(f"Loaded {len(self._folketshus_venues)} venues from Folketshus")
+        return self._folketshus_venues
+
+    def _load_bygdegardarna_venues(self) -> list:
+        """Load venues from Bygdegardarna JSON."""
+        if self._bygdegardarna_venues:
+            return self._bygdegardarna_venues
+        
+        import json
+        from pathlib import Path
+        bygdegard_file = Path("data/bygdegardarna/2026-04-14.json")
+        if bygdegard_file.exists():
+            self._bygdegardarna_venues = json.loads(bygdegard_file.read_text())
+            logger.info(f"Loaded {len(self._bygdegardarna_venues)} venues from Bygdegardarna")
+        return self._bygdegardarna_venues
+
+    def lookup_venue_qid(self, venue_name: str) -> tuple[str | None, str | None]:
+        """
+        Look up venue QID from local datasets.
+        Returns (qid, external_id) or (None, None) if not found.
+        """
+        if not venue_name:
+            return None, None
+        
+        venue_lower = venue_name.lower()
+        
+        # 1. Check DanceDB venues (exact substring match on labels + aliases)
+        dancedb = self._load_dancedb_venues()
+        for qid, v in dancedb.items():
+            label = v.get("label", "").lower()
+            if venue_lower in label or label in venue_lower:
+                logger.debug(f"Matched '{venue_name}' to DanceDB venue '{v['label']}' ({qid})")
+                return qid, None
+            
+            aliases = v.get("aliases", [])
+            for alias in aliases:
+                if venue_lower in alias or alias in venue_lower:
+                    logger.debug(f"Matched '{venue_name}' to DanceDB alias '{alias}' ({qid})")
+                    return qid, None
+        
+        # 2. Check Folketshus enriched (has QIDs)
+        folketshus = self._load_folketshus_venues()
+        for name, v in folketshus.items():
+            if venue_lower in name or name in venue_lower:
+                logger.debug(f"Matched '{venue_name}' to Folketshus '{v['name']}' ({v.get('qid')})")
+                return v.get("qid"), v.get("external_id")
+        
+        # 3. Check Bygdegardarna (no QIDs, return coords for potential creation)
+        bygdegard = self._load_bygdegardarna_venues()
+        for v in bygdegard:
+            title = v.get("title", "").lower()
+            if venue_lower in title or title in venue_lower:
+                pos = v.get("position", {})
+                logger.debug(f"Matched '{venue_name}' to Bygdegardarna '{v['title']}'")
+                return None, f"bygdegardarna:{v['meta'].get('permalink', '')}"
+        
+        logger.debug(f"No match found for venue: '{venue_name}'")
+        return None, None
+
+    def get_venue_qid(self, venue_name: str) -> tuple[str, str | None]:
+        """
+        Get venue QID, prompting user if not found in datasets.
+        Returns (qid, external_id).
+        """
+        qid, external_id = self.lookup_venue_qid(venue_name)
+        
+        if qid:
+            return qid, external_id
+        
+        if not venue_name:
+            return "", None
+        
+        logger.warning(f"Venue not found in any dataset: '{venue_name}'")
+        return "", external_id
 
     def fetch_page(self) -> None:
         response = requests.get(self.page_url)
@@ -250,9 +332,6 @@ class OnbeatEvents(BaseModel):
         event_id = url.lstrip("/")  # remove leading slash
         return event_url, event_id
 
-    def map_venue_qid(self, text: str) -> str:
-        return next((qid for key, qid in self.venue_qid_map.items() if key.lower() in text.lower()), "")
-
     def map_community_qid(self, text: str) -> str:
         return next((qid for key, qid in self.community_qid_map.items() if key.lower() in text.lower()), "")
 
@@ -298,9 +377,9 @@ class OnbeatEvents(BaseModel):
             description = self._parse_description(soup)
 
             venue_text = f"{details['where']} {description}"
-            venue_qid = self.map_venue_qid(venue_text)
+            venue_qid, external_id = self.get_venue_qid(venue_text)
             if not venue_qid:
-                logger.warning(f"Could not map venue from: '{venue_text}' - skipping event")
+                logger.warning(f"Could not find venue: '{venue_text}' - skipping event")
                 continue
 
             style_text = f"{api_event.name} {description}"
