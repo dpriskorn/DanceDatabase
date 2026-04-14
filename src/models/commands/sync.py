@@ -89,7 +89,7 @@ def scrape_all(month: str, year: int) -> None:
     scrape_bygdegardarna(date_str=date_str)
 
     print("\n[4/6] Scrape onbeat events...")
-    scrape_onbeat(dry_run=True)
+    scrape_onbeat(dry_run=False)
 
     print("\n[5/6] Scrape cogwork events...")
     scrape_cogwork(source=None)

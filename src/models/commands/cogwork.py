@@ -1,12 +1,6 @@
 """Cogwork scraper commands."""
 import logging
-import sys
 from pathlib import Path
-
-import questionary
-
-from src.models.dancedb.status import detect_event_status
-from src.models.dancedb_client import DancedbClient
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +28,10 @@ def scrape(source: str | None = None) -> None:
     Args:
         source: Optional specific source, or None for all.
     """
+    import importlib
+
+    from src.models.dancedb.config import config
+
     print("\n=== Scrape cogwork events ===")
 
     scrapers = get_scrapers()
@@ -51,9 +49,19 @@ def scrape(source: str | None = None) -> None:
 
     print(f"\nScraping {len(sources_to_scrape)} sources...")
 
+    output_folder = config.data_dir / "cogwork"
+    output_folder.mkdir(parents=True, exist_ok=True)
+
     for name in sources_to_scrape:
-        print(f"\n{name}: (scraper not fully implemented)")
-        print(f"  Note: Run individual scrapers manually")
+        print(f"\n--- {name} ---")
+        try:
+            module = importlib.import_module(f"src.models.cogwork.scrapers.{name}")
+            scraper_class = getattr(module, name.capitalize())
+            scraper = scraper_class(json_output_folder=output_folder)
+            scraper.start()
+            print(f"  Done: {name}")
+        except Exception as e:
+            print(f"  Error: {name} - {e}")
 
     print(f"\nTotal: {len(sources_to_scrape)} sources configured")
 
@@ -85,11 +93,12 @@ def upload(source: str | None = None, dry_run: bool = False) -> None:
         print("\nDry run complete. Run without --dry-run to upload.")
         return
 
-    print(f"\nCogwork upload: (not fully implemented)")
+    print("\nCogwork upload: (not fully implemented)")
     print("Use individual scrapers first, then upload via danslogen if needed")
 
 
-def run(source: str | None = None, dry_run: bool = False, upload_only: bool = False) -> None:
+def run(source: str | None = None, dry_run: bool = False,
+        upload_only: bool = False) -> None:
     """Run scrape and optionally upload cogwork events.
 
     Args:
