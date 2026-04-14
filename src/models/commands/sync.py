@@ -20,10 +20,11 @@ def sync_danslogen(
     dry_run: bool = False,
     limit: int | None = None,
 ) -> bool:
-    """Sync danslogen events: scrape → ensure-venues → upload → ensure-events."""
+    """Sync danslogen events: sync-wikidata-artists → scrape → ensure-venues → upload → ensure-events."""
     from src.models.danslogen.event_ops import scrape_danslogen, upload_events
     from src.models.commands.venue_ops import ensure_venues
     from src.models.commands.ensure_events import run as ensure_events
+    from src.models.commands.wikidata_ops import sync_wikidata_artists
 
     if month is None or year is None:
         month, year = get_current_month_year()
@@ -38,13 +39,16 @@ def sync_danslogen(
     if dry_run:
         print("\n*** DRY RUN ***\n")
 
-    print("\n[1/4] Scrape danslogen events...")
+    print("\n[1/5] Sync Wikidata artists...")
+    sync_wikidata_artists(date_str=date_str, dry_run=dry_run)
+
+    print("\n[2/5] Scrape danslogen events...")
     scrape_danslogen(month=month, year=year)
 
-    print("\n[2/4] Ensure venues exist in DanceDB...")
+    print("\n[3/5] Ensure venues exist in DanceDB...")
     ensure_venues(date_str=date_str, dry_run=dry_run)
 
-    print("\n[3/4] Upload events to DanceDB...")
+    print("\n[4/5] Upload events to DanceDB...")
     upload_events(
         input_file=input_file,
         date_str=date_str,
