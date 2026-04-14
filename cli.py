@@ -95,16 +95,16 @@ def main():
                    help="Skip confirmation prompts")
 
 # === ONBEAT ===
-    p = sub.add_parser("scrape-onbeat",
-                      help="Fetch onbeat events")
+    p = sub.add_parser("onbeat-scrape",
+                       help="Fetch onbeat events")
 
-    p = sub.add_parser("upload-onbeat",
-                      help="Upload onbeat events to DanceDB")
+    p = sub.add_parser("onbeat-upload",
+                       help="Upload onbeat events to DanceDB")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
 
     p = sub.add_parser("onbeat-ensure-venues",
-                      help="Ensure onbeat venues exist in DanceDB")
+                       help="Ensure onbeat venues exist in DanceDB")
     p.add_argument("--date", default=None,
                    help="Date of scraped data (default: today)")
     p.add_argument("--dry-run", action="store_true",
@@ -278,10 +278,10 @@ def main():
         )
 
     # ONBEAT
-    elif args.command == "scrape-onbeat":
+    elif args.command == "onbeat-scrape":
         scrape_onbeat()
 
-    elif args.command == "upload-onbeat":
+    elif args.command == "onbeat-upload":
         upload_onbeat(dry_run=args.dry_run)
 
     elif args.command == "onbeat-ensure-venues":

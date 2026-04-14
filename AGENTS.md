@@ -70,8 +70,9 @@ poetry run python cli.py run-all --dry-run
 
 #### Onbeat
 ```bash
-poetry run python cli.py scrape-onbeat
-poetry run python cli.py upload-onbeat
+poetry run python cli.py onbeat-scrape
+poetry run python cli.py onbeat-ensure-venues
+poetry run python cli.py onbeat-upload
 ```
 
 #### Cogwork
