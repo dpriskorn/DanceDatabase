@@ -170,7 +170,7 @@ def main():
 
     # === SYNC COMMANDS ===
     p = sub.add_parser("sync-danslogen",
-                       help="Sync danslogen: scrape → ensure-venues → upload → ensure-events")
+                       help="Sync danslogen: sync-wikidata → scrape → ensure-venues → upload")
     p.add_argument("-m", "--month", default=None,
                     help="Month name (default: current month)")
     p.add_argument("-y", "--year", type=int, default=None,
@@ -179,11 +179,19 @@ def main():
                     help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None,
                     help="Limit number of events")
+    p.add_argument("-f", "--force", action="store_true",
+                    help="Force run even if prerequisites met")
+    p.add_argument("--only-scrape", action="store_true",
+                    help="Only scrape, skip uploads")
 
     p = sub.add_parser("sync-bygdegardarna",
                        help="Sync bygdegardarna: scrape → fetch-dancedb → match-venues")
     p.add_argument("--dry-run", action="store_true",
                     help="Preview without uploading")
+    p.add_argument("-f", "--force", action="store_true",
+                    help="Force run even if prerequisites met")
+    p.add_argument("--only-scrape", action="store_true",
+                    help="Only scrape, skip uploads")
 
     p = sub.add_parser("sync-onbeat",
                        help="Sync onbeat: scrape + upload")
@@ -210,6 +218,10 @@ def main():
                     help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None,
                     help="Limit number of events")
+    p.add_argument("-f", "--force", action="store_true",
+                    help="Force run even if prerequisites met")
+    p.add_argument("--only-scrape", action="store_true",
+                    help="Only scrape, skip uploads")
 
     args = parser.parse_args()
 
@@ -290,10 +302,12 @@ def main():
             year=args.year,
             dry_run=args.dry_run,
             limit=args.limit,
+            force=args.force,
+            only_scrape=args.only_scrape,
         )
 
     elif args.command == "sync-bygdegardarna":
-        sync_bygdegardarna(dry_run=args.dry_run)
+        sync_bygdegardarna(dry_run=args.dry_run, force=args.force, only_scrape=args.only_scrape)
 
     elif args.command == "sync-onbeat":
         sync_onbeat(dry_run=args.dry_run)
@@ -310,6 +324,8 @@ def main():
             year=args.year,
             dry_run=args.dry_run,
             limit=args.limit,
+            force=args.force,
+            only_scrape=args.only_scrape,
         )
 
     # WIKIDATA
