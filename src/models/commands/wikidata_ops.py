@@ -1,7 +1,8 @@
-"""Wikidata operations: fetch artists."""
+"""Wikidata operations: fetch and match artists."""
 import json
 from datetime import date
 
+import questionary
 import config as root_config
 from src.models.dancedb.config import config as dancedb_config
 from src.models.dancedb_client import DancedbClient, wbi_config
@@ -122,3 +123,186 @@ def match_wikidata_artists(date_str: str | None = None, dry_run: bool = False) -
         item.claims.add(datatypes.String(prop_nr="P3", value=wd_qid))
         item.write(login=client.wbi.login, summary="Add Wikidata QID from matching")
         print(f"  Updated: {client.base_url}/wiki/Item:{db_qid}")
+
+
+def sync_wikidata_artists(
+    date_str: str | None = None,
+    month: str = "april",
+    year: int = 2026,
+    dry_run: bool = False,
+) -> None:
+    """Create missing artists from danslogen and add P3 to artists without P3."""
+    from rapidfuzz import process as fuzz_process
+    from wikibaseintegrator import datatypes
+
+    date_str = date_str or date.today().strftime("%Y-%m-%d")
+    print("\n=== Sync Wikidata artists from Danslogen ===")
+
+    wikidata_file = dancedb_config.wikidata_dir / "artists" / f"{date_str}.json"
+    if not wikidata_file.exists():
+        print(f"Error: Wikidata artists file not found: {wikidata_file}")
+        return
+
+    wikidata_artists = json.loads(wikidata_file.read_text())
+    print(f"Loaded {len(wikidata_artists)} Wikidata artists")
+
+    wikidata_labels = {v["label"].lower(): qid for qid, v in wikidata_artists.items()}
+    wikidata_label_list = list(wikidata_labels.keys())
+
+    client = DancedbClient()
+    dancedb_artists = client.fetch_artists_from_dancedb()
+    dancedb_labels = {a.get("label", "").lower(): a for a in dancedb_artists}
+    artists_with_p3 = {a.get("qid") for a in dancedb_artists if a.get("p3")}
+    print(f"Found {len(dancedb_artists)} artists in DanceDB, {len(artists_with_p3)} have P3")
+
+    from src.models.danslogen.maps import BAND_QID_MAP
+    danslogen_bands = set(BAND_QID_MAP.keys())
+    print(f"Found {len(danslogen_bands)} bands in danslogen (BAND_QID_MAP)")
+
+    missing_bands = []
+    needs_p3 = []
+
+    for band in danslogen_bands:
+        band_lower = band.lower()
+        wd_qid = None
+
+        if band_lower in wikidata_labels:
+            wd_qid = wikidata_labels[band_lower]
+        else:
+            fuzzy = fuzz_process.extractOne(
+                band_lower, wikidata_label_list, score_cutoff=85
+            )
+            if fuzzy:
+                wd_qid = wikidata_labels[fuzzy[0]]
+
+        if band_lower not in dancedb_labels:
+            missing_bands.append({"name": band, "wd_qid": wd_qid})
+        else:
+            existing = dancedb_labels[band_lower]
+            db_qid = existing.get("qid")
+            if wd_qid and db_qid and db_qid not in artists_with_p3:
+                needs_p3.append({"name": band, "db_qid": db_qid, "wd_qid": wd_qid})
+
+    print(f"Missing in DanceDB: {len(missing_bands)}")
+    print(f"Need P3 added: {len(needs_p3)}")
+
+    if not missing_bands and not needs_p3:
+        print("All bands already in DanceDB with P3!")
+        return
+
+    skip_all = False
+    abort = False
+
+    if needs_p3:
+        print("\n--- Adding P3 to existing artists ---")
+        for band_data in needs_p3:
+            band_name = band_data["name"]
+            db_qid = band_data["db_qid"]
+            wd_qid = band_data["wd_qid"]
+
+            print(f"\n{band_name} ({db_qid}) -> Wikidata {wd_qid}")
+
+            if dry_run:
+                print(f"[DRY RUN] Would add P3={wd_qid}")
+                continue
+
+            if skip_all:
+                print("Skipping (skip all)")
+                continue
+
+            response = questionary.select(
+                f"Add P3={wd_qid} to {band_name}?",
+                choices=["Yes", "Skip", "Skip all", "Abort"],
+            ).ask()
+
+            if response == "Yes":
+                print(f"Adding P3={wd_qid} to {band_name} ({db_qid})...")
+                item = client.wbi.item.get(entity_id=db_qid)
+                item.claims.add(datatypes.String(prop_nr="P3", value=wd_qid))
+                item.write(login=client.wbi.login, summary="Add Wikidata QID from sync")
+                print(f"  Updated: {client.base_url}/wiki/Item:{db_qid}")
+            elif response == "Skip":
+                print("Skipped")
+            elif response == "Skip all":
+                print("Skipping all remaining")
+                skip_all = True
+            elif response == "Abort":
+                print("Aborting")
+                abort = True
+                break
+
+    if abort:
+        print("\nAborted by user")
+        return
+
+    skip_all = False
+
+    if missing_bands:
+        print("\n--- Creating missing artists ---")
+        for band_data in missing_bands:
+            band_name = band_data["name"]
+            wd_qid = band_data["wd_qid"]
+
+            print(f"\n{band_name}")
+            if wd_qid:
+                print(f"  Wikidata match: {wd_qid}")
+
+            if dry_run:
+                if wd_qid:
+                    print(f"[DRY RUN] Would create artist with P3={wd_qid}")
+                else:
+                    print("[DRY RUN] Would create artist (no Wikidata match)")
+                continue
+
+            if skip_all:
+                print("Skipping (skip all)")
+                continue
+
+            choices = ["Yes"]
+            if wd_qid:
+                choices.append("Yes + add P3")
+            choices.extend(["Skip", "Skip all", "Abort"])
+
+            response = questionary.select(
+                f"Create artist '{band_name}' in DanceDB?",
+                choices=choices,
+            ).ask()
+
+            if response and "Yes" in response:
+                add_p3 = "add P3" in response and wd_qid is not None
+                print(f"Creating artist: {band_name}...")
+                new_item = client.wbi.item.new()
+                new_item.labels.set("sv", band_name)
+                new_item.labels.set("en", band_name)
+                new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q225"))
+
+                if add_p3:
+                    new_item.claims.add(datatypes.String(prop_nr="P3", value=wd_qid))
+                    print(f"  Added P3={wd_qid}")
+
+                summary = "Create artist from danslogen sync"
+                if wd_qid:
+                    summary += f" with Wikidata {wd_qid}"
+
+                new_item.write(
+                    login=client.wbi.login,
+                    summary=summary,
+                )
+                qid = new_item.id
+                print(f"  Created: {client.base_url}/wiki/Item:{qid}")
+
+                dancedb_labels[band_name.lower()] = {"qid": qid, "label": band_name}
+            elif response == "Skip":
+                print("Skipped")
+            elif response == "Skip all":
+                print("Skipping all remaining")
+                skip_all = True
+            elif response == "Abort":
+                print("Aborting")
+                abort = True
+                break
+
+    if abort:
+        print("\nAborted by user")
+    else:
+        print("\nDone!")

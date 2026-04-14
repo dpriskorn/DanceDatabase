@@ -75,8 +75,8 @@ class DancedbClient:
 
     def fetch_artists_from_dancedb(self) -> list[dict]:
         """Fetch all artist items from DanceDB (instance of Q225).
-        
-        Returns list of {qid, label, aliases}.
+
+        Returns list of {qid, label, aliases, p3}.
         """
         sparql = """
 PREFIX dd: <https://dance.wikibase.cloud/entity/>
@@ -84,10 +84,11 @@ PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-SELECT ?item ?label ?altLabel WHERE {
+SELECT ?item ?label ?altLabel ?p3 WHERE {
     ?item ddt:P1 dd:Q225 .
     OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
     OPTIONAL { ?item skos:altLabel ?altLabel FILTER(LANG(?altLabel) = "sv") }
+    OPTIONAL { ?item ddt:P3 ?p3 }
 }
 """
         try:
@@ -97,8 +98,9 @@ SELECT ?item ?label ?altLabel WHERE {
                 qid = r['item']['value'].split('/')[-1]
                 label = r.get('label', {}).get('value', '')
                 alt_label = r.get('altLabel', {}).get('value', '')
+                p3_value = r.get('p3', {}).get('value', '')
                 if qid not in artists_dict:
-                    artists_dict[qid] = {'qid': qid, 'label': label, 'aliases': []}
+                    artists_dict[qid] = {'qid': qid, 'label': label, 'aliases': [], 'p3': p3_value}
                 if alt_label:
                     artists_dict[qid].setdefault('aliases', []).append(alt_label)
             return list(artists_dict.values())

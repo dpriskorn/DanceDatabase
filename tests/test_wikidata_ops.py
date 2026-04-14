@@ -201,3 +201,59 @@ class TestMatchWikidataArtists:
         mock_client.wbi.item.get.assert_called_once_with(entity_id="Q227")
         mock_item.claims.add.assert_called_once()
         mock_item.write.assert_called_once()
+
+
+class TestSyncWikidataArtists:
+    @patch("src.models.commands.wikidata_ops.DancedbClient")
+    @patch("src.models.commands.wikidata_ops.dancedb_config")
+    def test_sync_wikidata_artists_uses_band_map(
+        self, mock_dancedb_config, MockDancedbClient
+    ):
+        from src.models.commands.wikidata_ops import sync_wikidata_artists
+
+        mock_dancedb_config.wikidata_dir = Path("/tmp/wikidata_sync_test")
+
+        wd_file = Path("/tmp/wikidata_sync_test/artists/2026-01-10.json")
+        wd_file.parent.mkdir(parents=True, exist_ok=True)
+        wd_file.write_text(json.dumps({
+            "Q123": {"label": "Test Band"}
+        }))
+
+        mock_client = MagicMock()
+        mock_client.fetch_artists_from_dancedb.return_value = []
+        mock_client.wbi = MagicMock()
+        mock_client.wbi.item = MagicMock()
+        mock_client.wbi.login = MagicMock()
+        mock_client.base_url = "https://dance.wikibase.cloud"
+        MockDancedbClient.return_value = mock_client
+
+        with patch("src.models.danslogen.maps.BAND_QID_MAP", {"Test Band": "Q999"}):
+            sync_wikidata_artists("2026-01-10", dry_run=True)
+
+        mock_client.fetch_artists_from_dancedb.assert_called_once()
+
+    @patch("src.models.commands.wikidata_ops.DancedbClient")
+    @patch("src.models.commands.wikidata_ops.dancedb_config")
+    def test_sync_wikidata_artists_no_missing(
+        self, mock_dancedb_config, MockDancedbClient
+    ):
+        from src.models.commands.wikidata_ops import sync_wikidata_artists
+
+        mock_dancedb_config.wikidata_dir = Path("/tmp/wikidata_sync_test2")
+
+        wd_file = Path("/tmp/wikidata_sync_test2/artists/2026-01-11.json")
+        wd_file.parent.mkdir(parents=True, exist_ok=True)
+        wd_file.write_text(json.dumps({
+            "Q999": {"label": "New Band"}
+        }))
+
+        mock_client = MagicMock()
+        mock_client.fetch_artists_from_dancedb.return_value = [
+            {"qid": "Q227", "label": "Existing Band", "aliases": []},
+        ]
+        MockDancedbClient.return_value = mock_client
+
+        with patch("src.models.danslogen.maps.BAND_QID_MAP", {"Existing Band": "Q227"}):
+            sync_wikidata_artists("2026-01-11", dry_run=True)
+
+        mock_client.wbi.item.new.assert_not_called()

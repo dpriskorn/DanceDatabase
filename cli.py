@@ -20,7 +20,7 @@ from src.models.commands.onbeat import run as scrape_onbeat
 from src.models.commands.cogwork import scrape as scrape_cogwork, upload as upload_cogwork
 from src.models.commands.folketshus import run as scrape_folketshus
 from src.models.commands.ensure_events import run as ensure_events
-from src.models.commands.wikidata_ops import scrape_wikidata_artists, match_wikidata_artists
+from src.models.commands.wikidata_ops import scrape_wikidata_artists, match_wikidata_artists, sync_wikidata_artists
 from src.models.commands.sync import (
     sync_danslogen,
     sync_bygdegardarna,
@@ -145,6 +145,17 @@ def main():
                        help="Match DanceDB artists to Wikidata and upload P3")
     p.add_argument("-d", "--date", default=None,
                     help="Date for Wikidata artists file (YYYY-MM-DD, default: today)")
+    p.add_argument("--dry-run", action="store_true",
+                    help="Preview without uploading")
+
+    p = sub.add_parser("sync-wikidata-artists",
+                       help="Create missing artists from danslogen in DanceDB with Wikidata match")
+    p.add_argument("-d", "--date", default=None,
+                    help="Date for Wikidata artists file (YYYY-MM-DD, default: today)")
+    p.add_argument("-m", "--month", default="april",
+                    help="Month name for danslogen (default: april)")
+    p.add_argument("-y", "--year", type=int, default=2026,
+                    help="Year for danslogen (default: 2026)")
     p.add_argument("--dry-run", action="store_true",
                     help="Preview without uploading")
 
@@ -291,6 +302,10 @@ def main():
     elif args.command == "match-wikidata-artists":
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
         match_wikidata_artists(date_str, dry_run=args.dry_run)
+
+    elif args.command == "sync-wikidata-artists":
+        date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
+        sync_wikidata_artists(date_str, month=args.month, year=args.year, dry_run=args.dry_run)
 
 
 if __name__ == "__main__":
