@@ -22,6 +22,18 @@ logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)
 
 
+class OnbeatApiEvent(BaseModel):
+    id: str
+    name: str
+    place: str
+    start: str
+    courselink: str
+    clublink: str
+    clubname: str
+    course_image: str = ""
+    club_image: Optional[str] = None
+
+
 class OnbeatEvents(BaseModel):
     """
     Parses Onbeat club pages to extract courses and social dance events.
@@ -51,14 +63,21 @@ class OnbeatEvents(BaseModel):
             "Johannesbergs Castle": "Q504",
             "Trafikgatan 54": "Q505",
             "Klemensnäs Folkets Hus": "Q122",
+            "Klemensnäs folkets hus": "Q122",
             "Umeå Folkets Hus": "Q17",
             "Kulturhus tio14": "Q518",
             "Talavidskolan": "Q521",
+            "Talavidskolan, Jönköping": "Q521",
             "Hälsans Hus": "Q519",
+            "Hälsans Hus, Repslagargatan": "Q519",
             "Bergnäsgården": "Q50",
             "Gnistan Folkets Hus": "Q520",
+            "Gnistan Folkets Hus i Gullänget": "Q520",
             "Bollsta Folkets Hus": "Q522",
-            "Gräsmyr Loge": "Q101"
+            "Bollsta Folkets Hus, Bollstabruk": "Q522",
+            "Gräsmyr Loge": "Q101",
+            "Sliperiet": "Q999",
+            "Teatergatan 5, Falun": "Q999"
         },
         description="Mapping of place to QID in DanceDatabase (case-insensitive)")
     price_override_map: dict[str, Decimal] = {
@@ -71,6 +90,9 @@ class OnbeatEvents(BaseModel):
     organizer_qid: str = ""
     container: Optional[Tag] = None
     cards: List[Tag] = []
+    api_events: List[OnbeatApiEvent] = []
+    current_api_event: Optional[OnbeatApiEvent] = None
+    events: List[DanceEvent] = Field(default_factory=list, description="Parsed dance events")
     start_date: datetime | None = None
     end_date: datetime | None = None
     start_time: str = ""
@@ -85,6 +107,27 @@ class OnbeatEvents(BaseModel):
         response.raise_for_status()
         self.soup = BeautifulSoup(response.text, "lxml")
         logger.info("Fetched page: %s", self.page_url)
+
+    def fetch_events_from_api(self) -> List[OnbeatApiEvent]:
+        """Fetch all events from the /explore API endpoint."""
+        response = requests.post(
+            f"{self.baseurl}/explore",
+            json={"selectedValues": {"selectedCommunities": [], "selectedDates": []}},
+            headers={"Content-Type": "application/json", "Accept": "application/json"}
+        )
+        response.raise_for_status()
+        data = response.json()
+        logger.info("Fetched %d events from API", len(data))
+        return [OnbeatApiEvent(**item) for item in data]
+
+    def fetch_event_details(self, clublink: str, courselink: str) -> BeautifulSoup:
+        """Fetch an individual event detail page and return parsed soup."""
+        url = f"{self.baseurl}/{clublink}/{courselink}"
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "lxml")
+        logger.debug("Fetched event details: %s", url)
+        return soup
 
     def map_dance_style_qids(self, text: str) -> set[str]:
         """Append all matching dance style QIDs based on text."""
@@ -214,147 +257,66 @@ class OnbeatEvents(BaseModel):
         return next((qid for key, qid in self.community_qid_map.items() if key.lower() in text.lower()), "")
 
     def parse_events(self) -> List[DanceEvent]:
-        if not self.cards:
-            self.find_cards()
-        if not self.organizer_name:
-            self.parse_community_name()
-
+        self.api_events = self.fetch_events_from_api()
+        
         events: List[DanceEvent] = []
 
-        for i, card in enumerate(self.cards, start=1):
-            if self.has_no_courses_message(card=card):
-                continue
-            logger.debug(f"card: \n{card}")
-            title_elem = card.find("h5", class_="card-title")
-            label_sv = title_elem.get_text(strip=True) if title_elem else ""
-            if not label_sv:
-                logger.warning(f"No label found for card {i}: {title_elem}")
+        for i, api_event in enumerate(self.api_events, start=1):
+            self.current_api_event = api_event
+            self.organizer_name = api_event.clubname
+            self.organizer_qid = self.map_community_qid(text=self.organizer_name)
+            
+            logger.info(f"Processing event {i}/{len(self.api_events)}: {api_event.name}")
+            
+            soup = self.fetch_event_details(api_event.clublink, api_event.courselink)
+            details = self._parse_event_details_from_soup(soup, api_event)
+            
+            if not details:
+                logger.warning(f"Skipping event with no details: {api_event.name}")
                 continue
 
-            event_url, event_id = self.parse_card_url(card=card)
-            details = {
-                "where": "",
-                "start_date": "",
-                "end_date": "",
-                "time": "",
-                "occasions": "",
-                "price": "",
-                "registration_opens": "",
-            }
-
-            for p in card.find_all("p"):
-                b = p.find("b")
-                if not b:
-                    continue
-                key = b.get_text(strip=True).rstrip(":")
-                value = b.next_sibling.strip() if b.next_sibling else ""
-                if not value:
-                    value = p.get_text(strip=True).replace(b.get_text(strip=True), "").strip()
-                if key == "Where":
-                    details["where"] = value
-                elif key == "Start date":
-                    details["start_date"] = value
-                elif key == "End date":
-                    details["end_date"] = value
-                elif key == "Time":
-                    self.parse_time_range(value)
-                    details["time"] = value
-                elif key == "Occasions":
-                    details["occasions"] = value
-                elif key == "Price":
-                    details["price"] = value
-                elif key == "Registration opens":
-                    # logger.debug(f"value: {value}")
-                    if "1970-01-01" in value:
-                        details["registration_opens"] = ""
-                        self.registration_open = True
-                    else:
-                        details["registration_opens"] = value
-            logger.debug(f"Found details:\n{details}")
             start_dt = self.parse_datetime(details["start_date"], self.start_time)
             end_dt = self.parse_datetime(details["end_date"], self.end_time)
 
-            price_normal = None
-            for key, override_price in self.price_override_map.items():
-                if key.lower() in label_sv.lower():
-                    price_normal = override_price
-                    logger.debug(f"Using price override {override_price} for event {label_sv}")
-                    break
-
-            if price_normal is None:
-                try:
-                    price_normal = Decimal(details["price"].replace("SEK", "").replace("kr", "").replace(",", ".").strip())
-                except Exception:
-                    logger.warning(f"Could not parse price '{details["price"]}' - defaulting to 0")
-                    price_normal = Decimal(0)
+            price_normal = self._extract_price(soup, api_event.name)
 
             dance_event_organizer = Organizer(
                 description=self.organizer_name,
                 official_website=self.page_url,
             )
 
-            if details["registration_opens"]:
-                if "CEST" in details["registration_opens"]:
-                    # extract time component
-                    parts = details["registration_opens"].split()
-                    time = parts[1]
-                    date = parts[0]
-                    logger.debug(f"parsing registration opens with date: {date} and time:{time}")
-                    registration_opens_dt = self.parse_datetime(date, time)
-                else:
-                    logger.debug(f"parsing registration opens from {details["registration_opens"]}")
-                    registration_opens_dt = self.parse_datetime(details["registration_opens"])
-                if registration_opens_dt is not None and registration_opens_dt < datetime.now().replace(tzinfo=CET):
-                    self.registration_open = True
-            else:
-                registration_opens_dt = None
+            registration_opens_dt = self._parse_registration_opens(details.get("registration_opens", ""))
             registration = Registration(
                 registration_opens=registration_opens_dt,
                 registration_open=self.registration_open,
-                advance_registration_required=True,  # hardcoded because everything in the site seems to be
-                cancelled=False,  # todo how do we handle this?
-                fully_booked=False,  # todo how do we handle this?
-                registration_closes=None  # not available
+                advance_registration_required=True,
+                cancelled=False,
+                fully_booked=False,
+                registration_closes=None
             )
 
-            description = self.parse_description(card)
+            description = self._parse_description(soup)
 
-            # venue
-            venue_text = f"{details["where"]} {description}"
+            venue_text = f"{details['where']} {description}"
             venue_qid = self.map_venue_qid(venue_text)
             if not venue_qid:
-                if questionary.confirm(f"Could not map venue from:\n'{venue_text}'\nSkip this event?", default=True).ask():
-                    logger.warning(f"Skipping event with unknown venue: {label_sv}")
-                    continue
-                else:
-                    raise Exception(f"Could not map to a venue QID from this text: \n'{venue_text}'\nsee {self.page_url} and {event_url}")
+                logger.warning(f"Could not map venue from: '{venue_text}' - skipping event")
+                continue
 
-            # style
-            style_text = f"{label_sv} {description}"
+            style_text = f"{api_event.name} {description}"
             dance_styles_qids = self.map_dance_style_qids(text=style_text)
             if not dance_styles_qids:
-                # fallback to WCS
                 logger.warning("Adding fallback dance style: WCS")
                 dance_styles_qids.add("Q15")
-                # raise Exception("could not match at least one dance style")
 
-            # recurring
-            occasions = details["occasions"]
-            # print(occasions)
-            number_of_occasions = 0
-            if occasions:
-                try:
-                    number_of_occasions = int(occasions.strip())
-                except TypeError:
-                    raise Exception(f"could not parse '{occasions}' to int")
-            if number_of_occasions > 1:
-                recurring = True
-            else:
-                recurring = False
+            number_of_occasions = int(details.get("occasions", "0").strip()) if details.get("occasions") else 0
+            recurring = number_of_occasions > 1
 
+            event_url = f"{self.baseurl}/{api_event.clublink}/{api_event.courselink}"
+            
             dance_event = DanceEvent(
-                id=event_id,
-                label={"sv": label_sv},
+                id=api_event.courselink,
+                label={"sv": api_event.name},
                 description={"sv": description},
                 location=details["where"],
                 start_timestamp=start_dt,
@@ -384,9 +346,120 @@ class OnbeatEvents(BaseModel):
                 weekly_recurring=recurring,
                 number_of_occasions=number_of_occasions
             )
-            # pprint(dance_event.model_dump())
-            # exit(0)
             events.append(dance_event)
+            self._reset_per_event_state()
 
-        logger.info("Parsed %d events for %s", len(events), self.organizer_name)
+        logger.info("Parsed %d events total", len(events))
+        self.events = events
         return events
+
+    def _reset_per_event_state(self) -> None:
+        """Reset state that is per-event to avoid carrying over between events."""
+        self.soup = None
+        self.start_time = ""
+        self.end_time = ""
+        self.registration_open = False
+        self.start_date = None
+        self.end_date = None
+
+    def _parse_event_details_from_soup(self, soup: BeautifulSoup, api_event: OnbeatApiEvent) -> Optional[dict]:
+        """Parse event details from the detail page soup."""
+        details = {
+            "where": api_event.place,
+            "start_date": api_event.start,
+            "end_date": "",
+            "time": "",
+            "occasions": "",
+            "price": "",
+            "registration_opens": "",
+        }
+
+        card_body = soup.find("div", class_="card-body")
+        if not card_body:
+            logger.warning("No card-body found in event page")
+            return details
+
+        for p in card_body.find_all("p"):
+            b = p.find("b")
+            if not b:
+                continue
+            span = b.find("span", class_="green-text")
+            if not span:
+                continue
+            label = span.get_text(strip=True)
+            value = b.next_sibling.strip() if b.next_sibling else ""
+            if not value:
+                continue
+
+            if label == "Where":
+                details["where"] = value
+            elif label == "Start date":
+                details["start_date"] = value
+            elif label == "End date":
+                details["end_date"] = value
+            elif label == "Time":
+                self.parse_time_range(value)
+                details["time"] = value
+            elif label == "Occasions":
+                details["occasions"] = value
+            elif label == "Registration opens":
+                details["registration_opens"] = value
+
+        logger.debug(f"Parsed details: {details}")
+        return details
+
+    def _parse_description(self, soup: BeautifulSoup) -> str:
+        """Parse description from event detail page."""
+        desc_elem = soup.find("p", class_="mt-5", attrs={"style": lambda s: s and "white-space: pre-wrap" in s})
+        if not desc_elem:
+            return ""
+        text = desc_elem.get_text(strip=True)
+        return text if text else ""
+
+    def _extract_price(self, soup: BeautifulSoup, event_name: str) -> Decimal:
+        """Extract price from event detail page."""
+        for key, override_price in self.price_override_map.items():
+            if key.lower() in event_name.lower():
+                logger.debug(f"Using price override {override_price} for event {event_name}")
+                return override_price
+
+        price_container = soup.find("div", class_="mt-5")
+        if not price_container:
+            price_container = soup.find("div", class_=lambda c: c and "mt-5" in c.split() if c else False)
+
+        if price_container:
+            option_cards = price_container.find_all("div", class_="option-card")
+            for card in option_cards:
+                text = card.get_text(strip=True)
+                import re
+                match = re.search(r"(\d+)\s*SEK", text)
+                if match:
+                    price_val = Decimal(match.group(1))
+                    logger.debug(f"Extracted price {price_val} for {event_name}")
+                    return price_val
+
+        logger.warning(f"Could not parse price for {event_name} - defaulting to 0")
+        return Decimal(0)
+
+    def _parse_registration_opens(self, reg_text: str) -> Optional[datetime]:
+        """Parse registration opens datetime from text."""
+        if not reg_text:
+            return None
+
+        try:
+            if "CET" in reg_text:
+                parts = reg_text.replace("CET", "").strip().split()
+                if len(parts) >= 2:
+                    dt_str = f"{parts[0]} {parts[1]}"
+                    reg_dt = datetime.strptime(dt_str, "%Y-%m-%d %H:%M").replace(tzinfo=CET)
+                    if reg_dt < datetime.now().replace(tzinfo=CET):
+                        self.registration_open = True
+                    return reg_dt
+            else:
+                reg_dt = datetime.strptime(reg_text, "%Y-%m-%d").replace(tzinfo=CET)
+                if reg_dt < datetime.now().replace(tzinfo=CET):
+                    self.registration_open = True
+                return reg_dt
+        except Exception as e:
+            logger.warning(f"Failed to parse registration opens: {reg_text} ({e})")
+        return None

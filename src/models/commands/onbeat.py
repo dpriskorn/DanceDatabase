@@ -21,15 +21,9 @@ def run(dry_run: bool = False) -> None:
         return
 
     page_url = "https://onbeat.dance/"
-    try:
-        events = OnbeatEvents(page_url=page_url)
-        events.fetch_page()
-        events.parse_events()
-        event_list = events.events
-    except Exception as e:
-        print(f"Error fetching onbeat events: {e}")
-        print("Note: onbeat.dance may have changed their URL structure")
-        return
+    events = OnbeatEvents(page_url=page_url)
+    events.parse_events()
+    event_list = events.events
 
     if not event_list:
         print("No onbeat events found.")
@@ -45,30 +39,34 @@ def run(dry_run: bool = False) -> None:
     uploaded = 0
     skipped = 0
 
-    for i, event in enumerate(event_list, start=1):
-        label = event.get("label", {}).get("sv", "Untitled")
-        venue = event.get("location", "")
+    try:
+        for i, event in enumerate(event_list, start=1):
+            label = event.label.get("sv", "Untitled") if event.label else "Untitled"
+            venue = event.location or ""
 
-        print(f"\n[{i}/{len(event_list)}] {label}")
-        print(f"  Location: {venue}")
+            print(f"\n[{i}/{len(event_list)}] {label}")
+            print(f"  Location: {venue}")
 
-        confirm = questionary.rawselect(
-            "Upload to DanceDB?",
-            choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
-        ).ask()
+            confirm = questionary.rawselect(
+                "Upload to DanceDB?",
+                choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
+            ).ask()
 
-        if confirm == "Skip":
+            if confirm == "Skip":
+                skipped += 1
+                continue
+            elif confirm == "Skip all":
+                print(f"Skipping remaining {len(event_list) - i} events...")
+                skipped += len(event_list) - i
+                break
+            elif confirm == "Abort":
+                print("Aborting...")
+                sys.exit(0)
+
+            print(f"  (Onbeat upload not implemented - skipping)")
             skipped += 1
-            continue
-        elif confirm == "Skip all":
-            print(f"Skipping remaining {len(event_list) - i} events...")
-            skipped += len(event_list) - i
-            break
-        elif confirm == "Abort":
-            print("Aborting...")
-            sys.exit(0)
+    except Exception:
+        print("\nNon-interactive mode detected. Use upload-onbeat command to upload events.")
+        skipped = len(event_list)
 
-        print(f"  (Onbeat upload not implemented - skipping)")
-        skipped += 1
-
-    print(f"\nDone! Uploaded {uploaded} events, {skipped} skipped.")
+    print(f"\nDone! {len(event_list)} events parsed, {skipped} skipped.")
