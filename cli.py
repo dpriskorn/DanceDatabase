@@ -30,7 +30,7 @@ from src.models.commands.sync import (
     sync_all,
     scrape_all,
 )
-from src.models.dancedb.workflow import run_all
+
 
 
 def main():
@@ -94,16 +94,16 @@ def main():
     p.add_argument("--yes", action="store_true",
                    help="Skip confirmation prompts")
 
-# === ONBEAT ===
-    p = sub.add_parser("onbeat-scrape",
+    # === ONBEAT ===
+    p = sub.add_parser("scrape-onbeat",
                        help="Fetch events")
-    p = sub.add_parser("onbeat-ensure-venues",
+    p = sub.add_parser("ensure-venues-onbeat",
                        help="Ensure venues exist")
     p.add_argument("--date", default=None,
                    help="Date of scraped data (default: today)")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without creating")
-    p = sub.add_parser("onbeat-upload",
+    p = sub.add_parser("upload-onbeat",
                        help="Upload to DanceDB")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
@@ -131,19 +131,7 @@ def main():
     p.add_argument("-m", "--match", action="store_true",
                   help="Match venues to DanceDB and create new venues")
 
-    # === WORKFLOW ===
-    p = sub.add_parser("run-all",
-                       help="Full workflow: scrape → match → upload")
-    p.add_argument("-m", "--month", default="april",
-                    help="Month name (default: april)")
-    p.add_argument("-y", "--year", type=int, default=2026,
-                    help="Year (default: 2026)")
-    p.add_argument("--dry-run", action="store_true",
-                    help="Preview without uploading")
-    p.add_argument("-l", "--limit", type=int, default=None,
-                    help="Limit number of rows")
-
-    # === WIKIDATA ===
+# === WIKIDATA ===
     p = sub.add_parser("scrape-wikidata-artists",
                        help="Fetch artists from Wikidata")
     p.add_argument("-d", "--date", default=None,
@@ -276,10 +264,10 @@ def main():
         )
 
     # ONBEAT
-    elif args.command == "onbeat-scrape":
+    elif args.command == "scrape-onbeat":
         scrape_onbeat()
 
-    elif args.command == "onbeat-upload":
+    elif args.command == "upload-onbeat":
         upload_onbeat(dry_run=args.dry_run)
 
     elif args.command == "onbeat-ensure-venues":
@@ -297,15 +285,6 @@ def main():
     # FOLKETSHUS
     elif args.command == "scrape-folketshus":
         scrape_folketshus(date_str=getattr(args, 'date', None), match=args.match)
-
-    # WORKFLOW
-    elif args.command == "run-all":
-        run_all(
-            month=args.month,
-            year=args.year,
-            dry_run=args.dry_run,
-            limit=args.limit,
-        )
 
     # SYNC COMMANDS
     elif args.command == "sync-danslogen":
