@@ -108,6 +108,8 @@ def main():
                       help="Fetch cogwork events from ALL sources")
     p.add_argument("-s", "--source", default=None,
                    help="Specific source (default: all)")
+    p.add_argument("--overwrite", action="store_true",
+                   help="Overwrite existing output files")
 
     p = sub.add_parser("upload-cogwork",
                       help="Upload cogwork events to DanceDB")
@@ -277,7 +279,7 @@ def main():
 
     # COGWORK
     elif args.command == "scrape-cogwork":
-        scrape_cogwork(source=args.source)
+        scrape_cogwork(source=args.source, overwrite=args.overwrite)
 
     elif args.command == "upload-cogwork":
         upload_cogwork(source=args.source, dry_run=args.dry_run)

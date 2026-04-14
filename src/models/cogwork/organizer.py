@@ -44,11 +44,11 @@ class CogworkOrganizer(Organizer):
 
     # === Start method ===
     # noinspection PyArgumentList,PyCallingNonCallable
-    def start(self):
+    def start(self, overwrite: bool = False):
         """Fetch all events and export them."""
         today_str = date.today().strftime("%Y-%m-%d")
         output_file = Path(self.json_output_folder) / f"{today_str}.json"
-        if output_file.exists():
+        if output_file.exists() and not overwrite:
             print(f"Output file already exists: {output_file}")
             return
 

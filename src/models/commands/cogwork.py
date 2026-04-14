@@ -22,11 +22,12 @@ def get_scrapers() -> dict:
     return scrapers
 
 
-def scrape(source: str | None = None) -> None:
+def scrape(source: str | None = None, overwrite: bool = False) -> None:
     """Scrape cogwork events.
 
     Args:
         source: Optional specific source, or None for all.
+        overwrite: If True, overwrite existing output files.
     """
     import importlib
     from datetime import date
@@ -62,7 +63,7 @@ def scrape(source: str | None = None) -> None:
             module = importlib.import_module(f"src.models.cogwork.scrapers.{name}")
             scraper_class = getattr(module, name.capitalize())
             scraper = scraper_class(json_output_folder=output_folder)
-            scraper.start()
+            scraper.start(overwrite=overwrite)
             print(f"  Done: {name}")
         except Exception as e:
             print(f"  Error: {name} - {e}")
