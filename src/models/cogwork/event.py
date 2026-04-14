@@ -257,24 +257,28 @@ class CogworkEvent(BaseModel):
         if self.event_type == EventType.DANCE:
             self.map_dance_style_qids(text=style_text)
             if not self.dance_styles_qids:
-                logger.warning(f"Could not map to any dance style QIDs from this text: '{style_text}' see {self.shop_url}")
-                style_choices = list(self.dance_style_qid_map.keys())
-                default_style = "socialdans"
-                if default_style not in style_choices:
-                    default_style = style_choices[0] if style_choices else None
-                if default_style:
-                    chosen = questionary.select(
-                        f"Select dance style for: '{style_text[:50]}...'",
-                        choices=style_choices,
-                        default=default_style
-                    ).ask()
-                    self.dance_styles_qids.add(self.dance_style_qid_map[chosen])
-                    logger.debug(f"User selected dance style: {chosen} ({self.dance_style_qid_map[chosen]})")
+                if self.organizer_slug in ("wannadance", "gasasteget"):
+                    self.dance_styles_qids.add("Q15")
+                    logger.warning(f"Auto-assigned west coast swing (fallback for {self.organizer_slug}): {self.shop_url}")
                 else:
-                    if questionary.confirm(f"Skip event? Could not map dance style from: '{style_text[:50]}...'", default=True).ask():
-                        self.skip = True
-                        return
-                    raise Exception(f"Could not map dance style QIDs from: '{style_text}'")
+                    logger.warning(f"Could not map to any dance style QIDs from this text: '{style_text}' see {self.shop_url}")
+                    style_choices = list(self.dance_style_qid_map.keys())
+                    default_style = "socialdans"
+                    if default_style not in style_choices:
+                        default_style = style_choices[0] if style_choices else None
+                    if default_style:
+                        chosen = questionary.select(
+                            f"Select dance style for: '{style_text[:50]}...'",
+                            choices=style_choices,
+                            default=default_style
+                        ).ask()
+                        self.dance_styles_qids.add(self.dance_style_qid_map[chosen])
+                        logger.debug(f"User selected dance style: {chosen} ({self.dance_style_qid_map[chosen]})")
+                    else:
+                        if questionary.confirm(f"Skip event? Could not map dance style from: '{style_text[:50]}...'", default=True).ask():
+                            self.skip = True
+                            return
+                        raise Exception(f"Could not map dance style QIDs from: '{style_text}'")
         now = datetime.now().replace(microsecond=0).isoformat()
 
         self.dance_event = DanceEvent(
