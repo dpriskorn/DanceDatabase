@@ -10,6 +10,7 @@ BYGDEGARDARNA_DIR = Path("data") / "bygdegardarna"
 ENRICHED_BYG_DIR = Path("data") / "bygdegardarna" / "enriched"
 DANCEDB_ARTISTS_DIR = Path("data") / "dancedb" / "artists"
 DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
+DANSLOGEN_ARTISTS_DIR = Path("data") / "danslogen" / "artists"
 
 
 class DataNotFoundError(Exception):
@@ -171,6 +172,30 @@ def load_venue_map() -> dict[str, str]:
     Raises DataNotFoundError if today's data file is not found.
     """
     return _get_data_instance().load_venue_map()
+
+
+def load_danslogen_artists() -> dict[str, dict]:
+    """Load danslogen artists with spelplan_id.
+    
+    Returns dict mapping band name (lowercase) to {name, spelplan_id}.
+    """
+    today = get_today_str()
+    artists_file = DANSLOGEN_ARTISTS_DIR / f"{today}.json"
+    if not artists_file.exists():
+        logger.warning(f"Danslogen artists file not found: {artists_file}")
+        return {}
+    
+    artists_data = json.loads(artists_file.read_text())
+    artists_map = {}
+    for a in artists_data:
+        name = a.get("name", "")
+        if name:
+            artists_map[name.lower()] = {
+                "name": name,
+                "spelplan_id": a.get("spelplan_id", ""),
+            }
+    logger.info(f"Loaded {len(artists_map)} danslogen artists")
+    return artists_map
 
 
 def get_today_str() -> str:

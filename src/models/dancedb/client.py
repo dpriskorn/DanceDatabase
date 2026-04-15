@@ -61,9 +61,8 @@ class DancedbClient:
             new_item.descriptions.set('sv', 'artist')
             new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q225'))
             if spelplan_id:
-                spelplan_url = f"https://danslogen.se/spelplan/{spelplan_id}"
-                new_item.claims.add(datatypes.Item(prop_nr='P46', value=spelplan_url))
-                logger.info(f"Band '{band_name}' spelplan: %s", spelplan_url)
+                new_item.claims.add(datatypes.String(prop_nr='P46', value=spelplan_id))
+                logger.info(f"Band '{band_name}' P46: %s", spelplan_id)
             else:
                 logger.warning(f"Band '{band_name}' created WITHOUT spelplan_id (P46)")
             new_item.write(login=self.wbi.login)
@@ -84,7 +83,7 @@ class DancedbClient:
     def fetch_artists_from_dancedb(self) -> list[dict]:
         """Fetch all artist items from DanceDB (instance of Q225).
 
-        Returns list of {qid, label, aliases, p3}.
+        Returns list of {qid, label, aliases, p3, p46}.
         """
         sparql = """
 PREFIX dd: <https://dance.wikibase.cloud/entity/>
@@ -92,11 +91,12 @@ PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-SELECT ?item ?label ?altLabel ?p3 WHERE {
+SELECT ?item ?label ?altLabel ?p3 ?p46 WHERE {
     ?item ddt:P1 dd:Q225 .
     OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
     OPTIONAL { ?item skos:altLabel ?altLabel FILTER(LANG(?altLabel) = "sv") }
     OPTIONAL { ?item ddt:P3 ?p3 }
+    OPTIONAL { ?item ddt:P46 ?p46 }
 }
 """
         try:
@@ -107,7 +107,8 @@ SELECT ?item ?label ?altLabel ?p3 WHERE {
                 label = row.get('label', {}).get('value', '')
                 alt_labels = row.get('altLabel', {}).get('value', '').split(',') if 'altLabel' in row else []
                 p3 = row.get('p3', {}).get('value', '')
-                items.append({'qid': qid, 'label': label, 'aliases': alt_labels, 'p3': p3})
+                p46 = row.get('p46', {}).get('value', '')
+                items.append({'qid': qid, 'label': label, 'aliases': alt_labels, 'p3': p3, 'p46': p46})
             logger.info(f"Fetched {len(items)} artists from DanceDB")
             return items
         except Exception as e:
@@ -219,6 +220,18 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             return True
         except Exception as e:
             logger.error(f"Error setting property on '{qid}': {e}")
+            return False
+
+    def set_artist_spelplan(self, qid: str, spelplan_id: str) -> bool:
+        """Set P46 (spelplan ID) on existing artist item. Returns True on success."""
+        try:
+            item = self.wbi.item.get(qid)
+            item.claims.add(datatypes.String(prop_nr='P46', value=spelplan_id))
+            item.write(login=self.wbi.login)
+            logger.info(f"Added P46 to artist {qid}: {spelplan_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error setting P46 on '{qid}': {e}")
             return False
 
     def add_event(self, band_qid: str, venue_qid: str, start: datetime, end: datetime, status_qid: str = 'Q566') -> bool:

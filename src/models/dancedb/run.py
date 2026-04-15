@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from datetime import date
 
@@ -7,6 +8,64 @@ from rapidfuzz import process as fuzz_process
 from src.models.dancedb.client import DancedbClient
 from src.models.dancedb.ensure_events import configure_wbi, fetch_events_from_dancedb, EVENTS_DIR, ARTISTS_DIR, \
     fetch_existing_venues, logger
+
+logger = logging.getLogger(__name__)
+
+
+def sync_artist_spelplan(dry_run: bool = False) -> None:
+    """Sync spelplan_id from danslogen data to DanceDB artists (P46).
+    
+    Matches artists from danslogen artists data with DanceDB artists and updates missing P46 values.
+    """
+    from src.models.danslogen.data import load_danslogen_artists
+
+    configure_wbi()
+    client = DancedbClient()
+
+    danslogen_artists = load_danslogen_artists()
+    if not danslogen_artists:
+        logger.warning("No danslogen artists found, skipping spelplan sync")
+        return
+
+    print(f"\n=== Sync artist spelplan IDs ===")
+    print(f"Loaded {len(danslogen_artists)} danslogen artists")
+
+    db_artists = client.fetch_artists_from_dancedb()
+    print(f"Loaded {len(db_artists)} DanceDB artists")
+
+    updated = 0
+    skipped = 0
+
+    for artist in db_artists:
+        qid = artist.get("qid", "")
+        label = artist.get("label", "")
+        existing_p46 = artist.get("p46", "")
+
+        if not label:
+            continue
+
+        danslogen = danslogen_artists.get(label.lower(), {})
+        spelplan_id = danslogen.get("spelplan_id", "")
+
+        if not spelplan_id:
+            continue
+
+        if existing_p46:
+            skipped += 1
+            continue
+
+        print(f"\n[{qid}] {label}")
+        print(f"  Adding P46: {spelplan_id}")
+
+        if not dry_run:
+            client.set_artist_spelplan(qid, spelplan_id)
+            updated += 1
+        else:
+            print(f"  (dry run - would add)")
+
+    print(f"\n=== Summary ===")
+    print(f"Updated: {updated}")
+    print(f"Skipped (already has P46 or no spelplan_id): {skipped}")
 
 
 def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: bool = False) -> list[dict]:

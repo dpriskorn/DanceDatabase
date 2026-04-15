@@ -50,14 +50,30 @@ class TestBandMapperResolve:
 
 
 class TestBandMapperWithClient:
+    @patch('src.models.danslogen.band_mapper.load_danslogen_artists')
     @patch('src.models.danslogen.band_mapper.load_band_map')
     @patch('src.models.danslogen.band_mapper.fuzzy_match_qid', return_value=None)
-    def test_uses_client_when_no_static_match(self, mock_fuzzy, mock_load):
+    def test_uses_client_when_no_static_match(self, mock_fuzzy, mock_load, mock_danslogen):
         mock_load.return_value = {}
+        mock_danslogen.return_value = {}
         mock_client = MagicMock()
         mock_client.get_or_create_band.return_value = "Q300"
         mapper = BandMapper(client=mock_client)
         result = mapper.resolve("NewBand")
 
         assert result == "Q300"
-        mock_client.get_or_create_band.assert_called_once_with("NewBand")
+        mock_client.get_or_create_band.assert_called_once_with("NewBand", spelplan_id="")
+
+    @patch('src.models.danslogen.band_mapper.load_danslogen_artists')
+    @patch('src.models.danslogen.band_mapper.load_band_map')
+    @patch('src.models.danslogen.band_mapper.fuzzy_match_qid', return_value=None)
+    def test_passes_spelplan_id_to_client(self, mock_fuzzy, mock_load, mock_danslogen):
+        mock_load.return_value = {}
+        mock_danslogen.return_value = {"newband": {"name": "NewBand", "spelplan_id": "kent_henke"}}
+        mock_client = MagicMock()
+        mock_client.get_or_create_band.return_value = "Q300"
+        mapper = BandMapper(client=mock_client)
+        result = mapper.resolve("NewBand")
+
+        assert result == "Q300"
+        mock_client.get_or_create_band.assert_called_once_with("NewBand", spelplan_id="kent_henke")
