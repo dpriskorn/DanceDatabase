@@ -6,7 +6,7 @@ from datetime import date
 
 import config
 from src.models.dancedb.client import DancedbClient
-from src.models.bygdegardarna import fetch_markerdata
+from src.models.bygdegardarna.venue import fetch_markerdata
 from src.models.danslogen.fuzzy import fuzzy_match_qid
 from wikibaseintegrator.wbi_config import config as wbi_config
 

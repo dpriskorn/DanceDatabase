@@ -21,7 +21,7 @@ from src.models.cogwork.commands import scrape as scrape_cogwork, upload as uplo
 from src.models.folketshus.venue import run as scrape_folketshus
 from src.models.dancedb.ensure_events import run as ensure_events
 from src.models.wikidata.operations import scrape_wikidata_artists, match_wikidata_artists, sync_wikidata_artists
-from models.dancedb.sync import (
+from src.models.dancedb.sync import (
     sync_danslogen,
     sync_bygdegardarna,
     sync_onbeat,
@@ -225,7 +225,7 @@ def main():
         month = args.month
         year = args.year
         if month is None or year is None:
-            from models.dancedb.sync import get_current_month_year
+            from src.models.dancedb.sync import get_current_month_year
             month, year = get_current_month_year()
         scrape_all(month=month, year=year)
 
