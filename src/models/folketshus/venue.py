@@ -204,8 +204,14 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
                 if fuzzy:
                     matched_qid = fuzzy[1]
                     print(f"[{i}/{total}] Fuzzy match: {venue.name} -> {matched_qid} ('{fuzzy[0]}', score={fuzzy[2]})")
-                    confirm = questionary.confirm(f"Accept fuzzy match ({fuzzy[2]:.1f}%?)").ask()
-                    if not confirm:
+                    choice = questionary.select(
+                        f"Accept fuzzy match ({fuzzy[2]:.1f}%?)?",
+                        choices=["Yes (Recommended)", "Skip", "Abort"],
+                    ).ask()
+                    if choice == "Abort":
+                        print("\nAborted.")
+                        return enriched, unmatched
+                    if choice == "Skip":
                         matched_qid = None
 
         if matched_qid:
