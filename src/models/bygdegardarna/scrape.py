@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 import requests
 
 
-def fetch_markerdata() -> List[Dict[str, Any]]:
+def scrape() -> List[Dict[str, Any]]:
     url = "https://bygdegardarna.se/hitta-bygdegard/"
     resp = requests.get(url)
     resp.raise_for_status()

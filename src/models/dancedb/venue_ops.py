@@ -6,7 +6,7 @@ from datetime import date
 
 import config
 from src.models.dancedb.client import DancedbClient
-from src.models.bygdegardarna.venue import fetch_markerdata
+from src.models.bygdegardarna.scrape import scrape
 from src.models.danslogen.fuzzy import fuzzy_match_qid
 from wikibaseintegrator.wbi_config import config as wbi_config
 
@@ -27,7 +27,7 @@ def scrape_bygdegardarna(date_str: str | None = None) -> None:
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print(f"\n=== Scrape bygdegardarna venues ===")
 
-    venues = fetch_markerdata()
+    venues = scrape()
     print(f"Found {len(venues)} venues")
 
     output_file = config.bygdegardarna_dir / f"{date_str}.json"

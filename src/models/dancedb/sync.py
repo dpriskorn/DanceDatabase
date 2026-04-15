@@ -68,7 +68,7 @@ def scrape_all(month: str, year: int) -> None:
     from src.models.danslogen.event_ops import scrape_danslogen
     from src.models.dancedb.venue_ops import scrape_bygdegardarna
     from src.models.onbeat.run import run as scrape_onbeat
-    from src.models.cogwork.commands import scrape as scrape_cogwork
+    from src.models.cogwork.scrape import scrape as scrape_cogwork
     from src.models.folketshus.venue import run as scrape_folketshus
     from src.models.wikidata.wikidata_ops import scrape_wikidata_artists
 
@@ -248,7 +248,8 @@ def sync_onbeat(dry_run: bool = False) -> bool:
 
 def sync_cogwork(dry_run: bool = False) -> bool:
     """Sync cogwork events: scrape + upload."""
-    from src.models.cogwork.commands import scrape as scrape_cogwork, upload as upload_cogwork
+    from src.models.cogwork.scrape import scrape as scrape_cogwork
+    from models.cogwork.upload import upload as upload_cogwork
 
     print("\n" + "=" * 50)
     print("SYNC COGWORK")

@@ -17,9 +17,10 @@ from src.models.danslogen.event_ops import (
     upload_events,
 )
 from src.models.onbeat.run import run as scrape_onbeat
-from src.models.cogwork.commands import scrape as scrape_cogwork, upload as upload_cogwork
+from src.models.cogwork.scrape import scrape as scrape_cogwork
+from src.models.cogwork.upload import upload as upload_cogwork
 from src.models.folketshus.venue import run as scrape_folketshus
-from src.models.dancedb.ensure_events import run as ensure_events
+from src.models.dancedb.run import run as ensure_events
 from src.models.wikidata.operations import scrape_wikidata_artists, match_wikidata_artists, sync_wikidata_artists
 from src.models.dancedb.sync import (
     sync_danslogen,

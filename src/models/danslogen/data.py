@@ -3,18 +3,15 @@ import logging
 from datetime import date
 from pathlib import Path
 
-from src.models.dancedb.client import DancedbClient
-from src.models.danslogen.fuzzy import fuzzy_match_qid
-
 logger = logging.getLogger(__name__)
-
-DANCEDB_ARTISTS_DIR = Path("data") / "dancedb" / "artists"
-DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
 
 
 class DataNotFoundError(Exception):
     """Raised when required JSON data file is not found."""
     pass
+
+DANCEDB_ARTISTS_DIR = Path("data") / "dancedb" / "artists"
+DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
 
 
 def get_today_str() -> str:
