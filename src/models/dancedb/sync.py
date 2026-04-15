@@ -1,4 +1,5 @@
 """Unified sync commands for all data sources."""
+import json
 import logging
 import sys
 from datetime import date
@@ -42,13 +43,31 @@ class SyncStep:
     input_files: list[Path]
     output_files: list[Path]
 
+    def _has_content(self, f: Path) -> bool:
+        """Check if file exists and has content (not empty)."""
+        if not f.exists():
+            return False
+        if f.suffix == ".json":
+            try:
+                content = f.read_text()
+                if content == "[]" or content == "{}" or content.strip() == "":
+                    return False
+                data = json.loads(content)
+                if isinstance(data, (list, dict)) and len(data) == 0:
+                    return False
+            except json.JSONDecodeError:
+                pass
+        return True
+
     def needs_run(self, force: bool = False) -> bool:
-        """Check if step needs to run (missing input OR missing output)."""
+        """Check if step needs to run (missing input OR missing output OR empty input)."""
         if force:
             return True
         if not self.input_files:
             return not all(f.exists() for f in self.output_files) if self.output_files else True
         if any(not f.exists() for f in self.input_files):
+            return True
+        if any(not self._has_content(f) for f in self.input_files):
             return True
         return any(not f.exists() for f in self.output_files) if self.output_files else False
 
