@@ -162,9 +162,9 @@ class TestDanslogenTableRow:
         result = DanslogenTableRow.from_row(row)
 
         assert result is not None
-        assert result.time == "Jive"
-        assert result.band == "Birka Gotland"
-        assert result.venue == "Stockholm"
+        assert result.time == ""
+        assert result.band == "Jive"
+        assert result.venue == "Birka Gotland"
 
     def test_handles_empty_venue(self):
         row = MagicMock()

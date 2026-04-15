@@ -131,59 +131,101 @@ class DanslogenTableRow(BaseModel):
         if value_stripped in COUNTIES:
             return "lan"
 
+        for county in COUNTIES:
+            if value_stripped.lower() == county.lower():
+                return "lan"
+
         if value_stripped in MUNICIPALITIES or value_stripped in URBAN_AREAS:
             return "ort"
+
+        value_lower = value_stripped.lower()
+        if any(keyword in value_lower for keyword in cls.VENUE_KEYWORDS):
+            return "venue"
 
         return "unknown"
 
     @classmethod
     def from_row(cls, row: Tag) -> Optional["DanslogenTableRow"]:
-        _load_static_data()
-
         cells = row.find_all("td")
-        if len(cells) < 9:
+
+        if len(cells) < 6:
             return None
+
+        _load_static_data()
 
         if cells[0].get_text(strip=True) == "":
             weekday = cells[1].get_text(strip=True)
             day = cells[2].get_text(strip=True)
-            time_val = cells[3].get_text(strip=True)
-            band_val = cells[4].get_text(strip=True)
-            venue_val = cells[5].get_text(strip=True)
-            ort_val = cells[6].get_text(strip=True)
-            kommun_val = cells[7].get_text(strip=True)
-            lan_val = cells[8].get_text(strip=True)
-            ovrigt_val = cells[9].get_text(strip=True) if len(cells) > 9 else ""
+            content_cells = cells[3:10]
         else:
             weekday = cells[0].get_text(strip=True)
             day = cells[1].get_text(strip=True)
-            time_val = cells[2].get_text(strip=True)
-            band_val = cells[3].get_text(strip=True)
-            venue_val = cells[4].get_text(strip=True)
-            ort_val = cells[5].get_text(strip=True)
-            kommun_val = cells[6].get_text(strip=True)
-            lan_val = cells[7].get_text(strip=True)
-            ovrigt_val = cells[8].get_text(strip=True)
+            content_cells = cells[2:10]
 
         cell_texts = [c.get_text(strip=True) for c in cells]
         cancelled = cls._is_cancelled(cell_texts)
 
-        if not time_val and band_val:
-            time_val = band_val
-            band_val = venue_val
-            venue_val = ort_val
-            ort_val = kommun_val
-            kommun_val = lan_val
-            lan_val = ovrigt_val
-            ovrigt_val = ""
+        if not day.isdigit():
+            raise InvalidRowError(f"Day field is not a valid number: '{day}'")
 
-        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_venue_empty(
-            venue_val, ort_val, kommun_val, lan_val, ovrigt_val
-        )
+        if weekday and weekday not in VALID_WEEKDAYS:
+            raise InvalidRowError(
+                f"Weekday '{weekday}' not in valid weekdays: {VALID_WEEKDAYS}"
+            )
 
-        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_lan_empty(
-            venue_val, ort_val, kommun_val, lan_val, ovrigt_val
-        )
+        time_val = ""
+        band_val = ""
+        venue_val = ""
+        ort_val = ""
+        kommun_val = ""
+        lan_val = ""
+        ovrigt_val = ""
+
+        field_names = ["time", "band", "venue", "ort", "kommun", "lan", "ovrigt"]
+        i = 0
+
+        for cell in content_cells:
+            content = cell.get_text(strip=True)
+
+            if i >= len(field_names):
+                break
+
+            field_type = field_names[i]
+
+            if not content:
+                i += 1
+                continue
+
+            content_type = cls._classify_content(content)
+
+            if field_type == "band":
+                band_val = content
+            elif field_type == "time":
+                if content_type == "time" and not time_val:
+                    time_val = content
+                else:
+                    band_val = content
+            elif field_type == "venue":
+                if not venue_val:
+                    venue_val = content
+                elif not ort_val:
+                    ort_val = content
+            elif field_type == "ort":
+                if not ort_val:
+                    ort_val = content
+                elif not kommun_val:
+                    kommun_val = content
+            elif field_type == "kommun":
+                if not kommun_val:
+                    kommun_val = content
+                elif not lan_val:
+                    lan_val = content
+            elif field_type == "lan":
+                lan_val = content
+            elif field_type == "ovrigt":
+                ovrigt_val = content
+
+            i += 1
 
         if not band_val or not band_val.strip():
             return None
@@ -192,14 +234,6 @@ class DanslogenTableRow(BaseModel):
             raise InvalidRowError(
                 f"Band field contains time range '{band_val}' - column mapping error. "
                 f"Row cells: {[c.get_text(strip=True) for c in cells]}"
-            )
-
-        if not day.isdigit():
-            raise InvalidRowError(f"Day field is not a valid number: '{day}'")
-
-        if weekday and weekday not in VALID_WEEKDAYS:
-            raise InvalidRowError(
-                f"Weekday '{weekday}' not in valid weekdays: {VALID_WEEKDAYS}"
             )
 
         venue = venue_val or ort_val
@@ -218,24 +252,3 @@ class DanslogenTableRow(BaseModel):
             cancelled=cancelled,
             venue_qid=venue_qid,
         )
-
-    @classmethod
-    def _shift_columns_if_venue_empty(
-        cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str
-    ) -> tuple[str, str, str, str, str]:
-        if not venue_val and ort_val:
-            ort_lower = ort_val.lower()
-            if any(keyword in ort_lower for keyword in cls.VENUE_KEYWORDS):
-                return ort_val, kommun_val, lan_val, ovrigt_val, ""
-        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
-
-    @classmethod
-    def _shift_columns_if_lan_empty(
-        cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str
-    ) -> tuple[str, str, str, str, str]:
-        if not lan_val and ovrigt_val:
-            ovrigt_stripped = ovrigt_val.strip()
-            for lan in COUNTIES:
-                if ovrigt_stripped == lan or ovrigt_stripped.startswith(lan + " "):
-                    return venue_val, ort_val, kommun_val, ovrigt_val, ""
-        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
