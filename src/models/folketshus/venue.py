@@ -179,29 +179,34 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
 
     enriched = []
     unmatched = []
+    total = len(venues)
+    print(f"\nMatching {total} folketshus venues...")
 
-    for venue in venues:
+    for i, venue in enumerate(venues, 1):
         name_lower = venue.name.lower()
         matched_qid = None
 
         if name_lower in db_labels:
             matched_qid = db_labels[name_lower]
-            print(f"Exact match: {venue.name} -> {matched_qid}")
+            print(f"[{i}/{total}] Exact match: {venue.name} -> {matched_qid}")
         else:
-            fuzzy = fuzzy_match(venue.name, db_labels)
-            if fuzzy:
-                matched_qid = fuzzy[1]
-                print(f"Fuzzy match: {venue.name} -> {matched_qid} ('{fuzzy[0]}', score={fuzzy[2]})")
-                confirm = questionary.confirm(f"Accept fuzzy match ({fuzzy[2]:.1f}%?)").ask()
-                if not confirm:
-                    matched_qid = None
-            if not matched_qid:
-                for qid, (lat2, lng2) in db_coords.items():
-                    dist = haversine_distance(venue.lat, venue.lng, lat2, lng2)
-                    if dist <= COORD_DISTANCE_KM:
-                        matched_qid = qid
-                        print(f"Coord match: {venue.name} -> {qid} ({dist:.1f}km)")
-                        break
+            coord_match = None
+            for qid, (lat2, lng2) in db_coords.items():
+                dist = haversine_distance(venue.lat, venue.lng, lat2, lng2)
+                if dist <= COORD_DISTANCE_KM:
+                    coord_match = (qid, dist)
+                    break
+            if coord_match:
+                matched_qid = coord_match[0]
+                print(f"[{i}/{total}] Coord match: {venue.name} -> {qid} ({coord_match[1]:.1f}km)")
+            else:
+                fuzzy = fuzzy_match(venue.name, db_labels)
+                if fuzzy:
+                    matched_qid = fuzzy[1]
+                    print(f"[{i}/{total}] Fuzzy match: {venue.name} -> {matched_qid} ('{fuzzy[0]}', score={fuzzy[2]})")
+                    confirm = questionary.confirm(f"Accept fuzzy match ({fuzzy[2]:.1f}%?)").ask()
+                    if not confirm:
+                        matched_qid = None
 
         if matched_qid:
             enriched.append(
