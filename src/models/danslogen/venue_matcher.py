@@ -10,8 +10,6 @@ from src.models.danslogen.venue_mapper import VenueMapper
 
 logger = logging.getLogger(__name__)
 
-FUZZY_THRESHOLD = 85
-
 
 class VenueMatcher:
     """Resolves venue names to QIDs with coordinate matching.

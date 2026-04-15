@@ -3,7 +3,11 @@ from typing import Optional
 from rapidfuzz import fuzz, process
 
 
-def fuzzy_match_qid(venue_name: str, qid_map: dict[str, str], threshold: int = 85) -> Optional[tuple[str, str, int]]:
+def fuzzy_match_qid(venue_name: str, qid_map: dict[str, str], threshold: int | None = None) -> Optional[tuple[str, str, int]]:
+    if threshold is None:
+        from config import FUZZY_THRESHOLD
+
+        threshold = FUZZY_THRESHOLD
     """Find best matching QID using token_set_ratio. Handles subset matches well.
     Returns (matched_key, qid, score) or None."""
     if not venue_name:

@@ -14,8 +14,6 @@ from src.models.danslogen.fuzzy import fuzzy_match_qid
 
 logger = logging.getLogger(__name__)
 
-FUZZY_THRESHOLD = 85
-
 
 def create_venue(venue_name: str, lat: float, lng: float, external_ids: dict[str, str] | None = None, client=None) -> str | None:
     """Create a new venue in DanceDB."""
@@ -129,7 +127,7 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
             matched_count += 1
         else:
             fuzzy = fuzzy_match_qid(title, db_labels)
-            if fuzzy and fuzzy[2] >= FUZZY_THRESHOLD:
+            if fuzzy and fuzzy[2] >= config.FUZZY_THRESHOLD:
                 venue["qid"] = fuzzy[1]
                 enriched.append(venue)
                 matched_count += 1

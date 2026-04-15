@@ -26,7 +26,6 @@ HEADERS = {
     "Referer": "https://www.folketshusochparker.se/medlemmar/",
 }
 
-FUZZY_THRESHOLD = 85
 COORD_DISTANCE_KM = 1.0
 
 UNMATCHED_DIR = Path("data") / "folketshus" / "unmatched"
@@ -73,15 +72,16 @@ def fuzzy_match(text: str, candidates: dict[str, str]) -> tuple[str, str, float]
     """Fuzzy match text against candidates. Returns (label, qid, score) or None."""
     from rapidfuzz import fuzz
 
+    threshold = config.FUZZY_THRESHOLD
     text_lower = text.lower()
     best = None
     best_score = 0
     for label_lower, qid in candidates.items():
         score = fuzz.ratio(text_lower, label_lower)
-        if score >= FUZZY_THRESHOLD and score > best_score:
+        if score >= threshold and score > best_score:
             best_score = score
             best = (label_lower, qid)
-    if best_score >= FUZZY_THRESHOLD:
+    if best_score >= threshold:
         return (best[0], best[1], best_score)
     return None
 
