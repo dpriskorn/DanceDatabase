@@ -19,7 +19,7 @@ def create_venue(venue_name: str, lat: float, lng: float, external_ids: dict[str
     """Create a new venue in DanceDB."""
     if client is None:
         client = DancedbClient()
-    return client.create_venue(venue_name=venue_name, lat=lat, lng=lng, external_ids=external_ids)
+    return client.create_venue(venue_name=venue_name, latitude=lat, longitude=lng, external_ids=external_ids)
 
 
 def scrape_bygdegardarna(date_str: str | None = None) -> None:
