@@ -6,6 +6,46 @@ from datetime import date
 
 sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
 
+COMMANDS = {
+    "DANSLOGEN": [
+        ("scrape-danslogen", "Fetch danslogen event rows"),
+        ("ensure-venues", "Ensure danslogen venues exist in DanceDB"),
+        ("upload-events", "Upload danslogen events to DanceDB"),
+        ("ensure-events", "Ensure all event venues exist in DanceDB"),
+    ],
+    "VENUES": [
+        ("scrape-bygdegardarna", "Fetch bygdegardarna venues with coordinates"),
+        ("scrape-dancedb-venues", "Fetch existing venues from DanceDB"),
+        ("match-venues", "Match bygdegardarna venues to DanceDB"),
+    ],
+    "ONBEAT": [
+        ("scrape-onbeat", "Fetch events"),
+        ("ensure-venues-onbeat", "Ensure venues exist"),
+        ("upload-onbeat", "Upload to DanceDB"),
+    ],
+    "COGWORK": [
+        ("scrape-cogwork", "Fetch cogwork events from ALL sources"),
+        ("upload-cogwork", "Upload cogwork events to DanceDB"),
+    ],
+    "FOLKETSHUS": [
+        ("scrape-folketshus", "Fetch folketshus och parker venues"),
+    ],
+    "WIKIDATA": [
+        ("scrape-wikidata-artists", "Fetch artists from Wikidata"),
+        ("match-wikidata-artists", "Match DanceDB artists to Wikidata"),
+        ("sync-wikidata-artists", "Create missing artists from danslogen"),
+    ],
+    "SYNC (FULL WORKFLOWS)": [
+        ("sync-danslogen", "wikidata → scrape → ensure-venues → upload"),
+        ("sync-bygdegardarna", "scrape → fetch-dancedb → match-venues"),
+        ("sync-onbeat", "scrape + upload"),
+        ("sync-cogwork", "scrape + upload"),
+        ("sync-folketshus", "scrape + match"),
+        ("sync-all", "Sync all sources in sequence"),
+        ("scrape-all", "Scrape all data sources at once"),
+    ],
+}
+
 from src.models.dancedb.venue_ops import (
     scrape_bygdegardarna,
     scrape_dancedb_venues,
@@ -34,11 +74,28 @@ from src.models.dancedb.sync import (
 
 
 
-def main():
-    parser = argparse.ArgumentParser(description="DanceDB CLI")
-    sub = parser.add_subparsers(dest="command", required=True)
+def print_commands():
+    print("DanceDB CLI Commands\n")
+    for category, commands in COMMANDS.items():
+        print(f"{category}:")
+        for cmd, desc in commands:
+            print(f"  {cmd:<30} {desc}")
+        print()
 
-    # === DANSLOGEN ===
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="DanceDB CLI")
+    parser.add_argument("-l", "--list", action="store_true", help="List available commands")
+    parser.add_argument("command", nargs="?", default=None)
+    args = parser.parse_args()
+    if args.list:
+        print_commands()
+        return
+    if args.command is None:
+        print_commands()
+        return
+
+    sub = parser.add_subparsers(dest="command")
     p = sub.add_parser("scrape-bygdegardarna",
                      help="Fetch bygdegardarna venues with coordinates")
     p.add_argument("-d", "--date", default=None,

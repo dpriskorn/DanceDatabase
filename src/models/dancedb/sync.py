@@ -70,7 +70,7 @@ def scrape_all(month: str, year: int) -> None:
     from src.models.onbeat.run import run as scrape_onbeat
     from src.models.cogwork.scrape import scrape as scrape_cogwork
     from src.models.folketshus.venue import run as scrape_folketshus
-    from src.models.wikidata.wikidata_ops import scrape_wikidata_artists
+    from src.models.wikidata.operations import scrape_wikidata_artists
 
     date_str = date.today().strftime("%Y-%m-%d")
     data_dir = get_data_dir()
@@ -113,7 +113,7 @@ def sync_danslogen(
     """Sync danslogen events with prerequisite checking."""
     from src.models.danslogen.event_ops import scrape_danslogen, upload_events
     from src.models.dancedb.venue_ops import ensure_venues
-    from src.models.wikidata.wikidata_ops import sync_wikidata_artists
+    from src.models.wikidata.operations import sync_wikidata_artists
 
     if month is None or year is None:
         month, year = get_current_month_year()
@@ -249,7 +249,7 @@ def sync_onbeat(dry_run: bool = False) -> bool:
 def sync_cogwork(dry_run: bool = False) -> bool:
     """Sync cogwork events: scrape + upload."""
     from src.models.cogwork.scrape import scrape as scrape_cogwork
-    from models.cogwork.upload import upload as upload_cogwork
+    from src.models.cogwork.upload import upload as upload_cogwork
 
     print("\n" + "=" * 50)
     print("SYNC COGWORK")
