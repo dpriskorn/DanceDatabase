@@ -1,12 +1,13 @@
+import datetime
 import logging
 import os
-import datetime
 import time
 from pathlib import Path
 
+import validate_data
+
 import config
 from src.models.onbeat.organizers import OnbeatOrganizers
-import validate_data
 
 logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)

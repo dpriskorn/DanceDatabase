@@ -12,7 +12,7 @@ from urllib.parse import quote
 
 import questionary
 
-sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
+sys.path.insert(0, str(__file__).rsplit("/", 1)[0])
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
     with open(output_path, "w", encoding="utf-8") as qs:
         for i, venue_info in enumerate(venues, start=1):
             venue_name = venue_info["venue"]
-            ort = venue_info.get("ort", "")
+            venue_info.get("ort", "")
             kommun = venue_info.get("kommun", "")
 
             search_query = quote(f"{venue_name}, {kommun}" if kommun else venue_name)
@@ -36,18 +36,15 @@ def main():
             print(f"  OSM:  {osm_url}")
             print(f"  Google: {google_url}")
 
-            coord_str = questionary.text(
-                "  Coordinates (lat/lon or Enter to skip)",
-                default=""
-            ).ask()
+            coord_str = questionary.text("  Coordinates (lat/lon or Enter to skip)", default="").ask()
 
             qs.write("CREATE\n")
             qs.write(f'LAST\tLsv\t"{venue_name}"\n')
-            qs.write(f'LAST\tDsv\t"dansställe"\n')
-            qs.write(f'LAST\tP1\tQ20\n')
+            qs.write('LAST\tDsv\t"dansställe"\n')
+            qs.write("LAST\tP1\tQ20\n")
             if coord_str:
-                coord_clean = coord_str.replace(',', '/').replace(' ', '/')
-                qs.write(f'LAST\tP4\t@{coord_clean}\n')
+                coord_clean = coord_str.replace(",", "/").replace(" ", "/")
+                qs.write(f"LAST\tP4\t@{coord_clean}\n")
             qs.write("\n")
 
     print(f"\nWrote {len(venues)} venues to {output_path}")

@@ -1,4 +1,5 @@
 """Cogwork scraper commands."""
+
 import logging
 from pathlib import Path
 
@@ -69,5 +70,3 @@ def scrape(source: str | None = None, overwrite: bool = False) -> None:
             print(f"  Error: {name} - {e}")
 
     print(f"\nTotal: {len(sources_to_scrape)} sources configured")
-
-

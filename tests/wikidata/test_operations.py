@@ -2,8 +2,6 @@ import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 
 class TestScrapeWikidataArtists:
     @patch("wikibaseintegrator.wbi_helpers.execute_sparql_query")
@@ -17,10 +15,8 @@ class TestScrapeWikidataArtists:
         mock_execute_sparql_query.return_value = {
             "results": {
                 "bindings": [
-                    {"o": {"value": "https://www.wikidata.org/entity/Q123"},
-                        "oLabel": {"value": "Test Artist"}},
-                    {"o": {"value": "https://www.wikidata.org/entity/Q456"},
-                        "oLabel": {"value": "Another Artist"}},
+                    {"o": {"value": "https://www.wikidata.org/entity/Q123"}, "oLabel": {"value": "Test Artist"}},
+                    {"o": {"value": "https://www.wikidata.org/entity/Q456"}, "oLabel": {"value": "Another Artist"}},
                 ]
             }
         }
@@ -57,19 +53,14 @@ class TestScrapeWikidataArtists:
 class TestMatchWikidataArtists:
     @patch("src.models.wikidata.operations.DancedbClient")
     @patch("src.models.wikidata.operations.root_config")
-    def test_match_wikidata_artists_loads_files(
-        self, mock_root_config, MockDancedbClient
-    ):
+    def test_match_wikidata_artists_loads_files(self, mock_root_config, MockDancedbClient):
         from src.models.wikidata.operations import match_wikidata_artists
 
         mock_root_config.wikidata_dir = Path("/tmp/wikidata_match_test3")
 
         wd_file = Path("/tmp/wikidata_match_test3/artists/2026-01-03.json")
         wd_file.parent.mkdir(parents=True, exist_ok=True)
-        wd_file.write_text(json.dumps({
-            "Q123": {"label": "Test Band"},
-            "Q456": {"label": "Another Band"}
-        }))
+        wd_file.write_text(json.dumps({"Q123": {"label": "Test Band"}, "Q456": {"label": "Another Band"}}))
 
         mock_client = MagicMock()
         mock_client.fetch_artists_from_dancedb.return_value = []
@@ -85,18 +76,14 @@ class TestMatchWikidataArtists:
 
     @patch("src.models.wikidata.operations.DancedbClient")
     @patch("src.models.wikidata.operations.root_config")
-    def test_match_wikidata_artists_dry_run(
-        self, mock_root_config, MockDancedbClient
-    ):
+    def test_match_wikidata_artists_dry_run(self, mock_root_config, MockDancedbClient):
         from src.models.wikidata.operations import match_wikidata_artists
 
         mock_root_config.wikidata_dir = Path("/tmp/wikidata_match_test4")
 
         wd_file = Path("/tmp/wikidata_match_test4/artists/2026-01-04.json")
         wd_file.parent.mkdir(parents=True, exist_ok=True)
-        wd_file.write_text(json.dumps({
-            "Q999": {"label": "Known Band"}
-        }))
+        wd_file.write_text(json.dumps({"Q999": {"label": "Known Band"}}))
 
         mock_client = MagicMock()
         mock_client.fetch_artists_from_dancedb.return_value = [
@@ -114,9 +101,7 @@ class TestMatchWikidataArtists:
 
     @patch("src.models.wikidata.operations.DancedbClient")
     @patch("src.models.wikidata.operations.root_config")
-    def test_match_wikidata_artists_no_file(
-        self, mock_root_config, MockDancedbClient
-    ):
+    def test_match_wikidata_artists_no_file(self, mock_root_config, MockDancedbClient):
         from src.models.wikidata.operations import match_wikidata_artists
 
         mock_root_config.wikidata_dir = Path("/tmp/wikidata_no_file")
@@ -130,18 +115,14 @@ class TestMatchWikidataArtists:
 
     @patch("src.models.wikidata.operations.DancedbClient")
     @patch("src.models.wikidata.operations.root_config")
-    def test_match_wikidata_artists_no_matches(
-        self, mock_root_config, MockDancedbClient
-    ):
+    def test_match_wikidata_artists_no_matches(self, mock_root_config, MockDancedbClient):
         from src.models.wikidata.operations import match_wikidata_artists
 
         mock_root_config.wikidata_dir = Path("/tmp/wikidata_no_match")
 
         wd_file = Path("/tmp/wikidata_no_match/artists/2026-01-06.json")
         wd_file.parent.mkdir(parents=True, exist_ok=True)
-        wd_file.write_text(json.dumps({
-            "Q111": {"label": "WD Band"}
-        }))
+        wd_file.write_text(json.dumps({"Q111": {"label": "WD Band"}}))
 
         mock_client = MagicMock()
         mock_client.fetch_artists_from_dancedb.return_value = [
@@ -160,18 +141,14 @@ class TestMatchWikidataArtists:
 
     @patch("src.models.wikidata.operations.DancedbClient")
     @patch("src.models.wikidata.operations.root_config")
-    def test_match_wikidata_artists_uploads(
-        self, mock_root_config, MockDancedbClient
-    ):
+    def test_match_wikidata_artists_uploads(self, mock_root_config, MockDancedbClient):
         from src.models.wikidata.operations import match_wikidata_artists
 
         mock_root_config.wikidata_dir = Path("/tmp/wikidata_upload")
 
         wd_file = Path("/tmp/wikidata_upload/artists/2026-01-07.json")
         wd_file.parent.mkdir(parents=True, exist_ok=True)
-        wd_file.write_text(json.dumps({
-            "Q999": {"label": "Matched Band"}
-        }))
+        wd_file.write_text(json.dumps({"Q999": {"label": "Matched Band"}}))
 
         mock_item = MagicMock()
         mock_client = MagicMock()
@@ -196,18 +173,14 @@ class TestMatchWikidataArtists:
 class TestSyncWikidataArtists:
     @patch("src.models.wikidata.operations.DancedbClient")
     @patch("src.models.wikidata.operations.root_config")
-    def test_sync_wikidata_artists_uses_band_map(
-        self, mock_root_config, MockDancedbClient
-    ):
+    def test_sync_wikidata_artists_uses_band_map(self, mock_root_config, MockDancedbClient):
         from src.models.wikidata.operations import sync_wikidata_artists
 
         mock_root_config.wikidata_dir = Path("/tmp/wikidata_sync_test")
 
         wd_file = Path("/tmp/wikidata_sync_test/artists/2026-01-10.json")
         wd_file.parent.mkdir(parents=True, exist_ok=True)
-        wd_file.write_text(json.dumps({
-            "Q123": {"label": "Test Band"}
-        }))
+        wd_file.write_text(json.dumps({"Q123": {"label": "Test Band"}}))
 
         mock_client = MagicMock()
         mock_client.fetch_artists_from_dancedb.return_value = []
@@ -225,18 +198,14 @@ class TestSyncWikidataArtists:
 
     @patch("src.models.wikidata.operations.DancedbClient")
     @patch("src.models.wikidata.operations.root_config")
-    def test_sync_wikidata_artists_no_missing(
-        self, mock_root_config, MockDancedbClient
-    ):
+    def test_sync_wikidata_artists_no_missing(self, mock_root_config, MockDancedbClient):
         from src.models.wikidata.operations import sync_wikidata_artists
 
         mock_root_config.wikidata_dir = Path("/tmp/wikidata_sync_test2")
 
         wd_file = Path("/tmp/wikidata_sync_test2/artists/2026-01-11.json")
         wd_file.parent.mkdir(parents=True, exist_ok=True)
-        wd_file.write_text(json.dumps({
-            "Q999": {"label": "New Band"}
-        }))
+        wd_file.write_text(json.dumps({"Q999": {"label": "New Band"}}))
 
         mock_client = MagicMock()
         mock_client.fetch_artists_from_dancedb.return_value = [

@@ -1,6 +1,5 @@
-from typing import Optional
-
 import logging
+from typing import Optional
 
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.data import load_venue_map
@@ -39,11 +38,7 @@ class VenueMapper:
 
         venue_map = self._get_venue_map()
 
-        exact = next(
-            (qid for key, qid in venue_map.items()
-             if key.lower() in venue_name.lower() or venue_name.lower() in key.lower()),
-            None
-        )
+        exact = next((qid for key, qid in venue_map.items() if key.lower() in venue_name.lower() or venue_name.lower() in key.lower()), None)
         if exact:
             logger.debug("Venue exact match: '%s' -> %s", venue_name, exact)
             return exact

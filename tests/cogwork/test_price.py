@@ -72,7 +72,7 @@ class TestPriceExtractor:
         assert normal == 150
 
     def test_full_html_document(self):
-        html = '''<!DOCTYPE html>
+        html = """<!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="utf-8">
@@ -86,32 +86,32 @@ class TestPriceExtractor:
         <p><b>Avgift</b>: 550 kr</p>
     </div>
 </body>
-</html>'''
+</html>"""
         extractor = PriceExtractor(html)
         normal, reduced = extractor.extract()
         assert normal == 550
 
     def test_html_extraction_from_sidebar(self):
-        html = '''<div class="cwColumnNarrow cwDataArea">
+        html = """<div class="cwColumnNarrow cwDataArea">
     <p><b>Ort</b>: Sundsvall</p>
     <p><b>Avgift</b>: 350 kr</p>
-</div>'''
+</div>"""
         extractor = PriceExtractor(html)
         normal, reduced = extractor.extract()
         assert normal == 350
 
     def test_data_area_fallback(self):
-        html = '''<div class="cwDataArea">
+        html = """<div class="cwDataArea">
     <p><b>Avgift</b>: 400 kr</p>
-</div>'''
+</div>"""
         extractor = PriceExtractor(html)
         normal, reduced = extractor.extract()
         assert normal == 400
 
     def test_cwcolumnwide_main_content(self):
-        html = '''<div class="cwColumnWide">
+        html = """<div class="cwColumnWide">
     <p>Kursen kostar 250 kr</p>
-</div>'''
+</div>"""
         extractor = PriceExtractor(html)
         normal, reduced = extractor.extract()
         assert normal == 250
@@ -123,7 +123,7 @@ class TestPriceExtractor:
         assert normal == 200
 
     def test_price_mismatch_raises_exception(self):
-        html = '''<!DOCTYPE html>
+        html = """<!DOCTYPE html>
 <html>
 <body>
     <div class="cwColumnNarrow cwDataArea">
@@ -133,13 +133,13 @@ class TestPriceExtractor:
         <p>Kursen kostar 400 kr</p>
     </div>
 </body>
-</html>'''
+</html>"""
         extractor = PriceExtractor(html)
         with pytest.raises(PriceMismatchError, match="Price mismatch"):
             extractor.extract()
 
     def test_main_text_and_sidebar_both_used(self):
-        html = '''<!DOCTYPE html>
+        html = """<!DOCTYPE html>
 <html>
 <body>
     <div class="cwColumnNarrow cwDataArea">
@@ -149,7 +149,7 @@ class TestPriceExtractor:
         <p>Kursen kostar 500 kr</p>
     </div>
 </body>
-</html>'''
+</html>"""
         extractor = PriceExtractor(html)
         normal, reduced = extractor.extract()
         assert normal == 500

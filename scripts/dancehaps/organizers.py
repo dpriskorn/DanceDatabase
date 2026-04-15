@@ -1,5 +1,5 @@
-import json
 import csv
+import json
 from pathlib import Path
 
 # ---- Load JSON ----
@@ -14,15 +14,7 @@ qs_path = Path("organizers_quickstatements.txt")
 organizers = data["associations"]
 
 # ---- CSV columns ----
-fields = [
-    "id",
-    "name",
-    "is_artist",
-    "is_defunct",
-    "is_instructor",
-    "is_organizer",
-    "cover"
-]
+fields = ["id", "name", "is_artist", "is_defunct", "is_instructor", "is_organizer", "cover"]
 
 # ---- Write CSV ----
 with open(csv_path, "w", newline="", encoding="utf-8") as csvfile:
@@ -30,15 +22,17 @@ with open(csv_path, "w", newline="", encoding="utf-8") as csvfile:
     writer.writeheader()
 
     for a in organizers:
-        writer.writerow({
-            "id": a.get("id"),
-            "name": a.get("name"),
-            "is_artist": a.get("is_artist"),
-            "is_defunct": a.get("is_defunct"),
-            "is_instructor": a.get("is_instructor"),
-            "is_organizer": a.get("is_organizer"),
-            "cover": a.get("cover")
-        })
+        writer.writerow(
+            {
+                "id": a.get("id"),
+                "name": a.get("name"),
+                "is_artist": a.get("is_artist"),
+                "is_defunct": a.get("is_defunct"),
+                "is_instructor": a.get("is_instructor"),
+                "is_organizer": a.get("is_organizer"),
+                "cover": a.get("cover"),
+            }
+        )
 
 print(f"✅ CSV file saved as: {csv_path.resolve()}")
 
@@ -70,7 +64,7 @@ with open(qs_path, "w", encoding="utf-8") as qs:
             qs.write(f'LAST\tLsv\t"{label_sv}"\n')
             if description_sv:
                 qs.write(f'LAST\tDsv\t"{description_sv}"\n')
-            qs.write(f'LAST\tP1\t{P1}\n')
+            qs.write(f"LAST\tP1\t{P1}\n")
             qs.write(f'LAST\tP29\t"{a.get("id")}"\n\n')
 
 print(f"✅ QuickStatements file saved as: {qs_path.resolve()}")

@@ -1,18 +1,19 @@
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 import requests
 from bs4 import BeautifulSoup
 from pydantic import Field
 
 from src.models.export.dance_event import DanceEvent
+from src.models.export.organizer import Organizer
 from src.models.onbeat.events import OnbeatEvents
 from src.models.onbeat.organizer import OnbeatCommunity
-from src.models.export.organizer import Organizer
 
 
 class OnbeatOrganizers(Organizer):
     """Scrapes the communities from Onbeat."""
+
     baseurl: str = "https://onbeat.dance"
     json_output_folder: Path
     title: str = ""

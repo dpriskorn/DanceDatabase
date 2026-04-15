@@ -1,10 +1,11 @@
+import logging
 from collections import defaultdict
 
 from wikibaseintegrator import wbi_helpers
-from wikibaseintegrator.wbi_login import Login
 from wikibaseintegrator.wbi_config import config as wbi_config
 from wikibaseintegrator.wbi_helpers import execute_sparql_query
-import logging
+from wikibaseintegrator.wbi_login import Login
+
 import config
 
 # ---- Setup logging ----
@@ -12,9 +13,9 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # ---- Configure your Wikibase instance ----
-wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
-wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
-wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
+wbi_config["MEDIAWIKI_API_URL"] = "https://dance.wikibase.cloud/w/api.php"
+wbi_config["SPARQL_ENDPOINT_URL"] = "https://dance.wikibase.cloud/query/sparql"
+wbi_config["WIKIBASE_URL"] = "https://dance.wikibase.cloud"
 
 # ---- Login for write operations ----
 login_instance = Login(user=config.username, password=config.password)
@@ -36,14 +37,14 @@ ORDER BY ?itemLabel ?item
 """
 
 # ---- Run SPARQL query ----
-results = execute_sparql_query(query=sparql_query, endpoint=wbi_config['SPARQL_ENDPOINT_URL'])
+results = execute_sparql_query(query=sparql_query, endpoint=wbi_config["SPARQL_ENDPOINT_URL"])
 
 # ---- Group clashing items by label ----
 clashes = defaultdict(list)
-for result in results['results']['bindings']:
-    item_url = result['item']['value']
-    qid = item_url.rsplit('/', 1)[-1]
-    label = result['itemLabel']['value']
+for result in results["results"]["bindings"]:
+    item_url = result["item"]["value"]
+    qid = item_url.rsplit("/", 1)[-1]
+    label = result["itemLabel"]["value"]
     clashes[label].append(qid)
 
 # ---- Merge clashing items ----
@@ -56,13 +57,9 @@ for label, qids in clashes.items():
     if response != "n":
         try:
             to_id = wbi_helpers.merge_items_and_create_redirect(
-                qids=qids,
-                login=login_instance,
-                is_bot=True,
-                ignore_conflicts=["description"],
-                tags="wikibaseintegrator"
+                qids=qids, login=login_instance, is_bot=True, ignore_conflicts=["description"], tags="wikibaseintegrator"
             )
-            logger.info(f"Merged qids, see recent changes in the wikibase for an overview")
+            logger.info("Merged qids, see recent changes in the wikibase for an overview")
             # Suppose merge returned 'merged_to' as the surviving QID
 
         except Exception as e:

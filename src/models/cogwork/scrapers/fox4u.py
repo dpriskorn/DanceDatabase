@@ -7,17 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 class Fox4uEvent(CogworkEvent):
-    skip_sv_labels: list[str] = [
-    ]
+    skip_sv_labels: list[str] = []
     organizer_qid: str = "Q359"
-    dance_style_qid_map: dict = {
-        "fox": "Q23",
-        "west coast swing": "Q15",
-        "modern fox": "Q23",
-        "bugg": "Q485",
-        "casanovas": "Q4",
-        "socialdans": "Q4"
-}
+    dance_style_qid_map: dict = {"fox": "Q23", "west coast swing": "Q15", "modern fox": "Q23", "bugg": "Q485", "casanovas": "Q4", "socialdans": "Q4"}
     venue_qid_map: dict[str, str] = {
         "Kvarntorpsgården": "Q136",
         "HällesåkersGården": "Q487",
@@ -27,12 +19,10 @@ class Fox4uEvent(CogworkEvent):
         "Altiras lokal": "Q71",
         "Matfors folkets hus": "Q488",
         "Danslogen på Norra berget": "Q489",
-        "Spegelsalen": "Q512"
+        "Spegelsalen": "Q512",
     }
 
 
 class Fox4u(CogworkOrganizer):
     organizer_slug: str = "fox4u"
     event_class: CogworkEvent = Fox4uEvent
-
-

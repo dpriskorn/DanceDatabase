@@ -6,17 +6,10 @@ from typing import Optional
 from pydantic import AnyUrl, TypeAdapter
 
 from config import CET
-from src.models.export.dance_event import (
-    DanceEvent,
-    DanceDatabaseIdentifiers,
-    EventLinks,
-    Identifiers,
-    Organizer,
-    Registration,
-)
+from src.models._utils.datetime_utils import combine_date_and_time, parse_date
 from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.venue_matcher import VenueMatcher
-from src.models._utils.datetime_utils import parse_date, combine_date_and_time
+from src.models.export.dance_event import DanceDatabaseIdentifiers, DanceEvent, EventLinks, Identifiers, Organizer, Registration
 
 logger = logging.getLogger(__name__)
 
@@ -37,13 +30,7 @@ class RowParser:
     def _parse_date(self, day: str, month: str, year: int = 2026) -> Optional[datetime]:
         return parse_date(day, month, year)
 
-    def _parse_datetime(
-        self,
-        day: str,
-        month: str,
-        time_str: str,
-        year: int = 2026
-    ) -> tuple[Optional[datetime], Optional[datetime]]:
+    def _parse_datetime(self, day: str, month: str, time_str: str, year: int = 2026) -> tuple[Optional[datetime], Optional[datetime]]:
         date = parse_date(day, month, year)
         if not date:
             return None, None
@@ -55,12 +42,12 @@ class RowParser:
         Returns None if band/venue not found or date invalid.
         Raises KeyboardInterrupt if venue creation aborted.
         """
-        band = row.get('band', '')
-        venue = row.get('venue', '') or row.get('ort', '')
-        ort = row.get('ort', '')
-        day = row.get('day', '')
-        time_str = row.get('time', '')
-        ovrigt = row.get('ovrigt', '')
+        band = row.get("band", "")
+        venue = row.get("venue", "") or row.get("ort", "")
+        ort = row.get("ort", "")
+        day = row.get("day", "")
+        time_str = row.get("time", "")
+        ovrigt = row.get("ovrigt", "")
 
         band_qid = self.band_mapper.resolve(band)
         if not band_qid:
@@ -104,12 +91,8 @@ class RowParser:
             event_type="dance",
             price_reduced=None,
             links=EventLinks(
-                official_website=AnyUrlAdapter.validate_strings(
-                    f"https://www.danslogen.se/dansprogram/{month}"
-                ),
-                sources=[AnyUrlAdapter.validate_strings(
-                    f"https://www.danslogen.se/dansprogram/{month}"
-                )]
+                official_website=AnyUrlAdapter.validate_strings(f"https://www.danslogen.se/dansprogram/{month}"),
+                sources=[AnyUrlAdapter.validate_strings(f"https://www.danslogen.se/dansprogram/{month}")],
             ),
             organizer=organizer,
             registration=Registration(
@@ -118,17 +101,11 @@ class RowParser:
                 registration_opens=None,
                 registration_closes=None,
                 advance_registration_required=False,
-                registration_open=False
+                registration_open=False,
             ),
             identifiers=Identifiers(
                 dancedatabase=DanceDatabaseIdentifiers(
-                    source="",
-                    venue=venue_qid,
-                    dance_styles=dance_styles,
-                    event_series="",
-                    organizer="",
-                    event="",
-                    artist=band_qid
+                    source="", venue=venue_qid, dance_styles=dance_styles, event_series="", organizer="", event="", artist=band_qid
                 )
             ),
             last_update=datetime.now().replace(tzinfo=CET, microsecond=0),
@@ -137,12 +114,12 @@ class RowParser:
             coordinates=None,
             weekly_recurring=False,
             number_of_occasions=1,
-            instance_of=instance_of
+            instance_of=instance_of,
         )
 
     def _detect_dance_styles_and_instance(self, ovrigt: str) -> tuple[list[str], str]:
         """Detect dance styles from ovrigt field and determine instance type.
-        
+
         Returns (dance_styles list, instance_of QID)
         - SPF → Q675 (dance_styles), Q678 (instance_of - pensionärsdans)
         - PRO → Q676 (dance_styles), Q678 (instance_of - pensionärsdans)
@@ -151,7 +128,7 @@ class RowParser:
         dance_styles = []
         instance_of = "Q2"  # default: event
         ovrigt_stripped = ovrigt.strip()
-        
+
         # Check case-sensitive first (SPF, PRO)
         if ovrigt_stripped == "SPF":
             dance_styles.append("Q675")
@@ -159,11 +136,11 @@ class RowParser:
         elif ovrigt_stripped == "PRO":
             dance_styles.append("Q676")
             instance_of = "Q678"  # pensionärsdans
-        
+
         # Check case-insensitive (länsdans)
         if "länsdans" in ovrigt_stripped.lower():
             if "Q677" not in dance_styles:
                 dance_styles.append("Q677")
             instance_of = "Q677"  # länsdans takes precedence
-        
+
         return dance_styles, instance_of

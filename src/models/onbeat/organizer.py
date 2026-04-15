@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 class OnbeatCommunity(BaseModel):
     """Represents a community and its related events scraped from Onbeat."""
+
     title: str = ""
     link: Optional[str] = None
     image: Optional[str] = None
@@ -26,4 +27,3 @@ class OnbeatCommunity(BaseModel):
         self.title = title_elem.get_text(strip=True) if title_elem else ""
         self.link = link_elem["href"] if link_elem else None
         self.image = image_elem["src"] if image_elem else None
-

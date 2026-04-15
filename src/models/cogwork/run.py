@@ -2,8 +2,7 @@ from src.models.cogwork.scrape import scrape
 from src.models.cogwork.upload import upload
 
 
-def run(source: str | None = None, dry_run: bool = False,
-        upload_only: bool = False) -> None:
+def run(source: str | None = None, dry_run: bool = False, upload_only: bool = False) -> None:
     """Run scrape and optionally upload cogwork events.
 
     Args:

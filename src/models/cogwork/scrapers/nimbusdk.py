@@ -7,10 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class NimbusdkEvent(CogworkEvent):
-    skip_sv_labels: list[str] = [
-        "Lindy Hop träning",
-        "fox träning"
-    ]
+    skip_sv_labels: list[str] = ["Lindy Hop träning", "fox träning"]
     organizer_qid: str = "Q161"
     dance_style_qid_map: dict = {
         "fox": "Q23",
@@ -22,7 +19,7 @@ class NimbusdkEvent(CogworkEvent):
         "socialdans": "Q4",
         "line dance": "Q491",
         "Argentinsk Tango": "Q492",
-        "Tango": "Q492"
+        "Tango": "Q492",
     }
     venue_qid_map: dict[str, str] = {
         "Kvarntorpsgården": "Q136",
@@ -38,12 +35,10 @@ class NimbusdkEvent(CogworkEvent):
         "Nimbus Dansklubb": "Q161",
         "Gärdesgallerian": "Q161",
         "Bollnäs": "Q161",
-        "Lindy Hop Fortsättning Helgkurs": "Q161", #workaround pga ställe saknas
+        "Lindy Hop Fortsättning Helgkurs": "Q161",  # workaround pga ställe saknas
     }
 
 
 class Nimbusdk(CogworkOrganizer):
     organizer_slug: str = "nimbusdk"
     event_class: CogworkEvent = NimbusdkEvent
-
-

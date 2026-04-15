@@ -1,7 +1,6 @@
 import json
-import pytest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from src.models.onbeat.venue_resolver import VenueResolver
 
@@ -50,10 +49,10 @@ class TestVenueResolverLoadDancedbVenues:
         with patch.object(Path, "exists", return_value=True):
             with patch.object(Path, "read_text", return_value='{"Q123": {"label": "Test"}}'):
                 resolver = VenueResolver()
-                
+
                 result1 = resolver._load_dancedb_venues()
                 result2 = resolver._load_dancedb_venues()
-                
+
                 assert result1 is result2
 
 
@@ -80,12 +79,12 @@ class TestVenueResolverLoadFolketshusVenues:
     def test_skips_venues_without_qid(self, mock_exists):
         mock_exists.return_value = True
         mock_json_loads = [{"name": "No QID Venue", "qid": None}]
-        
+
         with patch.object(Path, "exists", return_value=True):
             with patch.object(Path, "read_text", return_value=json.dumps(mock_json_loads)):
                 resolver = VenueResolver()
                 result = resolver._load_folketshus_venues()
-                
+
                 assert "no qid venue" not in result
 
 
@@ -123,7 +122,7 @@ class TestVenueResolverLookup:
     def test_returns_none_for_empty_venue_name(self, mock_byg, mock_folk, mock_dancedb):
         resolver = VenueResolver()
         qid, external_id = resolver.lookup("")
-        
+
         assert qid is None
         assert external_id is None
 
@@ -180,9 +179,7 @@ class TestVenueResolverLookup:
     def test_falls_back_to_bygdegardarna(self, mock_byg, mock_folk, mock_dancedb):
         mock_dancedb.return_value = {}
         mock_folk.return_value = {}
-        mock_byg.return_value = [
-            {"title": "Bygdegarden Test", "meta": {"permalink": "byg-test"}}
-        ]
+        mock_byg.return_value = [{"title": "Bygdegarden Test", "meta": {"permalink": "byg-test"}}]
 
         resolver = VenueResolver()
         qid, external_id = resolver.lookup("Bygdegarden Test")

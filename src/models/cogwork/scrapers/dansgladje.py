@@ -19,5 +19,3 @@ class DansgladjeEvent(CogworkEvent):
 class Dansgladje(CogworkOrganizer):
     organizer_slug: str = "dansgladje"
     event_class: CogworkEvent = DansgladjeEvent
-
-

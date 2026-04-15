@@ -9,7 +9,7 @@ import json
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
+sys.path.insert(0, str(__file__).rsplit("/", 1)[0])
 
 ARTIST_QID = "Q225"
 
@@ -26,7 +26,7 @@ def main():
             band_name = band_info["band"]
             qs.write("CREATE\n")
             qs.write(f'LAST\tLsv\t"{band_name}"\n')
-            qs.write(f'LAST\tDsv\t"artist"\n')
+            qs.write('LAST\tDsv\t"artist"\n')
             qs.write(f"LAST\tP1\t{ARTIST_QID}\n\n")
 
     print(f"Wrote {len(bands)} bands to {output_path}")

@@ -1,9 +1,10 @@
-import pytest
 from unittest.mock import MagicMock
 
+import pytest
+
+from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.events.row_parser import RowParser
 from src.models.danslogen.venue_matcher import VenueMatcher
-from src.models.danslogen.band_mapper import BandMapper
 
 
 class TestRowParserParse:
@@ -195,8 +196,8 @@ class TestRowParserParseDatetime:
             parser.parse(row, "april")
 
     def test_skips_invalid_date(self):
-        from src.models.danslogen.venue_matcher import VenueMatcher
         from src.models.danslogen.band_mapper import BandMapper
+        from src.models.danslogen.venue_matcher import VenueMatcher
 
         mock_venue_matcher = MagicMock(spec=VenueMatcher)
         mock_venue_matcher.resolve.return_value = "Q100"

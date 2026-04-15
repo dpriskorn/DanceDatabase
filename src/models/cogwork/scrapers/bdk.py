@@ -15,7 +15,7 @@ class BdkEvent(CogworkEvent):
         "bugg": "Q485",
         "casanovas": "Q4",
         "socialdans": "Q4",
-}
+    }
     venue_qid_map: dict[str, str] = {
         "brunnahallen": "Q486",
         "stora salen": "Q486",
@@ -28,5 +28,3 @@ class BdkEvent(CogworkEvent):
 class Bdk(CogworkOrganizer):
     organizer_slug: str = "bdk"
     event_class: CogworkEvent = BdkEvent
-
-

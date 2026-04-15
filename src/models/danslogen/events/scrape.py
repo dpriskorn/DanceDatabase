@@ -1,4 +1,5 @@
 """Event operations: scrape danslogen, upload events."""
+
 import logging
 import sys
 
@@ -6,29 +7,29 @@ import questionary
 import rich
 
 import config
-from src.models.dancedb.status import detect_event_status
 from src.models.dancedb.client import DancedbClient
+from src.models.dancedb.status import detect_event_status
 
 logger = logging.getLogger(__name__)
 
 
 def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
     """Fetch raw event rows from danslogen.se (no venue mapping).
-    
+
     Args:
         month: Month name or "all" for all months
         year: Year to use in output filename (defaults to current year)
     """
     import json
-    from src.models.danslogen.main import Danslogen
     from datetime import date
+
+    from src.models.danslogen.main import Danslogen
 
     date_str = date.today().strftime("%Y-%m-%d")
 
     months_to_scrape = []
     if month.lower() == "all":
-        months_to_scrape = ["januari", "februari", "mars", "april", "maj", "juni",
-                          "juli", "augusti", "september", "oktober", "november", "december"]
+        months_to_scrape = ["januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti", "september", "oktober", "november", "december"]
     else:
         months_to_scrape = [month.lower()]
 
@@ -59,13 +60,15 @@ def upload_events(
     yes: bool = False,
 ) -> None:
     """Upload danslogen events to DanceDB.
-    
+
     Loads existing events from data/dancedb/events/{date}.json for deduplication.
     """
     import json
     import os
-    from src.models.export.dance_event import DanceEvent
+
     from rapidfuzz import fuzz
+
+    from src.models.export.dance_event import DanceEvent
 
     is_tty = os.isatty(0)
     if not is_tty and not yes:
@@ -172,7 +175,7 @@ def upload_events(
         # Check for duplicate in existing events
         if existing_lookup and start_ts:
             # Convert datetime to string if needed
-            if hasattr(start_ts, 'strftime'):
+            if hasattr(start_ts, "strftime"):
                 start_ts = start_ts.strftime("%Y-%m-%dT%H:%M:%S")
             date_key = f"{venue_qid}|{start_ts[:10]}"
             existing = existing_lookup.get(date_key)
@@ -187,10 +190,7 @@ def upload_events(
                     print(f"\n[{i}/{len(events_data)}] {label}")
                     print(f"  WARNING: Same venue/date but different label: {existing['label']} (fuzzy match: {ratio}%)")
                     if not yes:
-                        confirm = questionary.rawselect(
-                            "Event may already exist. Upload anyway?",
-                            choices=["Skip", "Upload", "Skip all", "Abort"]
-                        ).ask()
+                        confirm = questionary.rawselect("Event may already exist. Upload anyway?", choices=["Skip", "Upload", "Skip all", "Abort"]).ask()
                         if confirm == "Skip":
                             skip_count += 1
                             continue
@@ -219,10 +219,7 @@ def upload_events(
         if yes:
             confirm = "Yes (Recommended)"
         else:
-            confirm = questionary.rawselect(
-                "Upload to DanceDB?",
-                choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
-            ).ask()
+            confirm = questionary.rawselect("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
 
         if confirm == "Skip":
             skip_count += 1
@@ -239,7 +236,7 @@ def upload_events(
             desc = event.description.get("sv", "") if event.description else ""
             search_text = f"{label} {desc}"
             status_qid, _ = detect_event_status(search_text)
-            instance_of = event.instance_of if hasattr(event, 'instance_of') else "Q2"
+            instance_of = event.instance_of if hasattr(event, "instance_of") else "Q2"
             artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
 
             qid = client.create_event(

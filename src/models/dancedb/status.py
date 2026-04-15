@@ -1,4 +1,5 @@
 """Event status detection utility."""
+
 import logging
 from typing import Optional
 
@@ -30,10 +31,7 @@ def detect_event_status(text: Optional[str]) -> tuple[str, Optional[str]]:
     text_lower = text.lower()
     for term in SEARCH_TERMS:
         if term in text_lower:
-            logger.info(
-                "Event status '%s' detected (term '%s' found in: '%.50s...')",
-                STATUS_CANCELLED, term, text
-            )
+            logger.info("Event status '%s' detected (term '%s' found in: '%.50s...')", STATUS_CANCELLED, term, text)
             return STATUS_CANCELLED, term
 
     return STATUS_PLANNED, None

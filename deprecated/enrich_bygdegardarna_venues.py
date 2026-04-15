@@ -14,18 +14,18 @@ from urllib.parse import urlparse
 
 import questionary
 import rich
-
-import config
 from wikibaseintegrator import WikibaseIntegrator
 from wikibaseintegrator.wbi_config import config as wbi_config
 from wikibaseintegrator.wbi_enums import ActionIfExists
 from wikibaseintegrator.wbi_login import Login
 
+import config
+
 logging.basicConfig(level=config.loglevel)
 
-wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
-wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
-wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
+wbi_config["MEDIAWIKI_API_URL"] = "https://dance.wikibase.cloud/w/api.php"
+wbi_config["SPARQL_ENDPOINT_URL"] = "https://dance.wikibase.cloud/query/sparql"
+wbi_config["WIKIBASE_URL"] = "https://dance.wikibase.cloud"
 
 ENRICHED_DIR = Path("data") / "bygdegardarna" / "enriched"
 DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
@@ -39,10 +39,7 @@ def is_interactive() -> bool:
 def run_scraping_and_matching(date_str: str) -> None:
     """Run scraping and matching scripts."""
     print("\n=== Step 1: Scrape bygdegardarna venues ===")
-    result = subprocess.run(
-        ["python", "scrape_bygdegardarna.py"],
-        capture_output=True, text=True
-    )
+    result = subprocess.run(["python", "scrape_bygdegardarna.py"], capture_output=True, text=True)
     if result.returncode != 0:
         print(result.stdout)
         print(result.stderr)
@@ -50,10 +47,7 @@ def run_scraping_and_matching(date_str: str) -> None:
     print(result.stdout)
 
     print("\n=== Step 2: Scrape DanceDB venues ===")
-    result = subprocess.run(
-        ["python", "scrape_venues_from_dancedb.py"],
-        capture_output=True, text=True
-    )
+    result = subprocess.run(["python", "scrape_venues_from_dancedb.py"], capture_output=True, text=True)
     if result.returncode != 0:
         print(result.stdout)
         print(result.stderr)
@@ -61,10 +55,7 @@ def run_scraping_and_matching(date_str: str) -> None:
     print(result.stdout)
 
     print("\n=== Step 3: Match venues ===")
-    result = subprocess.run(
-        ["python", "scrape_bygdegardarna_match.py", "--skip-prompts"],
-        capture_output=True, text=True
-    )
+    result = subprocess.run(["python", "scrape_bygdegardarna_match.py", "--skip-prompts"], capture_output=True, text=True)
     if result.returncode != 0:
         print(result.stdout)
         print(result.stderr)
@@ -102,8 +93,8 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
     byg_id = extract_bygdegardarna_id(permalink)
     alias_needed = byg_title.lower() != db_label.lower()
 
-    print(f"  Label (DanceDB): \"{db_label}\"")
-    print(f"  P42: \"{byg_id}\" (NEW)")
+    print(f'  Label (DanceDB): "{db_label}"')
+    print(f'  P42: "{byg_id}" (NEW)')
     print(f"  Alias: \"{byg_title}\" ({'NEW' if alias_needed else 'same as label'})")
 
     if dry_run:
@@ -112,10 +103,7 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
 
     item = wbi.item.get(entity_id=qid)
 
-    item.claims.add(
-        datatypes.ExternalID(prop_nr="P42", value=byg_id),
-        action_if_exists=ActionIfExists.REPLACE_ALL
-    )
+    item.claims.add(datatypes.ExternalID(prop_nr="P42", value=byg_id), action_if_exists=ActionIfExists.REPLACE_ALL)
     if alias_needed:
         current_aliases = item.aliases.get("sv") or []
         if byg_title not in current_aliases:
@@ -138,6 +126,7 @@ def update_venue(qid: str, byg_title: str, permalink: str, db_label: str, dry_ru
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Enrich DanceDB venues with bygdegardarna data")
     parser.add_argument("--dry-run", action="store_true", help="Preview without uploading")
     parser.add_argument("--start", type=int, default=1, help="Start from venue N")
@@ -188,17 +177,14 @@ def main():
 
             if args.dry_run:
                 print("  [DRY RUN - would update]")
-                print(f"    Label (DanceDB): \"{db_label}\"")
-                print(f"    P42: \"{extract_bygdegardarna_id(permalink)}\"")
-                print(f"    Alias: \"{byg_title}\"")
+                print(f'    Label (DanceDB): "{db_label}"')
+                print(f'    P42: "{extract_bygdegardarna_id(permalink)}"')
+                print(f'    Alias: "{byg_title}"')
                 skipped += 1
                 continue
 
             if is_interactive():
-                choice = questionary.rawselect(
-                    f"Upload to DanceDB?",
-                    choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
-                ).ask()
+                choice = questionary.rawselect("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
 
                 if choice == "Skip":
                     skipped += 1
@@ -212,9 +198,9 @@ def main():
                     sys.exit(0)
             else:
                 print("  Non-interactive mode - uploading automatically")
-                print(f"    Label (DanceDB): \"{db_label}\"")
-                print(f"    P42: \"{extract_bygdegardarna_id(permalink)}\"")
-                print(f"    Alias: \"{byg_title}\"")
+                print(f'    Label (DanceDB): "{db_label}"')
+                print(f'    P42: "{extract_bygdegardarna_id(permalink)}"')
+                print(f'    Alias: "{byg_title}"')
 
             update_venue(qid, byg_title, permalink, db_label, args.dry_run, wbi)
             uploaded += 1

@@ -1,5 +1,6 @@
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 
 from src.models.cogwork.enums import EventType
 from src.models.cogwork.event import CogworkEvent
@@ -161,13 +162,13 @@ class TestMapVenueQidEdge:
 class TestParseOccasions:
     def test_parse_occasions_found(self):
         event = TestEvent.model_construct()
-        event.shop_html = '<p><b>Occasions</b>: 5</p>'
+        event.shop_html = "<p><b>Occasions</b>: 5</p>"
         event.parse_occasions()
         assert event.occasions == 5
 
     def test_parse_occasions_not_found(self):
         event = TestEvent.model_construct()
-        event.shop_html = '<div>No occasions</div>'
+        event.shop_html = "<div>No occasions</div>"
         with pytest.raises(Exception, match="No occasions found"):
             event.parse_occasions()
 
@@ -176,7 +177,7 @@ class TestParseOccasions:
         mock_fetch.return_value = None
         event = TestEvent.model_construct()
         event.shop_html = ""
-        event.shop_html = '<p><b>Occasions</b>: 3</p>'
+        event.shop_html = "<p><b>Occasions</b>: 3</p>"
         event.parse_occasions()
         assert event.occasions == 3
 
@@ -185,6 +186,6 @@ class TestParseOccasions:
         mock_fetch.return_value = None
         event = TestEvent.model_construct()
         event.shop_html = ""
-        event.shop_html = '<p><b>Avgift</b>: 200 kr</p>'
+        event.shop_html = "<p><b>Avgift</b>: 200 kr</p>"
         event.parse_price()
         assert event.price_normal == 200

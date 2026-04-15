@@ -40,11 +40,7 @@ class BandMapper:
 
         band_map = self._get_band_map()
 
-        exact = next(
-            (qid for key, qid in band_map.items()
-             if key.lower() == band_name.lower()),
-            None
-        )
+        exact = next((qid for key, qid in band_map.items() if key.lower() == band_name.lower()), None)
         if exact:
             return exact
 

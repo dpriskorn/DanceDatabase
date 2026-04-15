@@ -43,7 +43,7 @@ class FolketshusVenue(BaseModel):
 
 def extract_external_id(url: str) -> str:
     """Extract folketshus ID from URL path.
-    
+
     https://www.folketshusochparker.se/arrangor/sundsvalls-folkets-hus-och-park/
     → sundsvalls-folkets-hus-och-park
     """
@@ -136,6 +136,7 @@ def fetch_existing_venues() -> dict[str, dict]:
     """Fetch existing venues from DanceDB via SPARQL."""
     from wikibaseintegrator.wbi_config import config as wbi_config
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
+
     wbi_config["USER_AGENT"] = config.user_agent
 
     sparql = """
@@ -199,15 +200,17 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
                         break
 
         if matched_qid:
-            enriched.append({
-                "name": venue.name,
-                "url": venue.url,
-                "lat": venue.lat,
-                "lng": venue.lng,
-                "region": venue.region,
-                "external_id": venue.external_id,
-                "qid": matched_qid,
-            })
+            enriched.append(
+                {
+                    "name": venue.name,
+                    "url": venue.url,
+                    "lat": venue.lat,
+                    "lng": venue.lng,
+                    "region": venue.region,
+                    "external_id": venue.external_id,
+                    "qid": matched_qid,
+                }
+            )
         else:
             unmatched.append(venue)
 
@@ -228,13 +231,7 @@ def create_venue_with_p44(venue: FolketshusVenue) -> str | None:
 
     new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q20"))
     new_item.claims.add(
-        datatypes.GlobeCoordinate(
-            prop_nr="P4",
-            latitude=venue.lat,
-            longitude=venue.lng,
-            precision=0.0001,
-            globe="http://www.wikidata.org/entity/Q2"
-        )
+        datatypes.GlobeCoordinate(prop_nr="P4", latitude=venue.lat, longitude=venue.lng, precision=0.0001, globe="http://www.wikidata.org/entity/Q2")
     )
     if external_id:
         new_item.claims.add(datatypes.ExternalID(prop_nr="P44", value=external_id))

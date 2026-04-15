@@ -1,4 +1,5 @@
 """Artist operations: scrape artists from danslogen.se."""
+
 import json
 import logging
 from pathlib import Path
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 def scrape_artists(date_str: str) -> None:
     """Fetch artists from danslogen.se/dansband/alla.
-    
+
     Args:
         date_str: Date string for output filename (YYYY-MM-DD)
     """

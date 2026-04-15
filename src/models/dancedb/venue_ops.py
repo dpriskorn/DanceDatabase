@@ -1,14 +1,16 @@
 """Venue operations: scrape, match, ensure exist."""
+
 import json
 import logging
 import urllib.parse
 from datetime import date
 
-import config
-from src.models.dancedb.client import DancedbClient
-from src.models.bygdegardarna.scrape import scrape
-from src.models.danslogen.fuzzy import fuzzy_match_qid
 from wikibaseintegrator.wbi_config import config as wbi_config
+
+import config
+from src.models.bygdegardarna.scrape import scrape
+from src.models.dancedb.client import DancedbClient
+from src.models.danslogen.fuzzy import fuzzy_match_qid
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +43,7 @@ def scrape_bygdegardarna(date_str: str | None = None) -> None:
 def scrape_dancedb_venues(date_str: str | None = None) -> None:
     """Fetch existing venues from DanceDB via SPARQL."""
     import json
+
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
@@ -68,16 +71,16 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
     for binding in results["results"]["bindings"]:
         qid = binding["item"]["value"].rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
-        
+
         alias_str = binding.get("aliasStr", {}).get("value", "")
         aliases = [a.lower() for a in alias_str.split("|") if a] if alias_str else []
-        
+
         geo = binding.get("geo", {}).get("value", "")
         lat, lng = None, None
         if geo:
             coords = geo.replace("Point(", "").replace(")", "").split(" ")
             lng, lat = float(coords[0]), float(coords[1])
-        
+
         venue_data = {"label": label, "lat": lat, "lng": lng, "aliases": aliases}
         venues[qid] = venue_data
 
@@ -152,10 +155,11 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
 
 def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     """Ensure danslogen venues exist in DanceDB before uploading events."""
+    from datetime import datetime
+
     import questionary
     from rapidfuzz import process as fuzz_process
 
-    from datetime import datetime
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     month_name = datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
     print(f"\n=== Ensuring venues exist for {date_str} ===")
@@ -190,6 +194,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
             print(f"Loaded {len(folketshus_venues)} folketshus venues for auto-match")
 
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
+
     wbi_config["User-Agent"] = "DanceDB/1.0 (User:So9q)"
 
     sparql = """
@@ -312,9 +317,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
         coords = None
         if folketshus_match:
-            use_coords = questionary.confirm(
-                f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?"
-            ).ask()
+            use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
             if use_coords:
                 coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
 
@@ -353,9 +356,10 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
 def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     """Ensure onbeat venues exist in DanceDB."""
-    import questionary
     import json
     from pathlib import Path
+
+    import questionary
 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print(f"\n=== Ensuring onbeat venues exist for {date_str} ===")
@@ -397,7 +401,7 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
         venue_name = event.get("location", "")
         if not venue_name:
             continue
-        
+
         venue_qid = event.get("venue_qid", "")
         if venue_qid:
             continue
@@ -478,10 +482,7 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
             print(f"Google: {gmaps}")
 
         try:
-            confirm = questionary.confirm(
-                f"Create venue '{venue_name}' in DanceDB?",
-                default=True
-            ).ask()
+            confirm = questionary.confirm(f"Create venue '{venue_name}' in DanceDB?", default=True).ask()
         except Exception:
             print("Non-interactive mode - skipping creation")
             confirm = False
@@ -529,9 +530,10 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
 
 def ensure_artists(date_str: str | None = None, dry_run: bool = False) -> None:
     """Ensure danslogen artists exist in DanceDB before uploading events."""
+    from datetime import datetime
+
     from rapidfuzz import process as fuzz_process
 
-    from datetime import datetime
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
     print(f"\n=== Ensuring artists exist for {date_str} ===")

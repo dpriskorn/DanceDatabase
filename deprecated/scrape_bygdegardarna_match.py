@@ -66,7 +66,7 @@ def coordinate_matches(lat: float, lng: float, db_venues: dict[str, dict], thres
 
 
 def prompt_fuzzy_match(title: str, matched_label: str, qid: str, score: int, permalink: str) -> bool:
-    print(f"\nPotential fuzzy match:")
+    print("\nPotential fuzzy match:")
     print(f'  Bygdegardarna: "{title}"')
     print(f'  DanceDB:       "{matched_label}" ({qid})')
     print(f"  Score: {score}")
@@ -75,14 +75,12 @@ def prompt_fuzzy_match(title: str, matched_label: str, qid: str, score: int, per
     return questionary.confirm("Accept match?").ask()
 
 
-def prompt_coordinate_matches(
-    title: str, permalink: str, options: list[tuple[str, str, float]]
-) -> Optional[str]:
+def prompt_coordinate_matches(title: str, permalink: str, options: list[tuple[str, str, float]]) -> Optional[str]:
     print(f"\nCoordinate matches within {COORD_THRESHOLD_KM}km:")
     print(f'  Bygdegardarna: "{title}"')
     choices = []
     for qid, label, dist in options:
-        choices.append(f"{qid} - \"{label}\" ({dist:.0f}m)")
+        choices.append(f'{qid} - "{label}" ({dist:.0f}m)')
     choices.append("Skip")
     result = questionary.rawselect("Select:", choices=choices).ask()
     if result == "Skip":
@@ -115,12 +113,7 @@ def main(skip_prompts: bool = False):
         permalink = venue.get("meta", {}).get("permalink", "")
         lat = venue.get("position", {}).get("lat")
         lng = venue.get("position", {}).get("lng")
-        result = {
-            "position": venue.get("position"),
-            "title": title,
-            "meta": venue.get("meta"),
-            "permalink": permalink
-        }
+        result = {"position": venue.get("position"), "title": title, "meta": venue.get("meta"), "permalink": permalink}
 
         qid = None
         match_method = None
@@ -196,5 +189,6 @@ def main(skip_prompts: bool = False):
 
 if __name__ == "__main__":
     import sys
+
     skip_prompts = "--skip-prompts" in sys.argv
     main(skip_prompts=skip_prompts)

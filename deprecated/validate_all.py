@@ -1,6 +1,7 @@
 # ---- Validation script ----
 import json
 from pathlib import Path
+
 from pydantic import ValidationError  # ✅ correct import (not from _pydantic_core)
 
 from src.models.dance_event import DanceEvent

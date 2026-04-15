@@ -6,25 +6,22 @@ from typing import Optional, cast
 import questionary
 import requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel, Field, AnyUrl
+from pydantic import AnyUrl, BaseModel, Field
 
 from config import CET
+from src.models._utils.dance_styles import DANCE_STYLE_MAP, get_style_qid
 from src.models.cogwork.enums import EventType
 from src.models.cogwork.price import PriceExtractor, PriceMismatchError
-from src.models.export.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
-    Registration
-from src.models._utils.dance_styles import DANCE_STYLE_MAP, get_style_qid
+from src.models.export.dance_event import DanceDatabaseIdentifiers, DanceEvent, EventLinks, Identifiers, Organizer, Registration
 
 logger = logging.getLogger(__name__)
 
-FULL_MAPPING = [
-    "FULLT",
-    "FULLBOKAD"
-]
+FULL_MAPPING = ["FULLT", "FULLBOKAD"]
 
 
 class CogworkEvent(BaseModel):
     """This class maps between an event in CogWork and DanceDatabase"""
+
     organizer_slug: str = Field(description="Organizer in Cogwork, e.g. 'dansgladje'")
     organizer_qid: str
 
@@ -35,7 +32,7 @@ class CogworkEvent(BaseModel):
     # event type detection
     meeting_labels: list[str] = Field(
         default_factory=lambda: ["årsmöte", "möte", "annual meeting", "medlemsmöte", "styrelsemöte"],
-        description="Case-insensitive phrases that indicate this is a meeting, not a dance"
+        description="Case-insensitive phrases that indicate this is a meeting, not a dance",
     )
     event_type: EventType = Field(EventType.DANCE, description="Type of event: dance, meeting, or unknown")
 
@@ -96,10 +93,7 @@ class CogworkEvent(BaseModel):
 
         ical_tag = soup.select_one("a.cwIconCal")
         ical_url = ical_tag["href"] if ical_tag else None
-        self.event_metadata = {
-            "label_sv": label_sv,
-            "ical_url": ical_url
-        }
+        self.event_metadata = {"label_sv": label_sv, "ical_url": ical_url}
 
     # === iCal methods ===
     @staticmethod
@@ -110,6 +104,7 @@ class CogworkEvent(BaseModel):
 
     def parse_ical_text(self, text: str):
         """Extract iCal info and store in attributes."""
+
         def get_value(key):
             match = re.search(rf"^{key}:(.*)$", text, re.MULTILINE)
             return match.group(1).strip() if match else ""
@@ -260,11 +255,7 @@ class CogworkEvent(BaseModel):
                     if default_style not in style_choices:
                         default_style = style_choices[0] if style_choices else None
                     if default_style:
-                        chosen = questionary.select(
-                            f"Select dance style for: '{style_text[:50]}...'",
-                            choices=style_choices,
-                            default=default_style
-                        ).ask()
+                        chosen = questionary.select(f"Select dance style for: '{style_text[:50]}...'", choices=style_choices, default=default_style).ask()
                         self.dance_styles_qids.add(self.dance_style_qid_map[chosen])
                         logger.debug(f"User selected dance style: {chosen} ({self.dance_style_qid_map[chosen]})")
                     else:
@@ -287,10 +278,7 @@ class CogworkEvent(BaseModel):
             price_reduced=self.price_reduced,
             last_update=now,
             registration=Registration(
-                registration_open=self.registration_open,
-                registration_opens=self.registration_opens,
-                advance_registration_required=True,
-                fully_booked=self.full
+                registration_open=self.registration_open, registration_opens=self.registration_opens, advance_registration_required=True, fully_booked=self.full
             ),
             identifiers=Identifiers(
                 dancedatabase=DanceDatabaseIdentifiers(
@@ -300,14 +288,8 @@ class CogworkEvent(BaseModel):
                     source="Q484",
                 )
             ),
-            organizer=Organizer(
-            ),
-            links=EventLinks(
-                sources=cast(list[AnyUrl], [
-                    self.event_url,
-                    self.shop_url
-                ])
-            )
+            organizer=Organizer(),
+            links=EventLinks(sources=cast(list[AnyUrl], [self.event_url, self.shop_url])),
         )
 
     def determine_skip(self):
@@ -355,4 +337,3 @@ class CogworkEvent(BaseModel):
             self.parse_shop_page()
         if not self.skip:
             self.parse_into_dance_event()
-

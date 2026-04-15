@@ -1,4 +1,5 @@
 """Onbeat scraper commands."""
+
 import json
 import logging
 from datetime import date
@@ -33,10 +34,10 @@ def run(dry_run: bool = False) -> None:
     ONBEAT_DATA_DIR.mkdir(parents=True, exist_ok=True)
     today = date.today().strftime("%Y-%m-%d")
     cache_file = ONBEAT_DATA_DIR / f"{today}.json"
-    
+
     def safe_url(val):
         return str(val) if val else None
-    
+
     cache_data = {
         "scrape_date": today,
         "events": [
@@ -53,9 +54,9 @@ def run(dry_run: bool = False) -> None:
                 "links": safe_url(e.links.official_website) if e.links else None,
             }
             for e in event_list
-        ]
+        ],
     }
-    
+
     with open(cache_file, "w") as f:
         json.dump(cache_data, f, ensure_ascii=False, indent=2)
     print(f"Cached to {cache_file}")

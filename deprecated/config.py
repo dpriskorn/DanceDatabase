@@ -1,5 +1,5 @@
 import logging
-from datetime import timezone, timedelta
+from datetime import timedelta, timezone
 
 loglevel = logging.INFO
 username = "Maintenance@maintenance-bot"

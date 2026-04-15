@@ -10,6 +10,7 @@ class Organizer(BaseModel):
     # === Export ===
     def export_to_json(self):
         from datetime import date
+
         Path(self.json_output_folder).mkdir(parents=True, exist_ok=True)
         today_str = date.today().strftime("%Y-%m-%d")
         file_path = Path(self.json_output_folder) / f"{today_str}.json"

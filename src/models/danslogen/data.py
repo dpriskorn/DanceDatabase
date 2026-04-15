@@ -15,6 +15,7 @@ DANSLOGEN_ARTISTS_DIR = Path("data") / "danslogen" / "artists"
 
 class DataNotFoundError(Exception):
     """Raised when required JSON data file is not found."""
+
     pass
 
 
@@ -32,7 +33,7 @@ class DanslogenData:
 
     def load_band_map(self) -> dict[str, str]:
         """Load band QID map from DanceDB artists JSON file for today.
-        
+
         Returns dict mapping band name (label) to QID.
         Raises DataNotFoundError if today's data file is not found.
         """
@@ -45,7 +46,7 @@ class DanslogenData:
             raise DataNotFoundError(f"DanceDB artists directory not found: {DANCEDB_ARTISTS_DIR}")
         if not artists_file.exists():
             raise DataNotFoundError(f"Artists data file not found for today: {artists_file}")
-        
+
         try:
             artists = json.loads(artists_file.read_text())
             band_map = {}
@@ -65,7 +66,7 @@ class DanslogenData:
 
     def load_venue_map(self) -> dict[str, str]:
         """Load venue QID map from DanceDB venues JSON file for today.
-        
+
         Returns dict mapping venue name (label) to QID.
         Raises DataNotFoundError if today's data file is not found.
         """
@@ -78,7 +79,7 @@ class DanslogenData:
             raise DataNotFoundError(f"DanceDB venues directory not found: {DANCEDB_VENUES_DIR}")
         if not venues_file.exists():
             raise DataNotFoundError(f"Venues data file not found for today: {venues_file}")
-        
+
         try:
             venues = json.loads(venues_file.read_text())
             venue_map = {}
@@ -144,6 +145,7 @@ class DanslogenData:
 
 _data_instance: Optional[DanslogenData] = None
 
+
 def _get_data_instance() -> DanslogenData:
     global _data_instance
     if _data_instance is None:
@@ -158,7 +160,7 @@ def _reset_instance() -> None:
 
 def load_band_map() -> dict[str, str]:
     """Load band QID map from DanceDB artists JSON file for today.
-    
+
     Returns dict mapping band name (label) to QID.
     Raises DataNotFoundError if today's data file is not found.
     """
@@ -167,7 +169,7 @@ def load_band_map() -> dict[str, str]:
 
 def load_venue_map() -> dict[str, str]:
     """Load venue QID map from DanceDB venues JSON file for today.
-    
+
     Returns dict mapping venue name (label) to QID.
     Raises DataNotFoundError if today's data file is not found.
     """
@@ -176,7 +178,7 @@ def load_venue_map() -> dict[str, str]:
 
 def load_danslogen_artists() -> dict[str, dict]:
     """Load danslogen artists with spelplan_id.
-    
+
     Returns dict mapping band name (lowercase) to {name, spelplan_id}.
     """
     today = get_today_str()
@@ -184,7 +186,7 @@ def load_danslogen_artists() -> dict[str, dict]:
     if not artists_file.exists():
         logger.warning(f"Danslogen artists file not found: {artists_file}")
         return {}
-    
+
     artists_data = json.loads(artists_file.read_text())
     artists_map = {}
     for a in artists_data:

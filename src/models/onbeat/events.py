@@ -5,18 +5,12 @@ from typing import List, Optional
 
 import requests
 from bs4 import BeautifulSoup, Tag
-from pydantic import BaseModel, AnyUrl, Field
+from pydantic import AnyUrl, BaseModel, Field
 
 import config
 from config import CET
-from src.models.export.dance_event import (
-    DanceEvent,
-    EventLinks,
-    Identifiers,
-    DanceDatabaseIdentifiers,
-    Registration,
-    Organizer, )
-from src.models._utils.datetime_utils import parse_iso_datetime, parse_datetime_with_range
+from src.models._utils.datetime_utils import parse_datetime_with_range, parse_iso_datetime
+from src.models.export.dance_event import DanceDatabaseIdentifiers, DanceEvent, EventLinks, Identifiers, Organizer, Registration
 from src.models.onbeat.venue_resolver import VenueResolver
 
 logging.basicConfig(level=config.loglevel)
@@ -39,26 +33,21 @@ class OnbeatEvents(BaseModel):
     """
     Parses Onbeat club pages to extract courses and social dance events.
     """
+
     # todo support excluding inactive communities
     page_url: str
     baseurl: str = "https://onbeat.dance"
-    community_qid_map: dict[str, str] = {"WCS Umeå": "Q16",
-                                         "Salsa Sundsvall": "Q498",
-                                         "WCS Piteå": "Q499",
-                                         "Westie Vision": "Q477",
-                                         "Valentine events": "Q500",
-                                         "WCS Skellefteå": "Q503",
-                                         "West Coast Nights": "inactive",  # no events so probably not active anymore
-                                         "Z Dance Experience": "inactive"  # no events so probably not active anymore
-                                         }
-    dance_style_qid_map: dict = {
-        "fox": "Q23",
-        "west coast swing": "Q15",
-        "modern fox": "Q23",
-        "bugg": "Q485",
-        "casanovas": "Q4",
-        "socialdans": "Q4"
+    community_qid_map: dict[str, str] = {
+        "WCS Umeå": "Q16",
+        "Salsa Sundsvall": "Q498",
+        "WCS Piteå": "Q499",
+        "Westie Vision": "Q477",
+        "Valentine events": "Q500",
+        "WCS Skellefteå": "Q503",
+        "West Coast Nights": "inactive",  # no events so probably not active anymore
+        "Z Dance Experience": "inactive",  # no events so probably not active anymore
     }
+    dance_style_qid_map: dict = {"fox": "Q23", "west coast swing": "Q15", "modern fox": "Q23", "bugg": "Q485", "casanovas": "Q4", "socialdans": "Q4"}
     price_override_map: dict[str, Decimal] = {
         "rockthebarn": Decimal("1800"),
     }
@@ -83,9 +72,7 @@ class OnbeatEvents(BaseModel):
     start_time: str = ""
     end_time: str = ""
     registration_open: bool = False
-    model_config = {
-        "arbitrary_types_allowed": True  # <-- allow BeautifulSoup and Tag
-    }
+    model_config = {"arbitrary_types_allowed": True}  # <-- allow BeautifulSoup and Tag
 
     def _get_venue_resolver(self) -> VenueResolver:
         """Get or create VenueResolver instance."""
@@ -110,7 +97,7 @@ class OnbeatEvents(BaseModel):
         response = requests.post(
             f"{self.baseurl}/explore",
             json={"selectedValues": {"selectedCommunities": [], "selectedDates": []}},
-            headers={"Content-Type": "application/json", "Accept": "application/json"}
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
         )
         response.raise_for_status()
         data = response.json()
@@ -224,19 +211,19 @@ class OnbeatEvents(BaseModel):
 
     def parse_events(self) -> List[DanceEvent]:
         self.api_events = self.fetch_events_from_api()
-        
+
         events: List[DanceEvent] = []
 
         for i, api_event in enumerate(self.api_events, start=1):
             self.current_api_event = api_event
             self.organizer_name = api_event.clubname
             self.organizer_qid = self.map_community_qid(text=self.organizer_name)
-            
+
             logger.info(f"Processing event {i}/{len(self.api_events)}: {api_event.name}")
-            
+
             soup = self.fetch_event_details(api_event.clublink, api_event.courselink)
             details = self._parse_event_details_from_soup(soup, api_event)
-            
+
             if not details:
                 logger.warning(f"Skipping event with no details: {api_event.name}")
                 continue
@@ -258,7 +245,7 @@ class OnbeatEvents(BaseModel):
                 advance_registration_required=True,
                 cancelled=False,
                 fully_booked=False,
-                registration_closes=None
+                registration_closes=None,
             )
 
             description = self._parse_description(soup)
@@ -278,7 +265,7 @@ class OnbeatEvents(BaseModel):
             recurring = number_of_occasions > 1
 
             event_url = f"{self.baseurl}/{api_event.clublink}/{api_event.courselink}"
-            
+
             dance_event = DanceEvent(
                 id=api_event.courselink,
                 label={"sv": api_event.name},
@@ -288,20 +275,12 @@ class OnbeatEvents(BaseModel):
                 end_timestamp=end_dt,
                 schedule={},
                 price_normal=price_normal,
-                links=EventLinks(
-                    official_website=AnyUrl(event_url),
-                    sources=[AnyUrl(self.page_url)]
-                ),
+                links=EventLinks(official_website=AnyUrl(event_url), sources=[AnyUrl(self.page_url)]),
                 organizer=dance_event_organizer,
                 registration=registration,
                 identifiers=Identifiers(
                     dancedatabase=DanceDatabaseIdentifiers(
-                        source="Q501",
-                        venue=venue_qid,
-                        dance_styles=list(dance_styles_qids),
-                        event_series="",
-                        organizer=self.organizer_qid,
-                        event=""
+                        source="Q501", venue=venue_qid, dance_styles=list(dance_styles_qids), event_series="", organizer=self.organizer_qid, event=""
                     )
                 ),
                 last_update=datetime.now().replace(tzinfo=CET, microsecond=0),
@@ -309,7 +288,7 @@ class OnbeatEvents(BaseModel):
                 price_early=None,
                 coordinates=None,
                 weekly_recurring=recurring,
-                number_of_occasions=number_of_occasions
+                number_of_occasions=number_of_occasions,
             )
             events.append(dance_event)
             self._reset_per_event_state()
@@ -397,6 +376,7 @@ class OnbeatEvents(BaseModel):
             for card in option_cards:
                 text = card.get_text(strip=True)
                 import re
+
                 match = re.search(r"(\d+)\s*SEK", text)
                 if match:
                     price_val = Decimal(match.group(1))

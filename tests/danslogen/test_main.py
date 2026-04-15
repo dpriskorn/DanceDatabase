@@ -1,5 +1,6 @@
-from bs4 import BeautifulSoup
 from unittest.mock import MagicMock, patch
+
+from bs4 import BeautifulSoup
 
 from src.models.danslogen.events.table_row import DanslogenTableRow
 
@@ -7,11 +8,11 @@ from src.models.danslogen.events.table_row import DanslogenTableRow
 class TestDanslogenParseDatetime:
     """Test full datetime parsing in Danslogen.parse_row."""
 
-    @patch('src.models.danslogen.band_mapper.load_band_map')
-    @patch('src.models.danslogen.venue_mapper.load_venue_map')
+    @patch("src.models.danslogen.band_mapper.load_band_map")
+    @patch("src.models.danslogen.venue_mapper.load_venue_map")
     def test_parses_row_like_html_example(self, mock_load_venue, mock_load_band):
         """Test row with exact HTML structure user provided.
-        
+
         HTML:
         <tr class="r9351">
             <td></td><td>Mån</td><td>13</td>
@@ -26,10 +27,10 @@ class TestDanslogenParseDatetime:
         """
         from src.models.danslogen.main import Danslogen
 
-        mock_load_band.return_value = {'streaplers': 'Q123'}
-        mock_load_venue.return_value = {'ätrasalen': 'Q456'}
+        mock_load_band.return_value = {"streaplers": "Q123"}
+        mock_load_venue.return_value = {"ätrasalen": "Q456"}
 
-        html = '''<tr class="r9351">
+        html = """<tr class="r9351">
             <td></td>
             <td>Mån</td>
             <td>13</td>
@@ -40,14 +41,14 @@ class TestDanslogenParseDatetime:
             <td>Falkenberg</td>
             <td>Halland</td>
             <td></td>
-        </tr>'''
-        
+        </tr>"""
+
         scraper = Danslogen(month="april", interactive=False)
         soup = BeautifulSoup(html, "lxml")
         row = soup.find("tr")
-        
+
         result = scraper.parse_row(row, "april")
-        
+
         assert result is not None
         assert result.start_timestamp.day == 13
         assert result.start_timestamp.hour == 19

@@ -58,6 +58,7 @@ def fetch_bygdegardarna() -> list[dict]:
         List of venue dictionaries with position, title, and meta fields
     """
     from src.models.bygdegardarna import fetch_markerdata
+
     return fetch_markerdata()
 
 
@@ -84,6 +85,7 @@ def fetch_dancedb_venues() -> dict[str, dict]:
     LIMIT 2000
     """
     from src.models.dancedb_client import execute_sparql_query
+
     results = execute_sparql_query(query=sparql)
     venues = {}
     for binding in results["results"]["bindings"]:
@@ -116,10 +118,7 @@ def validate_coordinates(db_venues: dict[str, dict], byg_venues: list[dict]) -> 
     db_pct = (db_with_coords / db_total * 100) if db_total else 0
     print(f"  DanceDB: {db_with_coords}/{db_total} ({db_pct:.1f}%) with coordinates")
 
-    byg_with_coords = sum(
-        1 for v in byg_venues
-        if v.get("position", {}).get("lat") and v.get("position", {}).get("lng")
-    )
+    byg_with_coords = sum(1 for v in byg_venues if v.get("position", {}).get("lat") and v.get("position", {}).get("lng"))
     byg_total = len(byg_venues)
     byg_pct = (byg_with_coords / byg_total * 100) if byg_total else 0
     print(f"  Bygdegardarna: {byg_with_coords}/{byg_total} ({byg_pct:.1f}%) with coordinates")
@@ -160,8 +159,7 @@ def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None
         if len(entries) > 1:
             for i in range(len(entries)):
                 for j in range(i + 1, len(entries)):
-                    dist = haversine_distance(entries[i][1], entries[i][2],
-                                              entries[j][1], entries[j][2])
+                    dist = haversine_distance(entries[i][1], entries[i][2], entries[j][1], entries[j][2])
                     if dist <= DUPLICATE_DISTANCE_KM:
                         db_true_dupes.append((label, [e[0] for e in entries]))
                         break
@@ -188,8 +186,7 @@ def check_duplicates(db_venues: dict[str, dict], byg_venues: list[dict]) -> None
         if len(entries) > 1:
             for i in range(len(entries)):
                 for j in range(i + 1, len(entries)):
-                    dist = haversine_distance(entries[i][0], entries[i][1],
-                                              entries[j][0], entries[j][1])
+                    dist = haversine_distance(entries[i][0], entries[i][1], entries[j][0], entries[j][1])
                     if dist <= DUPLICATE_DISTANCE_KM:
                         byg_true_dupes.append(title)
                         break
@@ -270,7 +267,7 @@ def prompt_fuzzy_match(title: str, matched_label: str, qid: str, score: int, per
     Returns:
         True if user accepts match, False if rejected
     """
-    print(f"\nPotential fuzzy match:")
+    print("\nPotential fuzzy match:")
     print(f'  Bygdegardarna: "{title}"')
     print(f'  DanceDB:       "{matched_label}" ({qid})')
     print(f"  Score: {score}")
@@ -294,7 +291,7 @@ def prompt_coordinate_matches(title: str, permalink: str, options: list[tuple[st
     print(f'  Bygdegardarna: "{title}"')
     choices = []
     for qid, label, dist in options:
-        choices.append(f"{qid} - \"{label}\" ({dist:.0f}m)")
+        choices.append(f'{qid} - "{label}" ({dist:.0f}m)')
     choices.append("Skip")
     result = questionary.rawselect("Select:", choices=choices).ask()
     if result == "Skip":
@@ -334,21 +331,15 @@ def save_dancedb_venues(venues: dict[str, dict]) -> None:
 
 
 def _print_progress(
-    processed: int,
-    total: int,
-    enriched: list[dict],
-    unmatched: list[dict],
-    matched_qids: set[str],
-    db_venues: dict[str, dict],
-    byg_venues: list[dict]
+    processed: int, total: int, enriched: list[dict], unmatched: list[dict], matched_qids: set[str], db_venues: dict[str, dict], byg_venues: list[dict]
 ) -> None:
     """Print matching progress with potential matches remaining."""
-    remaining = total - processed
+    total - processed
     matched = len(enriched)
     unmatched_count = len(unmatched)
     available_qids = len(db_venues) - len(matched_qids)
 
-    byg_titles = {v.get("title", "").lower() for v in byg_venues[:processed]}
+    {v.get("title", "").lower() for v in byg_venues[:processed]}
     matched_byg_titles = {v.get("title", "").lower() for v in enriched}
 
     fuzzy_candidates = 0
@@ -364,21 +355,23 @@ def _print_progress(
                 fuzzy_candidates += 1
 
         if lat and lng and title.lower() not in matched_byg_titles:
-            coords = [(q, l, d) for q, l, d in coordinate_matches(lat, lng, db_venues)
-                      if q not in matched_qids]
+            coords = [(q, l, d) for q, l, d in coordinate_matches(lat, lng, db_venues) if q not in matched_qids]
             if coords:
                 coord_candidates += 1
 
     exact_candidates = sum(
-        1 for v in byg_venues[processed:]
+        1
+        for v in byg_venues[processed:]
         if v.get("title", "").lower() not in matched_byg_titles
         and exact_match(v.get("title", ""), db_venues) is not None
         and exact_match(v.get("title", ""), db_venues)[0] not in matched_qids
     )
 
-    print(f"  {processed}/{total} | Matched: {matched} | Unmatched: {unmatched_count} | "
-          f"Pending: {exact_candidates} exact, {fuzzy_candidates} fuzzy, {coord_candidates} coord | "
-          f"QIDs available: {available_qids}")
+    print(
+        f"  {processed}/{total} | Matched: {matched} | Unmatched: {unmatched_count} | "
+        f"Pending: {exact_candidates} exact, {fuzzy_candidates} fuzzy, {coord_candidates} coord | "
+        f"QIDs available: {available_qids}"
+    )
 
 
 def main(skip_prompts: bool = False) -> None:
@@ -419,12 +412,12 @@ def main(skip_prompts: bool = False) -> None:
 
     if output_file.exists():
         if skip_prompts:
-            print(f"Skipping - already matched today.")
+            print("Skipping - already matched today.")
             return
         if not questionary.confirm(f"[{today_str}] {output_file} already exists. Skip?").ask():
             output_file.unlink()
         else:
-            print(f"Skipping - already matched today.")
+            print("Skipping - already matched today.")
             return
 
     print(f"\nStep 5: Matching venues from {today_str}...")
@@ -439,12 +432,7 @@ def main(skip_prompts: bool = False) -> None:
         permalink = venue.get("meta", {}).get("permalink", "")
         lat = venue.get("position", {}).get("lat")
         lng = venue.get("position", {}).get("lng")
-        result = {
-            "position": venue.get("position"),
-            "title": title,
-            "meta": venue.get("meta"),
-            "permalink": permalink
-        }
+        result = {"position": venue.get("position"), "title": title, "meta": venue.get("meta"), "permalink": permalink}
 
         if title in matched_byg_titles:
             unmatched.append(result)
@@ -477,9 +465,7 @@ def main(skip_prompts: bool = False) -> None:
                         match_score = score
 
         if not qid and lat and lng:
-            coord_options = [(qid, label, dist) for qid, label, dist 
-                             in coordinate_matches(lat, lng, db_venues)
-                             if qid not in matched_qids]
+            coord_options = [(qid, label, dist) for qid, label, dist in coordinate_matches(lat, lng, db_venues) if qid not in matched_qids]
             if coord_options:
                 if skip_prompts:
                     if len(coord_options) == 1:
@@ -514,5 +500,6 @@ def main(skip_prompts: bool = False) -> None:
 
 if __name__ == "__main__":
     import sys
+
     skip_prompts = "--skip-prompts" in sys.argv
     main(skip_prompts=skip_prompts)

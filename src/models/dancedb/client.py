@@ -1,20 +1,20 @@
 import logging
+from datetime import datetime
 from typing import Optional
 
-from datetime import datetime
 import questionary
 import rich
 from wikibaseintegrator import WikibaseIntegrator, datatypes
-from wikibaseintegrator.wbi_login import Login
 from wikibaseintegrator.wbi_config import config as wbi_config
 from wikibaseintegrator.wbi_helpers import execute_sparql_query
+from wikibaseintegrator.wbi_login import Login
 
 import config
 
-wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
-wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
-wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
-wbi_config['USER_AGENT'] = config.user_agent
+wbi_config["MEDIAWIKI_API_URL"] = "https://dance.wikibase.cloud/w/api.php"
+wbi_config["SPARQL_ENDPOINT_URL"] = "https://dance.wikibase.cloud/query/sparql"
+wbi_config["WIKIBASE_URL"] = "https://dance.wikibase.cloud"
+wbi_config["USER_AGENT"] = config.user_agent
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class DancedbClient:
     def __init__(self):
         self.login = Login(user=config.username, password=config.password)
         self.wbi = WikibaseIntegrator(login=self.login)
-        self.base_url = wbi_config['WIKIBASE_URL']
+        self.base_url = wbi_config["WIKIBASE_URL"]
 
     def search_band(self, band_name: str) -> Optional[str]:
         sparql = f"""
@@ -38,9 +38,9 @@ class DancedbClient:
         """
         try:
             results = execute_sparql_query(query=sparql)
-            items = results['results']['bindings']
+            items = results["results"]["bindings"]
             if len(items) == 1:
-                qid = items[0]['item']['value'].rsplit('/', 1)[-1]
+                qid = items[0]["item"]["value"].rsplit("/", 1)[-1]
                 logger.info(f"Found band '{band_name}' on DanceDB: {self.base_url}/wiki/Item:{qid}")
                 return qid
             elif len(items) > 1:
@@ -56,12 +56,12 @@ class DancedbClient:
 
         try:
             new_item = self.wbi.item.new()
-            new_item.labels.set('sv', band_name)
-            new_item.labels.set('en', band_name)
-            new_item.descriptions.set('sv', 'artist')
-            new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q225'))
+            new_item.labels.set("sv", band_name)
+            new_item.labels.set("en", band_name)
+            new_item.descriptions.set("sv", "artist")
+            new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q225"))
             if spelplan_id:
-                new_item.claims.add(datatypes.String(prop_nr='P46', value=spelplan_id))
+                new_item.claims.add(datatypes.String(prop_nr="P46", value=spelplan_id))
                 logger.info(f"Band '{band_name}' P46: %s", spelplan_id)
             else:
                 logger.warning(f"Band '{band_name}' created WITHOUT spelplan_id (P46)")
@@ -102,16 +102,16 @@ SELECT ?item ?label ?altLabel ?p3 ?p46 WHERE {
         try:
             results = execute_sparql_query(sparql)
             items_dict = {}
-            for row in results.get('results', {}).get('bindings', []):
-                qid = row['item']['value'].rsplit('/', 1)[-1]
-                label = row.get('label', {}).get('value', '')
-                alt_label = row.get('altLabel', {}).get('value', '')
-                p3 = row.get('p3', {}).get('value', '')
-                p46 = row.get('p46', {}).get('value', '')
+            for row in results.get("results", {}).get("bindings", []):
+                qid = row["item"]["value"].rsplit("/", 1)[-1]
+                label = row.get("label", {}).get("value", "")
+                alt_label = row.get("altLabel", {}).get("value", "")
+                p3 = row.get("p3", {}).get("value", "")
+                p46 = row.get("p46", {}).get("value", "")
                 if qid not in items_dict:
-                    items_dict[qid] = {'qid': qid, 'label': label, 'aliases': [], 'p3': p3, 'p46': p46}
+                    items_dict[qid] = {"qid": qid, "label": label, "aliases": [], "p3": p3, "p46": p46}
                 if alt_label:
-                    items_dict[qid]['aliases'].append(alt_label.lower())
+                    items_dict[qid]["aliases"].append(alt_label.lower())
             items = list(items_dict.values())
             logger.info(f"Fetched {len(items)} artists from DanceDB")
             return items
@@ -140,12 +140,12 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         try:
             results = execute_sparql_query(sparql)
             venues = []
-            for row in results.get('results', {}).get('bindings', []):
-                qid = row['item']['value'].rsplit('/', 1)[-1]
-                label = row.get('label', {}).get('value', '')
-                alt_labels = row.get('altLabel', {}).get('value', '').split(',') if 'altLabel' in row else []
-                p4 = row.get('p4', {}).get('value', '')
-                venues.append({'qid': qid, 'label': label, 'aliases': alt_labels, 'p4': p4})
+            for row in results.get("results", {}).get("bindings", []):
+                qid = row["item"]["value"].rsplit("/", 1)[-1]
+                label = row.get("label", {}).get("value", "")
+                alt_labels = row.get("altLabel", {}).get("value", "").split(",") if "altLabel" in row else []
+                p4 = row.get("p4", {}).get("value", "")
+                venues.append({"qid": qid, "label": label, "aliases": alt_labels, "p4": p4})
             logger.info(f"Fetched {len(venues)} venues from DanceDB")
             return venues
         except Exception as e:
@@ -167,9 +167,9 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         """
         try:
             results = execute_sparql_query(query=sparql)
-            items = results['results']['bindings']
+            items = results["results"]["bindings"]
             if len(items) == 1:
-                qid = items[0]['item']['value'].rsplit('/', 1)[-1]
+                qid = items[0]["item"]["value"].rsplit("/", 1)[-1]
                 logger.info(f"Found venue '{venue_name}' on DanceDB: {self.base_url}/wiki/Item:{qid}")
                 return qid
             elif len(items) > 1:
@@ -186,17 +186,13 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
 
         try:
             new_item = self.wbi.item.new()
-            new_item.labels.set('sv', venue_name)
-            new_item.labels.set('en', venue_name)
-            new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q20'))
+            new_item.labels.set("sv", venue_name)
+            new_item.labels.set("en", venue_name)
+            new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q20"))
             if latitude and longitude:
-                new_item.claims.add(datatypes.GlobeCoordinate(
-                    prop_nr='P4',
-                    latitude=latitude,
-                    longitude=longitude,
-                    precision=0.0001,
-                    globe='http://www.wikidata.org/entity/Q2'
-                ))
+                new_item.claims.add(
+                    datatypes.GlobeCoordinate(prop_nr="P4", latitude=latitude, longitude=longitude, precision=0.0001, globe="http://www.wikidata.org/entity/Q2")
+                )
             new_item.write(login=self.wbi.login)
             qid = new_item.id
             url = f"{self.base_url}/wiki/Item:{qid}"
@@ -230,7 +226,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         """Set P46 (spelplan ID) on existing artist item. Returns True on success."""
         try:
             item = self.wbi.item.get(qid)
-            item.claims.add(datatypes.String(prop_nr='P46', value=spelplan_id))
+            item.claims.add(datatypes.String(prop_nr="P46", value=spelplan_id))
             item.write(login=self.wbi.login)
             logger.info(f"Added P46 to artist {qid}: {spelplan_id}")
             return True
@@ -238,7 +234,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             logger.error(f"Error setting P46 on '{qid}': {e}")
             return False
 
-    def add_event(self, band_qid: str, venue_qid: str, start: datetime, end: datetime, status_qid: str = 'Q566') -> bool:
+    def add_event(self, band_qid: str, venue_qid: str, start: datetime, end: datetime, status_qid: str = "Q566") -> bool:
         """Add/创建一个新的活动事件.
 
         Args:
@@ -252,13 +248,13 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         """
         try:
             event = self.wbi.item.new()
-            event.labels.set('sv', f"Event {start.isoformat()}")
-            event.labels.set('en', f"Event {start.isoformat()}")
-            event.claims.add(datatypes.Item(prop_nr='P1', value='Q2'))
-            event.claims.add(datatypes.Item(prop_nr='P7', value=venue_qid))
-            event.claims.add(datatypes.Time(prop_nr='P5', time=start.strftime('+%Y-%m-%dT%H:%M:%S00'), precision=11))
-            event.claims.add(datatypes.Time(prop_nr='P6', time=end.strftime('+%Y-%m-%dT%H:%M:%S00'), precision=11))
-            event.claims.add(datatypes.Item(prop_nr='P43', value=status_qid))
+            event.labels.set("sv", f"Event {start.isoformat()}")
+            event.labels.set("en", f"Event {start.isoformat()}")
+            event.claims.add(datatypes.Item(prop_nr="P1", value="Q2"))
+            event.claims.add(datatypes.Item(prop_nr="P7", value=venue_qid))
+            event.claims.add(datatypes.Time(prop_nr="P5", time=start.strftime("+%Y-%m-%dT%H:%M:%S00"), precision=11))
+            event.claims.add(datatypes.Time(prop_nr="P6", time=end.strftime("+%Y-%m-%dT%H:%M:%S00"), precision=11))
+            event.claims.add(datatypes.Item(prop_nr="P43", value=status_qid))
             item_qid = event.write(login=self.wbi.login)
             logger.info(f"Created event {item_qid} for band {band_qid} at venue {venue_qid}")
             return True

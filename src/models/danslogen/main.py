@@ -9,22 +9,15 @@ from bs4 import BeautifulSoup, Tag
 from pydantic import AnyUrl
 
 from config import CET
-from src.models.export.dance_event import (
-    DanceEvent,
-    EventLinks,
-    Identifiers,
-    DanceDatabaseIdentifiers,
-    Organizer,
-    Registration,
-)
+from src.models._utils.datetime_utils import MONTH_NUM_TO_NAME, combine_date_and_time, parse_date, parse_time_range
 from src.models.dancedb.client import DancedbClient
+from src.models.danslogen.artists.row import DanslogenArtistRow
 from src.models.danslogen.band_mapper import BandMapper
-from src.models.danslogen.venue_mapper import VenueMapper
 from src.models.danslogen.events.event import DanslogenEvent
 from src.models.danslogen.events.table_row import DanslogenTableRow
+from src.models.danslogen.venue_mapper import VenueMapper
 from src.models.exceptions import InvalidRowError
-from src.models.danslogen.artists.row import DanslogenArtistRow
-from src.models._utils.datetime_utils import MONTH_NUM_TO_NAME, combine_date_and_time, parse_time_range, parse_date
+from src.models.export.dance_event import DanceDatabaseIdentifiers, DanceEvent, EventLinks, Identifiers, Organizer, Registration
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +108,7 @@ class Danslogen:
             except KeyboardInterrupt:
                 logger.info("Aborted by user, exiting...")
                 sys.exit(0)
-            if new_qid.lower() == 'skip':
+            if new_qid.lower() == "skip":
                 logger.warning("Skipping event with unknown venue: %s", venue_full)
                 return None
             venue_qid = new_qid
@@ -146,10 +139,7 @@ class Danslogen:
             price_normal=0,
             event_type="dance",
             price_reduced=None,
-            links=EventLinks(
-                official_website=AnyUrl(f"{self.baseurl}/dansprogram/{month}"),
-                sources=[AnyUrl(f"{self.baseurl}/dansprogram/{month}")]
-            ),
+            links=EventLinks(official_website=AnyUrl(f"{self.baseurl}/dansprogram/{month}"), sources=[AnyUrl(f"{self.baseurl}/dansprogram/{month}")]),
             organizer=organizer,
             registration=Registration(
                 cancelled=False,
@@ -157,24 +147,17 @@ class Danslogen:
                 registration_opens=None,
                 registration_closes=None,
                 advance_registration_required=False,
-                registration_open=False
+                registration_open=False,
             ),
             identifiers=Identifiers(
-                dancedatabase=DanceDatabaseIdentifiers(
-                    source="",
-                    venue=venue_qid,
-                    dance_styles=[],
-                    event_series="",
-                    organizer="",
-                    event=""
-                )
+                dancedatabase=DanceDatabaseIdentifiers(source="", venue=venue_qid, dance_styles=[], event_series="", organizer="", event="")
             ),
             last_update=datetime.now().replace(tzinfo=CET, microsecond=0),
             price_late=None,
             price_early=None,
             coordinates=None,
             weekly_recurring=False,
-            number_of_occasions=1
+            number_of_occasions=1,
         )
         return dance_event
 

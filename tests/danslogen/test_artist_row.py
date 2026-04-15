@@ -7,21 +7,11 @@ class TestDanslogenArtistRow:
     def test_parses_all_fields(self):
         row = MagicMock()
         cells = [
+            MagicMock(get_text=MagicMock(return_value="Tommys"), find=MagicMock(return_value=None)),
+            MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="http://www.tommys-musik.fi")))),
+            MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="https://www.facebook.com/test")))),
             MagicMock(
-                get_text=MagicMock(return_value="Tommys"),
-                find=MagicMock(return_value=None)
-            ),
-            MagicMock(
-                get_text=MagicMock(return_value=""),
-                find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="http://www.tommys-musik.fi")))
-            ),
-            MagicMock(
-                get_text=MagicMock(return_value=""),
-                find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="https://www.facebook.com/test")))
-            ),
-            MagicMock(
-                get_text=MagicMock(return_value=""),
-                find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="/dansband/spelplan/tommys_finland")))
+                get_text=MagicMock(return_value=""), find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="/dansband/spelplan/tommys_finland")))
             ),
         ]
         row.find_all = MagicMock(return_value=cells)
@@ -37,10 +27,7 @@ class TestDanslogenArtistRow:
     def test_parses_minimal_row(self):
         row = MagicMock()
         cells = [
-            MagicMock(
-                get_text=MagicMock(return_value="TestBand"),
-                find=MagicMock(return_value=None)
-            ),
+            MagicMock(get_text=MagicMock(return_value="TestBand"), find=MagicMock(return_value=None)),
             MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=None)),
             MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=None)),
             MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=None)),
@@ -86,10 +73,7 @@ class TestDanslogenArtistRow:
             MagicMock(get_text=MagicMock(return_value="Allstars")),
             MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=None)),
             MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=None)),
-            MagicMock(
-                get_text=MagicMock(return_value=""),
-                find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="/dansband/spelplan/allstars")))
-            ),
+            MagicMock(get_text=MagicMock(return_value=""), find=MagicMock(return_value=MagicMock(get=MagicMock(return_value="/dansband/spelplan/allstars")))),
         ]
         row.find_all = MagicMock(return_value=cells)
 

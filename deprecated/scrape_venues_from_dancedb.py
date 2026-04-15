@@ -49,7 +49,7 @@ def main():
     today_str = date.today().strftime("%Y-%m-%d")
     output_file = OUTPUT_DIR / f"{today_str}.json"
 
-    print(f"Fetching venues from DanceDB...")
+    print("Fetching venues from DanceDB...")
     venues = fetch_venues()
     print(f"Found {len(venues)} venues.")
 

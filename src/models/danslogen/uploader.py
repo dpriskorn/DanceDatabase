@@ -67,7 +67,7 @@ class DanslogenUploader:
         print(f"Processing {len(rows)} rows from {self.filename}")
 
         if self.limit:
-            rows = rows[:self.limit]
+            rows = rows[: self.limit]
             print(f"(Limited to {self.limit} rows)")
 
         events = []
@@ -88,17 +88,16 @@ class DanslogenUploader:
                 skipped += 1
 
             if (i + 1) % 50 == 0:
-                print(f"Processed {i + 1}/{len(rows)} rows... "
-                       f"{len(events)} events, {skipped} skipped")
+                print(f"Processed {i + 1}/{len(rows)} rows... " f"{len(events)} events, {skipped} skipped")
 
         print(f"\nDone! Processed {len(rows)} rows -> {len(events)} events, {skipped} skipped")
 
         if events:
-            output_file = Path(self.filename).with_suffix('.events.json')
+            output_file = Path(self.filename).with_suffix(".events.json")
             import json
-            with open(output_file, 'w') as f:
-                json.dump([e.model_dump(mode='json') for e in events], f,
-                         ensure_ascii=False, indent=2)
+
+            with open(output_file, "w") as f:
+                json.dump([e.model_dump(mode="json") for e in events], f, ensure_ascii=False, indent=2)
             print(f"Wrote events to {output_file}")
 
         if dry_run:

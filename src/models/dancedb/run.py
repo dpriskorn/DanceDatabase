@@ -6,15 +6,14 @@ from datetime import date
 from rapidfuzz import process as fuzz_process
 
 from src.models.dancedb.client import DancedbClient
-from src.models.dancedb.ensure_events import configure_wbi, fetch_events_from_dancedb, EVENTS_DIR, ARTISTS_DIR, \
-    fetch_existing_venues
+from src.models.dancedb.ensure_events import ARTISTS_DIR, EVENTS_DIR, configure_wbi, fetch_events_from_dancedb, fetch_existing_venues
 
 logger = logging.getLogger(__name__)
 
 
 def sync_artist_spelplan(dry_run: bool = False) -> None:
     """Sync spelplan_id from danslogen data to DanceDB artists (P46).
-    
+
     Matches artists from danslogen artists data with DanceDB artists and updates missing P46 values.
     """
     from src.models.danslogen.data import load_danslogen_artists
@@ -141,10 +140,7 @@ def run(month: str = "april", year: int = 2026, dry_run: bool = False, save: boo
             continue
 
         # Check existing venues by aliases
-        alias_match = any(
-            venue_lower in v.get("aliases", [])
-            for v in existing_venues.values()
-        )
+        alias_match = any(venue_lower in v.get("aliases", []) for v in existing_venues.values())
         if alias_match:
             continue
 

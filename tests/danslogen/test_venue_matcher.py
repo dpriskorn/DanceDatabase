@@ -1,5 +1,4 @@
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from src.models.danslogen.venue_matcher import VenueMatcher
 
@@ -22,7 +21,7 @@ class TestVenueMatcherFindInBygdegardarna:
 
 
 class TestVenueMatcherResolve:
-    @patch('src.models.danslogen.venue_mapper.load_venue_map')
+    @patch("src.models.danslogen.venue_mapper.load_venue_map")
     def test_resolves_from_venue_mapper(self, mock_load_venue_map):
         mock_load_venue_map.return_value = {"Arena": "Q100"}
         matcher = VenueMatcher()
@@ -30,7 +29,7 @@ class TestVenueMatcherResolve:
 
         assert result == "Q100"
 
-    @patch('src.models.danslogen.venue_mapper.load_venue_map')
+    @patch("src.models.danslogen.venue_mapper.load_venue_map")
     def test_returns_none_when_no_match_and_no_client(self, mock_load_venue_map):
         mock_load_venue_map.return_value = {}
         matcher = VenueMatcher(client=None)
@@ -38,7 +37,7 @@ class TestVenueMatcherResolve:
 
         assert result is None
 
-    @patch('src.models.danslogen.venue_mapper.load_venue_map')
+    @patch("src.models.danslogen.venue_mapper.load_venue_map")
     def test_falls_back_to_bygdegardarna(self, mock_load_venue_map):
         mock_load_venue_map.return_value = {}
         byg_venues = {
@@ -49,7 +48,7 @@ class TestVenueMatcherResolve:
 
         assert result == "Q200"
 
-    @patch('src.models.danslogen.venue_mapper.load_venue_map')
+    @patch("src.models.danslogen.venue_mapper.load_venue_map")
     def test_resolves_partial_match_from_venue_mapper(self, mock_load_venue_map):
         mock_load_venue_map.return_value = {"Allhem": "Q123"}
         matcher = VenueMatcher()

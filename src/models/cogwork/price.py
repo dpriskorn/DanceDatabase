@@ -1,5 +1,5 @@
-import re
 import logging
+import re
 from typing import Optional
 
 from bs4 import BeautifulSoup
@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 class PriceMismatchError(Exception):
     """Raised when prices from sidebar and main text don't match."""
+
     pass
 
 
@@ -69,22 +70,16 @@ class PriceExtractor:
 
         if sidebar_normal is not None and main_normal is not None:
             if sidebar_normal != main_normal:
-                raise PriceMismatchError(
-                    f"Price mismatch: sidebar={sidebar_normal}, main={main_normal}"
-                )
+                raise PriceMismatchError(f"Price mismatch: sidebar={sidebar_normal}, main={main_normal}")
 
         if sidebar_normal is not None or main_normal is not None:
             self.price_normal = sidebar_normal or main_normal
         else:
-            raise PriceMismatchError(
-                f"No price found in text: {self.original_html[:100]}..."
-            )
+            raise PriceMismatchError(f"No price found in text: {self.original_html[:100]}...")
 
         if sidebar_reduced is not None and main_reduced is not None:
             if sidebar_reduced != main_reduced:
-                raise PriceMismatchError(
-                    f"Reduced price mismatch: sidebar={sidebar_reduced}, main={main_reduced}"
-                )
+                raise PriceMismatchError(f"Reduced price mismatch: sidebar={sidebar_reduced}, main={main_reduced}")
 
         self.price_reduced = sidebar_reduced or main_reduced
 

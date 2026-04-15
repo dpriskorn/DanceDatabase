@@ -52,19 +52,29 @@ poetry run python cli.py --help
 
 #### Danslogen
 ```bash
-# 1. Scrape venues with coordinates
+# Full workflow (includes bygdegardarna + folketshus scrape + match)
+poetry run python cli.py sync-danslogen -m april -y 2026
+
+# Or step by step:
+# 1. Scrape bygdegardarna venues (provides coordinates for matching)
 poetry run python cli.py scrape-bygdegardarna
 
-# 2. Scrape danslogen events
-poetry run python cli.py scrape-danslogen -m april -y 2026
+# 2. Scrape folketshus venues (provides coordinates for matching)
+poetry run python cli.py scrape-folketshus
 
 # 3. Match venues to DanceDB
 poetry run python cli.py match-venues --skip-prompts
 
-# 4. Upload events (prompts for each)
+# 4. Scrape danslogen events
+poetry run python cli.py scrape-danslogen -m april -y 2026
+
+# 5. Ensure venues exist (uses bygdegardarna + folketshus for matching)
+poetry run python cli.py ensure-danslogen-venues
+
+# 6. Upload events
 poetry run python cli.py upload-events --limit 10
 
-# Or full workflow
+# Or run-all workflow (deprecated)
 poetry run python cli.py run-all --dry-run
 ```
 
@@ -119,9 +129,10 @@ SELECT ?item ?itemLabel WHERE {
 
 | Property | Description | Values |
 |-----------|-------------|--------|
-| P1 | Instance of | Q20 (venue), Q2 (event) |
+| P1 | Instance of | Q20 (venue), Q2 (event), Q225 (artist) |
+| P3 | Wikidata ID | External Wikidata QID |
 | P4 | Coordinates | lat/lng |
 | P5 | Start time | timestamp |
 | P6 | End time | timestamp |
 | P7 | Venue | venue QID |
-| P43 | Status | Q566 (planned), Q567 (cancelled) |
+| P43 | Status | Q566 (planned/planerat), Q567 (cancelled/inställt) |

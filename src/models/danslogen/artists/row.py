@@ -10,7 +10,7 @@ class DanslogenArtistRow(BaseModel):
     facebook: str = ""
     spelplan_id: str = ""
 
-    @field_validator('name', mode='before')
+    @field_validator("name", mode="before")
     @classmethod
     def validate_name(cls, v):
         if not v or not v.strip():
@@ -18,8 +18,8 @@ class DanslogenArtistRow(BaseModel):
         return v.strip()
 
     @classmethod
-    def from_row(cls, row: Tag) -> Optional['DanslogenArtistRow']:
-        cells = row.find_all('td')
+    def from_row(cls, row: Tag) -> Optional["DanslogenArtistRow"]:
+        cells = row.find_all("td")
         if len(cells) < 4:
             return None
 
@@ -40,16 +40,16 @@ class DanslogenArtistRow(BaseModel):
 
     @staticmethod
     def _extract_link(cell: Tag) -> str:
-        a = cell.find('a')
-        if a and a.get('href'):
-            return a.get('href')
+        a = cell.find("a")
+        if a and a.get("href"):
+            return a.get("href")
         return ""
 
     @staticmethod
     def _extract_spelplan_id(cell: Tag) -> str:
-        a = cell.find('a')
-        if a and a.get('href'):
-            href = a.get('href')
-            if '/dansband/spelplan/' in href:
-                return href.split('/dansband/spelplan/')[-1]
+        a = cell.find("a")
+        if a and a.get("href"):
+            href = a.get("href")
+            if "/dansband/spelplan/" in href:
+                return href.split("/dansband/spelplan/")[-1]
         return ""

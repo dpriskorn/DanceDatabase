@@ -1,4 +1,5 @@
 """Ensure all event venues exist in DanceDB."""
+
 import logging
 from pathlib import Path
 
@@ -14,10 +15,11 @@ ARTISTS_DIR = DATA_DIR / "dancedb" / "artists"
 def configure_wbi():
     """Configure wikibase-integrator."""
     from wikibaseintegrator.wbi_config import config as wbi_config
-    wbi_config['WIKIBASE_URL'] = 'https://dance.wikibase.cloud'
-    wbi_config['MEDIAWIKI_API_URL'] = 'https://dance.wikibase.cloud/w/api.php'
-    wbi_config['SPARQL_ENDPOINT_URL'] = 'https://dance.wikibase.cloud/query/sparql'
-    wbi_config['USER_AGENT'] = config.user_agent
+
+    wbi_config["WIKIBASE_URL"] = "https://dance.wikibase.cloud"
+    wbi_config["MEDIAWIKI_API_URL"] = "https://dance.wikibase.cloud/w/api.php"
+    wbi_config["SPARQL_ENDPOINT_URL"] = "https://dance.wikibase.cloud/query/sparql"
+    wbi_config["USER_AGENT"] = config.user_agent
 
 
 def fetch_events_from_dancedb() -> list[dict]:
@@ -61,7 +63,7 @@ SELECT ?event ?eventLabel ?start_date ?venue ?venueLabel WHERE {
         event_uri = binding.get("event", {}).get("value", "")
         event_label = binding.get("eventLabel", {}).get("value", "")
         start_date = binding.get("start_date", {}).get("value", "")
-        
+
         venue_qid = None
         venue_label = ""
         venue_aliases = []
@@ -80,14 +82,16 @@ SELECT ?event ?eventLabel ?start_date ?venue ?venueLabel WHERE {
                         if val:
                             venue_aliases = [val.lower()]
 
-        events.append({
-            "event_qid": event_uri.rsplit("/", 1)[-1] if event_uri else "",
-            "event_label": event_label,
-            "start_date": start_date,
-            "venue_qid": venue_qid,
-            "venue_label": venue_label,
-            "venue_aliases": venue_aliases,
-        })
+        events.append(
+            {
+                "event_qid": event_uri.rsplit("/", 1)[-1] if event_uri else "",
+                "event_label": event_label,
+                "start_date": start_date,
+                "venue_qid": venue_qid,
+                "venue_label": venue_label,
+                "venue_aliases": venue_aliases,
+            }
+        )
 
     logger.info(f"Fetched {len(events)} events from DanceDB")
     return events

@@ -12,17 +12,12 @@ import re
 import sys
 from pathlib import Path
 
-import questionary
-
-sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
+sys.path.insert(0, str(__file__).rsplit("/", 1)[0])
 
 from src.models.dancedb_client import DancedbClient
 from src.models.danslogen.maps import BAND_QID_MAP
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s: %(message)s'
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -32,8 +27,8 @@ def save_bands_to_maps(new_bands: dict[str, str]) -> None:
         print("No new bands to save.")
         return
 
-    maps_path = Path(__file__).parent / 'src' / 'models' / 'danslogen' / 'maps.py'
-    
+    maps_path = Path(__file__).parent / "src" / "models" / "danslogen" / "maps.py"
+
     with open(maps_path) as f:
         content = f.read()
 
@@ -43,11 +38,11 @@ def save_bands_to_maps(new_bands: dict[str, str]) -> None:
             logger.warning("Band '%s' already exists in BAND_QID_MAP, skipping", band_name)
             continue
 
-        insert_pattern = r'(BAND_QID_MAP: dict\[str, str\] = \{)'
+        insert_pattern = r"(BAND_QID_MAP: dict\[str, str\] = \{)"
         insert_replacement = rf'\1\n    "{band_name}": "{qid}",'
-        
+
         new_content = re.sub(insert_pattern, insert_replacement, content)
-        
+
         if new_content == content:
             logger.error("Could not find insertion point for '%s'", band_name)
             continue
@@ -55,7 +50,7 @@ def save_bands_to_maps(new_bands: dict[str, str]) -> None:
         content = new_content
         logger.info("Added '%s' to maps.py", band_name)
 
-    with open(maps_path, 'w') as f:
+    with open(maps_path, "w") as f:
         f.write(content)
 
     print(f"Saved {len(new_bands)} new QIDs to {maps_path}")
@@ -63,13 +58,9 @@ def save_bands_to_maps(new_bands: dict[str, str]) -> None:
 
 def main():
     parser = argparse.ArgumentParser(description="Upload unmapped bands to DanceDB")
-    parser.add_argument("--input", "-i", "input_file",
-                        default="data/unmapped_bands_2026_april.json",
-                        help="Input JSON file with unmapped bands")
-    parser.add_argument("--dry-run", action="store_true", default=False,
-                        help="Search but do not create bands on DanceDB")
-    parser.add_argument("--limit", "-l", type=int, default=None,
-                        help="Limit number of bands to process")
+    parser.add_argument("--input", "-i", "input_file", default="data/unmapped_bands_2026_april.json", help="Input JSON file with unmapped bands")
+    parser.add_argument("--dry-run", action="store_true", default=False, help="Search but do not create bands on DanceDB")
+    parser.add_argument("--limit", "-l", type=int, default=None, help="Limit number of bands to process")
     args = parser.parse_args()
     input_file = args.input_file
     dry_run = args.dry_run
@@ -105,10 +96,9 @@ def main():
     skipped = []
 
     for i, band_info in enumerate(bands):
-        band_name = band_info['band']
-        count = band_info.get('count', 0)
-        existing_qid = next((qid for key, qid in BAND_QID_MAP.items()
-                            if key.lower() == band_name.lower()), None)
+        band_name = band_info["band"]
+        count = band_info.get("count", 0)
+        existing_qid = next((qid for key, qid in BAND_QID_MAP.items() if key.lower() == band_name.lower()), None)
         if existing_qid:
             print(f"[{i+1}/{len(bands)}] {band_name} ({count} events) → {existing_qid} (already mapped)")
             found.append((band_name, existing_qid))
@@ -142,20 +132,20 @@ def main():
 
     print(f"\n{'='*50}")
     if dry_run:
-        print(f"DRY RUN SUMMARY:")
+        print("DRY RUN SUMMARY:")
         print(f"  Already mapped: {len(found)}")
         print(f"  Would create: {len(skipped)}")
     else:
-        print(f"SUMMARY:")
+        print("SUMMARY:")
         print(f"  Found on DanceDB: {len(found)}")
         print(f"  Created: {len(created)}")
         print(f"  Skipped: {len(skipped)}")
-        
+
         if created:
             save_bands_to_maps(dict(created))
         else:
             print("No new bands to save.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

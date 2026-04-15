@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
-sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
+sys.path.insert(0, str(__file__).rsplit("/", 1)[0])
 
 from src.models.danslogen.table_row import DanslogenTableRow
 

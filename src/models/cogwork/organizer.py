@@ -13,6 +13,7 @@ from src.models.export.organizer import Organizer
 
 class CogworkOrganizer(Organizer):
     """Abstract class for an organizer in CogWork"""
+
     organizer_slug: str = Field(description="Organizer in Cogwork, e.g. 'dansgladje'")
     event_class: CogworkEvent
     base_url: str = "https://dans.se"
@@ -64,4 +65,3 @@ class CogworkOrganizer(Organizer):
             self.events.append(event.dance_event)
         print("Exporting events to JSON...")
         self.export_to_json()
-

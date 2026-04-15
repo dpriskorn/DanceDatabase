@@ -69,21 +69,15 @@ class VenueMatcher:
         if not self.byg_venues:
             return None
 
-        exact = next(
-            (v.get("qid") for title, v in self.byg_venues.items()
-             if title.lower() == venue_name.lower() and v.get("qid")),
-            None
-        )
+        exact = next((v.get("qid") for title, v in self.byg_venues.items() if title.lower() == venue_name.lower() and v.get("qid")), None)
         if exact:
             return exact
 
-        venues_with_qid = {v.get("title", ""): v.get("qid", "")
-                     for v in self.byg_venues.values() if v.get("qid")}
+        venues_with_qid = {v.get("title", ""): v.get("qid", "") for v in self.byg_venues.values() if v.get("qid")}
         fuzzy = fuzzy_match_qid(venue_name, venues_with_qid)
         if fuzzy:
             matched_key, qid, score = fuzzy
-            logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (score=%d)",
-                     venue_name, matched_key, score)
+            logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (score=%d)", venue_name, matched_key, score)
             return qid
 
         return None
@@ -102,19 +96,17 @@ class VenueMatcher:
 
             venue_full = f"{venue_name}, {ort}" if ort else venue_name
             try:
-                coord_str = questionary.text(
-                    f"Enter coordinates for '{venue_full}' (lat,lng or 'skip' to abort)"
-                ).ask()
+                coord_str = questionary.text(f"Enter coordinates for '{venue_full}' (lat,lng or 'skip' to abort)").ask()
             except KeyboardInterrupt:
                 raise KeyboardInterrupt()
 
-            if coord_str.lower() == 'skip':
+            if coord_str.lower() == "skip":
                 logger.error("Aborting: venue '%s' requires coordinates", venue_full)
                 raise KeyboardInterrupt()
 
             if coord_str:
                 try:
-                    parts = [p.strip() for p in coord_str.split(',')]
+                    parts = [p.strip() for p in coord_str.split(",")]
                     lat = float(parts[0])
                     lng = float(parts[1])
                 except (ValueError, IndexError) as e:
@@ -128,12 +120,9 @@ class VenueMatcher:
             return None
 
         label = f"{venue_name}, {ort}" if ort else venue_name
-        print(f"\nCreate venue: \"{label}\" at ({lat}, {lng})")
+        print(f'\nCreate venue: "{label}" at ({lat}, {lng})')
 
-        confirm = questionary.rawselect(
-            "Upload to DanceDB?",
-            choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]
-        ).ask()
+        confirm = questionary.rawselect("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
 
         if confirm == "Skip":
             logger.info("Skipping venue '%s'", label)

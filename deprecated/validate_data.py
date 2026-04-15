@@ -64,7 +64,7 @@ def main():
                 print(f"  [FAIL] {json_file.name}: {msg}")
                 all_valid = False
 
-    print(f"\n=== Summary ===")
+    print("\n=== Summary ===")
     print(f"Total files checked: {total_files}")
     if all_valid:
         print("All files are valid!")

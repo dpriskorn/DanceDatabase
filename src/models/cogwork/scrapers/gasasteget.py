@@ -7,8 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class GasastegetEvent(CogworkEvent):
-    skip_sv_labels: list[str] = [
-    ]
+    skip_sv_labels: list[str] = []
     organizer_qid: str = "Q493"
     dance_style_qid_map: dict = {
         "fox": "Q23",
@@ -21,7 +20,7 @@ class GasastegetEvent(CogworkEvent):
         "Gillesdanser": "Q496",
         "Boogie Woogie": "Q497",
         "salsa": "Q517",
-}
+    }
     venue_qid_map: dict[str, str] = {
         "Kvarntorpsgården": "Q136",
         "HällesåkersGården": "Q487",
@@ -42,5 +41,3 @@ class GasastegetEvent(CogworkEvent):
 class Gasasteget(CogworkOrganizer):
     organizer_slug: str = "gasasteget"
     event_class: CogworkEvent = GasastegetEvent
-
-

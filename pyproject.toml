@@ -39,6 +39,24 @@ safety = "^2.3.5"
 [tool.ruff]
 line-length = 160
 
+[tool.mypy]
+exclude = ["deprecated", "tests"]
+ignore_missing_imports = true
+no_implicit_optional = false
+warn_unused_configs = false
+disallow_untyped_defs = false
+
+[tool.ruff.per-file-ignores]
+"deprecated/*" = ["E402", "E501", "E741"]
+"tests/*" = ["E501", "F401"]
+"cli.py" = ["E402"]
+
+[tool.black]
+line-length = 160
+
+[tool.isort]
+line_length = 160
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

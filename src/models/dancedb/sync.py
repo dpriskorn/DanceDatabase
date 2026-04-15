@@ -1,16 +1,17 @@
 """Unified sync commands for all data sources."""
+
 import json
 import logging
 import sys
-from datetime import date
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Callable
 
-from src.models.danslogen.data import DANCEDB_ARTISTS_DIR
-from src.models.danslogen.artists.scrape import scrape_artists
 from src.models.dancedb.client import DancedbClient
-from src.models.dancedb.ensure_events import configure_wbi, fetch_events_from_dancedb, EVENTS_DIR
+from src.models.dancedb.ensure_events import EVENTS_DIR, configure_wbi, fetch_events_from_dancedb
+from src.models.danslogen.artists.scrape import scrape_artists
+from src.models.danslogen.data import DANCEDB_ARTISTS_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +47,7 @@ def fetch_dancedb_events(date_str: str) -> None:
 def get_current_month_year() -> tuple[str, int]:
     """Get current month name and year."""
     today = date.today()
-    month_names = ["januari", "februari", "mars", "april", "maj", "juni",
-                   "juli", "augusti", "september", "oktober", "november", "december"]
+    month_names = ["januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti", "september", "oktober", "november", "december"]
     return month_names[today.month - 1], today.year
 
 
@@ -109,6 +109,7 @@ class SyncStep:
 def get_data_dir() -> Path:
     """Get the data directory path."""
     import config
+
     return config.data_dir
 
 
@@ -129,11 +130,11 @@ def run_sync_steps(
 
 def scrape_all(month: str, year: int) -> None:
     """Scrape all data sources first."""
-    from src.models.danslogen.events.scrape import scrape_danslogen
-    from src.models.dancedb.venue_ops import scrape_bygdegardarna
-    from src.models.onbeat.run import run as scrape_onbeat
     from src.models.cogwork.scrape import scrape as scrape_cogwork
+    from src.models.dancedb.venue_ops import scrape_bygdegardarna
+    from src.models.danslogen.events.scrape import scrape_danslogen
     from src.models.folketshus.venue import run as scrape_folketshus
+    from src.models.onbeat.run import run as scrape_onbeat
     from src.models.wikidata.operations import scrape_wikidata_artists
 
     date_str = date.today().strftime("%Y-%m-%d")
@@ -175,11 +176,10 @@ def sync_danslogen(
     only_scrape: bool = False,
 ) -> bool:
     """Sync danslogen events with prerequisite checking."""
+    from src.models.dancedb.venue_ops import ensure_artists, ensure_venues, match_venues, scrape_bygdegardarna, scrape_dancedb_venues
     from src.models.danslogen.events.scrape import scrape_danslogen, upload_events
-    from src.models.dancedb.venue_ops import ensure_venues, ensure_artists
-    from src.models.dancedb.venue_ops import scrape_bygdegardarna, scrape_dancedb_venues, match_venues
     from src.models.folketshus.venue import run as scrape_folketshus
-    from src.models.wikidata.operations import sync_wikidata_artists, scrape_wikidata_artists
+    from src.models.wikidata.operations import scrape_wikidata_artists, sync_wikidata_artists
 
     if month is None or year is None:
         month, year = get_current_month_year()
@@ -305,11 +305,7 @@ def sync_bygdegardarna(
     only_scrape: bool = False,
 ) -> bool:
     """Sync bygdegardarna venues with prerequisite checking."""
-    from src.models.dancedb.venue_ops import (
-        scrape_bygdegardarna,
-        scrape_dancedb_venues,
-        match_venues,
-    )
+    from src.models.dancedb.venue_ops import match_venues, scrape_bygdegardarna, scrape_dancedb_venues
 
     date_str = date.today().strftime("%Y-%m-%d")
     data_dir = get_data_dir()

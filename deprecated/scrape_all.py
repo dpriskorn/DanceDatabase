@@ -1,12 +1,13 @@
+import datetime
 import logging
 import os
-import datetime
-import time
 import subprocess
+import time
 from pathlib import Path
 
-import config
 import validate_data
+
+import config
 
 logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)

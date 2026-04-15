@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field, ConfigDict, condecimal, AnyUrl
-
+from pydantic import AnyUrl, BaseModel, ConfigDict, Field, condecimal
 
 # TODO adapt this to schema.org?
 
@@ -14,6 +13,7 @@ class Organizer(BaseModel):
 class EventItem(BaseModel):
     """Represents a single scheduled item like a course, workshop, or social dance.
     Times are in CEST/CET"""
+
     name: str
     start_time: datetime
     end_time: datetime
@@ -21,17 +21,20 @@ class EventItem(BaseModel):
 
 class ScheduleDay(BaseModel):
     """Represents the schedule for a single day."""
+
     date: datetime
     items: list[EventItem] = []
 
 
 class Schedule(BaseModel):
     """Represents the full schedule for the event."""
+
     days: list[ScheduleDay] = []
 
 
 class WikidataIdentifiers(BaseModel):
     """Wikidata does not have compatible items and properties for everything in our model"""
+
     dance_style: str = Field("", description="Wikidata QID for dance type (e.g. Q1057898)")
     venue: str = Field("", description="Wikidata QID for venue")
     event_series: str = Field("", description="Wikidata QID for event series")
@@ -39,6 +42,7 @@ class WikidataIdentifiers(BaseModel):
 
 class DanceDatabaseIdentifiers(BaseModel):
     """DanceDatabase should have identifiers for everything in our model, but might not"""
+
     event: str = Field("", description="DanceDatabase QID for the event")
     organizer: str = Field("", description="DanceDatabase QID for the organizer")
     dance_styles: list[str] = Field(default_factory=list, description="DanceDatabase QIDs for the dance styles")
@@ -55,34 +59,13 @@ class Identifiers(BaseModel):
 
 
 class EventLinks(BaseModel):
-    facebook: AnyUrl | None = Field(
-        default=None,
-        description="URL to the event's Facebook page"
-    )
-    official_website: AnyUrl | None = Field(
-        default=None,
-        description="URL to the official event website"
-    )
-    registration_website: AnyUrl | None = Field(
-        default=None,
-        description="URL to the registration page for the event"
-    )
-    schedule_website: AnyUrl | None = Field(
-        default=None,
-        description="URL to the event schedule or timetable"
-    )
-    venue_website: AnyUrl | None = Field(
-        default=None,
-        description="URL to the event venue's website"
-    )
-    image: AnyUrl | None = Field(
-        default=None,
-        description="URL to an image representing the event"
-    )
-    sources: list[AnyUrl] = Field(
-        default_factory=list,
-        description="List of URLs to the source of this event information"
-    )
+    facebook: AnyUrl | None = Field(default=None, description="URL to the event's Facebook page")
+    official_website: AnyUrl | None = Field(default=None, description="URL to the official event website")
+    registration_website: AnyUrl | None = Field(default=None, description="URL to the registration page for the event")
+    schedule_website: AnyUrl | None = Field(default=None, description="URL to the event schedule or timetable")
+    venue_website: AnyUrl | None = Field(default=None, description="URL to the event venue's website")
+    image: AnyUrl | None = Field(default=None, description="URL to an image representing the event")
+    sources: list[AnyUrl] = Field(default_factory=list, description="List of URLs to the source of this event information")
 
 
 class Registration(BaseModel):
@@ -97,6 +80,7 @@ class Registration(BaseModel):
 class DanceEvent(BaseModel):
     """Structured representation of a dance event.
     Times are in CEST/CET"""
+
     model_config = ConfigDict(extra="forbid")
 
     id: str = Field(..., description="Unique identifier for the event")
