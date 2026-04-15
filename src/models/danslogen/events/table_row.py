@@ -21,7 +21,11 @@ class DanslogenTableRow(BaseModel):
     lan: str = ""
     ovrigt: str = ""
 
-    VENUE_KEYWORDS: ClassVar[set[str]] = {'folkets', 'bygdegård', 'bygdegard', 'park', 'kulturhus', 'hallen', 'centrum', 'fritids', 'medborgar'}
+    VENUE_KEYWORDS: ClassVar[set[str]] = {
+        'folkets', 'bygdegård', 'bygdegard', 'park', 'kulturhus', 'hallen',
+        'centrum', 'fritids', 'medborgar', 'gården', 'gatan', 'plats',
+        'bygg', 'kyrkan', 'salen', 'staden', 'hemmet', 'våningen', 'hus'
+    }
 
     @field_validator('time', mode='before')
     @classmethod

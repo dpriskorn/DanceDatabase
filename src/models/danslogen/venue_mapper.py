@@ -1,8 +1,12 @@
 from typing import Optional
 
+import logging
+
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.data import load_venue_map
 from src.models.danslogen.fuzzy import fuzzy_match_qid
+
+logger = logging.getLogger(__name__)
 
 
 class VenueMapper:
@@ -15,7 +19,11 @@ class VenueMapper:
     def _get_venue_map(self) -> dict[str, str]:
         """Get venue map, loading from JSON if not cached."""
         if self._venue_map is None:
-            self._venue_map = load_venue_map()
+            try:
+                self._venue_map = load_venue_map()
+            except Exception as e:
+                logger.warning("Could not load venue map from JSON: %s", e)
+                self._venue_map = {}
         return self._venue_map
 
     def resolve(self, venue_name: str) -> Optional[str]:
@@ -37,12 +45,16 @@ class VenueMapper:
             None
         )
         if exact:
+            logger.debug("Venue exact match: '%s' -> %s", venue_name, exact)
             return exact
 
+        logger.debug("Venue no exact match, trying fuzzy: '%s'", venue_name)
         fuzzy = fuzzy_match_qid(venue_name, venue_map)
         if fuzzy:
             matched_key, qid, score = fuzzy
+            logger.debug("Venue fuzzy match: '%s' -> '%s' (%s%%)", venue_name, matched_key, score)
             self._venue_map[matched_key.lower()] = qid
             return qid
 
+        logger.debug("Venue not found: '%s' (tried %d venues)", venue_name, len(venue_map))
         return None
