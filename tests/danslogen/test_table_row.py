@@ -1,12 +1,12 @@
 import pytest
 from unittest.mock import MagicMock
 
-from src.models.danslogen.table_row import (
+from src.models.danslogen.events.table_row import (
     DanslogenTableRow,
-    InvalidRowError,
     TIME_RANGE_PATTERN,
     VALID_WEEKDAYS,
 )
+from src.models.exceptions import InvalidRowError
 
 
 class TestTimeRangePattern:

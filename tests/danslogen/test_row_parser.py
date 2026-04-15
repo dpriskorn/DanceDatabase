@@ -1,7 +1,7 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
-from src.models.danslogen.row_parser import RowParser
+from src.models.danslogen.events.row_parser import RowParser
 from src.models.danslogen.venue_matcher import VenueMatcher
 from src.models.danslogen.band_mapper import BandMapper
 
@@ -97,9 +97,6 @@ class TestRowParserParseDate:
 
 class TestRowParserParseDatetime:
     def test_parses_time_range(self):
-        from datetime import datetime
-        from config import CET
-
         mock_venue_matcher = MagicMock(spec=VenueMatcher)
         mock_venue_matcher.resolve.return_value = "Q100"
         mock_band_mapper = MagicMock(spec=BandMapper)
@@ -114,9 +111,6 @@ class TestRowParserParseDatetime:
         assert start.day == 5
 
     def test_handles_empty_time(self):
-        from datetime import datetime
-        from config import CET
-
         mock_venue_matcher = MagicMock(spec=VenueMatcher)
         mock_venue_matcher.resolve.return_value = "Q100"
         mock_band_mapper = MagicMock(spec=BandMapper)
@@ -130,9 +124,6 @@ class TestRowParserParseDatetime:
         assert end is None
 
     def test_parses_early_morning_end_time(self):
-        from datetime import datetime
-        from config import CET
-
         mock_venue_matcher = MagicMock(spec=VenueMatcher)
         mock_venue_matcher.resolve.return_value = "Q100"
         mock_band_mapper = MagicMock(spec=BandMapper)
@@ -149,9 +140,6 @@ class TestRowParserParseDatetime:
         assert end.hour == 2
 
     def test_parses_single_time_no_dash(self):
-        from datetime import datetime
-        from config import CET
-
         mock_venue_matcher = MagicMock(spec=VenueMatcher)
         mock_venue_matcher.resolve.return_value = "Q100"
         mock_band_mapper = MagicMock(spec=BandMapper)
@@ -166,9 +154,6 @@ class TestRowParserParseDatetime:
         assert start.hour == 20
 
     def test_early_morning_hour_boundary_03(self):
-        from datetime import datetime
-        from config import CET
-
         mock_venue_matcher = MagicMock(spec=VenueMatcher)
         mock_venue_matcher.resolve.return_value = "Q100"
         mock_band_mapper = MagicMock(spec=BandMapper)
@@ -182,9 +167,6 @@ class TestRowParserParseDatetime:
         assert end.day == 29
 
     def test_late_night_hour_not_shifted(self):
-        from datetime import datetime
-        from config import CET
-
         mock_venue_matcher = MagicMock(spec=VenueMatcher)
         mock_venue_matcher.resolve.return_value = "Q100"
         mock_band_mapper = MagicMock(spec=BandMapper)
@@ -213,8 +195,6 @@ class TestRowParserParseDatetime:
             parser.parse(row, "april")
 
     def test_skips_invalid_date(self):
-        from datetime import datetime
-        from config import CET
         from src.models.danslogen.venue_matcher import VenueMatcher
         from src.models.danslogen.band_mapper import BandMapper
 

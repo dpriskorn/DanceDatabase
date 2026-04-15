@@ -1,8 +1,7 @@
-import pytest
 from bs4 import BeautifulSoup
 from unittest.mock import MagicMock, patch
 
-from src.models.danslogen.table_row import DanslogenTableRow
+from src.models.danslogen.events.table_row import DanslogenTableRow
 
 
 class TestDanslogenParseDatetime:

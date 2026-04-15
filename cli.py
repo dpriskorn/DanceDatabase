@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """CLI for DanceDB operations."""
-import argparse
 import sys
 from datetime import date
 
@@ -54,11 +53,11 @@ from src.models.dancedb.venue_ops import (
     match_venues,
     ensure_venues,
 )
-from src.models.danslogen.event_ops import (
+from src.models.danslogen.events.scrape import (
     scrape_danslogen,
     upload_events,
 )
-from src.models.danslogen.artist_ops import scrape_artists
+from src.models.danslogen.artists.scrape import scrape_artists
 from src.models.onbeat.run import run as scrape_onbeat
 from src.models.cogwork.scrape import scrape as scrape_cogwork
 from src.models.cogwork.upload import upload as upload_cogwork

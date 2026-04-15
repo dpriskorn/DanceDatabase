@@ -1,7 +1,6 @@
-import pytest
 from unittest.mock import MagicMock
 
-from src.models.danslogen.artist_row import DanslogenArtistRow
+from src.models.danslogen.artists.row import DanslogenArtistRow
 
 
 class TestDanslogenArtistRow:

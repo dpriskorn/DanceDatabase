@@ -6,9 +6,25 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from src.models.danslogen.data import DANCEDB_ARTISTS_DIR
 from src.models.danslogen.artists.scrape import scrape_artists
+from src.models.dancedb.client import DancedbClient
 
 logger = logging.getLogger(__name__)
+
+
+def fetch_dancedb_artists(date_str: str) -> None:
+    """Fetch artists from DanceDB with QIDs."""
+    import json
+
+    client = DancedbClient()
+    artists = client.fetch_artists_from_dancedb()
+    output_file = DANCEDB_ARTISTS_DIR / f"{date_str}.json"
+    DANCEDB_ARTISTS_DIR.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "w") as f:
+        json.dump(artists, f, ensure_ascii=False, indent=2)
+    print(f"Fetched {len(artists)} artists from DanceDB")
+    print(f"Saved to {output_file}")
 
 
 def get_current_month_year() -> tuple[str, int]:
@@ -141,31 +157,37 @@ def sync_danslogen(
 
     steps = [
         SyncStep(
-            "0. Scrape danslogen artists",
-            lambda: scrape_artists(date_str=date_str),
+            "0. Fetch DanceDB artists",
+            lambda: fetch_dancedb_artists(date_str=date_str),
             input_files=[],
             output_files=[dancedb_artists_file],
         ),
         SyncStep(
-            "1. Sync Wikidata artists",
+            "1. Scrape danslogen artists",
+            lambda: scrape_artists(date_str=date_str),
+            input_files=[],
+            output_files=[],
+        ),
+        SyncStep(
+            "2. Sync Wikidata artists",
             lambda: sync_wikidata_artists(date_str=date_str, dry_run=dry_run),
             input_files=[dancedb_artists_file],
             output_files=[wikidata_file],
         ),
         SyncStep(
-            "2. Scrape danslogen events",
+            "3. Scrape danslogen events",
             lambda: scrape_danslogen(month=month, year=year),
             input_files=[],
             output_files=[danslogen_file],
         ),
         SyncStep(
-            "3. Ensure venues exist",
+            "4. Ensure venues exist",
             lambda: ensure_venues(date_str=date_str, dry_run=dry_run),
             input_files=[danslogen_file],
             output_files=[venues_file],
         ),
         SyncStep(
-            "4. Upload events",
+            "5. Upload events",
             lambda: upload_events(
                 input_file=str(danslogen_file),
                 date_str=date_str,

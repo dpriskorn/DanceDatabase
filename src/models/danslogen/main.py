@@ -20,9 +20,10 @@ from src.models.export.dance_event import (
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.venue_mapper import VenueMapper
-from src.models.danslogen.event import DanslogenEvent
-from src.models.danslogen.table_row import DanslogenTableRow, InvalidRowError
-from src.models.danslogen.artist_row import DanslogenArtistRow
+from src.models.danslogen.events.event import DanslogenEvent
+from src.models.danslogen.events.table_row import DanslogenTableRow
+from src.models.exceptions import InvalidRowError
+from src.models.danslogen.artists.row import DanslogenArtistRow
 from src.models._utils.datetime_utils import MONTH_NUM_TO_NAME, combine_date_and_time, parse_time_range, parse_date
 
 logger = logging.getLogger(__name__)

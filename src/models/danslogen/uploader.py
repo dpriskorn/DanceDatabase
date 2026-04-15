@@ -7,7 +7,7 @@ from typing import Optional
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.data import DanslogenData
-from src.models.danslogen.row_parser import RowParser
+from src.models.danslogen.events.row_parser import RowParser
 from src.models.danslogen.venue_matcher import VenueMatcher
 
 logger = logging.getLogger(__name__)

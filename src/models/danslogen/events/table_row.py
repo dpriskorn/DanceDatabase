@@ -4,13 +4,10 @@ from typing import Optional
 from bs4 import Tag
 from pydantic import BaseModel, field_validator
 
+from src.models.exceptions import InvalidRowError
+
 TIME_RANGE_PATTERN = re.compile(r'^\d{1,2}\.\d{2}-\d{1,2}\.\d{2}$')
 VALID_WEEKDAYS = {'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'}
-
-
-class InvalidRowError(Exception):
-    """Raised when table row fails validation."""
-    pass
 
 
 class DanslogenTableRow(BaseModel):
