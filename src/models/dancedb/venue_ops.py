@@ -231,6 +231,34 @@ def ensure_venues(date_str: str | None = None) -> None:
 
     print(f"Found {len(existing_venues)} existing venues in DanceDB")
 
+    bygdegardarna_addresses = {}
+    bygdegardarna_files_to_check = []
+    
+    enriched_dir = config.bygdegardarna_dir / "enriched"
+    if enriched_dir.exists():
+        bygdegardarna_files_to_check.extend(sorted(enriched_dir.glob("*.json"), reverse=True))
+    
+    raw_dir = config.bygdegardarna_dir
+    if raw_dir.exists():
+        bygdegardarna_files_to_check.extend(sorted(raw_dir.glob("*.json"), reverse=True))
+    
+    seen_addresses = set()
+    for byg_file in bygdegardarna_files_to_check:
+        bygdegardarna_data = json.loads(byg_file.read_text())
+        for v in bygdegardarna_data:
+            title = v.get("title", "").lower()
+            meta = v.get("meta", {})
+            address = meta.get("address", "").lower()
+            position = v.get("position", {})
+            if title and address and position.get("lat") and address not in seen_addresses:
+                seen_addresses.add(address)
+                qid = v.get("qid", "")
+                if qid:
+                    bygdegardarna_addresses[title] = {"qid": qid, "lat": position["lat"], "lng": position["lng"], "address": address}
+                bygdegardarna_addresses[address] = {"lat": position["lat"], "lng": position["lng"], "address": address, "qid": qid}
+    
+    print(f"Loaded {len(bygdegardarna_addresses)} bygdegardarna addresses for address matching")
+
     events = json.loads(dansevents_file.read_text())
     venues_needed = set(e.get("location") for e in events if e.get("location"))
     print(f"Need venues for {len(venues_needed)} unique locations")
@@ -301,7 +329,27 @@ def ensure_venues(date_str: str | None = None) -> None:
                     f.write(json.dumps({"venue_name": venue_name, "qid": byg_match.get("qid", ""), "lat": byg_match.get("lat"), "lng": byg_match.get("lng"), "created_at": date_str}) + "\n")
                 continue
 
-        new_venues.append(venue_name)
+        if bygdegardarna_addresses:
+            for addr_key, addr_data in bygdegardarna_addresses.items():
+                if venue_lower in addr_key or addr_key in venue_lower:
+                    existing_venues[venue_lower] = {
+                        "qid": addr_data.get("qid", ""),
+                        "lat": addr_data.get("lat"),
+                        "lng": addr_data.get("lng"),
+                        "aliases": [],
+                    }
+                    logger.info(f"Matched '{venue_name}' to bygdegardarna address '{addr_data.get('address')}'")
+                    matched += 1
+                    
+                    venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                    venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                    with open(venue_mapping_file, "a") as f:
+                        f.write(json.dumps({"venue_name": venue_name, "qid": addr_data.get("qid", ""), "lat": addr_data.get("lat"), "lng": addr_data.get("lng"), "created_at": date_str}) + "\n")
+                    break
+            else:
+                new_venues.append(venue_name)
+        else:
+            new_venues.append(venue_name)
 
     print(f"Matched: {matched}")
     print(f"Need to create: {len(new_venues)}")
