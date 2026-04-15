@@ -10,6 +10,7 @@ from typing import Callable
 from src.models.danslogen.data import DANCEDB_ARTISTS_DIR
 from src.models.danslogen.artists.scrape import scrape_artists
 from src.models.dancedb.client import DancedbClient
+from src.models.dancedb.ensure_events import configure_wbi, fetch_events_from_dancedb, EVENTS_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,20 @@ def fetch_dancedb_artists(date_str: str) -> None:
     with open(output_file, "w") as f:
         json.dump(artists, f, ensure_ascii=False, indent=2)
     print(f"Fetched {len(artists)} artists from DanceDB")
+    print(f"Saved to {output_file}")
+
+
+def fetch_dancedb_events(date_str: str) -> None:
+    """Fetch existing events from DanceDB for deduplication."""
+    import json
+
+    configure_wbi()
+    events = fetch_events_from_dancedb()
+    output_file = EVENTS_DIR / f"{date_str}.json"
+    EVENTS_DIR.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "w") as f:
+        json.dump(events, f, ensure_ascii=False, indent=2)
+    print(f"Fetched {len(events)} events from DanceDB")
     print(f"Saved to {output_file}")
 
 
@@ -166,6 +181,7 @@ def sync_danslogen(
     wikidata_file = data_dir / "wikidata" / "artists" / f"{date_str}.json"
     danslogen_file = data_dir / "danslogen" / f"{month.lower()}.json"
     venues_file = data_dir / "dancedb" / "venues" / f"{date_str}.json"
+    dancedb_events_file = EVENTS_DIR / f"{date_str}.json"
 
     print("\n" + "=" * 50)
     print(f"SYNC DANSLOGEN: {month} {year}")
@@ -218,7 +234,13 @@ def sync_danslogen(
             output_files=[],
         ),
         SyncStep(
-            "7. Upload events",
+            "7. Fetch DanceDB events",
+            lambda: fetch_dancedb_events(date_str=date_str),
+            input_files=[],
+            output_files=[dancedb_events_file],
+        ),
+        SyncStep(
+            "8. Upload events",
             lambda: upload_events(
                 input_file=str(danslogen_file),
                 date_str=date_str,
@@ -226,7 +248,7 @@ def sync_danslogen(
                 dry_run=dry_run,
                 limit=limit,
             ),
-            input_files=[danslogen_file],
+            input_files=[danslogen_file, dancedb_events_file],
             output_files=[],
         ),
     ]
