@@ -141,7 +141,7 @@ def sync_danslogen(
 
     steps = [
         SyncStep(
-            "0. Scrape DanceDB artists",
+            "0. Scrape danslogen artists",
             lambda: scrape_artists(date_str=date_str),
             input_files=[],
             output_files=[dancedb_artists_file],
