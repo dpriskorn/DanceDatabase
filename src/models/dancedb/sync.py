@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from src.models.danslogen.artists.scrape import scrape_artists
+
 logger = logging.getLogger(__name__)
 
 
@@ -67,7 +69,7 @@ def run_sync_steps(
 
 def scrape_all(month: str, year: int) -> None:
     """Scrape all data sources first."""
-    from src.models.danslogen.event_ops import scrape_danslogen
+    from src.models.danslogen.events.scrape import scrape_danslogen
     from src.models.dancedb.venue_ops import scrape_bygdegardarna
     from src.models.onbeat.run import run as scrape_onbeat
     from src.models.cogwork.scrape import scrape as scrape_cogwork
@@ -113,9 +115,8 @@ def sync_danslogen(
     only_scrape: bool = False,
 ) -> bool:
     """Sync danslogen events with prerequisite checking."""
-    from src.models.danslogen.event_ops import scrape_danslogen, upload_events
+    from src.models.danslogen.events.scrape import scrape_danslogen, upload_events
     from src.models.dancedb.venue_ops import ensure_venues
-    from src.models.dancedb.client import DancedbClient
     from src.models.wikidata.operations import sync_wikidata_artists
 
     if month is None or year is None:
@@ -136,12 +137,10 @@ def sync_danslogen(
     if dry_run:
         print("\n*** DRY RUN ***\n")
 
-    client = DancedbClient()
-
     steps = [
         SyncStep(
             "0. Scrape DanceDB artists",
-            lambda: client.scrape_artists(date_str=date_str),
+            lambda: scrape_artists(date_str=date_str),
             input_files=[],
             output_files=[dancedb_artists_file],
         ),

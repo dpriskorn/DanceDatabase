@@ -148,4 +148,4 @@ class TestDancedbClientGetOrCreateBand:
 
                 assert result == 'Q999'
                 mock_search.assert_called_once_with('NewBand')
-                mock_create.assert_called_once_with('NewBand')
+                mock_create.assert_called_once_with('NewBand', '')
