@@ -134,7 +134,7 @@ def sync_danslogen(
 ) -> bool:
     """Sync danslogen events with prerequisite checking."""
     from src.models.danslogen.events.scrape import scrape_danslogen, upload_events
-    from src.models.dancedb.venue_ops import ensure_venues
+    from src.models.dancedb.venue_ops import ensure_venues, ensure_artists
     from src.models.wikidata.operations import sync_wikidata_artists, scrape_wikidata_artists
 
     if month is None or year is None:
@@ -193,7 +193,13 @@ def sync_danslogen(
             output_files=[venues_file],
         ),
         SyncStep(
-            "5. Upload events",
+            "6. Ensure artists exist",
+            lambda: ensure_artists(date_str=date_str, dry_run=dry_run),
+            input_files=[danslogen_file],
+            output_files=[],
+        ),
+        SyncStep(
+            "7. Upload events",
             lambda: upload_events(
                 input_file=str(danslogen_file),
                 date_str=date_str,
