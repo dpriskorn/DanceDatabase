@@ -36,6 +36,9 @@ types-requests = "^2.31.0.1"
 ruff = "^0.0.278"
 safety = "^2.3.5"
 
+[tool.ruff]
+line-length = 160
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
