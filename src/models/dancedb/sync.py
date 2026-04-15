@@ -135,7 +135,7 @@ def sync_danslogen(
     """Sync danslogen events with prerequisite checking."""
     from src.models.danslogen.events.scrape import scrape_danslogen, upload_events
     from src.models.dancedb.venue_ops import ensure_venues
-    from src.models.wikidata.operations import sync_wikidata_artists
+    from src.models.wikidata.operations import sync_wikidata_artists, scrape_wikidata_artists
 
     if month is None or year is None:
         month, year = get_current_month_year()
@@ -169,19 +169,25 @@ def sync_danslogen(
             output_files=[],
         ),
         SyncStep(
-            "2. Sync Wikidata artists",
-            lambda: sync_wikidata_artists(date_str=date_str, dry_run=dry_run),
-            input_files=[dancedb_artists_file],
+            "2. Scrape Wikidata artists",
+            lambda: scrape_wikidata_artists(date_str=date_str),
+            input_files=[],
             output_files=[wikidata_file],
         ),
         SyncStep(
-            "3. Scrape danslogen events",
+            "3. Sync Wikidata artists",
+            lambda: sync_wikidata_artists(date_str=date_str, dry_run=dry_run),
+            input_files=[dancedb_artists_file, wikidata_file],
+            output_files=[],
+        ),
+        SyncStep(
+            "4. Scrape danslogen events",
             lambda: scrape_danslogen(month=month, year=year),
             input_files=[],
             output_files=[danslogen_file],
         ),
         SyncStep(
-            "4. Ensure venues exist",
+            "5. Ensure venues exist",
             lambda: ensure_venues(date_str=date_str, dry_run=dry_run),
             input_files=[danslogen_file],
             output_files=[venues_file],
