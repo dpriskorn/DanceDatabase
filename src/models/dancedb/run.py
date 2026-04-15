@@ -7,7 +7,7 @@ from rapidfuzz import process as fuzz_process
 
 from src.models.dancedb.client import DancedbClient
 from src.models.dancedb.ensure_events import configure_wbi, fetch_events_from_dancedb, EVENTS_DIR, ARTISTS_DIR, \
-    fetch_existing_venues, logger
+    fetch_existing_venues
 
 logger = logging.getLogger(__name__)
 

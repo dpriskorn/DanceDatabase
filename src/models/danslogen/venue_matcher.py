@@ -5,6 +5,7 @@ from typing import Optional
 import questionary
 
 from src.models.dancedb.client import DancedbClient
+from src.models.danslogen.fuzzy import fuzzy_match_qid
 from src.models.danslogen.venue_mapper import VenueMapper
 
 logger = logging.getLogger(__name__)

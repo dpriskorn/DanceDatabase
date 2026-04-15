@@ -13,10 +13,9 @@ from src.models.cogwork.enums import EventType
 from src.models.cogwork.price import PriceExtractor, PriceMismatchError
 from src.models.export.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
     Registration
+from src.models._utils.dance_styles import DANCE_STYLE_MAP, get_style_qid
 
 logger = logging.getLogger(__name__)
-
-from src.models._utils.dance_styles import DANCE_STYLE_MAP, get_style_qid
 
 FULL_MAPPING = [
     "FULLT",

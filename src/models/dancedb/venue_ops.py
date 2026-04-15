@@ -325,7 +325,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
                 try:
                     lat, lng = map(float, coords_input.split(","))
                     coords = {"lat": lat, "lng": lng}
-                except:
+                except ValueError:
                     print("Invalid format, skipping")
 
         if not coords:

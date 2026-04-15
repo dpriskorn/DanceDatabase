@@ -1,10 +1,13 @@
 """Wikidata operations: fetch and match artists."""
 import json
+import logging
 from datetime import date
 
 import questionary
 import config as root_config
 from src.models.dancedb.client import DancedbClient, wbi_config
+
+logger = logging.getLogger(__name__)
 
 
 def scrape_wikidata_artists(date_str: str | None = None) -> None:
