@@ -9,14 +9,15 @@ sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
 COMMANDS = {
     "DANSLOGEN": [
         ("scrape-danslogen", "Fetch danslogen event rows"),
-        ("ensure-venues", "Ensure danslogen venues exist in DanceDB"),
-        ("upload-events", "Upload danslogen events to DanceDB"),
-        ("ensure-events", "Ensure all event venues exist in DanceDB"),
+        ("ensure-danslogen-venues", "Ensure danslogen venues exist in DanceDB"),
+        ("upload-danslogen-events", "Upload danslogen events to DanceDB"),
+        ("ensure-danslogen-venues", "Ensure danslogen venues exist in DanceDB"),
+        ("ensure-event-venues", "Ensure event venues exist in DanceDB"),
     ],
     "VENUES": [
         ("scrape-bygdegardarna", "Fetch bygdegardarna venues with coordinates"),
         ("scrape-dancedb-venues", "Fetch existing venues from DanceDB"),
-        ("match-venues", "Match bygdegardarna venues to DanceDB"),
+        ("match-bygdegardarna-venues", "Match bygdegardarna venues to DanceDB"),
     ],
     "ONBEAT": [
         ("scrape-onbeat", "Fetch events"),
@@ -37,7 +38,7 @@ COMMANDS = {
     ],
     "SYNC (FULL WORKFLOWS)": [
         ("sync-danslogen", "wikidata → scrape → ensure-venues → upload"),
-        ("sync-bygdegardarna", "scrape → fetch-dancedb → match-venues"),
+        ("sync-bygdegardarna", "scrape → fetch-dancedb → match-bygdegardarna-venues"),
         ("sync-onbeat", "scrape + upload"),
         ("sync-cogwork", "scrape + upload"),
         ("sync-folketshus", "scrape + match"),
@@ -95,6 +96,16 @@ def main():
         print_commands()
         return
 
+    valid_commands = set()
+    for commands in COMMANDS.values():
+        for cmd, _ in commands:
+            valid_commands.add(cmd)
+
+    if args.command not in valid_commands:
+        print(f"Unknown command: {args.command}\n")
+        print_commands()
+        return
+
     sub = parser.add_subparsers(dest="command")
     p = sub.add_parser("scrape-bygdegardarna",
                      help="Fetch bygdegardarna venues with coordinates")
@@ -113,22 +124,22 @@ def main():
     p.add_argument("-d", "--date", default=None,
                    help="Date for output (YYYY-MM-DD, default: today)")
 
-    p = sub.add_parser("match-venues",
-                     help="Match bygdegardarna venues to DanceDB")
+    p = sub.add_parser("match-bygdegardarna-venues",
+                      help="Match bygdegardarna venues to DanceDB")
     p.add_argument("-d", "--date", default=None,
                    help="Date for input files (YYYY-MM-DD, default: today)")
     p.add_argument("--skip-prompts", action="store_true",
                    help="Skip interactive prompts, auto-match fuzzy >=85")
 
-    p = sub.add_parser("ensure-venues",
-                     help="Ensure danslogen venues exist in DanceDB")
+    p = sub.add_parser("ensure-danslogen-venues",
+                       help="Ensure danslogen venues exist in DanceDB")
     p.add_argument("-d", "--date", default=None,
                    help="Date for venue data (YYYY-MM-DD, default: today)")
     p.add_argument("--dry-run", action="store_true",
                    help="Preview without uploading")
 
-    p = sub.add_parser("ensure-events",
-                      help="Ensure all event venues exist in DanceDB (aborts if missing)")
+    p = sub.add_parser("ensure-event-venues",
+                       help="Ensure event venues exist in DanceDB")
     p.add_argument("-m", "--month", default="april",
                   help="Month name (default: april)")
     p.add_argument("-y", "--year", type=int, default=2026,
@@ -136,8 +147,8 @@ def main():
     p.add_argument("--dry-run", action="store_true",
                   help="Preview only, don't abort")
 
-    p = sub.add_parser("upload-events",
-                     help="Upload danslogen events to DanceDB")
+    p = sub.add_parser("upload-danslogen-events",
+                      help="Upload danslogen events to DanceDB")
     p.add_argument("-i", "--input-file",
                     default="data/danslogen/april.json",
                    help="Input JSON file")
@@ -223,7 +234,7 @@ def main():
 
     # === SYNC COMMANDS ===
     p = sub.add_parser("sync-danslogen",
-                       help="Sync danslogen: sync-wikidata → scrape → ensure-venues → upload")
+                       help="Sync danslogen: sync-wikidata → scrape → ensure-danslogen-venues → upload-danslogen-events")
     p.add_argument("-m", "--month", default=None,
                     help="Month name (default: current month)")
     p.add_argument("-y", "--year", type=int, default=None,
@@ -238,7 +249,7 @@ def main():
                     help="Only scrape, skip uploads")
 
     p = sub.add_parser("sync-bygdegardarna",
-                       help="Sync bygdegardarna: scrape → fetch-dancedb → match-venues")
+                       help="Sync bygdegardarna: scrape → fetch-dancedb → match-bygdegardarna-venues")
     p.add_argument("--dry-run", action="store_true",
                     help="Preview without uploading")
     p.add_argument("-f", "--force", action="store_true",
@@ -299,15 +310,15 @@ def main():
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
         scrape_dancedb_venues(date_str)
 
-    elif args.command == "match-venues":
+    elif args.command == "match-bygdegardarna-venues":
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
         match_venues(date_str, skip_prompts=args.skip_prompts)
 
-    elif args.command == "ensure-venues":
+    elif args.command == "ensure-danslogen-venues":
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
         ensure_venues(date_str, dry_run=args.dry_run)
 
-    elif args.command == "ensure-events":
+    elif args.command == "ensure-event-venues":
         ensure_events(month=args.month, year=args.year, dry_run=args.dry_run)
 
     elif args.command == "upload-events":

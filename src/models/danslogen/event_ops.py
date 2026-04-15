@@ -82,7 +82,7 @@ def upload_events(
         print(f"Loaded {len(existing_events)} existing events from {events_file.name}")
     else:
         print(f"Warning: No existing events file found at {events_file}")
-        print(f"Run 'poetry run python cli.py ensure-events' first to fetch events from DanceDB")
+        print(f"Run 'poetry run python cli.py ensure-event-venues' first to fetch events from DanceDB")
 
     # Build lookup for existing events
     existing_lookup: dict[str, dict] = {}
