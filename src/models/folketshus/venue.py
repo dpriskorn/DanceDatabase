@@ -68,7 +68,7 @@ def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> fl
     return R * c
 
 
-def fuzzy_match(text: str, candidates: dict[str, str]) -> tuple[str, str, int] | None:
+def fuzzy_match(text: str, candidates: dict[str, str]) -> tuple[str, str, float] | None:
     """Fuzzy match text against candidates. Returns (label, qid, score) or None."""
     from rapidfuzz import fuzz
 
@@ -76,12 +76,12 @@ def fuzzy_match(text: str, candidates: dict[str, str]) -> tuple[str, str, int] |
     best = None
     best_score = 0
     for label_lower, qid in candidates.items():
-        score = fuzz.ratio(text_lower, label_lower) * 100
-        if score > best_score:
+        score = fuzz.ratio(text_lower, label_lower)
+        if score >= FUZZY_THRESHOLD and score > best_score:
             best_score = score
             best = (label_lower, qid)
     if best_score >= FUZZY_THRESHOLD:
-        return (best[0], best[1], int(best_score))
+        return (best[0], best[1], best_score)
     return None
 
 
@@ -190,7 +190,7 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
             fuzzy = fuzzy_match(venue.name, db_labels)
             if fuzzy:
                 matched_qid = fuzzy[1]
-                print(f"Fuzzy match: {venue.name} -> {matched_qid} (score={fuzzy[2]})")
+                print(f"Fuzzy match: {venue.name} -> {matched_qid} ('{fuzzy[0]}', score={fuzzy[2]})")
             else:
                 for qid, (lat2, lng2) in db_coords.items():
                     dist = haversine_distance(venue.lat, venue.lng, lat2, lng2)
