@@ -179,7 +179,7 @@ def sync_danslogen(
 
     dancedb_artists_file = data_dir / "dancedb" / "artists" / f"{date_str}.json"
     wikidata_file = data_dir / "wikidata" / "artists" / f"{date_str}.json"
-    danslogen_file = data_dir / "danslogen" / f"{month.lower()}.json"
+    danslogen_event_file = data_dir / "danslogen" / f"{month.lower()}.json"
     venues_file = data_dir / "dancedb" / "venues" / f"{date_str}.json"
     dancedb_events_file = EVENTS_DIR / f"{date_str}.json"
 
@@ -219,18 +219,18 @@ def sync_danslogen(
             "4. Scrape danslogen events",
             lambda: scrape_danslogen(month=month, year=year),
             input_files=[],
-            output_files=[danslogen_file],
+            output_files=[danslogen_event_file],
         ),
         SyncStep(
             "5. Ensure venues exist",
             lambda: ensure_venues(date_str=date_str, dry_run=dry_run),
-            input_files=[danslogen_file],
+            input_files=[danslogen_event_file],
             output_files=[venues_file],
         ),
         SyncStep(
             "6. Ensure artists exist",
             lambda: ensure_artists(date_str=date_str, dry_run=dry_run),
-            input_files=[danslogen_file],
+            input_files=[danslogen_event_file],
             output_files=[],
         ),
         SyncStep(
@@ -242,13 +242,13 @@ def sync_danslogen(
         SyncStep(
             "8. Upload events",
             lambda: upload_events(
-                input_file=str(danslogen_file),
+                input_file=str(danslogen_event_file),
                 date_str=date_str,
                 month=month,
                 dry_run=dry_run,
                 limit=limit,
             ),
-            input_files=[danslogen_file, dancedb_events_file],
+            input_files=[danslogen_event_file, dancedb_events_file],
             output_files=[],
         ),
     ]
