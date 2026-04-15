@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import timedelta, timezone
 from pathlib import Path
 
@@ -11,13 +12,15 @@ WIKIBASE_URL = "https://dance.wikibase.cloud"
 MEDIAWIKI_API_URL = "https://dance.wikibase.cloud/w/api.php"
 SPARQL_ENDPOINT_URL = "https://dance.wikibase.cloud/query/sparql"
 
-data_dir: Path = Path("data")
-bygdegardarna_dir: Path = Path("data/bygdegardarna")
-dancedb_dir: Path = Path("data/dancedb")
-danslogen_dir: Path = Path("data/danslogen")
-wikidata_dir: Path = Path("data/wikidata")
-enrich_dir: Path = Path("data/bygdegardarna/enriched")
-static_dir: Path = Path("data/static")
+PROJECT_ROOT = Path(__file__).parent.resolve()
+
+data_dir: Path = PROJECT_ROOT / "data"
+bygdegardarna_dir: Path = data_dir / "bygdegardarna"
+dancedb_dir: Path = data_dir / "dancedb"
+danslogen_dir: Path = data_dir / "danslogen"
+wikidata_dir: Path = data_dir / "wikidata"
+enrich_dir: Path = data_dir / "bygdegardarna" / "enriched"
+static_dir: Path = data_dir / "static"
 
 CET = timezone(timedelta(hours=1))
 

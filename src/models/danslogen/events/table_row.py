@@ -6,12 +6,11 @@ from typing import ClassVar, Optional
 from bs4 import Tag
 from pydantic import BaseModel, field_validator
 
+import config as root_config
 from src.models.exceptions import InvalidRowError
 
 TIME_RANGE_PATTERN = re.compile(r"^\d{1,2}[:\.]\d{2}-\d{1,2}[:\.]\d{2}$")
 VALID_WEEKDAYS = {"Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"}
-
-STATIC_DIR = Path("data/static")
 
 MUNICIPALITIES: set[str] = set()
 COUNTIES: set[str] = set()
@@ -25,24 +24,27 @@ def _load_static_data() -> None:
     if MUNICIPALITIES:
         return
 
-    static_dir = STATIC_DIR
+    static_dir = root_config.static_dir
 
     municipalities_file = static_dir / "municipalities.json"
     if municipalities_file.exists():
-        MUNICIPALITIES = set(json.loads(municipalities_file.read_text()))
+        _muni = set(json.loads(municipalities_file.read_text()))
+        MUNICIPALITIES.update(_muni)
 
     counties_file = static_dir / "counties.json"
     if counties_file.exists():
-        COUNTIES = set(json.loads(counties_file.read_text()))
+        _counties = set(json.loads(counties_file.read_text()))
+        COUNTIES.update(_counties)
 
     ships_file = static_dir / "ships.json"
     if ships_file.exists():
-        SHIPS = set(json.loads(ships_file.read_text()))
+        _ships = set(json.loads(ships_file.read_text()))
+        SHIPS.update(_ships)
 
     urban_areas_file = static_dir / "urban_areas.json"
     if urban_areas_file.exists():
         urban_areas_list = json.loads(urban_areas_file.read_text())
-        URBAN_AREAS = {item["label"]: item["qid"] for item in urban_areas_list}
+        URBAN_AREAS.update({item["label"]: item["qid"] for item in urban_areas_list})
 
 
 class DanslogenTableRow(BaseModel):
@@ -218,12 +220,15 @@ class DanslogenTableRow(BaseModel):
             elif field_type == "kommun":
                 if not kommun_val:
                     kommun_val = content
-                elif not lan_val:
+                elif not lan_val and content_type == "lan":
                     lan_val = content
             elif field_type == "lan":
                 lan_val = content
             elif field_type == "ovrigt":
-                ovrigt_val = content
+                if not lan_val and content_type == "lan":
+                    lan_val = content
+                else:
+                    ovrigt_val = content
 
             i += 1
 

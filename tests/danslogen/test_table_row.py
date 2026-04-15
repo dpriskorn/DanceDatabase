@@ -123,4 +123,4 @@ class TestDanslogenTableRowFromRow:
         assert result.venue == "Folkets Hus Röfors"
         assert result.ort == "Röfors"
         assert result.kommun == "Laxå"
-        assert result.lan == ""
+        assert result.lan == "Örebro"
