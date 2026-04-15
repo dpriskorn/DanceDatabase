@@ -17,9 +17,13 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
     
     Args:
         month: Month name or "all" for all months
+        year: Year to use in output filename (defaults to current year)
     """
     import json
     from src.models.danslogen.main import Danslogen
+    from datetime import date
+
+    date_str = date.today().strftime("%Y-%m-%d")
 
     months_to_scrape = []
     if month.lower() == "all":
@@ -38,7 +42,7 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
 
     print(f"\nTotal: {len(all_events)} events")
 
-    output_file = config.danslogen_dir / "events" / f"{year}-{month.lower()}.json"
+    output_file = config.danslogen_dir / "events" / f"{date_str}-{month.lower()}.json"
     config.danslogen_dir.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump([e.model_dump(mode="json") for e in all_events], f, ensure_ascii=False, indent=2)

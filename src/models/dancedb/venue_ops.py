@@ -160,7 +160,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     month_name = datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
     print(f"\n=== Ensuring venues exist for {date_str} ===")
 
-    dansevents_file = config.danslogen_dir / f"{month_name}.json"
+    dansevents_file = config.danslogen_dir / "events" / f"{date_str}-{month_name}.json"
     if not dansevents_file.exists():
         print(f"Error: danslogen data not found: {dansevents_file}")
         return
@@ -530,7 +530,7 @@ def ensure_artists(date_str: str | None = None, dry_run: bool = False) -> None:
     month_name = datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
     print(f"\n=== Ensuring artists exist for {date_str} ===")
 
-    dansevents_file = config.danslogen_dir / f"{month_name}.json"
+    dansevents_file = config.danslogen_dir / "artists" / f"{date_str}.json"
     if not dansevents_file.exists():
         print(f"Error: danslogen data not found: {dansevents_file}")
         return
