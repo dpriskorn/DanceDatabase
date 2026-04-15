@@ -21,7 +21,7 @@ from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.venue_mapper import VenueMapper
 from src.models.danslogen.event import DanslogenEvent
-from src.models.danslogen.table_row import DanslogenTableRow
+from src.models.danslogen.table_row import DanslogenTableRow, InvalidRowError
 from src.models.danslogen.artist_row import DanslogenArtistRow
 from src.models._utils.datetime_utils import MONTH_NUM_TO_NAME, combine_date_and_time, parse_time_range, parse_date
 
@@ -77,8 +77,8 @@ class Danslogen:
     def parse_row(self, row: Tag, month: str) -> Optional[DanceEvent]:
         try:
             table_row = DanslogenTableRow.from_row(row)
-        except ValueError:
-            logger.debug("Skipping invalid row")
+        except (ValueError, InvalidRowError) as e:
+            logger.warning("Skipping invalid row: %s", e)
             return None
 
         if not table_row:

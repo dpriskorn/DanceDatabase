@@ -1,7 +1,16 @@
+import re
 from typing import Optional
 
 from bs4 import Tag
 from pydantic import BaseModel, field_validator
+
+TIME_RANGE_PATTERN = re.compile(r'^\d{1,2}\.\d{2}-\d{1,2}\.\d{2}$')
+VALID_WEEKDAYS = {'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'}
+
+
+class InvalidRowError(Exception):
+    """Raised when table row fails validation."""
+    pass
 
 
 class DanslogenTableRow(BaseModel):
@@ -66,6 +75,22 @@ class DanslogenTableRow(BaseModel):
 
         if not band_val or not band_val.strip():
             return None
+
+        if TIME_RANGE_PATTERN.match(band_val):
+            raise InvalidRowError(
+                f"Band field contains time range '{band_val}' - column mapping error. "
+                f"Row cells: {[c.get_text(strip=True) for c in cells]}"
+            )
+
+        if not day.isdigit():
+            raise InvalidRowError(
+                f"Day field is not a valid number: '{day}'"
+            )
+
+        if weekday and weekday not in VALID_WEEKDAYS:
+            raise InvalidRowError(
+                f"Weekday '{weekday}' not in valid weekdays: {VALID_WEEKDAYS}"
+            )
 
         return cls(
             weekday=weekday,
