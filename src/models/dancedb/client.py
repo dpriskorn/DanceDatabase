@@ -108,6 +108,20 @@ SELECT ?item ?label ?altLabel ?p3 WHERE {
             logger.error(f"Error fetching artists: {e}")
             return []
 
+    def scrape_artists(self, date_str: str | None = None) -> None:
+        """Fetch artists from DanceDB and save to local JSON file."""
+        import json
+        from pathlib import Path
+
+        date_str = date_str or datetime.now().strftime("%Y-%m-%d")
+        artists_file = config.data_dir / "dancedb" / "artists" / f"{date_str}.json"
+        artists_file.parent.mkdir(parents=True, exist_ok=True)
+
+        artists = self.fetch_artists_from_dancedb()
+        with open(artists_file, "w") as f:
+            json.dump(artists, f, ensure_ascii=False, indent=2)
+        print(f"Saved {len(artists)} artists to {artists_file}")
+
     def create_venue(
         self,
         venue_name: str,
