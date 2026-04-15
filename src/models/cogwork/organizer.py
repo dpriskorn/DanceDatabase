@@ -1,16 +1,14 @@
-import json
 from datetime import date
 from pathlib import Path
 from typing import List
 
-import questionary
 import requests
 from bs4 import BeautifulSoup
 from pydantic import Field
 
 from src.models.cogwork.event import CogworkEvent
-from src.models.dance_event import DanceEvent
-from src.models.organizer import Organizer
+from src.models.export.dance_event import DanceEvent
+from src.models.export.organizer import Organizer
 
 
 class CogworkOrganizer(Organizer):

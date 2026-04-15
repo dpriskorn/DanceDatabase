@@ -6,7 +6,7 @@ from datetime import date
 
 sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
 
-from src.models.commands.venue_ops import (
+from src.models.dancedb.venue_ops import (
     scrape_bygdegardarna,
     scrape_dancedb_venues,
     match_venues,
@@ -16,12 +16,12 @@ from src.models.danslogen.event_ops import (
     scrape_danslogen,
     upload_events,
 )
-from src.models.commands.onbeat import run as scrape_onbeat
-from src.models.commands.cogwork import scrape as scrape_cogwork, upload as upload_cogwork
-from src.models.commands.folketshus import run as scrape_folketshus
-from src.models.commands.ensure_events import run as ensure_events
-from src.models.commands.wikidata_ops import scrape_wikidata_artists, match_wikidata_artists, sync_wikidata_artists
-from src.models.commands.sync import (
+from src.models.onbeat.run import run as scrape_onbeat
+from src.models.cogwork.commands import scrape as scrape_cogwork, upload as upload_cogwork
+from src.models.folketshus.venue import run as scrape_folketshus
+from src.models.dancedb.ensure_events import run as ensure_events
+from src.models.wikidata.operations import scrape_wikidata_artists, match_wikidata_artists, sync_wikidata_artists
+from models.dancedb.sync import (
     sync_danslogen,
     sync_bygdegardarna,
     sync_onbeat,
@@ -225,7 +225,7 @@ def main():
         month = args.month
         year = args.year
         if month is None or year is None:
-            from src.models.commands.sync import get_current_month_year
+            from models.dancedb.sync import get_current_month_year
             month, year = get_current_month_year()
         scrape_all(month=month, year=year)
 
@@ -271,7 +271,7 @@ def main():
         upload_onbeat(dry_run=args.dry_run)
 
     elif args.command == "onbeat-ensure-venues":
-        from src.models.commands.venue_ops import onbeat_ensure_venues
+        from src.models.dancedb.venue_ops import onbeat_ensure_venues
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
         onbeat_ensure_venues(date_str, dry_run=args.dry_run)
 

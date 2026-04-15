@@ -1,6 +1,6 @@
 import pytest
 from bs4 import BeautifulSoup
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from src.models.danslogen.table_row import DanslogenTableRow
 
@@ -8,7 +8,9 @@ from src.models.danslogen.table_row import DanslogenTableRow
 class TestDanslogenParseDatetime:
     """Test full datetime parsing in Danslogen.parse_row."""
 
-    def test_parses_row_like_html_example(self):
+    @patch('src.models.danslogen.band_mapper.load_band_map')
+    @patch('src.models.danslogen.venue_mapper.load_venue_map')
+    def test_parses_row_like_html_example(self, mock_load_venue, mock_load_band):
         """Test row with exact HTML structure user provided.
         
         HTML:
@@ -23,7 +25,10 @@ class TestDanslogenParseDatetime:
             <td></td>
         </tr>
         """
-        from src.models.danslogen.model import Danslogen
+        from src.models.danslogen.main import Danslogen
+
+        mock_load_band.return_value = {'streaplers': 'Q123'}
+        mock_load_venue.return_value = {'ätrasalen': 'Q456'}
 
         html = '''<tr class="r9351">
             <td></td>

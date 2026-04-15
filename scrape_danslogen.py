@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 import config
-from src.models.danslogen.model import Danslogen
+from src.models.danslogen.main import Danslogen
 
 logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)

@@ -11,17 +11,13 @@ from pydantic import BaseModel, Field, AnyUrl
 from config import CET
 from src.models.cogwork.enums import EventType
 from src.models.cogwork.price import PriceExtractor, PriceMismatchError
-from src.models.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
+from src.models.export.dance_event import DanceEvent, Identifiers, DanceDatabaseIdentifiers, Organizer, EventLinks, \
     Registration
 
 logger = logging.getLogger(__name__)
 
-DANCE_STYLE_MAP = {
-    "fox": "Q23",
-    "west coast swing": "Q15",
-    "modern fox": "Q23",
-    "bugg": "Q485",
-}
+from src.models._utils.dance_styles import DANCE_STYLE_MAP, get_style_qid
+
 FULL_MAPPING = [
     "FULLT",
     "FULLBOKAD"
@@ -141,9 +137,7 @@ class CogworkEvent(BaseModel):
 
     def map_dance_style_qids(self, text: str) -> None:
         """Append all matching dance style QIDs based on text."""
-        for key, qid in self.dance_style_qid_map.items():
-            if key.lower() in text.lower():
-                self.dance_styles_qids.add(qid)
+        self.dance_styles_qids.update(get_style_qid(text))
 
     # === Shop methods ===
     @property

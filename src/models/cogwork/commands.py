@@ -32,7 +32,7 @@ def scrape(source: str | None = None, overwrite: bool = False) -> None:
     import importlib
     from datetime import date
 
-    from src.models.dancedb.config import config
+    import config
 
     print("\n=== Scrape cogwork events ===")
 

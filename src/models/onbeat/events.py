@@ -3,20 +3,21 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List, Optional
 
-import questionary
 import requests
 from bs4 import BeautifulSoup, Tag
 from pydantic import BaseModel, AnyUrl, Field
 
 import config
 from config import CET
-from src.models.dance_event import (
+from src.models.export.dance_event import (
     DanceEvent,
     EventLinks,
     Identifiers,
     DanceDatabaseIdentifiers,
     Registration,
     Organizer, )
+from src.models._utils.datetime_utils import parse_iso_datetime, parse_datetime_with_range
+from src.models.onbeat.venue_resolver import VenueResolver
 
 logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)
@@ -66,6 +67,7 @@ class OnbeatEvents(BaseModel):
     _dancedb_venues: dict = {}
     _folketshus_venues: dict = {}
     _bygdegardarna_venues: list = []
+    _venue_resolver: Optional["VenueResolver"] = None
 
     # Instance attributes to hold intermediate parsed data
     soup: Optional[BeautifulSoup] = None
@@ -85,104 +87,17 @@ class OnbeatEvents(BaseModel):
         "arbitrary_types_allowed": True  # <-- allow BeautifulSoup and Tag
     }
 
-    def _load_dancedb_venues(self) -> dict:
-        """Load venues from local DanceDB JSON cache."""
-        if self._dancedb_venues:
-            return self._dancedb_venues
-        
-        import json
-        from pathlib import Path
-        venues_file = Path("data/dancedb/venues/2026-04-12.json")
-        if venues_file.exists():
-            self._dancedb_venues = json.loads(venues_file.read_text())
-            logger.info(f"Loaded {len(self._dancedb_venues)} venues from DanceDB cache")
-        return self._dancedb_venues
-
-    def _load_folketshus_venues(self) -> dict:
-        """Load venues from Folketshus enriched JSON."""
-        if self._folketshus_venues:
-            return self._folketshus_venues
-        
-        import json
-        from pathlib import Path
-        folketshus_file = Path("data/folketshus/enriched/2026-04-14.json")
-        if folketshus_file.exists():
-            data = json.loads(folketshus_file.read_text())
-            self._folketshus_venues = {v["name"].lower(): v for v in data if v.get("qid")}
-            logger.info(f"Loaded {len(self._folketshus_venues)} venues from Folketshus")
-        return self._folketshus_venues
-
-    def _load_bygdegardarna_venues(self) -> list:
-        """Load venues from Bygdegardarna JSON."""
-        if self._bygdegardarna_venues:
-            return self._bygdegardarna_venues
-        
-        import json
-        from pathlib import Path
-        bygdegard_file = Path("data/bygdegardarna/2026-04-14.json")
-        if bygdegard_file.exists():
-            self._bygdegardarna_venues = json.loads(bygdegard_file.read_text())
-            logger.info(f"Loaded {len(self._bygdegardarna_venues)} venues from Bygdegardarna")
-        return self._bygdegardarna_venues
+    def _get_venue_resolver(self) -> VenueResolver:
+        """Get or create VenueResolver instance."""
+        if self._venue_resolver is None:
+            self._venue_resolver = VenueResolver()
+        return self._venue_resolver
 
     def lookup_venue_qid(self, venue_name: str) -> tuple[str | None, str | None]:
-        """
-        Look up venue QID from local datasets.
-        Returns (qid, external_id) or (None, None) if not found.
-        """
-        if not venue_name:
-            return None, None
-        
-        venue_lower = venue_name.lower()
-        
-        # 1. Check DanceDB venues (exact substring match on labels + aliases)
-        dancedb = self._load_dancedb_venues()
-        for qid, v in dancedb.items():
-            label = v.get("label", "").lower()
-            if venue_lower in label or label in venue_lower:
-                logger.debug(f"Matched '{venue_name}' to DanceDB venue '{v['label']}' ({qid})")
-                return qid, None
-            
-            aliases = v.get("aliases", [])
-            for alias in aliases:
-                if venue_lower in alias or alias in venue_lower:
-                    logger.debug(f"Matched '{venue_name}' to DanceDB alias '{alias}' ({qid})")
-                    return qid, None
-        
-        # 2. Check Folketshus enriched (has QIDs)
-        folketshus = self._load_folketshus_venues()
-        for name, v in folketshus.items():
-            if venue_lower in name or name in venue_lower:
-                logger.debug(f"Matched '{venue_name}' to Folketshus '{v['name']}' ({v.get('qid')})")
-                return v.get("qid"), v.get("external_id")
-        
-        # 3. Check Bygdegardarna (no QIDs, return coords for potential creation)
-        bygdegard = self._load_bygdegardarna_venues()
-        for v in bygdegard:
-            title = v.get("title", "").lower()
-            if venue_lower in title or title in venue_lower:
-                pos = v.get("position", {})
-                logger.debug(f"Matched '{venue_name}' to Bygdegardarna '{v['title']}'")
-                return None, f"bygdegardarna:{v['meta'].get('permalink', '')}"
-        
-        logger.debug(f"No match found for venue: '{venue_name}'")
-        return None, None
+        return self._get_venue_resolver().lookup(venue_name)
 
     def get_venue_qid(self, venue_name: str) -> tuple[str, str | None]:
-        """
-        Get venue QID, prompting user if not found in datasets.
-        Returns (qid, external_id).
-        """
-        qid, external_id = self.lookup_venue_qid(venue_name)
-        
-        if qid:
-            return qid, external_id
-        
-        if not venue_name:
-            return "", None
-        
-        logger.warning(f"Venue not found in any dataset: '{venue_name}'")
-        return "", external_id
+        return self._get_venue_resolver().resolve(venue_name)
 
     def fetch_page(self) -> None:
         response = requests.get(self.page_url)
@@ -221,40 +136,12 @@ class OnbeatEvents(BaseModel):
 
     @staticmethod
     def parse_datetime(date_str: str, time_str: Optional[str] = None) -> Optional[datetime]:
-        """
-        Parse date and time, optionally with a timezone abbreviation (e.g., '18:00 CEST').
-        Returns a datetime with tzinfo=CET.
-        """
-        if not date_str:
-            return None
-
-        try:
-            if time_str:
-                # Remove any non-numeric characters (e.g., "CEST") from time
-                time_clean = time_str.split()[0]  # keeps only "HH:MM"
-                dt_str = f"{date_str} {time_clean}"
-                return datetime.strptime(dt_str, "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-            return datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=CET)
-        except Exception as e:
-            logger.warning("Failed to parse datetime: %s %s (%s)", date_str, time_str, e)
-            return None
+        """Parse ISO date string with optional time, returns datetime with CET timezone."""
+        return parse_iso_datetime(date_str, time_str)
 
     def parse_datetime_range(self, date_str: str, time_str: Optional[str] = None) -> None:
-        """Parse date and time (including ranges like '18:00 - 19:00') into start_time and end_time."""
-        if not date_str:
-            return
-
-        try:
-            if time_str and " - " in time_str:
-                start_str, end_str = [t.strip() for t in time_str.split(" - ", 1)]
-                self.start_date = datetime.strptime(f"{date_str} {start_str}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-                self.end_date = datetime.strptime(f"{date_str} {end_str}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-            elif time_str:
-                self.start_date = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-            else:
-                self.start_date = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=CET)
-        except Exception as e:
-            logger.warning("Failed to parse datetime: %s %s (%s)", date_str, time_str, e)
+        """Parse date and time (including ranges like '18:00 - 19:00') into instance start_date/end_date."""
+        self.start_date, self.end_date = parse_datetime_with_range(date_str, time_str)
 
     def parse_community_name(self) -> None:
         if not self.soup:
@@ -354,8 +241,8 @@ class OnbeatEvents(BaseModel):
                 logger.warning(f"Skipping event with no details: {api_event.name}")
                 continue
 
-            start_dt = self.parse_datetime(details["start_date"], self.start_time)
-            end_dt = self.parse_datetime(details["end_date"], self.end_time)
+            start_dt = parse_iso_datetime(details["start_date"], self.start_time)
+            end_dt = parse_iso_datetime(details["end_date"], self.end_time)
 
             price_normal = self._extract_price(soup, api_event.name)
 

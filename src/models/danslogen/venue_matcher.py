@@ -3,10 +3,9 @@ import sys
 from typing import Optional
 
 import questionary
-from rapidfuzz import fuzz, process
 
-from src.models.dancedb_client import DancedbClient
-from src.models.danslogen.maps import VENUE_QID_MAP, fuzzy_match_qid
+from src.models.dancedb.client import DancedbClient
+from src.models.danslogen.venue_mapper import VenueMapper
 
 logger = logging.getLogger(__name__)
 
@@ -30,18 +29,17 @@ class VenueMatcher:
         self.byg_venues = byg_venues or {}
         self.db_venues = db_venues or {}
         self.interactive = interactive
+        self._venue_mapper = VenueMapper(client=client)
 
     def resolve(self, venue_name: str, ort: str = "") -> Optional[str]:
         """Resolve venue name to QID.
 
         Flow:
-        1. Exact match against static map
-        2. Fuzzy match against static map
-        3. Exact match against bygdegardarna
+        1. Exact match against DanceDB venues (dynamic)
+        2. Exact match against bygdegardarna
+        3. Fuzzy match against DanceDB venues
         4. Fuzzy match against bygdegardarna
-        5. Exact match against DanceDB venues
-        6. Fuzzy match against DanceDB venues
-        7. Create new venue if coords available (from bygdegardarna or prompt)
+        5. Create new venue if coords available (from bygdegardarna or prompt)
 
         Returns QID or None if not found.
         Raises KeyboardInterrupt if user skips/aborts.
@@ -52,7 +50,7 @@ class VenueMatcher:
         if not venue_name:
             return None
 
-        qid = self._find_in_static_map(venue_name)
+        qid = self._venue_mapper.resolve(venue_name)
         if qid:
             return qid
 
@@ -60,32 +58,10 @@ class VenueMatcher:
         if qid:
             return qid
 
-        qid = self._find_in_dancedb(venue_name)
-        if qid:
-            return qid
-
         if self.client is None:
             return None
 
         return self._create_if_needed(venue_name, ort)
-
-    def _find_in_static_map(self, venue_name: str) -> Optional[str]:
-        """Find in static map (exact or fuzzy)."""
-        exact = next(
-            (qid for key, qid in VENUE_QID_MAP.items()
-             if key.lower() == venue_name.lower()),
-            None
-        )
-        if exact:
-            return exact
-
-        fuzzy = fuzzy_match_qid(venue_name, VENUE_QID_MAP)
-        if fuzzy:
-            matched_key, qid, score = fuzzy
-            logger.info("Fuzzy matched venue '%s' to '%s' (score=%d)", venue_name, matched_key, score)
-            return qid
-
-        return None
 
     def _find_in_bygdegardarna(self, venue_name: str) -> Optional[str]:
         """Find in bygdegardarna venues (exact or fuzzy)."""
@@ -106,29 +82,6 @@ class VenueMatcher:
         if fuzzy:
             matched_key, qid, score = fuzzy
             logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (score=%d)",
-                     venue_name, matched_key, score)
-            return qid
-
-        return None
-
-    def _find_in_dancedb(self, venue_name: str) -> Optional[str]:
-        """Find in DanceDB venues (exact or fuzzy)."""
-        if not self.db_venues:
-            return None
-
-        exact = next(
-            (qid for qid, data in self.db_venues.items()
-             if data.get("label", "").lower() == venue_name.lower()),
-            None
-        )
-        if exact:
-            return exact
-
-        labels = {data.get("label", ""): qid for qid, data in self.db_venues.items()}
-        fuzzy = fuzzy_match_qid(venue_name, labels)
-        if fuzzy:
-            matched_key, qid, score = fuzzy
-            logger.info("Fuzzy matched venue '%s' to DanceDB '%s' (score=%d)",
                      venue_name, matched_key, score)
             return qid
 

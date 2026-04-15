@@ -1,15 +1,13 @@
 """Event operations: scrape danslogen, upload events."""
 import logging
 import sys
-from pathlib import Path
 
 import questionary
 import rich
 
-from src.models.dancedb.config import config
+import config
 from src.models.dancedb.status import detect_event_status
-from src.models.dancedb_client import DancedbClient
-from src.models.danslogen.uploader import DanslogenUploader
+from src.models.dancedb.client import DancedbClient
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +19,7 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
         month: Month name or "all" for all months
     """
     import json
-    from src.models.danslogen.model import Danslogen
+    from src.models.danslogen.main import Danslogen
 
     months_to_scrape = []
     if month.lower() == "all":
@@ -62,7 +60,7 @@ def upload_events(
     """
     import json
     import os
-    from src.models.dance_event import DanceEvent
+    from src.models.export.dance_event import DanceEvent
     from rapidfuzz import fuzz
 
     is_tty = os.isatty(0)

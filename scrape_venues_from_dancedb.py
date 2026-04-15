@@ -4,7 +4,7 @@ from datetime import date
 from pathlib import Path
 
 import config
-from src.models.dancedb_client import wbi_config, execute_sparql_query
+from src.models.dancedb.client import execute_sparql_query
 
 logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)

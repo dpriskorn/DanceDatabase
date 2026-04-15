@@ -1,12 +1,12 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
 from pydantic import AnyUrl, TypeAdapter
 
 from config import CET
-from src.models.dance_event import (
+from src.models.export.dance_event import (
     DanceEvent,
     DanceDatabaseIdentifiers,
     EventLinks,
@@ -16,6 +16,7 @@ from src.models.dance_event import (
 )
 from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.venue_matcher import VenueMatcher
+from src.models._utils.datetime_utils import parse_date, combine_date_and_time
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,21 @@ class RowParser:
     ):
         self.venue_matcher = venue_matcher
         self.band_mapper = band_mapper
+
+    def _parse_date(self, day: str, month: str, year: int = 2026) -> Optional[datetime]:
+        return parse_date(day, month, year)
+
+    def _parse_datetime(
+        self,
+        day: str,
+        month: str,
+        time_str: str,
+        year: int = 2026
+    ) -> tuple[Optional[datetime], Optional[datetime]]:
+        date = parse_date(day, month, year)
+        if not date:
+            return None, None
+        return combine_date_and_time(date, time_str)
 
     def parse(self, row: dict, month: str) -> Optional[DanceEvent]:
         """Parse danslogen row dict to DanceEvent.
@@ -60,12 +76,12 @@ class RowParser:
             logger.warning("Skipping event - no venue QID for '%s'", venue)
             return None
 
-        date = self._parse_date(day, month)
+        date = parse_date(day, month)
         if not date:
             logger.warning("Skipping event - invalid date %s %s", day, month)
             return None
 
-        start_dt, end_dt = self._parse_datetime(day, month, time_str)
+        start_dt, end_dt = combine_date_and_time(date, time_str)
 
         dance_styles, instance_of = self._detect_dance_styles_and_instance(ovrigt)
 
@@ -123,70 +139,6 @@ class RowParser:
             number_of_occasions=1,
             instance_of=instance_of
         )
-
-    def _parse_date(self, day: str, month: str, year: int = 2026) -> Optional[datetime]:
-        """Parse day and month name to datetime."""
-        month_map = {
-            "januari": 1, "februari": 2, "mars": 3, "april": 4,
-            "maj": 5, "juni": 6, "juli": 7, "augusti": 8,
-            "september": 9, "oktober": 10, "november": 11, "december": 12
-        }
-        try:
-            month_num = month_map.get(month.lower(), 1)
-            return datetime.strptime(
-                f"{year}-{month_num:02d}-{int(day):02d}",
-                "%Y-%m-%d"
-            ).replace(tzinfo=CET)
-        except Exception:
-            return None
-
-    def _parse_datetime(
-        self,
-        day: str,
-        month: str,
-        time_str: str,
-        year: int = 2026
-    ) -> tuple[Optional[datetime], Optional[datetime]]:
-        """Parse day, month, time string like '18.00-22.00' into start/end datetimes directly."""
-        month_map = {"januari": 1, "februari": 2, "mars": 3, "april": 4,
-                  "maj": 5, "juni": 6, "juli": 7, "augusti": 8,
-                  "september": 9, "oktober": 10, "november": 11, "december": 12}
-        
-        try:
-            day_num = int(day)
-            month_num = month_map.get(month.lower(), 4)
-        except (ValueError, TypeError):
-            return None, None
-        
-        if not time_str:
-            return None, None
-        
-        time_clean = time_str.replace('.', ':')
-        start_dt = None
-        end_dt = None
-        
-        if "-" in time_clean:
-            start_str, end_str = time_clean.split('-', 1)
-            try:
-                start_h, start_m = map(int, start_str.strip().split(":"))
-                end_h, end_m = map(int, end_str.strip().split(":"))
-            except ValueError:
-                return None, None
-            
-            start_dt = datetime(year, month_num, day_num, start_h, start_m, tzinfo=CET)
-            end_dt = datetime(year, month_num, day_num, end_h, end_m, tzinfo=CET)
-            
-            if end_dt.hour <= 3:
-                end_dt = end_dt + timedelta(days=1)
-        else:
-            try:
-                start_h, start_m = map(int, time_clean.strip().split(":"))
-            except ValueError:
-                return None, None
-            
-            start_dt = datetime(year, month_num, day_num, start_h, start_m, tzinfo=CET)
-        
-        return start_dt, end_dt
 
     def _detect_dance_styles_and_instance(self, ovrigt: str) -> tuple[list[str], str]:
         """Detect dance styles from ovrigt field and determine instance type.

@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from pydantic import BaseModel
 
 import config
-from src.models.dancedb_client import DancedbClient
+from src.models.dancedb.client import DancedbClient
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=config.loglevel)

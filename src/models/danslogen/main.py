@@ -1,6 +1,6 @@
 import logging
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List, Optional
 
 import questionary
@@ -8,14 +8,8 @@ import requests
 from bs4 import BeautifulSoup, Tag
 from pydantic import AnyUrl
 
-from src.models.danslogen.event import DanslogenEvent
-from src.models.danslogen.maps import BAND_QID_MAP, VENUE_QID_MAP, fuzzy_match_qid
-from src.models.danslogen.table_row import DanslogenTableRow
-
-sys.path.insert(0, str(__file__).rsplit('/', 1)[0] + '/../../')
-
 from config import CET
-from src.models.dance_event import (
+from src.models.export.dance_event import (
     DanceEvent,
     EventLinks,
     Identifiers,
@@ -23,7 +17,12 @@ from src.models.dance_event import (
     Organizer,
     Registration,
 )
-from src.models.dancedb_client import DancedbClient
+from src.models.dancedb.client import DancedbClient
+from src.models.danslogen.band_mapper import BandMapper
+from src.models.danslogen.venue_mapper import VenueMapper
+from src.models.danslogen.event import DanslogenEvent
+from src.models.danslogen.table_row import DanslogenTableRow
+from src.models._utils.datetime_utils import MONTH_NUM_TO_NAME, combine_date_and_time, parse_time_range, parse_date
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +31,24 @@ class Danslogen:
     baseurl: str = "https://www.danslogen.se"
     event_class: type[DanslogenEvent] = DanslogenEvent
 
-    def __init__(self, month: str = "april", interactive: bool = True):
-        self.month = month.lower()
+    def __init__(self, month: Optional[str] = None, interactive: bool = True):
+        now = datetime.now(tz=CET)
+        if month is None:
+            self.month = MONTH_NUM_TO_NAME[now.month]
+        else:
+            self.month = month.lower()
+        self.year = now.year
         self.events: List[DanceEvent] = []
         self.dancedb_client = DancedbClient()
+        self.band_mapper = BandMapper(client=self.dancedb_client)
+        self.venue_mapper = VenueMapper(client=self.dancedb_client)
         self.interactive = interactive
+
+    def parse_time_range(self, time_str: str) -> tuple[str, str]:
+        return parse_time_range(time_str)
+
+    def parse_date(self, day: str, month: str, year: int = 2026) -> Optional[datetime]:
+        return parse_date(day, month, year)
 
     def fetch_month(self, month: str) -> None:
         url = f"{self.baseurl}/dansprogram/{month}"
@@ -46,37 +58,13 @@ class Danslogen:
         logger.info("Fetched page: %s", url)
 
     def map_band_qid(self, band_name: str) -> Optional[str]:
-        try:
-            exact = next((qid for key, qid in BAND_QID_MAP.items()
-                         if key.lower() == band_name.lower()), None)
-            if exact:
-                return exact
-        except Exception as e:
-            logger.warning("Error looking up band '%s' in band_qid_map: %s", band_name, e)
-            return None
-
-        fuzzy = fuzzy_match_qid(band_name, BAND_QID_MAP)
-        if fuzzy:
-            matched_key, qid, score = fuzzy
-            logger.info("Fuzzy matched band '%s' to '%s' (score=%d)", band_name, matched_key, score)
-            BAND_QID_MAP[band_name] = qid
-            return qid
-        return None
+        return self.band_mapper.resolve(band_name)
 
     def map_venue_qid(self, venue_name: str) -> Optional[str]:
-        exact_match = next((qid for key, qid in VENUE_QID_MAP.items()
-                           if key.lower() in venue_name.lower()), None)
-        if exact_match:
-            return exact_match
-        fuzzy_result = fuzzy_match_qid(venue_name, VENUE_QID_MAP)
-        if fuzzy_result:
-            matched_key, qid, score = fuzzy_result
-            logger.info("Fuzzy matched '%s' to '%s' (score=%d)", venue_name, matched_key, score)
-            return qid
-        return None
+        return self.venue_mapper.resolve(venue_name)
 
     def add_venue_qid(self, venue_name: str, qid: str) -> None:
-        VENUE_QID_MAP[venue_name] = qid
+        self.venue_mapper._venue_map[venue_name.lower()] = qid
         logger.info("Added venue mapping: %s -> %s", venue_name, qid)
 
     def parse_weekday_day(self, text: str) -> tuple[str, str]:
@@ -84,27 +72,6 @@ class Danslogen:
         if len(parts) == 2:
             return parts[0], parts[1]
         return text, ""
-
-    def parse_time_range(self, time_str: str) -> tuple[str, str]:
-        if not time_str or time_str.strip() == "":
-            return "", ""
-        if "-" in time_str:
-            start, end = time_str.split("-", 1)
-            return start.strip(), end.strip()
-        return time_str.strip(), ""
-
-    def parse_date(self, day: str, month: str, year: int = 2026) -> Optional[datetime]:
-        try:
-            month_map = {
-                "januari": 1, "februari": 2, "mars": 3, "april": 4,
-                "maj": 5, "juni": 6, "juli": 7, "augusti": 8,
-                "september": 9, "oktober": 10, "november": 11, "december": 12
-            }
-            month_num = month_map.get(month.lower(), 1)
-            return datetime.strptime(f"{year}-{month_num:02d}-{int(day):02d}", "%Y-%m-%d").replace(tzinfo=CET)
-        except Exception as e:
-            logger.warning("Failed to parse date %s %s: %s", day, month, e)
-            return None
 
     def parse_row(self, row: Tag, month: str) -> Optional[DanceEvent]:
         try:
@@ -128,24 +95,15 @@ class Danslogen:
         lan = table_row.lan
         ovrigt = table_row.ovrigt
 
-        start_time, end_time = self.parse_time_range(time_text)
+        start_time, end_time = parse_time_range(time_text)
 
         band_qid = self.map_band_qid(band)
         if not band_qid:
             if not self.interactive:
                 logger.debug("Band '%s' not found, skipping event (non-interactive)", band)
                 return None
-            try:
-                band_qid = self.dancedb_client.get_or_create_band(band)
-            except KeyboardInterrupt:
-                logger.info("Aborted by user, exiting...")
-                sys.exit(0)
-            except Exception as e:
-                logger.warning("Could not get/create band '%s': %s. Skipping event.", band, e)
-                return None
-            if band_qid:
-                BAND_QID_MAP[band] = band_qid
-                logger.info("Added band mapping: %s -> %s", band, band_qid)
+            logger.warning("Could not resolve band '%s'. Skipping event.", band)
+            return None
 
         venue_qid = self.map_venue_qid(venue)
         if not venue_qid:
@@ -165,34 +123,14 @@ class Danslogen:
                 logger.warning("Skipping event with unknown venue: %s", venue_full)
                 return None
             venue_qid = new_qid
-            VENUE_QID_MAP[venue] = venue_qid
+            self.venue_mapper._venue_map[venue.lower()] = venue_qid
             logger.info("Added venue mapping: %s -> %s", venue, venue_qid)
 
-        date = self.parse_date(day, month)
+        date = parse_date(day, month)
         if not date:
             return None
 
-        start_dt = None
-        end_dt = None
-        if date and start_time:
-            try:
-                start_time_clean = start_time.replace('.', ':')
-                if '24:00' in start_time:
-                    start_time_clean = start_time_clean.replace('24:00', '00:00')
-                    start_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {start_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-                    start_dt = start_dt + timedelta(days=1)
-                else:
-                    start_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {start_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-                if end_time:
-                    end_time_clean = end_time.replace('.', ':')
-                    if '24:00' in end_time:
-                        end_time_clean = end_time_clean.replace('24:00', '00:00')
-                        end_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {end_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-                        end_dt = end_dt + timedelta(days=1)
-                    else:
-                        end_dt = datetime.strptime(f"{date.strftime('%Y-%m-%d')} {end_time_clean}", "%Y-%m-%d %H:%M").replace(tzinfo=CET)
-            except Exception as e:
-                logger.warning("Failed to parse datetime: %s", e)
+        start_dt, end_dt = combine_date_and_time(date, time_text) if date and start_time else (None, None)
 
         organizer = Organizer(
             description="",

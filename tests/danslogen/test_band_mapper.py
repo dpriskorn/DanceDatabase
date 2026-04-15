@@ -1,27 +1,30 @@
 import pytest
 from unittest.mock import MagicMock, patch
 
-from src.models.danslogen.band_mapper import BandMapper
+from src.models.danslogen.band_mapper import BandMapper, load_band_map
 
 
 class TestBandMapperResolve:
-    @patch('src.models.danslogen.band_mapper.BAND_QID_MAP', {"TestBand": "Q200"})
-    def test_finds_exact_match(self):
+    @patch('src.models.danslogen.band_mapper.load_band_map')
+    def test_finds_exact_match(self, mock_load):
+        mock_load.return_value = {"testband": "Q200"}
         mapper = BandMapper()
         result = mapper.resolve("TestBand")
 
         assert result == "Q200"
 
-    @patch('src.models.danslogen.band_mapper.BAND_QID_MAP', {"TestBand": "Q200"})
-    def test_finds_case_insensitive(self):
+    @patch('src.models.danslogen.band_mapper.load_band_map')
+    def test_finds_case_insensitive(self, mock_load):
+        mock_load.return_value = {"testband": "Q200"}
         mapper = BandMapper()
         result = mapper.resolve("testband")
 
         assert result == "Q200"
 
-    @patch('src.models.danslogen.band_mapper.BAND_QID_MAP', {"Test Band": "Q200"})
+    @patch('src.models.danslogen.band_mapper.load_band_map')
     @patch('src.models.danslogen.band_mapper.fuzzy_match_qid')
-    def test_falls_back_to_fuzzy(self, mock_fuzzy):
+    def test_falls_back_to_fuzzy(self, mock_fuzzy, mock_load):
+        mock_load.return_value = {"test band": "Q200"}
         mock_fuzzy.return_value = ("Test Band", "Q200", 90)
         mapper = BandMapper()
         result = mapper.resolve("Testbnad")
@@ -29,15 +32,17 @@ class TestBandMapperResolve:
         assert result == "Q200"
         mock_fuzzy.assert_called_once()
 
-    @patch('src.models.danslogen.band_mapper.BAND_QID_MAP', {})
-    def test_returns_none_when_not_found_and_no_client(self):
+    @patch('src.models.danslogen.band_mapper.load_band_map')
+    def test_returns_none_when_not_found_and_no_client(self, mock_load):
+        mock_load.return_value = {}
         mapper = BandMapper(client=None)
         result = mapper.resolve("Unknown Band")
 
         assert result is None
 
-    @patch('src.models.danslogen.band_mapper.BAND_QID_MAP', {})
-    def test_returns_none_for_empty_band_name(self):
+    @patch('src.models.danslogen.band_mapper.load_band_map')
+    def test_returns_none_for_empty_band_name(self, mock_load):
+        mock_load.return_value = {}
         mapper = BandMapper()
         result = mapper.resolve("")
 
@@ -45,9 +50,10 @@ class TestBandMapperResolve:
 
 
 class TestBandMapperWithClient:
-    @patch('src.models.danslogen.band_mapper.BAND_QID_MAP', {})
+    @patch('src.models.danslogen.band_mapper.load_band_map')
     @patch('src.models.danslogen.band_mapper.fuzzy_match_qid', return_value=None)
-    def test_uses_client_when_no_static_match(self, mock_fuzzy):
+    def test_uses_client_when_no_static_match(self, mock_fuzzy, mock_load):
+        mock_load.return_value = {}
         mock_client = MagicMock()
         mock_client.get_or_create_band.return_value = "Q300"
         mapper = BandMapper(client=mock_client)

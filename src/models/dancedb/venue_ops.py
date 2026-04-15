@@ -4,10 +4,10 @@ import logging
 import urllib.parse
 from datetime import date
 
-from src.models.dancedb.config import config
-from src.models.dancedb_client import DancedbClient
+import config
+from src.models.dancedb.client import DancedbClient
 from src.models.bygdegardarna import fetch_markerdata
-from src.models.danslogen.maps import VENUE_QID_MAP, fuzzy_match_qid
+from src.models.danslogen.fuzzy import fuzzy_match_qid
 from wikibaseintegrator.wbi_config import config as wbi_config
 
 logger = logging.getLogger(__name__)
@@ -177,7 +177,6 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
             folketshus_names = list(folketshus_venues.keys())
             print(f"Loaded {len(folketshus_venues)} folketshus venues for auto-match")
 
-    from src.models.danslogen.venue_matcher import VenueMatcher
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
     wbi_config["User-Agent"] = "DanceDB/1.0 (User:So9q)"
 
@@ -315,10 +314,8 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     """Ensure onbeat venues exist in DanceDB."""
     import questionary
-    from rapidfuzz import process as fuzz_process
     import json
     from pathlib import Path
-    from datetime import datetime
 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print(f"\n=== Ensuring onbeat venues exist for {date_str} ===")

@@ -1,14 +1,8 @@
 """Onbeat scraper commands."""
 import json
 import logging
-import sys
 from datetime import date
 from pathlib import Path
-
-import questionary
-
-from src.models.dancedb.status import detect_event_status
-from src.models.dancedb_client import DancedbClient
 
 logger = logging.getLogger(__name__)
 

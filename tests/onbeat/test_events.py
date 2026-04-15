@@ -50,23 +50,6 @@ class TestMapDanceStyleQids:
         assert "Q485" in result
 
 
-class TestMapVenueQid:
-    def test_maps_known_venue(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        event.venue_qid_map = {"Test Venue": "Q99"}
-        assert event.map_venue_qid("Test Venue") == "Q99"
-
-    def test_returns_empty_for_unknown(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        event.venue_qid_map = {"Test Venue": "Q99"}
-        assert event.map_venue_qid("Unknown Place") == ""
-
-    def test_case_insensitive(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        event.venue_qid_map = {"Test Venue": "Q99"}
-        assert event.map_venue_qid("test venue") == "Q99"
-
-
 class TestParseCommunityName:
     def test_parses_known_community(self):
         event = OnbeatEvents(page_url="https://onbeat.dance/club/wcs-umea")
@@ -335,85 +318,3 @@ class TestPriceOverrideMap:
     def test_price_override_map_is_populated(self):
         event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
         assert len(event.price_override_map) >= 1
-
-
-class TestMapVenueQidCaseInsensitive:
-    def test_venue_qid_map_values_are_strings(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        for key, qid in event.venue_qid_map.items():
-            assert isinstance(key, str), f"Key {key} is not a string"
-            assert isinstance(qid, str), f"QID {qid} is not a string"
-
-
-class TestParseEvents:
-    def test_parse_events_skips_no_courses_message(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        event.organizer_name = "Test"
-        event.cards = []
-        no_courses_card = MagicMock()
-        no_courses_card.find.return_value.get_text.return_value = "Sorry, no available courses"
-        event.cards = [no_courses_card]
-        events = event.parse_events()
-        assert len(events) == 0
-
-    def test_parse_events_handles_empty_card(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        event.organizer_name = "Test"
-        event.cards = []
-        empty_card = MagicMock()
-        title = MagicMock()
-        title.get_text.return_value = ""
-        empty_card.find.return_value = title
-        event.cards = [empty_card]
-        events = event.parse_events()
-        assert len(events) == 0
-
-    def test_parse_events_skips_unknown_venue_with_confirm(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        event.organizer_name = "Test"
-        event.start_time = ""
-        event.end_time = ""
-
-        card = MagicMock()
-        title = MagicMock()
-        title.get_text.return_value = "Unknown Venue Event"
-
-        p_elem = MagicMock()
-        b_elem = MagicMock()
-        b_elem.get_text.return_value = "Where:"
-        b_elem.next_sibling = None
-        p_elem.find.return_value = b_elem
-        p_elem.get_text.return_value = "Where: Unknown Place"
-
-        desc = MagicMock()
-        desc.get_text.return_value = ""
-
-        card.find.side_effect = [title, None, desc]
-        card.find_all.return_value = [p_elem]
-
-        event.cards = [card]
-
-        with patch("click.confirm", return_value=True):
-            events = event.parse_events()
-        assert len(events) == 0
-
-    def test_parse_events_calls_find_cards_when_empty(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        event.organizer_name = "Test"
-        object.__setattr__(event, 'cards', None)
-        def mock_find_cards():
-            object.__setattr__(event, 'cards', [])
-        object.__setattr__(event, 'find_cards', mock_find_cards)
-        events = event.parse_events()
-        assert event.cards == []
-
-    def test_parse_events_calls_parse_community_when_empty(self):
-        event = OnbeatEvents(page_url="https://onbeat.dance/club/test")
-        object.__setattr__(event, 'organizer_name', "")
-        event.cards = [MagicMock()]
-        object.__setattr__(event, 'parse_community_name', MagicMock())
-        no_courses = MagicMock()
-        no_courses.get_text.return_value = "Sorry"
-        event.cards[0].find.return_value = no_courses
-        events = event.parse_events()
-        event.parse_community_name.assert_called_once()

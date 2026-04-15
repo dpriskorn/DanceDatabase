@@ -2,13 +2,13 @@ from pathlib import Path
 from typing import Optional, List
 
 import requests
-from bs4 import BeautifulSoup, Tag
-from pydantic import Field, BaseModel
+from bs4 import BeautifulSoup
+from pydantic import Field
 
-from src.models.dance_event import DanceEvent
+from src.models.export.dance_event import DanceEvent
 from src.models.onbeat.events import OnbeatEvents
 from src.models.onbeat.organizer import OnbeatCommunity
-from src.models.organizer import Organizer
+from src.models.export.organizer import Organizer
 
 
 class OnbeatOrganizers(Organizer):

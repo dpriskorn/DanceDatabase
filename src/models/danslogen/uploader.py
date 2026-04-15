@@ -4,7 +4,7 @@ from datetime import date
 from pathlib import Path
 from typing import Optional
 
-from src.models.dancedb_client import DancedbClient
+from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.data_loader import DanslogenDataLoader
 from src.models.danslogen.row_parser import RowParser

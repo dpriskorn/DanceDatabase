@@ -44,7 +44,7 @@ class SyncStep:
 
 def get_data_dir() -> Path:
     """Get the data directory path."""
-    from src.models.dancedb.config import config
+    import config
     return config.data_dir
 
 
@@ -66,11 +66,11 @@ def run_sync_steps(
 def scrape_all(month: str, year: int) -> None:
     """Scrape all data sources first."""
     from src.models.danslogen.event_ops import scrape_danslogen
-    from src.models.commands.venue_ops import scrape_bygdegardarna
-    from src.models.commands.onbeat import run as scrape_onbeat
-    from src.models.commands.cogwork import scrape as scrape_cogwork
-    from src.models.commands.folketshus import run as scrape_folketshus
-    from src.models.commands.wikidata_ops import scrape_wikidata_artists
+    from src.models.dancedb.venue_ops import scrape_bygdegardarna
+    from src.models.onbeat.run import run as scrape_onbeat
+    from src.models.cogwork.commands import scrape as scrape_cogwork
+    from src.models.folketshus.venue import run as scrape_folketshus
+    from src.models.wikidata.wikidata_ops import scrape_wikidata_artists
 
     date_str = date.today().strftime("%Y-%m-%d")
     data_dir = get_data_dir()
@@ -112,9 +112,8 @@ def sync_danslogen(
 ) -> bool:
     """Sync danslogen events with prerequisite checking."""
     from src.models.danslogen.event_ops import scrape_danslogen, upload_events
-    from src.models.commands.venue_ops import ensure_venues
-    from src.models.commands.ensure_events import run as ensure_events
-    from src.models.commands.wikidata_ops import sync_wikidata_artists
+    from src.models.dancedb.venue_ops import ensure_venues
+    from src.models.wikidata.wikidata_ops import sync_wikidata_artists
 
     if month is None or year is None:
         month, year = get_current_month_year()
@@ -180,7 +179,7 @@ def sync_bygdegardarna(
     only_scrape: bool = False,
 ) -> bool:
     """Sync bygdegardarna venues with prerequisite checking."""
-    from src.models.commands.venue_ops import (
+    from src.models.dancedb.venue_ops import (
         scrape_bygdegardarna,
         scrape_dancedb_venues,
         match_venues,
@@ -230,7 +229,7 @@ def sync_bygdegardarna(
 
 def sync_onbeat(dry_run: bool = False) -> bool:
     """Sync onbeat events: scrape + upload."""
-    from src.models.commands.onbeat import run as scrape_onbeat
+    from src.models.onbeat.run import run as scrape_onbeat
 
     print("\n" + "=" * 50)
     print("SYNC ONBEAT")
@@ -249,7 +248,7 @@ def sync_onbeat(dry_run: bool = False) -> bool:
 
 def sync_cogwork(dry_run: bool = False) -> bool:
     """Sync cogwork events: scrape + upload."""
-    from src.models.commands.cogwork import scrape as scrape_cogwork, upload as upload_cogwork
+    from src.models.cogwork.commands import scrape as scrape_cogwork, upload as upload_cogwork
 
     print("\n" + "=" * 50)
     print("SYNC COGWORK")
@@ -271,7 +270,7 @@ def sync_cogwork(dry_run: bool = False) -> bool:
 
 def sync_folketshus(dry_run: bool = False) -> bool:
     """Sync folketshus venues: scrape + match."""
-    from src.models.commands.folketshus import run as scrape_folketshus
+    from src.models.folketshus.venue import run as scrape_folketshus
 
     print("\n" + "=" * 50)
     print("SYNC FOLKETSHUS")

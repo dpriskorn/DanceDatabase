@@ -1,15 +1,15 @@
 import pytest
 from unittest.mock import MagicMock, patch
 
-from src.models.dancedb_client import DancedbClient
+from src.models.dancedb.client import DancedbClient
 
 
 class TestDancedbClientSearchBand:
-    @patch('src.models.dancedb_client.Login')
+    @patch('src.models.dancedb.client.Login')
     def test_search_band_finds_single_match(self, mock_login):
         mock_login.return_value = MagicMock()
 
-        with patch('src.models.dancedb_client.execute_sparql_query') as mock_sparql:
+        with patch('src.models.dancedb.client.execute_sparql_query') as mock_sparql:
             mock_sparql.return_value = {
                 'results': {
                     'bindings': [
@@ -24,11 +24,11 @@ class TestDancedbClientSearchBand:
             assert result == 'Q123'
             mock_sparql.assert_called_once()
 
-    @patch('src.models.dancedb_client.Login')
+    @patch('src.models.dancedb.client.Login')
     def test_search_band_returns_none_when_no_match(self, mock_login):
         mock_login.return_value = MagicMock()
 
-        with patch('src.models.dancedb_client.execute_sparql_query') as mock_sparql:
+        with patch('src.models.dancedb.client.execute_sparql_query') as mock_sparql:
             mock_sparql.return_value = {'results': {'bindings': []}}
 
             client = DancedbClient()
@@ -36,11 +36,11 @@ class TestDancedbClientSearchBand:
 
             assert result is None
 
-    @patch('src.models.dancedb_client.Login')
+    @patch('src.models.dancedb.client.Login')
     def test_search_band_returns_none_when_multiple_matches(self, mock_login):
         mock_login.return_value = MagicMock()
 
-        with patch('src.models.dancedb_client.execute_sparql_query') as mock_sparql:
+        with patch('src.models.dancedb.client.execute_sparql_query') as mock_sparql:
             mock_sparql.return_value = {
                 'results': {
                     'bindings': [
@@ -55,11 +55,11 @@ class TestDancedbClientSearchBand:
 
             assert result is None
 
-    @patch('src.models.dancedb_client.Login')
+    @patch('src.models.dancedb.client.Login')
     def test_search_band_returns_none_on_exception(self, mock_login):
         mock_login.return_value = MagicMock()
 
-        with patch('src.models.dancedb_client.execute_sparql_query') as mock_sparql:
+        with patch('src.models.dancedb.client.execute_sparql_query') as mock_sparql:
             mock_sparql.side_effect = Exception('SPARQL error')
 
             client = DancedbClient()
@@ -69,28 +69,29 @@ class TestDancedbClientSearchBand:
 
 
 class TestDancedbClientCreateBand:
-    @patch('src.models.dancedb_client.Login')
-    @patch('src.models.dancedb_client.wbi_helpers')
-    @patch('src.models.dancedb_client.questionary')
-    def test_create_band_user_confirms(self, mock_questionary, mock_wbi_helpers, mock_login):
+    @patch('src.models.dancedb.client.Login')
+    @patch('src.models.dancedb.client.questionary')
+    def test_create_band_user_confirms(self, mock_questionary, mock_login):
         mock_login.return_value = MagicMock()
         mock_questionary.confirm.return_value.ask.return_value = True
 
+        client = DancedbClient()
+
+        mock_wbi = MagicMock()
         mock_new_item = MagicMock()
         mock_new_item.id = 'Q999'
-        mock_new_item.claims = MagicMock()
-        mock_wbi_helpers.create_item.return_value = mock_new_item
+        mock_wbi.item.new.return_value = mock_new_item
+        client.wbi = mock_wbi
 
-        client = DancedbClient()
         result = client.create_band('NewBand')
 
         assert result == 'Q999'
-        mock_wbi_helpers.create_item.assert_called_once()
-        mock_new_item.claims.add.assert_called_once_with('P31', 'Q215380')
+        mock_new_item.labels.set.assert_called()
+        mock_new_item.claims.add.assert_called()
         mock_new_item.write.assert_called_once()
 
-    @patch('src.models.dancedb_client.Login')
-    @patch('src.models.dancedb_client.questionary')
+    @patch('src.models.dancedb.client.Login')
+    @patch('src.models.dancedb.client.questionary')
     def test_create_band_user_declines(self, mock_questionary, mock_login):
         mock_login.return_value = MagicMock()
         mock_questionary.confirm.return_value.ask.return_value = False
@@ -102,15 +103,19 @@ class TestDancedbClientCreateBand:
 
         assert 'User declined' in str(exc_info.value)
 
-    @patch('src.models.dancedb_client.Login')
-    @patch('src.models.dancedb_client.wbi_helpers')
-    @patch('src.models.dancedb_client.questionary')
-    def test_create_band_handles_wbi_exception(self, mock_questionary, mock_wbi_helpers, mock_login):
+    @patch('src.models.dancedb.client.Login')
+    @patch('src.models.dancedb.client.questionary')
+    def test_create_band_handles_wbi_exception(self, mock_questionary, mock_login):
         mock_login.return_value = MagicMock()
         mock_questionary.confirm.return_value.ask.return_value = True
-        mock_wbi_helpers.create_item.side_effect = Exception('WBI error')
 
         client = DancedbClient()
+
+        mock_wbi = MagicMock()
+        mock_new_item = MagicMock()
+        mock_wbi.item.new.return_value = mock_new_item
+        mock_new_item.write.side_effect = Exception('WBI error')
+        client.wbi = mock_wbi
 
         with pytest.raises(Exception) as exc_info:
             client.create_band('ErrorBand')
@@ -119,7 +124,7 @@ class TestDancedbClientCreateBand:
 
 
 class TestDancedbClientGetOrCreateBand:
-    @patch('src.models.dancedb_client.Login')
+    @patch('src.models.dancedb.client.Login')
     def test_get_or_create_returns_existing_band(self, mock_login):
         mock_login.return_value = MagicMock()
 
@@ -130,8 +135,8 @@ class TestDancedbClientGetOrCreateBand:
             assert result == 'Q123'
             mock_search.assert_called_once_with('ExistingBand')
 
-    @patch('src.models.dancedb_client.Login')
-    @patch('src.models.dancedb_client.questionary')
+    @patch('src.models.dancedb.client.Login')
+    @patch('src.models.dancedb.client.questionary')
     def test_get_or_create_creates_new_band(self, mock_questionary, mock_login):
         mock_login.return_value = MagicMock()
         mock_questionary.confirm.return_value.ask.return_value = True

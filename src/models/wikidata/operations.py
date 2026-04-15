@@ -4,8 +4,7 @@ from datetime import date
 
 import questionary
 import config as root_config
-from src.models.dancedb.config import config as dancedb_config
-from src.models.dancedb_client import DancedbClient, wbi_config
+from src.models.dancedb.client import DancedbClient, wbi_config
 
 
 def scrape_wikidata_artists(date_str: str | None = None) -> None:
@@ -45,7 +44,7 @@ def scrape_wikidata_artists(date_str: str | None = None) -> None:
 
     print(f"Found {len(artists)} artists")
 
-    output_file = dancedb_config.wikidata_dir / "artists" / f"{date_str}.json"
+    output_file = root_config.wikidata_dir / "artists" / f"{date_str}.json"
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump(artists, f, ensure_ascii=False, indent=2)
@@ -60,7 +59,7 @@ def match_wikidata_artists(date_str: str | None = None, dry_run: bool = False) -
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print("\n=== Match Wikidata artists to DanceDB ===")
 
-    wikidata_file = dancedb_config.wikidata_dir / "artists" / f"{date_str}.json"
+    wikidata_file = root_config.wikidata_dir / "artists" / f"{date_str}.json"
     if not wikidata_file.exists():
         print(f"Error: Wikidata artists file not found: {wikidata_file}")
         return
@@ -138,7 +137,7 @@ def sync_wikidata_artists(
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print("\n=== Sync Wikidata artists from Danslogen ===")
 
-    wikidata_file = dancedb_config.wikidata_dir / "artists" / f"{date_str}.json"
+    wikidata_file = root_config.wikidata_dir / "artists" / f"{date_str}.json"
     if not wikidata_file.exists():
         print(f"Error: Wikidata artists file not found: {wikidata_file}")
         return
@@ -155,9 +154,9 @@ def sync_wikidata_artists(
     artists_with_p3 = {a.get("qid") for a in dancedb_artists if a.get("p3")}
     print(f"Found {len(dancedb_artists)} artists in DanceDB, {len(artists_with_p3)} have P3")
 
-    from src.models.danslogen.maps import BAND_QID_MAP
-    danslogen_bands = set(BAND_QID_MAP.keys())
-    print(f"Found {len(danslogen_bands)} bands in danslogen (BAND_QID_MAP)")
+    from src.models.danslogen.data import load_band_map
+    danslogen_bands = set(load_band_map().keys())
+    print(f"Found {len(danslogen_bands)} bands in danslogen (from DanceDB artists)")
 
     missing_bands = []
     needs_p3 = []

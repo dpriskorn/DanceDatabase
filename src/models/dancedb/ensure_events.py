@@ -2,13 +2,13 @@
 import json
 import logging
 import sys
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 
 from rapidfuzz import process as fuzz_process
 
 import config
-from src.models.dancedb_client import DancedbClient
+from src.models.dancedb.client import DancedbClient
 
 logger = logging.getLogger(__name__)
 
