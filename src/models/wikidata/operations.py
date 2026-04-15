@@ -58,7 +58,7 @@ def scrape_wikidata_artists(date_str: str | None = None) -> None:
 
 
 def match_wikidata_artists(date_str: str | None = None, dry_run: bool = False) -> None:
-    """Match DanceDB artists to Wikidata and upload P3 (Wikidata QID) as external ID."""
+    """Match DanceDB artists to Wikidata and upload P3 (Wikidata ID) as external ID."""
     from rapidfuzz import process as fuzz_process
 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
