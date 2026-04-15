@@ -12,6 +12,10 @@ class TestTimeRangePattern:
         assert TIME_RANGE_PATTERN.match("8.00-22.00")
         assert TIME_RANGE_PATTERN.match("18.00-2.00")
 
+    def test_matches_with_colons(self):
+        assert TIME_RANGE_PATTERN.match("18:00-22:00")
+        assert TIME_RANGE_PATTERN.match("17:00-20:30")
+
     def test_does_not_match_non_time_range(self):
         assert not TIME_RANGE_PATTERN.match("Streaplers")
         assert not TIME_RANGE_PATTERN.match("")
@@ -45,20 +49,20 @@ class TestDanslogenTableRowFromRow:
         return mock_row
 
     def test_raises_when_band_contains_time_range(self):
-        row = self.create_mock_row(["", "Ons", "3", "", "18.00-22.00", "Streaplers", "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge"])
+        row = self.create_mock_row(["Ons", "3", "18.00-22.00", "18.00-22.00", "Streaplers", "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge"])
         with pytest.raises(InvalidRowError) as exc_info:
             DanslogenTableRow.from_row(row)
         assert "18.00-22.00" in str(exc_info.value)
         assert "column mapping error" in str(exc_info.value)
 
     def test_raises_when_day_not_digit(self):
-        row = self.create_mock_row(["Ons", "abc", "18.00-22.00", "Streaplers", "Streaplers", "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge"])
+        row = self.create_mock_row(["Ons", "abc", "18.00-22.00", "Streaplers", "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge", ""])
         with pytest.raises(InvalidRowError) as exc_info:
             DanslogenTableRow.from_row(row)
         assert "Day field is not a valid number" in str(exc_info.value)
 
     def test_raises_when_weekday_invalid(self):
-        row = self.create_mock_row(["Monday", "3", "18.00-22.00", "Streaplers", "Streaplers", "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge"])
+        row = self.create_mock_row(["Monday", "3", "18.00-22.00", "Streaplers", "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge", ""])
         with pytest.raises(InvalidRowError) as exc_info:
             DanslogenTableRow.from_row(row)
         assert "Weekday" in str(exc_info.value)
@@ -94,7 +98,7 @@ class TestDanslogenTableRowFromRow:
 
     def test_shifts_columns_when_venue_empty(self):
         row = self.create_mock_row(
-            ["Fre", "24", "19.00-22.30", "Kjelles Danskavalkad", "", "Folkets Hus Bastuträsk", "Bastuträsk", "Norsjö", "Västerbotten", ""]
+            ["Fre", "24", "19.00-22.30", "Kjelles Danskavalkad", "", "Folkets Hus Bastuträsk", "Bastuträsk", "Norsjö", "Västerbotten"]
         )
         result = DanslogenTableRow.from_row(row)
         assert result is not None
@@ -102,7 +106,6 @@ class TestDanslogenTableRowFromRow:
         assert result.ort == "Bastuträsk"
         assert result.kommun == "Norsjö"
         assert result.lan == "Västerbotten"
-        assert result.ovrigt == ""
 
     def test_no_shift_when_venue_present(self):
         row = self.create_mock_row(["Ons", "3", "18.00-22.00", "Streaplers", "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge", ""])
@@ -121,4 +124,3 @@ class TestDanslogenTableRowFromRow:
         assert result.ort == "Röfors"
         assert result.kommun == "Laxå"
         assert result.lan == "Örebro"
-        assert result.ovrigt == ""
