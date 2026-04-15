@@ -109,7 +109,7 @@ class DanslogenTableRow(BaseModel):
 
     @classmethod
     def from_row(cls, row: Tag) -> Optional["DanslogenTableRow"]:
-        cells = row.find_all("td")
+        cells = [child for child in row.children if isinstance(child, Tag) and child.name == "td"]
         if len(cells) < 9:
             return None
 
