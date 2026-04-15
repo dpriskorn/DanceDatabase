@@ -38,7 +38,7 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
 
     print(f"\nTotal: {len(all_events)} events")
 
-    output_file = config.danslogen_dir / f"{month.lower()}.json"
+    output_file = config.danslogen_dir / "events" / f"{year}-{month.lower()}.json"
     config.danslogen_dir.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump([e.model_dump(mode="json") for e in all_events], f, ensure_ascii=False, indent=2)
@@ -47,7 +47,7 @@ def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
 
 
 def upload_events(
-    input_file: str = "data/danslogen/april.json",
+    input_file: str = "",
     date_str: str | None = None,
     month: str = "april",
     dry_run: bool = False,
@@ -76,6 +76,9 @@ def upload_events(
 
     existing_events = []
     date_str = date_str or dt.today().strftime("%Y-%m-%d")
+    if not input_file:
+        input_file = str(config.danslogen_dir / "events" / f"{date_str}-{month.lower()}.json")
+    input_path = Path(input_file)
     events_file = Path("data/dancedb/events") / f"{date_str}.json"
     if events_file.exists():
         existing_events = json.loads(events_file.read_text())

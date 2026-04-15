@@ -179,7 +179,7 @@ def sync_danslogen(
 
     dancedb_artists_file = data_dir / "dancedb" / "artists" / f"{date_str}.json"
     wikidata_file = data_dir / "wikidata" / "artists" / f"{date_str}.json"
-    danslogen_event_file = data_dir / "danslogen" / f"{month.lower()}.json"
+    danslogen_event_file = data_dir / "danslogen" / "events" / f"{date_str}-{month.lower()}.json"
     venues_file = data_dir / "dancedb" / "venues" / f"{date_str}.json"
     dancedb_events_file = EVENTS_DIR / f"{date_str}.json"
 
