@@ -28,6 +28,8 @@ class SyncStep:
         """Check if any input file is missing."""
         if force:
             return True
+        if not self.input_files:
+            return True
         return any(not f.exists() for f in self.input_files)
 
     def run(self, force: bool = False, dry_run: bool = False) -> None:
@@ -136,8 +138,8 @@ def sync_danslogen(
         SyncStep(
             "1. Sync Wikidata artists",
             lambda: sync_wikidata_artists(date_str=date_str, dry_run=dry_run),
-            input_files=[wikidata_file],
-            output_files=[],
+            input_files=[],
+            output_files=[wikidata_file],
         ),
         SyncStep(
             "2. Scrape danslogen events",
