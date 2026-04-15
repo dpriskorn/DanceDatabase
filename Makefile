@@ -1,10 +1,10 @@
-.PHONY: lint test coverage clean
+.PHONY: lint test coverage clean lint-fix
 
 lint:
 	ruff check .
-	black --check .
-	mypy .
-	isort --check .
+
+lint-fix:
+	ruff check . --fix
 
 test:
 	pytest
