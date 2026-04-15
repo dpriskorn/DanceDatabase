@@ -285,17 +285,8 @@ def run(date_str: str | None = None, match: bool = False) -> None:
         print(f"Unmatched: {len(unmatched)}")
 
         if unmatched:
-            print("\n=== Creating unmatched venues in DanceDB ===")
-            create = questionary.confirm("Create unmatched venues in DanceDB?").ask()
-            if create:
-                for venue in unmatched:
-                    print(f"\nCreating: {venue.name}")
-                    if questionary.confirm(f"Create '{venue.name}' in DanceDB?", default=True).ask():
-                        qid = create_venue_with_p44(venue)
-                        if qid:
-                            print(f"  Created: {qid}")
-                    else:
-                        print(f"  Skipped")
+            print(f"\nUnmatched venues saved to {unmatched_file}")
+            print("Create venues on-demand during event upload, not upfront.")
     else:
         output_file = UNMATCHED_DIR / f"{date_val}.json"
         output_file.write_text(json.dumps([v.model_dump() for v in venues], indent=2, ensure_ascii=False) + "\n")
