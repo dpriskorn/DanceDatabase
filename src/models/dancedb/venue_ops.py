@@ -25,7 +25,7 @@ def create_venue(venue_name: str, lat: float, lng: float, external_ids: dict[str
 def scrape_bygdegardarna(date_str: str | None = None) -> None:
     """Fetch venues from bygdegardarna.se with coordinates."""
     date_str = date_str or date.today().strftime("%Y-%m-%d")
-    print(f"\n=== Scrape bygdegardarna venues ===")
+    print("\n=== Scrape bygdegardarna venues ===")
 
     venues = scrape()
     print(f"Found {len(venues)} venues")
@@ -44,7 +44,7 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
-    print(f"\n=== Scrape DanceDB venues ===")
+    print("\n=== Scrape DanceDB venues ===")
 
     sparql = """
     PREFIX dd: <https://dance.wikibase.cloud/entity/>
@@ -94,7 +94,7 @@ def scrape_dancedb_venues(date_str: str | None = None) -> None:
 def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> None:
     """Match bygdegardarna venues to DanceDB."""
     date_str = date_str or date.today().strftime("%Y-%m-%d")
-    print(f"\n=== Match venues to DanceDB ===")
+    print("\n=== Match venues to DanceDB ===")
 
     byg_path = config.bygdegardarna_dir / f"{date_str}.json"
     db_path = config.dancedb_dir / "venues" / f"{date_str}.json"
@@ -225,7 +225,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
     events = json.loads(dansevents_file.read_text())
     venues_needed = set(e.get("location") for e in events if e.get("location"))
-print(f"Need venues for {len(venues_needed)} unique locations")
+    print(f"Need venues for {len(venues_needed)} unique locations")
 
     step1_done = False
     step2_done = False
@@ -529,12 +529,11 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
 
 def ensure_artists(date_str: str | None = None, dry_run: bool = False) -> None:
     """Ensure danslogen artists exist in DanceDB before uploading events."""
-    import questionary
     from rapidfuzz import process as fuzz_process
 
     from datetime import datetime
     date_str = date_str or date.today().strftime("%Y-%m-%d")
-    month_name = datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
+    datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
     print(f"\n=== Ensuring artists exist for {date_str} ===")
 
     dansevents_file = config.danslogen_dir / "artists" / f"{date_str}.json"
@@ -597,7 +596,7 @@ def ensure_artists(date_str: str | None = None, dry_run: bool = False) -> None:
 
     for artist_name in new_artists[:10]:
         print(f"\n--- Creating artist: {artist_name} ---")
-        print(f"Enter spelplan_id or press Enter to skip:")
+        print("Enter spelplan_id or press Enter to skip:")
         spelplan_id = input("> ").strip()
 
         if not spelplan_id:

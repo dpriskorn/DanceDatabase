@@ -72,7 +72,7 @@ def upload_events(
         print("Warning: Not a TTY, using --yes mode automatically")
         yes = True
 
-    print(f"\n=== Upload danslogen events ===")
+    print("\n=== Upload danslogen events ===")
 
     # Load existing events from JSON for deduplication
     from datetime import date as dt
@@ -89,7 +89,7 @@ def upload_events(
         print(f"Loaded {len(existing_events)} existing events from {events_file.name}")
     else:
         print(f"Warning: No existing events file found at {events_file}")
-        print(f"Run 'poetry run python cli.py ensure-event-venues' first to fetch events from DanceDB")
+        print("Run 'poetry run python cli.py ensure-event-venues' first to fetch events from DanceDB")
 
     # Build lookup for existing events
     existing_lookup: dict[str, dict] = {}

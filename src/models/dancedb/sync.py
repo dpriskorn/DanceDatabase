@@ -129,7 +129,7 @@ def scrape_all(month: str, year: int) -> None:
     from src.models.wikidata.operations import scrape_wikidata_artists
 
     date_str = date.today().strftime("%Y-%m-%d")
-    data_dir = get_data_dir()
+    get_data_dir()
 
     print("\n" + "=" * 50)
     print("SCRAPING ALL DATA SOURCES")

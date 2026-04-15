@@ -3,7 +3,6 @@ import json
 import logging
 from pathlib import Path
 
-import config
 from src.models.danslogen.main import Danslogen
 
 logger = logging.getLogger(__name__)

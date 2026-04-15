@@ -15,7 +15,6 @@ class FmsabEvent(CogworkEvent):
         "bugg": "Q485",
         "casanovas": "Q4",
         "socialdans": "Q4",
-        "bugg": "Q485",
     }
     venue_qid_map: dict[str, str] = {
         "Vallsta bygdegård": "Q508",

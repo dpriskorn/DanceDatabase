@@ -1,5 +1,4 @@
 import json
-from datetime import date
 from pathlib import Path
 
 from pydantic import BaseModel

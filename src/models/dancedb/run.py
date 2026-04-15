@@ -27,7 +27,7 @@ def sync_artist_spelplan(dry_run: bool = False) -> None:
         logger.warning("No danslogen artists found, skipping spelplan sync")
         return
 
-    print(f"\n=== Sync artist spelplan IDs ===")
+    print("\n=== Sync artist spelplan IDs ===")
     print(f"Loaded {len(danslogen_artists)} danslogen artists")
 
     db_artists = client.fetch_artists_from_dancedb()
@@ -61,9 +61,9 @@ def sync_artist_spelplan(dry_run: bool = False) -> None:
             client.set_artist_spelplan(qid, spelplan_id)
             updated += 1
         else:
-            print(f"  (dry run - would add)")
+            print("  (dry run - would add)")
 
-    print(f"\n=== Summary ===")
+    print("\n=== Summary ===")
     print(f"Updated: {updated}")
     print(f"Skipped (already has P46 or no spelplan_id): {skipped}")
 

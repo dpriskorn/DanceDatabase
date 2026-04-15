@@ -51,7 +51,7 @@ def scrape(source: str | None = None, overwrite: bool = False) -> None:
 
     print(f"\nScraping {len(sources_to_scrape)} sources...")
 
-    today = date.today().strftime("%Y-%m-%d")
+    date.today().strftime("%Y-%m-%d")
     output_base = config.data_dir / "cogwork"
 
     for name in sources_to_scrape:

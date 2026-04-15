@@ -87,14 +87,11 @@ class Danslogen:
 
         logger.debug("Parsed row: %s", table_row.model_dump())
 
-        weekday = table_row.weekday
         day = table_row.day
         time_text = table_row.time
         band = table_row.band
         venue = table_row.venue or table_row.ort
         ort = table_row.ort
-        kommun = table_row.kommun
-        lan = table_row.lan
         ovrigt = table_row.ovrigt
 
         start_time, end_time = parse_time_range(time_text)

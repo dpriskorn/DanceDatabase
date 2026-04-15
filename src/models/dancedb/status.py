@@ -31,7 +31,7 @@ def detect_event_status(text: Optional[str]) -> tuple[str, Optional[str]]:
     for term in SEARCH_TERMS:
         if term in text_lower:
             logger.info(
-                f"Event status '%s' detected (term '%s' found in: '%.50s...')",
+                "Event status '%s' detected (term '%s' found in: '%.50s...')",
                 STATUS_CANCELLED, term, text
             )
             return STATUS_CANCELLED, term
