@@ -181,14 +181,8 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
 
     def create_venue(self, venue_name: str, latitude: float = 0.0, longitude: float = 0.0, external_ids: dict[str, str] | None = None) -> str:
         """Create a new venue on DanceDB with optional coordinates."""
-        import os
-
-        is_tty = os.isatty(0)
-        if is_tty:
-            if not questionary.confirm(f"Create new venue '{venue_name}' on DanceDB?", default=True).ask():
-                raise Exception(f"User declined to create venue: {venue_name}")
-        else:
-            print(f"Auto-confirming: Create new venue '{venue_name}' on DanceDB")
+        if not questionary.confirm(f"Create new venue '{venue_name}' on DanceDB?", default=True).ask():
+            raise Exception(f"User declined to create venue: {venue_name}")
 
         try:
             new_item = self.wbi.item.new()
@@ -285,14 +279,8 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
 
         Returns the created event QID or None on failure.
         """
-        import os
-
-        is_tty = os.isatty(0)
-        if is_tty:
-            if not questionary.confirm(f"Create new event '{label_sv}' on DanceDB?", default=True).ask():
-                raise Exception(f"User declined to create event: {label_sv}")
-        else:
-            print(f"Auto-confirming: Create new event '{label_sv}'")
+        if not questionary.confirm(f"Create new event '{label_sv}' on DanceDB?", default=True).ask():
+            raise Exception(f"User declined to create event: {label_sv}")
 
         try:
             event = self.wbi.item.new()

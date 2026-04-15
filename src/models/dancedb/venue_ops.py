@@ -163,8 +163,6 @@ def ensure_venues(date_str: str | None = None) -> None:
     month_name = datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
     print(f"\n=== Ensuring venues exist for {date_str} ===")
 
-    is_tty = os.isatty(0)
-
     dansevents_file = config.danslogen_dir / "events" / f"{date_str}-{month_name}.json"
     if not dansevents_file.exists():
         print(f"Error: danslogen data not found: {dansevents_file}")
@@ -382,27 +380,19 @@ def ensure_venues(date_str: str | None = None) -> None:
 
         coords = None
         if folketshus_match:
-            if is_tty:
-                use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
-                if use_coords:
-                    coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
-            else:
+            use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
+            if use_coords:
                 coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
-                print(f"  Auto-confirming: Using folketshus coordinates: {coords['lat']}, {coords['lng']}")
 
         if not folketshus_match or not coords:
-            if is_tty:
-                print("Enter coordinates (lat, lng) or press Enter to skip:")
-                coords_input = input("> ").strip()
-                if coords_input:
-                    try:
-                        lat, lng = map(float, coords_input.split(","))
-                        coords = {"lat": lat, "lng": lng}
-                    except ValueError:
-                        print("Invalid format, skipping")
-            else:
-                print(f"  Skipping (no coordinates, not TTY): {venue_name}")
-                continue
+            print("Enter coordinates (lat, lng) or press Enter to skip:")
+            coords_input = input("> ").strip()
+            if coords_input:
+                try:
+                    lat, lng = map(float, coords_input.split(","))
+                    coords = {"lat": lat, "lng": lng}
+                except ValueError:
+                    print("Invalid format, skipping")
 
         if not coords:
             print("Skipping venue creation (no coordinates)")

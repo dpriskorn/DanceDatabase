@@ -57,7 +57,6 @@ def upload_events(
     month: str = "april",
     dry_run: bool = False,
     limit: int | None = None,
-    yes: bool = False,
 ) -> None:
     """Upload danslogen events to DanceDB.
 
@@ -69,11 +68,6 @@ def upload_events(
     from rapidfuzz import fuzz
 
     from src.models.export.dance_event import DanceEvent
-
-    is_tty = os.isatty(0)
-    if not is_tty and not yes:
-        print("Warning: Not a TTY, using --yes mode automatically")
-        yes = True
 
     print("\n=== Upload danslogen events ===")
 
@@ -233,10 +227,7 @@ def upload_events(
             artist_label = artist_info.get("label", "")
             print(f"  Artist: {artist_qid}{f' ({artist_label})' if artist_label else ''}")
 
-        if yes:
-            confirm = "Yes (Recommended)"
-        else:
-            confirm = questionary.rawselect("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
+        confirm = questionary.rawselect("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
 
         if confirm == "Skip":
             skip_count += 1

@@ -124,7 +124,6 @@ def main():
     p.add_argument("-d", "--date", default=None, help="Date for venue data (YYYY-MM-DD, default: today)")
     p.add_argument("-m", "--month", default="april", help="Month name (default: april)")
     p.add_argument("-l", "--limit", type=int, default=None, help="Limit number of rows to process")
-    p.add_argument("--yes", action="store_true", help="Skip confirmation prompts")
 
     # === ONBEAT ===
     p = sub.add_parser("scrape-onbeat", help="Fetch events")
@@ -230,7 +229,6 @@ def main():
             date_str=date_str,
             month=args.month,
             limit=args.limit,
-            yes=args.yes,
         )
 
     # ONBEAT

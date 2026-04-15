@@ -6,7 +6,7 @@ from pydantic import BaseModel, field_validator
 
 from src.models.exceptions import InvalidRowError
 
-TIME_RANGE_PATTERN = re.compile(r"^\d{1,2}\.\d{2}-\d{1,2}\.\d{2}$")
+TIME_RANGE_PATTERN = re.compile(r"^\d{1,2}[:\.]\d{2}-\d{1,2}[:\.]\d{2}$")
 VALID_WEEKDAYS = {"Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"}
 
 VALID_LAN = {
@@ -134,6 +134,15 @@ class DanslogenTableRow(BaseModel):
             kommun_val = cells[6].get_text(strip=True)
             lan_val = cells[7].get_text(strip=True)
             ovrigt_val = cells[8].get_text(strip=True)
+
+        if not time_val or not time_val.strip():
+            time_val = band_val
+            band_val = venue_val
+            venue_val = ort_val
+            ort_val = kommun_val
+            kommun_val = lan_val
+            lan_val = ovrigt_val
+            ovrigt_val = ""
 
         venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_venue_empty(venue_val, ort_val, kommun_val, lan_val, ovrigt_val)
 
