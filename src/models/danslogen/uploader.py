@@ -6,7 +6,7 @@ from typing import Optional
 
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.band_mapper import BandMapper
-from src.models.danslogen.data_loader import DanslogenDataLoader
+from src.models.danslogen.data import DanslogenData
 from src.models.danslogen.row_parser import RowParser
 from src.models.danslogen.venue_matcher import VenueMatcher
 
@@ -28,7 +28,7 @@ class DanslogenUploader:
         self.month = month
         self.limit = limit
 
-        self.loader = DanslogenDataLoader()
+        self.loader = DanslogenData()
         self.client: Optional[DancedbClient] = None
 
     def run(self, dry_run: bool = False) -> tuple[int, int, int]:

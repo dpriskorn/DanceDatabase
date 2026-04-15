@@ -27,7 +27,7 @@ class TestDanslogenUploaderInit:
 
 
 class TestDanslogenUploaderRun:
-    @patch('src.models.danslogen.uploader.DanslogenDataLoader')
+    @patch('src.models.danslogen.uploader.DanslogenData')
     def test_loads_venue_data(self, mock_loader_class):
         mock_loader = MagicMock()
         mock_loader.load_bygdegardarna_venues.return_value = {"test": {"lat": 1.0}}
@@ -41,7 +41,7 @@ class TestDanslogenUploaderRun:
         mock_loader.load_bygdegardarna_venues.assert_called_once_with("2026-04-12")
         mock_loader.load_dancedb_venues.assert_called_once_with("2026-04-12")
 
-    @patch('src.models.danslogen.uploader.DanslogenDataLoader')
+    @patch('src.models.danslogen.uploader.DanslogenData')
     def test_returns_counts_on_empty(self, mock_loader_class):
         mock_loader = MagicMock()
         mock_loader.load_bygdegardarna_venues.return_value = {}

@@ -10,6 +10,7 @@ from src.models.danslogen.data import (
     get_today_str,
     DANCEDB_ARTISTS_DIR,
     DANCEDB_VENUES_DIR,
+    _reset_instance,
 )
 
 
@@ -37,6 +38,7 @@ class TestLoadBandMap:
 
     @patch('src.models.danslogen.data.DANCEDB_ARTISTS_DIR')
     def test_loads_band_map_successfully(self, mock_dir):
+        _reset_instance()
         artists_file = MagicMock()
         artists_content = [
             {"qid": "Q123", "label": "Test Band", "aliases": ["Test", "Band"]},
@@ -60,6 +62,7 @@ class TestLoadBandMap:
 
     @patch('src.models.danslogen.data.DANCEDB_ARTISTS_DIR')
     def test_handles_missing_qid_or_label(self, mock_dir):
+        _reset_instance()
         artists_file = MagicMock()
         artists_content = [
             {"label": "No QID"},
@@ -97,6 +100,7 @@ class TestLoadVenueMap:
 
     @patch('src.models.danslogen.data.DANCEDB_VENUES_DIR')
     def test_loads_venue_map_successfully(self, mock_dir):
+        _reset_instance()
         venues_file = MagicMock()
         venues_content = {
             "Q123": {"label": "Test Venue", "aliases": ["Venue", "Test"]},
@@ -120,6 +124,7 @@ class TestLoadVenueMap:
 
     @patch('src.models.danslogen.data.DANCEDB_VENUES_DIR')
     def test_handles_missing_label(self, mock_dir):
+        _reset_instance()
         venues_file = MagicMock()
         venues_content = {
             "Q123": {},
