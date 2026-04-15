@@ -74,7 +74,9 @@ def main():
     parser = argparse.ArgumentParser(description="DanceDB CLI")
     parser.add_argument("-l", "--list", action="store_true", help="List available commands")
     parser.add_argument("command", nargs="?", default=None)
-    args = parser.parse_args()
+
+    args, unknown = parser.parse_known_args()
+
     if args.list:
         print_commands()
         return
@@ -112,18 +114,15 @@ def main():
 
     p = sub.add_parser("ensure-danslogen-venues", help="Ensure danslogen venues exist in DanceDB")
     p.add_argument("-d", "--date", default=None, help="Date for venue data (YYYY-MM-DD, default: today)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     p = sub.add_parser("ensure-event-venues", help="Ensure event venues exist in DanceDB")
     p.add_argument("-m", "--month", default="april", help="Month name (default: april)")
     p.add_argument("-y", "--year", type=int, default=2026, help="Year (default: 2026)")
-    p.add_argument("--dry-run", action="store_true", help="Preview only, don't abort")
 
     p = sub.add_parser("upload-danslogen-events", help="Upload danslogen events to DanceDB")
     p.add_argument("-i", "--input-file", default="data/danslogen/april.json", help="Input JSON file")
     p.add_argument("-d", "--date", default=None, help="Date for venue data (YYYY-MM-DD, default: today)")
     p.add_argument("-m", "--month", default="april", help="Month name (default: april)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None, help="Limit number of rows to process")
     p.add_argument("--yes", action="store_true", help="Skip confirmation prompts")
 
@@ -131,9 +130,7 @@ def main():
     p = sub.add_parser("scrape-onbeat", help="Fetch events")
     p = sub.add_parser("ensure-venues-onbeat", help="Ensure venues exist")
     p.add_argument("--date", default=None, help="Date of scraped data (default: today)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without creating")
     p = sub.add_parser("upload-onbeat", help="Upload to DanceDB")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     # === COGWORK ===
     p = sub.add_parser("scrape-cogwork", help="Fetch cogwork events from ALL sources")
@@ -142,7 +139,6 @@ def main():
 
     p = sub.add_parser("upload-cogwork", help="Upload cogwork events to DanceDB")
     p.add_argument("-s", "--source", default=None, help="Specific source (default: all)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     # === FOLKETSHUS ===
     p = sub.add_parser("scrape-folketshus", help="Fetch folketshus och parker venues")
@@ -155,13 +151,11 @@ def main():
 
     p = sub.add_parser("match-wikidata-artists", help="Match DanceDB artists to Wikidata and upload P3")
     p.add_argument("-d", "--date", default=None, help="Date for Wikidata artists file (YYYY-MM-DD, default: today)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     p = sub.add_parser("sync-wikidata-artists", help="Create missing artists from danslogen in DanceDB with Wikidata match")
     p.add_argument("-d", "--date", default=None, help="Date for Wikidata artists file (YYYY-MM-DD, default: today)")
     p.add_argument("-m", "--month", default="april", help="Month name for danslogen (default: april)")
     p.add_argument("-y", "--year", type=int, default=2026, help="Year for danslogen (default: 2026)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     # === SCRAPE COMMANDS ===
     p = sub.add_parser("scrape-all", help="Scrape all data sources at once")
@@ -172,29 +166,23 @@ def main():
     p = sub.add_parser("sync-danslogen", help="Sync danslogen: sync-wikidata → scrape → ensure-danslogen-venues → upload-danslogen-events")
     p.add_argument("-m", "--month", default=None, help="Month name (default: current month)")
     p.add_argument("-y", "--year", type=int, default=None, help="Year (default: current year)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None, help="Limit number of events")
     p.add_argument("-f", "--force", action="store_true", help="Force run even if prerequisites met")
     p.add_argument("--only-scrape", action="store_true", help="Only scrape, skip uploads")
 
     p = sub.add_parser("sync-bygdegardarna", help="Sync bygdegardarna: scrape → fetch-dancedb → match-bygdegardarna-venues")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
     p.add_argument("-f", "--force", action="store_true", help="Force run even if prerequisites met")
     p.add_argument("--only-scrape", action="store_true", help="Only scrape, skip uploads")
 
     p = sub.add_parser("sync-onbeat", help="Sync onbeat: scrape + upload")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     p = sub.add_parser("sync-cogwork", help="Sync cogwork: scrape + upload")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     p = sub.add_parser("sync-folketshus", help="Sync folketshus: scrape + match")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
 
     p = sub.add_parser("sync-all", help="Sync all sources in sequence")
     p.add_argument("-m", "--month", default=None, help="Month name (default: current month)")
     p.add_argument("-y", "--year", type=int, default=None, help="Year (default: current year)")
-    p.add_argument("--dry-run", action="store_true", help="Preview without uploading")
     p.add_argument("-l", "--limit", type=int, default=None, help="Limit number of events")
     p.add_argument("-f", "--force", action="store_true", help="Force run even if prerequisites met")
     p.add_argument("--only-scrape", action="store_true", help="Only scrape, skip uploads")
@@ -233,10 +221,10 @@ def main():
 
     elif args.command == "ensure-danslogen-venues":
         date_str = getattr(args, "date", None) or date.today().strftime("%Y-%m-%d")
-        ensure_venues(date_str, dry_run=args.dry_run)
+        ensure_venues(date_str)
 
     elif args.command == "ensure-event-venues":
-        ensure_events(month=args.month, year=args.year, dry_run=args.dry_run)
+        ensure_events(month=args.month, year=args.year)
 
     elif args.command == "upload-events":
         date_str = getattr(args, "date", None) or date.today().strftime("%Y-%m-%d")
@@ -244,7 +232,6 @@ def main():
             input_file=args.input_file,
             date_str=date_str,
             month=args.month,
-            dry_run=args.dry_run,
             limit=args.limit,
             yes=args.yes,
         )
@@ -255,20 +242,19 @@ def main():
 
     elif args.command == "upload-onbeat":
         print("upload-onbeat is not yet implemented. Use sync-onbeat instead.")
-        # upload_onbeat(dry_run=args.dry_run)
 
     elif args.command == "onbeat-ensure-venues":
         from src.models.dancedb.venue_ops import onbeat_ensure_venues
 
         date_str = getattr(args, "date", None) or date.today().strftime("%Y-%m-%d")
-        onbeat_ensure_venues(date_str, dry_run=args.dry_run)
+        onbeat_ensure_venues(date_str)
 
     # COGWORK
     elif args.command == "scrape-cogwork":
         scrape_cogwork(source=args.source, overwrite=args.overwrite)
 
     elif args.command == "upload-cogwork":
-        upload_cogwork(source=args.source, dry_run=args.dry_run)
+        upload_cogwork(source=args.source)
 
     # FOLKETSHUS
     elif args.command == "scrape-folketshus":
@@ -279,29 +265,27 @@ def main():
         sync_danslogen(
             month=args.month,
             year=args.year,
-            dry_run=args.dry_run,
             limit=args.limit,
             force=args.force,
             only_scrape=args.only_scrape,
         )
 
     elif args.command == "sync-bygdegardarna":
-        sync_bygdegardarna(dry_run=args.dry_run, force=args.force, only_scrape=args.only_scrape)
+        sync_bygdegardarna(force=args.force, only_scrape=args.only_scrape)
 
     elif args.command == "sync-onbeat":
-        sync_onbeat(dry_run=args.dry_run)
+        sync_onbeat()
 
     elif args.command == "sync-cogwork":
-        sync_cogwork(dry_run=args.dry_run)
+        sync_cogwork()
 
     elif args.command == "sync-folketshus":
-        sync_folketshus(dry_run=args.dry_run)
+        sync_folketshus()
 
     elif args.command == "sync-all":
         sync_all(
             month=args.month,
             year=args.year,
-            dry_run=args.dry_run,
             limit=args.limit,
             force=args.force,
             only_scrape=args.only_scrape,
@@ -314,11 +298,11 @@ def main():
 
     elif args.command == "match-wikidata-artists":
         date_str = getattr(args, "date", None) or date.today().strftime("%Y-%m-%d")
-        match_wikidata_artists(date_str, dry_run=args.dry_run)
+        match_wikidata_artists(date_str)
 
     elif args.command == "sync-wikidata-artists":
         date_str = getattr(args, "date", None) or date.today().strftime("%Y-%m-%d")
-        sync_wikidata_artists(date_str, month=args.month, year=args.year, dry_run=args.dry_run)
+        sync_wikidata_artists(date_str, month=args.month, year=args.year)
 
 
 if __name__ == "__main__":

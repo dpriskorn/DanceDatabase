@@ -241,6 +241,12 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
         venue_lower = venue_name.lower()
         if venue_lower in existing_venues:
             matched += 1
+            
+            venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+            venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+            existing = existing_venues[venue_lower]
+            with open(venue_mapping_file, "a") as f:
+                f.write(json.dumps({"venue_name": venue_name, "qid": existing["qid"], "lat": existing.get("lat"), "lng": existing.get("lng"), "created_at": date_str}) + "\n")
             continue
 
         if not step1_done:
@@ -263,6 +269,11 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
                 }
                 logger.info(f"Matched '{venue_name}' to folketshus '{fuzzy_folkets[0]}' ({fuzzy_folkets[1]}%)")
                 matched += 1
+                
+                venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                with open(venue_mapping_file, "a") as f:
+                    f.write(json.dumps({"venue_name": venue_name, "qid": folkets_match.get("qid", ""), "lat": folkets_match.get("lat"), "lng": folkets_match.get("lng"), "created_at": date_str}) + "\n")
                 continue
 
         if bygdegardarna_names:
@@ -280,6 +291,11 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
                 }
                 logger.info(f"Matched '{venue_name}' to bygdegardarna '{fuzzy_byg[0]}' ({fuzzy_byg[1]}%)")
                 matched += 1
+                
+                venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                with open(venue_mapping_file, "a") as f:
+                    f.write(json.dumps({"venue_name": venue_name, "qid": byg_match.get("qid", ""), "lat": byg_match.get("lat"), "lng": byg_match.get("lng"), "created_at": date_str}) + "\n")
                 continue
 
         new_venues.append(venue_name)
@@ -317,9 +333,13 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
         coords = None
         if folketshus_match:
-            use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
-            if use_coords:
+            if dry_run:
                 coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
+                print(f"  [DRY RUN] Using folketshus coordinates: {coords['lat']}, {coords['lng']}")
+            else:
+                use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
+                if use_coords:
+                    coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
 
         if not folketshus_match or not coords:
             print("Enter coordinates (lat, lng) or press Enter to skip:")

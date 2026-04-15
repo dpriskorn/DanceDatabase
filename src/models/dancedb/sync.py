@@ -88,14 +88,11 @@ class SyncStep:
             return True
         return any(not f.exists() for f in self.output_files)
 
-    def run(self, force: bool = False, dry_run: bool = False) -> None:
+    def run(self, force: bool = False) -> None:
         """Run the step if needed."""
         if self.needs_run(force):
             print(f"\n[RUN] {self.name}")
-            if dry_run:
-                print(f"  [DRY RUN] Would execute: {self.func.__name__}")
-            else:
-                self.func()
+            self.func()
         else:
             outputs_exist = self.output_files and all(f.exists() for f in self.output_files)
             if outputs_exist and self.input_files:
@@ -116,7 +113,6 @@ def get_data_dir() -> Path:
 def run_sync_steps(
     steps: list[SyncStep],
     force: bool = False,
-    dry_run: bool = False,
     only_scrape: bool = False,
 ) -> None:
     """Run a list of sync steps with prerequisite checking."""
@@ -125,7 +121,7 @@ def run_sync_steps(
             if all(f.exists() for f in step.output_files):
                 print(f"\n[SKIP] {step.name} - output already exists")
                 continue
-        step.run(force=force, dry_run=dry_run)
+        step.run(force=force)
 
 
 def scrape_all(month: str, year: int) -> None:
@@ -154,7 +150,7 @@ def scrape_all(month: str, year: int) -> None:
     scrape_bygdegardarna(date_str=date_str)
 
     print("\n[4/6] Scrape onbeat events...")
-    scrape_onbeat(dry_run=False)
+    scrape_onbeat()
 
     print("\n[5/6] Scrape cogwork events...")
     scrape_cogwork(source=None)
@@ -170,7 +166,6 @@ def scrape_all(month: str, year: int) -> None:
 def sync_danslogen(
     month: str | None = None,
     year: int | None = None,
-    dry_run: bool = False,
     limit: int | None = None,
     force: bool = False,
     only_scrape: bool = False,
@@ -201,9 +196,6 @@ def sync_danslogen(
     print(f"SYNC DANSLOGEN: {month} {year}")
     print("=" * 50)
 
-    if dry_run:
-        print("\n*** DRY RUN ***\n")
-
     steps = [
         SyncStep(
             "0. Fetch DanceDB artists",
@@ -225,7 +217,7 @@ def sync_danslogen(
         ),
         SyncStep(
             "3. Sync Wikidata artists",
-            lambda: sync_wikidata_artists(date_str=date_str, dry_run=dry_run),
+            lambda: sync_wikidata_artists(date_str=date_str),
             input_files=[dancedb_artists_file, wikidata_file],
             output_files=[],
         ),
@@ -261,13 +253,13 @@ def sync_danslogen(
         ),
         SyncStep(
             "9. Ensure venues exist",
-            lambda: ensure_venues(date_str=date_str, dry_run=dry_run),
+            lambda: ensure_venues(date_str=date_str),
             input_files=[danslogen_event_file],
             output_files=[venues_file],
         ),
         SyncStep(
             "10. Ensure artists exist",
-            lambda: ensure_artists(date_str=date_str, dry_run=dry_run),
+            lambda: ensure_artists(date_str=date_str),
             input_files=[danslogen_event_file],
             output_files=[],
         ),
@@ -283,7 +275,6 @@ def sync_danslogen(
                 input_file=str(danslogen_event_file),
                 date_str=date_str,
                 month=month,
-                dry_run=dry_run,
                 limit=limit,
             ),
             input_files=[danslogen_event_file, dancedb_events_file],
@@ -291,7 +282,7 @@ def sync_danslogen(
         ),
     ]
 
-    run_sync_steps(steps, force=force, dry_run=dry_run, only_scrape=only_scrape)
+    run_sync_steps(steps, force=force, only_scrape=only_scrape)
 
     print("\n" + "=" * 50)
     print("DANSLOGEN SYNC COMPLETE")
@@ -300,7 +291,6 @@ def sync_danslogen(
 
 
 def sync_bygdegardarna(
-    dry_run: bool = False,
     force: bool = False,
     only_scrape: bool = False,
 ) -> bool:
@@ -317,9 +307,6 @@ def sync_bygdegardarna(
     print("\n" + "=" * 50)
     print("SYNC BYGDEGARDARNA")
     print("=" * 50)
-
-    if dry_run:
-        print("\n*** DRY RUN ***\n")
 
     steps = [
         SyncStep(
@@ -342,7 +329,7 @@ def sync_bygdegardarna(
         ),
     ]
 
-    run_sync_steps(steps, force=force, dry_run=dry_run, only_scrape=only_scrape)
+    run_sync_steps(steps, force=force, only_scrape=only_scrape)
 
     print("\n" + "=" * 50)
     print("BYGDEGARDARNA SYNC COMPLETE")
@@ -350,7 +337,7 @@ def sync_bygdegardarna(
     return True
 
 
-def sync_onbeat(dry_run: bool = False) -> bool:
+def sync_onbeat() -> bool:
     """Sync onbeat events: scrape + upload."""
     from src.models.onbeat.run import run as scrape_onbeat
 
@@ -358,10 +345,7 @@ def sync_onbeat(dry_run: bool = False) -> bool:
     print("SYNC ONBEAT")
     print("=" * 50)
 
-    if dry_run:
-        print("\n*** DRY RUN ***\n")
-
-    scrape_onbeat(dry_run=dry_run)
+    scrape_onbeat()
 
     print("\n" + "=" * 50)
     print("ONBEAT SYNC COMPLETE")
@@ -369,7 +353,7 @@ def sync_onbeat(dry_run: bool = False) -> bool:
     return True
 
 
-def sync_cogwork(dry_run: bool = False) -> bool:
+def sync_cogwork() -> bool:
     """Sync cogwork events: scrape + upload."""
     from src.models.cogwork.scrape import scrape as scrape_cogwork
     from src.models.cogwork.upload import upload as upload_cogwork
@@ -378,13 +362,10 @@ def sync_cogwork(dry_run: bool = False) -> bool:
     print("SYNC COGWORK")
     print("=" * 50)
 
-    if dry_run:
-        print("\n*** DRY RUN ***\n")
-
     scrape_cogwork(source=None)
 
     print("\n[2/2] Upload events...")
-    upload_cogwork(source=None, dry_run=dry_run)
+    upload_cogwork(source=None)
 
     print("\n" + "=" * 50)
     print("COGWORK SYNC COMPLETE")
@@ -392,16 +373,13 @@ def sync_cogwork(dry_run: bool = False) -> bool:
     return True
 
 
-def sync_folketshus(dry_run: bool = False) -> bool:
+def sync_folketshus() -> bool:
     """Sync folketshus venues: scrape + match."""
     from src.models.folketshus.venue import run as scrape_folketshus
 
     print("\n" + "=" * 50)
     print("SYNC FOLKETSHUS")
     print("=" * 50)
-
-    if dry_run:
-        print("\n*** DRY RUN ***\n")
 
     scrape_folketshus(date_str=None, match=True)
 
@@ -414,7 +392,6 @@ def sync_folketshus(dry_run: bool = False) -> bool:
 def sync_all(
     month: str | None = None,
     year: int | None = None,
-    dry_run: bool = False,
     limit: int | None = None,
     force: bool = False,
     only_scrape: bool = False,
@@ -427,18 +404,15 @@ def sync_all(
     print(f"SYNC ALL SOURCES: {month} {year}")
     print("=" * 60)
 
-    if dry_run:
-        print("\n*** DRY RUN - NO CHANGES WILL BE MADE ***\n")
-
     print("\n[0/6] Scraping all data sources...")
     scrape_all(month=month, year=year)
 
     sources = [
-        ("DANSLOGEN", lambda: sync_danslogen(month=month, year=year, dry_run=dry_run, limit=limit, force=force, only_scrape=only_scrape)),
-        ("BYGDEGARDARNA", lambda: sync_bygdegardarna(dry_run=dry_run, force=force, only_scrape=only_scrape)),
-        ("ONBEAT", lambda: sync_onbeat(dry_run=dry_run)),
-        ("COGWORK", lambda: sync_cogwork(dry_run=dry_run)),
-        ("FOLKETSHUS", lambda: sync_folketshus(dry_run=dry_run)),
+        ("DANSLOGEN", lambda: sync_danslogen(month=month, year=year, limit=limit, force=force, only_scrape=only_scrape)),
+        ("BYGDEGARDARNA", lambda: sync_bygdegardarna(force=force, only_scrape=only_scrape)),
+        ("ONBEAT", lambda: sync_onbeat()),
+        ("COGWORK", lambda: sync_cogwork()),
+        ("FOLKETSHUS", lambda: sync_folketshus()),
     ]
 
     for i, (name, func) in enumerate(sources, 1):
