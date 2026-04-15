@@ -107,11 +107,8 @@ class Danslogen:
             logger.warning("Could not resolve band '%s'. Skipping event.", band)
             return None
 
-        venue_qid = self.map_venue_qid(venue)
-        if not venue_qid:
-            if not self.interactive:
-                logger.debug("Venue '%s' not found, skipping event (non-interactive)", venue)
-                return None
+        venue_qid = self.map_venue_qid(venue) or ""
+        if not venue_qid and self.interactive:
             if venue == ort or not ort:
                 venue_full = venue
             else:
