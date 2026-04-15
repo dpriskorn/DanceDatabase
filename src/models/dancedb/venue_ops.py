@@ -229,16 +229,30 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
     new_venues = []
     matched = 0
-    existing_labels = list(existing_venues.keys())
     for venue_name in venues_needed:
         venue_lower = venue_name.lower()
         if venue_lower in existing_venues:
             matched += 1
             continue
 
+        folkets_match = False
+        if folketshus_names:
+            fuzzy_folkets = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=90)
+            if fuzzy_folkets:
+                folkets_match = folketshus_venues[fuzzy_folkets[0]]
+                existing_venues[venue_lower] = {
+                    "qid": folkets_match.get("qid", ""),
+                    "lat": folkets_match.get("lat"),
+                    "lng": folkets_match.get("lng"),
+                    "aliases": [],
+                }
+                logger.info(f"Matched '{venue_name}' to folketshus '{fuzzy_folkets[0]}' ({fuzzy_folkets[1]}%)")
+                matched += 1
+                continue
+
         byg_match = False
         if bygdegardarna_names:
-            fuzzy_byg = fuzz_process.extractOne(venue_lower, bygdegardarna_names, score_cutoff=80)
+            fuzzy_byg = fuzz_process.extractOne(venue_lower, bygdegardarna_names, score_cutoff=90)
             if fuzzy_byg:
                 byg_match = bygdegardarna_venues[fuzzy_byg[0]]
                 existing_venues[venue_lower] = {
@@ -250,25 +264,6 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
                 logger.info(f"Matched '{venue_name}' to bygdegardarna '{fuzzy_byg[0]}' ({fuzzy_byg[1]}%)")
                 matched += 1
                 continue
-
-        alias_match = False
-        for venue_data in existing_venues.values():
-            aliases = venue_data.get("aliases", [])
-            for alias in aliases:
-                if fuzz_process.extractOne(venue_lower, [alias], score_cutoff=80):
-                    alias_match = True
-                    break
-            if alias_match:
-                break
-        if alias_match:
-            matched += 1
-            continue
-
-        fuzzy = fuzz_process.extractOne(venue_lower, existing_labels, score_cutoff=80)
-        if fuzzy:
-            logger.info(f"Fuzzy matched '{venue_name}' to '{fuzzy[0]}' ({fuzzy[1]}%)")
-            matched += 1
-            continue
 
         new_venues.append(venue_name)
 
