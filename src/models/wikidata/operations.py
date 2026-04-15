@@ -161,6 +161,7 @@ def sync_wikidata_artists(
     missing_bands = []
     needs_p3 = []
 
+    dancedb_label_list = list(dancedb_labels.keys())
     for band in danslogen_bands:
         band_lower = band.lower()
         wd_qid = None
@@ -174,11 +175,31 @@ def sync_wikidata_artists(
             if fuzzy:
                 wd_qid = wikidata_labels[fuzzy[0]]
 
-        if band_lower not in dancedb_labels:
+        found_db = None
+        if band_lower in dancedb_labels:
+            found_db = dancedb_labels[band_lower]
+        else:
+            fuzzy_db = fuzz_process.extractOne(
+                band_lower, dancedb_label_list, score_cutoff=80
+            )
+            if fuzzy_db:
+                found_db = dancedb_labels[fuzzy_db[0]]
+                logger.info(f"Fuzzy matched band '{band}' to DanceDB '{fuzzy_db[0]}' ({fuzzy_db[1]}%)")
+            else:
+                for existing in dancedb_labels.values():
+                    aliases = existing.get("aliases", [])
+                    for alias in aliases:
+                        if fuzz_process.extractOne(band_lower, [alias], score_cutoff=80):
+                            found_db = existing
+                            logger.info(f"Fuzzy matched band '{band}' to alias '{alias}' ({80}%)")
+                            break
+                    if found_db:
+                        break
+
+        if not found_db:
             missing_bands.append({"name": band, "wd_qid": wd_qid})
         else:
-            existing = dancedb_labels[band_lower]
-            db_qid = existing.get("qid")
+            db_qid = found_db.get("qid")
             if wd_qid and db_qid and db_qid not in artists_with_p3:
                 needs_p3.append({"name": band, "db_qid": db_qid, "wd_qid": wd_qid})
 

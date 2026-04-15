@@ -101,14 +101,18 @@ SELECT ?item ?label ?altLabel ?p3 ?p46 WHERE {
 """
         try:
             results = execute_sparql_query(sparql)
-            items = []
+            items_dict = {}
             for row in results.get('results', {}).get('bindings', []):
                 qid = row['item']['value'].rsplit('/', 1)[-1]
                 label = row.get('label', {}).get('value', '')
-                alt_labels = row.get('altLabel', {}).get('value', '').split(',') if 'altLabel' in row else []
+                alt_label = row.get('altLabel', {}).get('value', '')
                 p3 = row.get('p3', {}).get('value', '')
                 p46 = row.get('p46', {}).get('value', '')
-                items.append({'qid': qid, 'label': label, 'aliases': alt_labels, 'p3': p3, 'p46': p46})
+                if qid not in items_dict:
+                    items_dict[qid] = {'qid': qid, 'label': label, 'aliases': [], 'p3': p3, 'p46': p46}
+                if alt_label:
+                    items_dict[qid]['aliases'].append(alt_label.lower())
+            items = list(items_dict.values())
             logger.info(f"Fetched {len(items)} artists from DanceDB")
             return items
         except Exception as e:

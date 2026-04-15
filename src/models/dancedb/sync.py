@@ -27,12 +27,14 @@ class SyncStep:
     output_files: list[Path]
 
     def needs_run(self, force: bool = False) -> bool:
-        """Check if any input file is missing."""
+        """Check if step needs to run (missing input OR missing output)."""
         if force:
             return True
         if not self.input_files:
+            return not all(f.exists() for f in self.output_files) if self.output_files else True
+        if any(not f.exists() for f in self.input_files):
             return True
-        return any(not f.exists() for f in self.input_files)
+        return any(not f.exists() for f in self.output_files) if self.output_files else False
 
     def run(self, force: bool = False, dry_run: bool = False) -> None:
         """Run the step if needed."""
