@@ -1,4 +1,6 @@
+import json
 import re
+from pathlib import Path
 from typing import ClassVar, Optional
 
 from bs4 import Tag
@@ -9,29 +11,38 @@ from src.models.exceptions import InvalidRowError
 TIME_RANGE_PATTERN = re.compile(r"^\d{1,2}[:\.]\d{2}-\d{1,2}[:\.]\d{2}$")
 VALID_WEEKDAYS = {"Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"}
 
-VALID_LAN = {
-    "Stockholms",
-    "Uppsala",
-    "Södermanlands",
-    "Östergötlands",
-    "Jönköpings",
-    "Kronobergs",
-    "Kalmar",
-    "Gotlands",
-    "Blekinge",
-    "Skåne",
-    "Hallands",
-    "Västra Götalands",
-    "Värmlands",
-    "Örebro",
-    "Västmanlands",
-    "Dalarnas",
-    "Gävleborgs",
-    "Västernorrlands",
-    "Jämtlands",
-    "Västerbottens",
-    "Norrbottens",
-}
+STATIC_DIR = Path("data/static")
+
+MUNICIPALITIES: set[str] = set()
+COUNTIES: set[str] = set()
+SHIPS: set[str] = set()
+URBAN_AREAS: dict[str, str] = {}
+
+
+def _load_static_data() -> None:
+    global MUNICIPALITIES, COUNTIES, SHIPS, URBAN_AREAS
+
+    if MUNICIPALITIES:
+        return
+
+    static_dir = STATIC_DIR
+
+    municipalities_file = static_dir / "municipalities.json"
+    if municipalities_file.exists():
+        MUNICIPALITIES = set(json.loads(municipalities_file.read_text()))
+
+    counties_file = static_dir / "counties.json"
+    if counties_file.exists():
+        COUNTIES = set(json.loads(counties_file.read_text()))
+
+    ships_file = static_dir / "ships.json"
+    if ships_file.exists():
+        SHIPS = set(json.loads(ships_file.read_text()))
+
+    urban_areas_file = static_dir / "urban_areas.json"
+    if urban_areas_file.exists():
+        urban_areas_list = json.loads(urban_areas_file.read_text())
+        URBAN_AREAS = {item["label"]: item["qid"] for item in urban_areas_list}
 
 
 class DanslogenTableRow(BaseModel):
@@ -44,6 +55,8 @@ class DanslogenTableRow(BaseModel):
     kommun: str = ""
     lan: str = ""
     ovrigt: str = ""
+    cancelled: bool = False
+    venue_qid: Optional[str] = None
 
     VENUE_KEYWORDS: ClassVar[set[str]] = {
         "folkets",
@@ -89,31 +102,48 @@ class DanslogenTableRow(BaseModel):
         return v.strip()
 
     @classmethod
-    def _shift_columns_if_venue_empty(cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str) -> tuple[str, str, str, str, str]:
-        """Handle case where venue cell is empty but next cell contains venue data."""
-        if not venue_val and ort_val:
-            ort_lower = ort_val.lower()
-            if any(keyword in ort_lower for keyword in cls.VENUE_KEYWORDS):
-                return ort_val, kommun_val, lan_val, ovrigt_val, ""
-        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+    def _is_cancelled(cls, cells: list[str]) -> bool:
+        for cell in cells:
+            cell_lower = cell.lower()
+            if any(term in cell_lower for term in ["inställt", "avbokat", "ställt in", "inställda"]):
+                return True
+        return False
 
     @classmethod
-    def _shift_columns_if_lan_empty(cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str) -> tuple[str, str, str, str, str]:
-        """Handle case where lan is empty but ovrigt contains a county name."""
-        if not lan_val and ovrigt_val:
-            ovrigt_stripped = ovrigt_val.strip()
-            for lan in VALID_LAN:
-                if ovrigt_stripped == lan or ovrigt_stripped.startswith(lan + " "):
-                    return venue_val, ort_val, kommun_val, ovrigt_val, ""
-        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+    def _get_venue_qid(cls, venue: str) -> Optional[str]:
+        if venue in URBAN_AREAS:
+            return URBAN_AREAS[venue]
+        return None
+
+    @classmethod
+    def _classify_content(cls, value: str) -> str:
+        if not value:
+            return "empty"
+
+        value_stripped = value.strip()
+
+        if TIME_RANGE_PATTERN.match(value_stripped):
+            return "time"
+
+        if value_stripped in SHIPS:
+            return "ship"
+
+        if value_stripped in COUNTIES:
+            return "lan"
+
+        if value_stripped in MUNICIPALITIES or value_stripped in URBAN_AREAS:
+            return "ort"
+
+        return "unknown"
 
     @classmethod
     def from_row(cls, row: Tag) -> Optional["DanslogenTableRow"]:
+        _load_static_data()
+
         cells = row.find_all("td")
         if len(cells) < 9:
             return None
 
-        # Handle rows where first cell is empty (row spans weekday/day from previous)
         if cells[0].get_text(strip=True) == "":
             weekday = cells[1].get_text(strip=True)
             day = cells[2].get_text(strip=True)
@@ -135,7 +165,10 @@ class DanslogenTableRow(BaseModel):
             lan_val = cells[7].get_text(strip=True)
             ovrigt_val = cells[8].get_text(strip=True)
 
-        if not time_val or not time_val.strip():
+        cell_texts = [c.get_text(strip=True) for c in cells]
+        cancelled = cls._is_cancelled(cell_texts)
+
+        if not time_val and band_val:
             time_val = band_val
             band_val = venue_val
             venue_val = ort_val
@@ -144,22 +177,65 @@ class DanslogenTableRow(BaseModel):
             lan_val = ovrigt_val
             ovrigt_val = ""
 
-        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_venue_empty(venue_val, ort_val, kommun_val, lan_val, ovrigt_val)
+        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_venue_empty(
+            venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+        )
 
-        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_lan_empty(venue_val, ort_val, kommun_val, lan_val, ovrigt_val)
+        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_lan_empty(
+            venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+        )
 
         if not band_val or not band_val.strip():
             return None
 
         if TIME_RANGE_PATTERN.match(band_val):
             raise InvalidRowError(
-                f"Band field contains time range '{band_val}' - column mapping error. " f"Row cells: {[c.get_text(strip=True) for c in cells]}"
+                f"Band field contains time range '{band_val}' - column mapping error. "
+                f"Row cells: {[c.get_text(strip=True) for c in cells]}"
             )
 
         if not day.isdigit():
             raise InvalidRowError(f"Day field is not a valid number: '{day}'")
 
         if weekday and weekday not in VALID_WEEKDAYS:
-            raise InvalidRowError(f"Weekday '{weekday}' not in valid weekdays: {VALID_WEEKDAYS}")
+            raise InvalidRowError(
+                f"Weekday '{weekday}' not in valid weekdays: {VALID_WEEKDAYS}"
+            )
 
-        return cls(weekday=weekday, day=day, time=time_val, band=band_val, venue=venue_val, ort=ort_val, kommun=kommun_val, lan=lan_val, ovrigt=ovrigt_val)
+        venue = venue_val or ort_val
+        venue_qid = cls._get_venue_qid(venue) if venue else None
+
+        return cls(
+            weekday=weekday,
+            day=day,
+            time=time_val,
+            band=band_val,
+            venue=venue_val,
+            ort=ort_val,
+            kommun=kommun_val,
+            lan=lan_val,
+            ovrigt=ovrigt_val,
+            cancelled=cancelled,
+            venue_qid=venue_qid,
+        )
+
+    @classmethod
+    def _shift_columns_if_venue_empty(
+        cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str
+    ) -> tuple[str, str, str, str, str]:
+        if not venue_val and ort_val:
+            ort_lower = ort_val.lower()
+            if any(keyword in ort_lower for keyword in cls.VENUE_KEYWORDS):
+                return ort_val, kommun_val, lan_val, ovrigt_val, ""
+        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+
+    @classmethod
+    def _shift_columns_if_lan_empty(
+        cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str
+    ) -> tuple[str, str, str, str, str]:
+        if not lan_val and ovrigt_val:
+            ovrigt_stripped = ovrigt_val.strip()
+            for lan in COUNTIES:
+                if ovrigt_stripped == lan or ovrigt_stripped.startswith(lan + " "):
+                    return venue_val, ort_val, kommun_val, ovrigt_val, ""
+        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val

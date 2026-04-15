@@ -1,0 +1,10918 @@
+[
+  {
+    "label": "Storvik",
+    "qid": "Q145642"
+  },
+  {
+    "label": "Ljusne",
+    "qid": "Q145648"
+  },
+  {
+    "label": "Berg",
+    "qid": "Q2510081"
+  },
+  {
+    "label": "Vickleby",
+    "qid": "Q168457"
+  },
+  {
+    "label": "Köping",
+    "qid": "Q174126"
+  },
+  {
+    "label": "Mohed",
+    "qid": "Q175159"
+  },
+  {
+    "label": "Hallunda-Norsborg",
+    "qid": "Q175797"
+  },
+  {
+    "label": "Moliden",
+    "qid": "Q175885"
+  },
+  {
+    "label": "Gunnarn",
+    "qid": "Q176095"
+  },
+  {
+    "label": "Köpingebro",
+    "qid": "Q176280"
+  },
+  {
+    "label": "Vårgårda",
+    "qid": "Q178538"
+  },
+  {
+    "label": "Nattavaara",
+    "qid": "Q179286"
+  },
+  {
+    "label": "Sätofta",
+    "qid": "Q181941"
+  },
+  {
+    "label": "Gränna",
+    "qid": "Q194353"
+  },
+  {
+    "label": "Mariefred",
+    "qid": "Q194359"
+  },
+  {
+    "label": "Skanör med Falsterbo",
+    "qid": "Q194512"
+  },
+  {
+    "label": "Mellerud",
+    "qid": "Q201182"
+  },
+  {
+    "label": "Billdal",
+    "qid": "Q202037"
+  },
+  {
+    "label": "Svalöv",
+    "qid": "Q202408"
+  },
+  {
+    "label": "Juoksengi",
+    "qid": "Q205769"
+  },
+  {
+    "label": "Kristinehamn",
+    "qid": "Q215832"
+  },
+  {
+    "label": "Rinkaby",
+    "qid": "Q221584"
+  },
+  {
+    "label": "Vagnhärad",
+    "qid": "Q246694"
+  },
+  {
+    "label": "Essvik",
+    "qid": "Q253086"
+  },
+  {
+    "label": "Virserum",
+    "qid": "Q254017"
+  },
+  {
+    "label": "Hestra",
+    "qid": "Q2267863"
+  },
+  {
+    "label": "Älghult",
+    "qid": "Q254761"
+  },
+  {
+    "label": "Älvkarleby",
+    "qid": "Q254953"
+  },
+  {
+    "label": "Älvsbyn",
+    "qid": "Q255003"
+  },
+  {
+    "label": "Älvängen",
+    "qid": "Q255042"
+  },
+  {
+    "label": "Alfta",
+    "qid": "Q255161"
+  },
+  {
+    "label": "Änge",
+    "qid": "Q255168"
+  },
+  {
+    "label": "Insjön",
+    "qid": "Q255578"
+  },
+  {
+    "label": "Hult",
+    "qid": "Q257067"
+  },
+  {
+    "label": "Ätran",
+    "qid": "Q258121"
+  },
+  {
+    "label": "Hjortsberga",
+    "qid": "Q258806"
+  },
+  {
+    "label": "Gällivare",
+    "qid": "Q259046"
+  },
+  {
+    "label": "Sjödiken",
+    "qid": "Q260451"
+  },
+  {
+    "label": "Övertorneå",
+    "qid": "Q260609"
+  },
+  {
+    "label": "Storå",
+    "qid": "Q261808"
+  },
+  {
+    "label": "Harlösa",
+    "qid": "Q263479"
+  },
+  {
+    "label": "Floda",
+    "qid": "Q264780"
+  },
+  {
+    "label": "Vadstena",
+    "qid": "Q265682"
+  },
+  {
+    "label": "Färna",
+    "qid": "Q266387"
+  },
+  {
+    "label": "Skattungbyn",
+    "qid": "Q266784"
+  },
+  {
+    "label": "Åby",
+    "qid": "Q15079522"
+  },
+  {
+    "label": "Åkers styckebruk",
+    "qid": "Q270945"
+  },
+  {
+    "label": "Ålem",
+    "qid": "Q271002"
+  },
+  {
+    "label": "Åminne",
+    "qid": "Q271053"
+  },
+  {
+    "label": "Åmål",
+    "qid": "Q271082"
+  },
+  {
+    "label": "Ånge",
+    "qid": "Q271096"
+  },
+  {
+    "label": "Ånn",
+    "qid": "Q271120"
+  },
+  {
+    "label": "Åre",
+    "qid": "Q271138"
+  },
+  {
+    "label": "Årjäng",
+    "qid": "Q271180"
+  },
+  {
+    "label": "Åsarna",
+    "qid": "Q271240"
+  },
+  {
+    "label": "Åsarp",
+    "qid": "Q271242"
+  },
+  {
+    "label": "Åseda",
+    "qid": "Q271255"
+  },
+  {
+    "label": "Åsele",
+    "qid": "Q271257"
+  },
+  {
+    "label": "Åstorp",
+    "qid": "Q271299"
+  },
+  {
+    "label": "Åtvidaberg",
+    "qid": "Q271335"
+  },
+  {
+    "label": "Genarp",
+    "qid": "Q277849"
+  },
+  {
+    "label": "Gundal och Högås",
+    "qid": "Q279909"
+  },
+  {
+    "label": "Roma",
+    "qid": "Q282013"
+  },
+  {
+    "label": "Getinge",
+    "qid": "Q282755"
+  },
+  {
+    "label": "Surte",
+    "qid": "Q287691"
+  },
+  {
+    "label": "Kaxås",
+    "qid": "Q287969"
+  },
+  {
+    "label": "Utvälinge",
+    "qid": "Q289649"
+  },
+  {
+    "label": "Ödeshög",
+    "qid": "Q293968"
+  },
+  {
+    "label": "Ölme",
+    "qid": "Q297161"
+  },
+  {
+    "label": "Örbyhus",
+    "qid": "Q297673"
+  },
+  {
+    "label": "Öregrund",
+    "qid": "Q297790"
+  },
+  {
+    "label": "Örkelljunga",
+    "qid": "Q297922"
+  },
+  {
+    "label": "Össjö",
+    "qid": "Q298270"
+  },
+  {
+    "label": "Österbybruk",
+    "qid": "Q298344"
+  },
+  {
+    "label": "Österbymo",
+    "qid": "Q298357"
+  },
+  {
+    "label": "Österfärnebo",
+    "qid": "Q298374"
+  },
+  {
+    "label": "Flygsfors",
+    "qid": "Q302072"
+  },
+  {
+    "label": "Jönåker",
+    "qid": "Q304145"
+  },
+  {
+    "label": "Duved",
+    "qid": "Q305066"
+  },
+  {
+    "label": "Hällefors",
+    "qid": "Q305380"
+  },
+  {
+    "label": "Abborrträsk",
+    "qid": "Q306659"
+  },
+  {
+    "label": "Östra Tommarp",
+    "qid": "Q307351"
+  },
+  {
+    "label": "Överkalix",
+    "qid": "Q307541"
+  },
+  {
+    "label": "Övre Soppero",
+    "qid": "Q307616"
+  },
+  {
+    "label": "Öxabäck",
+    "qid": "Q307636"
+  },
+  {
+    "label": "Vaggeryd",
+    "qid": "Q339905"
+  },
+  {
+    "label": "Adak",
+    "qid": "Q347020"
+  },
+  {
+    "label": "Lunde",
+    "qid": "Q347841"
+  },
+  {
+    "label": "Säffle",
+    "qid": "Q368574"
+  },
+  {
+    "label": "Svedala",
+    "qid": "Q369863"
+  },
+  {
+    "label": "Hökåsen",
+    "qid": "Q377564"
+  },
+  {
+    "label": "Ekerö",
+    "qid": "Q384083"
+  },
+  {
+    "label": "Öbonäs",
+    "qid": "Q385619"
+  },
+  {
+    "label": "Holmsund",
+    "qid": "Q388953"
+  },
+  {
+    "label": "Filsbäck",
+    "qid": "Q395040"
+  },
+  {
+    "label": "Järpås",
+    "qid": "Q395046"
+  },
+  {
+    "label": "Örslösa",
+    "qid": "Q395051"
+  },
+  {
+    "label": "Vinninga",
+    "qid": "Q404656"
+  },
+  {
+    "label": "Kode",
+    "qid": "Q404661"
+  },
+  {
+    "label": "Duvesjön",
+    "qid": "Q404675"
+  },
+  {
+    "label": "Lund",
+    "qid": "Q3352411"
+  },
+  {
+    "label": "Malmö",
+    "qid": "Q2211"
+  },
+  {
+    "label": "Norsesund",
+    "qid": "Q5027"
+  },
+  {
+    "label": "Sjömarken",
+    "qid": "Q5035"
+  },
+  {
+    "label": "Äspered",
+    "qid": "Q5036"
+  },
+  {
+    "label": "Aplared",
+    "qid": "Q5037"
+  },
+  {
+    "label": "Sandared",
+    "qid": "Q5038"
+  },
+  {
+    "label": "Falköping",
+    "qid": "Q21165"
+  },
+  {
+    "label": "Skövde",
+    "qid": "Q21166"
+  },
+  {
+    "label": "Enköping",
+    "qid": "Q21167"
+  },
+  {
+    "label": "Varberg",
+    "qid": "Q21168"
+  },
+  {
+    "label": "Piteå",
+    "qid": "Q21169"
+  },
+  {
+    "label": "Uppsala",
+    "qid": "Q25286"
+  },
+  {
+    "label": "Göteborg",
+    "qid": "Q25287"
+  },
+  {
+    "label": "Helsingborg",
+    "qid": "Q25411"
+  },
+  {
+    "label": "Västerås",
+    "qid": "Q25412"
+  },
+  {
+    "label": "Linköping",
+    "qid": "Q25413"
+  },
+  {
+    "label": "Jönköping",
+    "qid": "Q25415"
+  },
+  {
+    "label": "Karlstad",
+    "qid": "Q25457"
+  },
+  {
+    "label": "Mölnlycke",
+    "qid": "Q25462"
+  },
+  {
+    "label": "Umeå",
+    "qid": "Q25579"
+  },
+  {
+    "label": "Norrköping",
+    "qid": "Q25724"
+  },
+  {
+    "label": "Örebro",
+    "qid": "Q25732"
+  },
+  {
+    "label": "Gävle",
+    "qid": "Q25748"
+  },
+  {
+    "label": "Karlskrona",
+    "qid": "Q25789"
+  },
+  {
+    "label": "Borås",
+    "qid": "Q26040"
+  },
+  {
+    "label": "Växjö",
+    "qid": "Q26152"
+  },
+  {
+    "label": "Luleå",
+    "qid": "Q26268"
+  },
+  {
+    "label": "Kalmar",
+    "qid": "Q26345"
+  },
+  {
+    "label": "Sundsvall",
+    "qid": "Q26476"
+  },
+  {
+    "label": "Eskilstuna",
+    "qid": "Q26498"
+  },
+  {
+    "label": "Falun",
+    "qid": "Q26509"
+  },
+  {
+    "label": "Osby",
+    "qid": "Q26511"
+  },
+  {
+    "label": "Östersund",
+    "qid": "Q26515"
+  },
+  {
+    "label": "Södertälje",
+    "qid": "Q26518"
+  },
+  {
+    "label": "Halmstad",
+    "qid": "Q26521"
+  },
+  {
+    "label": "Kristianstad",
+    "qid": "Q26937"
+  },
+  {
+    "label": "Trelleborg",
+    "qid": "Q26943"
+  },
+  {
+    "label": "Uddevalla",
+    "qid": "Q27447"
+  },
+  {
+    "label": "Kungälv",
+    "qid": "Q27455"
+  },
+  {
+    "label": "Flen",
+    "qid": "Q27774"
+  },
+  {
+    "label": "Oxelösund",
+    "qid": "Q27846"
+  },
+  {
+    "label": "Ulricehamn",
+    "qid": "Q27999"
+  },
+  {
+    "label": "Torslanda",
+    "qid": "Q28154"
+  },
+  {
+    "label": "Ystad",
+    "qid": "Q28287"
+  },
+  {
+    "label": "Örnsköldsvik",
+    "qid": "Q28327"
+  },
+  {
+    "label": "Kungsbacka",
+    "qid": "Q28374"
+  },
+  {
+    "label": "Lidköping",
+    "qid": "Q29988"
+  },
+  {
+    "label": "Surahammar",
+    "qid": "Q33798"
+  },
+  {
+    "label": "Kvicksund",
+    "qid": "Q33799"
+  },
+  {
+    "label": "Skurup",
+    "qid": "Q39059"
+  },
+  {
+    "label": "Kungsör",
+    "qid": "Q41992"
+  },
+  {
+    "label": "Täby",
+    "qid": "Q54337"
+  },
+  {
+    "label": "Trollhättan",
+    "qid": "Q54339"
+  },
+  {
+    "label": "Borlänge",
+    "qid": "Q54341"
+  },
+  {
+    "label": "Upplands Väsby",
+    "qid": "Q54343"
+  },
+  {
+    "label": "Skellefteå",
+    "qid": "Q54344"
+  },
+  {
+    "label": "Lidingö",
+    "qid": "Q54349"
+  },
+  {
+    "label": "Landskrona",
+    "qid": "Q54352"
+  },
+  {
+    "label": "Nyköping",
+    "qid": "Q54356"
+  },
+  {
+    "label": "Motala",
+    "qid": "Q54357"
+  },
+  {
+    "label": "Vallentuna",
+    "qid": "Q54358"
+  },
+  {
+    "label": "Åkersberga",
+    "qid": "Q54728"
+  },
+  {
+    "label": "Karlskoga",
+    "qid": "Q54732"
+  },
+  {
+    "label": "Alingsås",
+    "qid": "Q54743"
+  },
+  {
+    "label": "Märsta",
+    "qid": "Q54748"
+  },
+  {
+    "label": "Boo",
+    "qid": "Q54752"
+  },
+  {
+    "label": "Ängelholm",
+    "qid": "Q54755"
+  },
+  {
+    "label": "Sandviken",
+    "qid": "Q3005583"
+  },
+  {
+    "label": "Visby",
+    "qid": "Q54757"
+  },
+  {
+    "label": "Katrineholm",
+    "qid": "Q54758"
+  },
+  {
+    "label": "Vänersborg",
+    "qid": "Q54759"
+  },
+  {
+    "label": "Västervik",
+    "qid": "Q54764"
+  },
+  {
+    "label": "Falkenberg",
+    "qid": "Q54766"
+  },
+  {
+    "label": "Karlshamn",
+    "qid": "Q54769"
+  },
+  {
+    "label": "Värnamo",
+    "qid": "Q54771"
+  },
+  {
+    "label": "Skutskär",
+    "qid": "Q59052"
+  },
+  {
+    "label": "Östhammar",
+    "qid": "Q59088"
+  },
+  {
+    "label": "Hofors",
+    "qid": "Q62329"
+  },
+  {
+    "label": "Iggesund",
+    "qid": "Q68971"
+  },
+  {
+    "label": "Österskär",
+    "qid": "Q75013"
+  },
+  {
+    "label": "Eslöv",
+    "qid": "Q79237"
+  },
+  {
+    "label": "Kiruna",
+    "qid": "Q83232"
+  },
+  {
+    "label": "Ekeby",
+    "qid": "Q2648960"
+  },
+  {
+    "label": "Nora",
+    "qid": "Q10601888"
+  },
+  {
+    "label": "Kalix",
+    "qid": "Q83681"
+  },
+  {
+    "label": "Avesta",
+    "qid": "Q83682"
+  },
+  {
+    "label": "Tumba",
+    "qid": "Q83715"
+  },
+  {
+    "label": "Malmberget",
+    "qid": "Q83718"
+  },
+  {
+    "label": "Stockholm",
+    "qid": "Q94385"
+  },
+  {
+    "label": "Strängnäs",
+    "qid": "Q106909"
+  },
+  {
+    "label": "Kävlinge",
+    "qid": "Q117493"
+  },
+  {
+    "label": "Edsbyn",
+    "qid": "Q121561"
+  },
+  {
+    "label": "Ockelbo",
+    "qid": "Q122378"
+  },
+  {
+    "label": "Älmhult",
+    "qid": "Q122872"
+  },
+  {
+    "label": "Åhus",
+    "qid": "Q127419"
+  },
+  {
+    "label": "Vega",
+    "qid": "Q129176"
+  },
+  {
+    "label": "Skeppshult",
+    "qid": "Q129568"
+  },
+  {
+    "label": "Rimbo",
+    "qid": "Q131882"
+  },
+  {
+    "label": "Karesuando",
+    "qid": "Q137860"
+  },
+  {
+    "label": "Norrmjöle",
+    "qid": "Q732164"
+  },
+  {
+    "label": "Torsebro",
+    "qid": "Q732253"
+  },
+  {
+    "label": "Älvsered",
+    "qid": "Q734356"
+  },
+  {
+    "label": "Selja",
+    "qid": "Q734871"
+  },
+  {
+    "label": "Karungi",
+    "qid": "Q737196"
+  },
+  {
+    "label": "Nynäshamn",
+    "qid": "Q738338"
+  },
+  {
+    "label": "Huaröd",
+    "qid": "Q738946"
+  },
+  {
+    "label": "Anneberg",
+    "qid": "Q1965878"
+  },
+  {
+    "label": "Ljungby",
+    "qid": "Q744491"
+  },
+  {
+    "label": "Sidensjö",
+    "qid": "Q745164"
+  },
+  {
+    "label": "Hälleforsnäs",
+    "qid": "Q746023"
+  },
+  {
+    "label": "Söderhamn",
+    "qid": "Q746839"
+  },
+  {
+    "label": "Riddarhyttan",
+    "qid": "Q747975"
+  },
+  {
+    "label": "Dalarö",
+    "qid": "Q748257"
+  },
+  {
+    "label": "Ängesbyn",
+    "qid": "Q748434"
+  },
+  {
+    "label": "Strömstad",
+    "qid": "Q748559"
+  },
+  {
+    "label": "Mölltorp",
+    "qid": "Q759387"
+  },
+  {
+    "label": "Undenäs",
+    "qid": "Q759395"
+  },
+  {
+    "label": "Forsvik",
+    "qid": "Q759763"
+  },
+  {
+    "label": "Karlsborg",
+    "qid": "Q1933651"
+  },
+  {
+    "label": "Målsryd",
+    "qid": "Q764166"
+  },
+  {
+    "label": "Höör",
+    "qid": "Q765434"
+  },
+  {
+    "label": "Mjällom",
+    "qid": "Q765760"
+  },
+  {
+    "label": "Barsebäckshamn",
+    "qid": "Q768778"
+  },
+  {
+    "label": "Sundborn",
+    "qid": "Q771863"
+  },
+  {
+    "label": "Munkedal",
+    "qid": "Q772339"
+  },
+  {
+    "label": "Ljungbyhed",
+    "qid": "Q776830"
+  },
+  {
+    "label": "Vingåker",
+    "qid": "Q777901"
+  },
+  {
+    "label": "Diö",
+    "qid": "Q778536"
+  },
+  {
+    "label": "Sörforsa",
+    "qid": "Q781256"
+  },
+  {
+    "label": "Liatorp",
+    "qid": "Q783703"
+  },
+  {
+    "label": "Reftele",
+    "qid": "Q784287"
+  },
+  {
+    "label": "Broaryd",
+    "qid": "Q784539"
+  },
+  {
+    "label": "Maglehem",
+    "qid": "Q784944"
+  },
+  {
+    "label": "Lugnås",
+    "qid": "Q787693"
+  },
+  {
+    "label": "Ovesholm",
+    "qid": "Q787758"
+  },
+  {
+    "label": "Backe",
+    "qid": "Q798392"
+  },
+  {
+    "label": "Baskemölla",
+    "qid": "Q810260"
+  },
+  {
+    "label": "Bastuträsk",
+    "qid": "Q810670"
+  },
+  {
+    "label": "Beddingestrand",
+    "qid": "Q813826"
+  },
+  {
+    "label": "Bengtsfors",
+    "qid": "Q817252"
+  },
+  {
+    "label": "Bergnäset",
+    "qid": "Q820082"
+  },
+  {
+    "label": "Bergsjö",
+    "qid": "Q820231"
+  },
+  {
+    "label": "Bergsviken",
+    "qid": "Q820330"
+  },
+  {
+    "label": "Ronneby",
+    "qid": "Q823785"
+  },
+  {
+    "label": "Borensberg",
+    "qid": "Q834832"
+  },
+  {
+    "label": "Hässleholm",
+    "qid": "Q847665"
+  },
+  {
+    "label": "Filipstad",
+    "qid": "Q847769"
+  },
+  {
+    "label": "Ludvika",
+    "qid": "Q848393"
+  },
+  {
+    "label": "Mora",
+    "qid": "Q3352421"
+  },
+  {
+    "label": "Bie",
+    "qid": "Q857052"
+  },
+  {
+    "label": "Billsta",
+    "qid": "Q862932"
+  },
+  {
+    "label": "Bjurholm",
+    "qid": "Q879471"
+  },
+  {
+    "label": "Bjärred",
+    "qid": "Q879479"
+  },
+  {
+    "label": "Björbo",
+    "qid": "Q879486"
+  },
+  {
+    "label": "Björnänge",
+    "qid": "Q879786"
+  },
+  {
+    "label": "Blattnicksele",
+    "qid": "Q882229"
+  },
+  {
+    "label": "Boliden",
+    "qid": "Q891347"
+  },
+  {
+    "label": "Bollmora",
+    "qid": "Q891467"
+  },
+  {
+    "label": "Borgholm",
+    "qid": "Q893554"
+  },
+  {
+    "label": "Borgvik",
+    "qid": "Q893574"
+  },
+  {
+    "label": "Boxholm",
+    "qid": "Q895675"
+  },
+  {
+    "label": "Sölvesborg",
+    "qid": "Q898727"
+  },
+  {
+    "label": "Bredbyn",
+    "qid": "Q904688"
+  },
+  {
+    "label": "Byxelkrok",
+    "qid": "Q905877"
+  },
+  {
+    "label": "Rosenfors",
+    "qid": "Q907549"
+  },
+  {
+    "label": "Drottningholm",
+    "qid": "Q910007"
+  },
+  {
+    "label": "Höganäs",
+    "qid": "Q911875"
+  },
+  {
+    "label": "Slottsskogen",
+    "qid": "Q919693"
+  },
+  {
+    "label": "Broby",
+    "qid": "Q923113"
+  },
+  {
+    "label": "Ytterhogdal",
+    "qid": "Q924378"
+  },
+  {
+    "label": "Marieby",
+    "qid": "Q924504"
+  },
+  {
+    "label": "Sonstorp",
+    "qid": "Q925183"
+  },
+  {
+    "label": "Bergsäng",
+    "qid": "Q926368"
+  },
+  {
+    "label": "Bromölla",
+    "qid": "Q927096"
+  },
+  {
+    "label": "Vallsta",
+    "qid": "Q928603"
+  },
+  {
+    "label": "Nybro",
+    "qid": "Q930238"
+  },
+  {
+    "label": "Sala",
+    "qid": "Q930262"
+  },
+  {
+    "label": "Nitta",
+    "qid": "Q933497"
+  },
+  {
+    "label": "Storebro",
+    "qid": "Q933517"
+  },
+  {
+    "label": "Skee",
+    "qid": "Q933760"
+  },
+  {
+    "label": "Knäred",
+    "qid": "Q934485"
+  },
+  {
+    "label": "Alby",
+    "qid": "Q2005834"
+  },
+  {
+    "label": "Orsa",
+    "qid": "Q935348"
+  },
+  {
+    "label": "Helgum",
+    "qid": "Q937262"
+  },
+  {
+    "label": "Hemavan",
+    "qid": "Q937583"
+  },
+  {
+    "label": "Lövestad",
+    "qid": "Q937883"
+  },
+  {
+    "label": "Hallerna",
+    "qid": "Q938561"
+  },
+  {
+    "label": "Råneå",
+    "qid": "Q938745"
+  },
+  {
+    "label": "Skara",
+    "qid": "Q939389"
+  },
+  {
+    "label": "Åshammar",
+    "qid": "Q940812"
+  },
+  {
+    "label": "Vika",
+    "qid": "Q945857"
+  },
+  {
+    "label": "Onslunda",
+    "qid": "Q946707"
+  },
+  {
+    "label": "Rossön",
+    "qid": "Q948020"
+  },
+  {
+    "label": "Mariestad",
+    "qid": "Q948117"
+  },
+  {
+    "label": "Svensta",
+    "qid": "Q953166"
+  },
+  {
+    "label": "Bollnäs",
+    "qid": "Q953769"
+  },
+  {
+    "label": "Glimåkra",
+    "qid": "Q954385"
+  },
+  {
+    "label": "Eringsboda",
+    "qid": "Q955410"
+  },
+  {
+    "label": "Vittangi",
+    "qid": "Q960861"
+  },
+  {
+    "label": "Hogstad",
+    "qid": "Q961978"
+  },
+  {
+    "label": "Röke",
+    "qid": "Q962019"
+  },
+  {
+    "label": "Hästholmen",
+    "qid": "Q962516"
+  },
+  {
+    "label": "Norrlandet",
+    "qid": "Q963062"
+  },
+  {
+    "label": "Torestorp",
+    "qid": "Q964308"
+  },
+  {
+    "label": "Vinäs",
+    "qid": "Q969636"
+  },
+  {
+    "label": "Lillhaga",
+    "qid": "Q970691"
+  },
+  {
+    "label": "Ösmo",
+    "qid": "Q972028"
+  },
+  {
+    "label": "Ambjörby",
+    "qid": "Q972059"
+  },
+  {
+    "label": "Gåvsta",
+    "qid": "Q973184"
+  },
+  {
+    "label": "Ekeby tomtområde",
+    "qid": "Q974643"
+  },
+  {
+    "label": "Gällö",
+    "qid": "Q974762"
+  },
+  {
+    "label": "Sveg",
+    "qid": "Q977073"
+  },
+  {
+    "label": "Pajala",
+    "qid": "Q977248"
+  },
+  {
+    "label": "Seskarö",
+    "qid": "Q977858"
+  },
+  {
+    "label": "Tomelilla",
+    "qid": "Q983681"
+  },
+  {
+    "label": "Tidaholm",
+    "qid": "Q983889"
+  },
+  {
+    "label": "Lycksele",
+    "qid": "Q983893"
+  },
+  {
+    "label": "Söderköping",
+    "qid": "Q984831"
+  },
+  {
+    "label": "Kåbdalis",
+    "qid": "Q985014"
+  },
+  {
+    "label": "Slagnäs",
+    "qid": "Q985336"
+  },
+  {
+    "label": "Sävsjö",
+    "qid": "Q985616"
+  },
+  {
+    "label": "Fagersta",
+    "qid": "Q985617"
+  },
+  {
+    "label": "Lerum",
+    "qid": "Q988275"
+  },
+  {
+    "label": "Solberg",
+    "qid": "Q988294"
+  },
+  {
+    "label": "Tranås",
+    "qid": "Q988403"
+  },
+  {
+    "label": "Fegen",
+    "qid": "Q988504"
+  },
+  {
+    "label": "Skänninge",
+    "qid": "Q990083"
+  },
+  {
+    "label": "Saltsjöbaden",
+    "qid": "Q990771"
+  },
+  {
+    "label": "Säter",
+    "qid": "Q992613"
+  },
+  {
+    "label": "Brunflo",
+    "qid": "Q992640"
+  },
+  {
+    "label": "Murjek",
+    "qid": "Q994695"
+  },
+  {
+    "label": "Trosa",
+    "qid": "Q994927"
+  },
+  {
+    "label": "Lomma",
+    "qid": "Q995369"
+  },
+  {
+    "label": "Olofström",
+    "qid": "Q995431"
+  },
+  {
+    "label": "Bräcke",
+    "qid": "Q995545"
+  },
+  {
+    "label": "Bräkne-Hoby",
+    "qid": "Q995551"
+  },
+  {
+    "label": "Brösarp",
+    "qid": "Q995809"
+  },
+  {
+    "label": "Valdemarsvik",
+    "qid": "Q999317"
+  },
+  {
+    "label": "Finspång",
+    "qid": "Q1000129"
+  },
+  {
+    "label": "Torshälla",
+    "qid": "Q1000633"
+  },
+  {
+    "label": "Vaxholm",
+    "qid": "Q1001109"
+  },
+  {
+    "label": "Sollefteå",
+    "qid": "Q1001154"
+  },
+  {
+    "label": "Hedemora",
+    "qid": "Q1001183"
+  },
+  {
+    "label": "Hallsberg",
+    "qid": "Q1001505"
+  },
+  {
+    "label": "Eksjö",
+    "qid": "Q1001905"
+  },
+  {
+    "label": "Stenungsund",
+    "qid": "Q1001939"
+  },
+  {
+    "label": "Staffanstorp",
+    "qid": "Q1003201"
+  },
+  {
+    "label": "Lennartsfors",
+    "qid": "Q1003212"
+  },
+  {
+    "label": "Leksand",
+    "qid": "Q1003260"
+  },
+  {
+    "label": "Johannishus",
+    "qid": "Q1004071"
+  },
+  {
+    "label": "Frösön",
+    "qid": "Q1004189"
+  },
+  {
+    "label": "Klimpfjäll",
+    "qid": "Q1006739"
+  },
+  {
+    "label": "Köinge",
+    "qid": "Q1010554"
+  },
+  {
+    "label": "Bureå",
+    "qid": "Q1010630"
+  },
+  {
+    "label": "Rökå",
+    "qid": "Q1011053"
+  },
+  {
+    "label": "Djurås",
+    "qid": "Q1011674"
+  },
+  {
+    "label": "Sälen",
+    "qid": "Q1011739"
+  },
+  {
+    "label": "Gustavsberg",
+    "qid": "Q3352884"
+  },
+  {
+    "label": "Båstad",
+    "qid": "Q1011844"
+  },
+  {
+    "label": "Hagfors",
+    "qid": "Q1012813"
+  },
+  {
+    "label": "Charlottenberg",
+    "qid": "Q1013299"
+  },
+  {
+    "label": "Vellinge",
+    "qid": "Q1013305"
+  },
+  {
+    "label": "Torekov",
+    "qid": "Q1013563"
+  },
+  {
+    "label": "Moskosel",
+    "qid": "Q1013590"
+  },
+  {
+    "label": "Kinnarp",
+    "qid": "Q1013594"
+  },
+  {
+    "label": "Vidsel",
+    "qid": "Q1013597"
+  },
+  {
+    "label": "Ryssby",
+    "qid": "Q1014028"
+  },
+  {
+    "label": "Hällekis",
+    "qid": "Q1014033"
+  },
+  {
+    "label": "Evertsberg",
+    "qid": "Q1014038"
+  },
+  {
+    "label": "Moholm",
+    "qid": "Q1014044"
+  },
+  {
+    "label": "Floby",
+    "qid": "Q1014050"
+  },
+  {
+    "label": "Gudhem",
+    "qid": "Q1014055"
+  },
+  {
+    "label": "Stenstorp",
+    "qid": "Q1014060"
+  },
+  {
+    "label": "Styrsö",
+    "qid": "Q1015454"
+  },
+  {
+    "label": "Idala",
+    "qid": "Q1016056"
+  },
+  {
+    "label": "Burgsvik",
+    "qid": "Q1016057"
+  },
+  {
+    "label": "Lidhult",
+    "qid": "Q1016065"
+  },
+  {
+    "label": "Skummeslövsstrand",
+    "qid": "Q1016075"
+  },
+  {
+    "label": "Järnforsen",
+    "qid": "Q1016327"
+  },
+  {
+    "label": "Otterbäcken",
+    "qid": "Q1016332"
+  },
+  {
+    "label": "Vislanda",
+    "qid": "Q1016338"
+  },
+  {
+    "label": "Grillby",
+    "qid": "Q1016345"
+  },
+  {
+    "label": "Silverdalen",
+    "qid": "Q1016351"
+  },
+  {
+    "label": "Kånna",
+    "qid": "Q1016358"
+  },
+  {
+    "label": "Vittaryd",
+    "qid": "Q1016365"
+  },
+  {
+    "label": "Nås",
+    "qid": "Q1016368"
+  },
+  {
+    "label": "Rengsjö",
+    "qid": "Q1016373"
+  },
+  {
+    "label": "Lilla Harrie",
+    "qid": "Q1016379"
+  },
+  {
+    "label": "Teckomatorp",
+    "qid": "Q1016384"
+  },
+  {
+    "label": "Torsås",
+    "qid": "Q1016705"
+  },
+  {
+    "label": "Lilla Edet",
+    "qid": "Q1016712"
+  },
+  {
+    "label": "Hillerstorp",
+    "qid": "Q1016846"
+  },
+  {
+    "label": "Stockaryd",
+    "qid": "Q1016852"
+  },
+  {
+    "label": "Vrigstad",
+    "qid": "Q1016856"
+  },
+  {
+    "label": "Gäddede",
+    "qid": "Q1016861"
+  },
+  {
+    "label": "Lönsboda",
+    "qid": "Q1016865"
+  },
+  {
+    "label": "Donsö",
+    "qid": "Q1016947"
+  },
+  {
+    "label": "Henån",
+    "qid": "Q1016950"
+  },
+  {
+    "label": "Hammarstrand",
+    "qid": "Q1016952"
+  },
+  {
+    "label": "Diseröd",
+    "qid": "Q404977"
+  },
+  {
+    "label": "Kärna",
+    "qid": "Q404986"
+  },
+  {
+    "label": "Rishammar",
+    "qid": "Q404997"
+  },
+  {
+    "label": "Tjuvkil",
+    "qid": "Q405817"
+  },
+  {
+    "label": "Marstrand",
+    "qid": "Q406556"
+  },
+  {
+    "label": "Västra Karaby",
+    "qid": "Q426327"
+  },
+  {
+    "label": "Siljansnäs",
+    "qid": "Q427314"
+  },
+  {
+    "label": "Rörö",
+    "qid": "Q427357"
+  },
+  {
+    "label": "Hjo",
+    "qid": "Q429467"
+  },
+  {
+    "label": "Gamla Uppsala",
+    "qid": "Q433032"
+  },
+  {
+    "label": "Anderstorp",
+    "qid": "Q491730"
+  },
+  {
+    "label": "Hede",
+    "qid": "Q492641"
+  },
+  {
+    "label": "Hallstavik",
+    "qid": "Q496201"
+  },
+  {
+    "label": "Laholm",
+    "qid": "Q503050"
+  },
+  {
+    "label": "Gagnef",
+    "qid": "Q504454"
+  },
+  {
+    "label": "Stora Levene",
+    "qid": "Q509088"
+  },
+  {
+    "label": "Sankt Olof",
+    "qid": "Q509773"
+  },
+  {
+    "label": "Yttersjö",
+    "qid": "Q513646"
+  },
+  {
+    "label": "Fritsla",
+    "qid": "Q516883"
+  },
+  {
+    "label": "Gullbranna",
+    "qid": "Q520996"
+  },
+  {
+    "label": "Bleket",
+    "qid": "Q521162"
+  },
+  {
+    "label": "Yttermalung",
+    "qid": "Q521686"
+  },
+  {
+    "label": "Sorsele",
+    "qid": "Q524379"
+  },
+  {
+    "label": "Lyrestad",
+    "qid": "Q527249"
+  },
+  {
+    "label": "Hennan",
+    "qid": "Q527270"
+  },
+  {
+    "label": "Stavsjö",
+    "qid": "Q528450"
+  },
+  {
+    "label": "Varnhem",
+    "qid": "Q531376"
+  },
+  {
+    "label": "Ruda",
+    "qid": "Q531767"
+  },
+  {
+    "label": "Hyltebruk",
+    "qid": "Q531776"
+  },
+  {
+    "label": "Angelstad",
+    "qid": "Q537431"
+  },
+  {
+    "label": "Mjölby",
+    "qid": "Q538915"
+  },
+  {
+    "label": "Tidan",
+    "qid": "Q548821"
+  },
+  {
+    "label": "Ankarsrum",
+    "qid": "Q556590"
+  },
+  {
+    "label": "Södra Sandby",
+    "qid": "Q569800"
+  },
+  {
+    "label": "Skoghall",
+    "qid": "Q576644"
+  },
+  {
+    "label": "Söderskogen",
+    "qid": "Q581877"
+  },
+  {
+    "label": "Hortlax",
+    "qid": "Q584385"
+  },
+  {
+    "label": "Antnäs",
+    "qid": "Q585038"
+  },
+  {
+    "label": "Boden",
+    "qid": "Q586179"
+  },
+  {
+    "label": "Gideå",
+    "qid": "Q586790"
+  },
+  {
+    "label": "Torbjörntorp",
+    "qid": "Q588054"
+  },
+  {
+    "label": "Vinberg",
+    "qid": "Q588873"
+  },
+  {
+    "label": "Haparanda",
+    "qid": "Q588976"
+  },
+  {
+    "label": "Kungshamn",
+    "qid": "Q594557"
+  },
+  {
+    "label": "Långvik",
+    "qid": "Q596147"
+  },
+  {
+    "label": "Väländan",
+    "qid": "Q596192"
+  },
+  {
+    "label": "Veddige",
+    "qid": "Q596567"
+  },
+  {
+    "label": "Karlsvik",
+    "qid": "Q597068"
+  },
+  {
+    "label": "Bestorp",
+    "qid": "Q597704"
+  },
+  {
+    "label": "Mönsterås",
+    "qid": "Q599114"
+  },
+  {
+    "label": "Hallen",
+    "qid": "Q599318"
+  },
+  {
+    "label": "Mörrum",
+    "qid": "Q600012"
+  },
+  {
+    "label": "Lysekil",
+    "qid": "Q602574"
+  },
+  {
+    "label": "Nykvarn",
+    "qid": "Q610146"
+  },
+  {
+    "label": "Vetlanda",
+    "qid": "Q611013"
+  },
+  {
+    "label": "Norrfjärden",
+    "qid": "Q612314"
+  },
+  {
+    "label": "Bröttjärna",
+    "qid": "Q614210"
+  },
+  {
+    "label": "Kåge",
+    "qid": "Q616561"
+  },
+  {
+    "label": "Laxvik",
+    "qid": "Q630648"
+  },
+  {
+    "label": "Bollebygd",
+    "qid": "Q632092"
+  },
+  {
+    "label": "Mala",
+    "qid": "Q632102"
+  },
+  {
+    "label": "Vimmerby",
+    "qid": "Q634231"
+  },
+  {
+    "label": "Hudiksvall",
+    "qid": "Q642964"
+  },
+  {
+    "label": "Rya",
+    "qid": "Q644455"
+  },
+  {
+    "label": "Kramfors",
+    "qid": "Q645351"
+  },
+  {
+    "label": "Simrishamn",
+    "qid": "Q648536"
+  },
+  {
+    "label": "Sköllersta",
+    "qid": "Q649659"
+  },
+  {
+    "label": "Oskarshamn",
+    "qid": "Q654268"
+  },
+  {
+    "label": "Nässjö",
+    "qid": "Q654299"
+  },
+  {
+    "label": "Arvika",
+    "qid": "Q654308"
+  },
+  {
+    "label": "Stallarholmen",
+    "qid": "Q656167"
+  },
+  {
+    "label": "Lindesberg",
+    "qid": "Q656562"
+  },
+  {
+    "label": "Sturkö",
+    "qid": "Q660299"
+  },
+  {
+    "label": "Tierp",
+    "qid": "Q660532"
+  },
+  {
+    "label": "Arild",
+    "qid": "Q661162"
+  },
+  {
+    "label": "Bålsta",
+    "qid": "Q661608"
+  },
+  {
+    "label": "Tågarp",
+    "qid": "Q665718"
+  },
+  {
+    "label": "Sätra brunn",
+    "qid": "Q666089"
+  },
+  {
+    "label": "Korpilombolo",
+    "qid": "Q667632"
+  },
+  {
+    "label": "Kinna",
+    "qid": "Q667818"
+  },
+  {
+    "label": "Torsåker",
+    "qid": "Q668933"
+  },
+  {
+    "label": "Arboga",
+    "qid": "Q669660"
+  },
+  {
+    "label": "Tanumshede",
+    "qid": "Q670220"
+  },
+  {
+    "label": "Arjeplog",
+    "qid": "Q671330"
+  },
+  {
+    "label": "Dunö",
+    "qid": "Q672247"
+  },
+  {
+    "label": "Kaxholmen",
+    "qid": "Q675213"
+  },
+  {
+    "label": "Arlöv",
+    "qid": "Q676026"
+  },
+  {
+    "label": "Hartungviken och Spikarna",
+    "qid": "Q680645"
+  },
+  {
+    "label": "Brodalen",
+    "qid": "Q684518"
+  },
+  {
+    "label": "Kyrksten",
+    "qid": "Q684718"
+  },
+  {
+    "label": "Jung",
+    "qid": "Q685930"
+  },
+  {
+    "label": "Ullared",
+    "qid": "Q686783"
+  },
+  {
+    "label": "Djäkneböle",
+    "qid": "Q687012"
+  },
+  {
+    "label": "Tollarp",
+    "qid": "Q719069"
+  },
+  {
+    "label": "Kumla",
+    "qid": "Q725826"
+  },
+  {
+    "label": "Röstånga",
+    "qid": "Q729410"
+  },
+  {
+    "label": "Vuollerim",
+    "qid": "Q730482"
+  },
+  {
+    "label": "Askersund",
+    "qid": "Q731441"
+  },
+  {
+    "label": "Klädesholmen",
+    "qid": "Q731729"
+  },
+  {
+    "label": "Norsjö",
+    "qid": "Q1017058"
+  },
+  {
+    "label": "Burträsk",
+    "qid": "Q1017138"
+  },
+  {
+    "label": "Tibro",
+    "qid": "Q1017565"
+  },
+  {
+    "label": "Kisa",
+    "qid": "Q1017607"
+  },
+  {
+    "label": "Gnarp",
+    "qid": "Q1018412"
+  },
+  {
+    "label": "Porjus",
+    "qid": "Q1018421"
+  },
+  {
+    "label": "Grundsund",
+    "qid": "Q1018430"
+  },
+  {
+    "label": "Hörnefors",
+    "qid": "Q1018434"
+  },
+  {
+    "label": "Torna Hällestad",
+    "qid": "Q1018437"
+  },
+  {
+    "label": "Enånger",
+    "qid": "Q1018441"
+  },
+  {
+    "label": "Uddeholm",
+    "qid": "Q1018454"
+  },
+  {
+    "label": "Nödinge-Nol",
+    "qid": "Q1018460"
+  },
+  {
+    "label": "Sösdala",
+    "qid": "Q1018462"
+  },
+  {
+    "label": "Kopparberg",
+    "qid": "Q1018719"
+  },
+  {
+    "label": "Klippan",
+    "qid": "Q1018739"
+  },
+  {
+    "label": "Bälinge",
+    "qid": "Q2333236"
+  },
+  {
+    "label": "Degerfors",
+    "qid": "Q1019101"
+  },
+  {
+    "label": "Rimforsa",
+    "qid": "Q1019412"
+  },
+  {
+    "label": "Husby",
+    "qid": "Q10527317"
+  },
+  {
+    "label": "Rutvik",
+    "qid": "Q1019546"
+  },
+  {
+    "label": "Töcksfors",
+    "qid": "Q1019553"
+  },
+  {
+    "label": "Mörlunda",
+    "qid": "Q1019554"
+  },
+  {
+    "label": "Sjöbo",
+    "qid": "Q1019556"
+  },
+  {
+    "label": "Högsäter",
+    "qid": "Q1019557"
+  },
+  {
+    "label": "Hallstahammar",
+    "qid": "Q1019560"
+  },
+  {
+    "label": "Oskarström",
+    "qid": "Q1019572"
+  },
+  {
+    "label": "Ljusdal",
+    "qid": "Q1019575"
+  },
+  {
+    "label": "Hackås",
+    "qid": "Q1019578"
+  },
+  {
+    "label": "Håverud",
+    "qid": "Q1019584"
+  },
+  {
+    "label": "Ellös",
+    "qid": "Q1019930"
+  },
+  {
+    "label": "Uddheden",
+    "qid": "Q1019935"
+  },
+  {
+    "label": "Alsike",
+    "qid": "Q1019979"
+  },
+  {
+    "label": "Gunnarskog",
+    "qid": "Q1020133"
+  },
+  {
+    "label": "Kallinge",
+    "qid": "Q1020929"
+  },
+  {
+    "label": "Lit",
+    "qid": "Q1021109"
+  },
+  {
+    "label": "Nälden",
+    "qid": "Q1021142"
+  },
+  {
+    "label": "Järlåsa",
+    "qid": "Q1021148"
+  },
+  {
+    "label": "Furulund",
+    "qid": "Q1021155"
+  },
+  {
+    "label": "Deje",
+    "qid": "Q1021161"
+  },
+  {
+    "label": "Vollsjö",
+    "qid": "Q1021165"
+  },
+  {
+    "label": "Forsbacka",
+    "qid": "Q1021169"
+  },
+  {
+    "label": "Föllinge",
+    "qid": "Q1021324"
+  },
+  {
+    "label": "Trångsviken",
+    "qid": "Q1021330"
+  },
+  {
+    "label": "Häggenås",
+    "qid": "Q1021335"
+  },
+  {
+    "label": "Töllsjö",
+    "qid": "Q1021341"
+  },
+  {
+    "label": "Holm",
+    "qid": "Q1021346"
+  },
+  {
+    "label": "Hoting",
+    "qid": "Q1021355"
+  },
+  {
+    "label": "Gislaved",
+    "qid": "Q1021557"
+  },
+  {
+    "label": "Hällnäs",
+    "qid": "Q1022428"
+  },
+  {
+    "label": "Lögdeå",
+    "qid": "Q1022436"
+  },
+  {
+    "label": "Söråker",
+    "qid": "Q1022440"
+  },
+  {
+    "label": "Västra Bispgården",
+    "qid": "Q1022452"
+  },
+  {
+    "label": "Kil",
+    "qid": "Q2159882"
+  },
+  {
+    "label": "Malung",
+    "qid": "Q1025370"
+  },
+  {
+    "label": "Mörsil",
+    "qid": "Q1025476"
+  },
+  {
+    "label": "Höllviken och Ljunghusen",
+    "qid": "Q1025480"
+  },
+  {
+    "label": "Vännäsby",
+    "qid": "Q1025483"
+  },
+  {
+    "label": "Urshult",
+    "qid": "Q1025490"
+  },
+  {
+    "label": "Vikarbyn",
+    "qid": "Q1025493"
+  },
+  {
+    "label": "Lammhult",
+    "qid": "Q1025495"
+  },
+  {
+    "label": "Kristineberg",
+    "qid": "Q2559120"
+  },
+  {
+    "label": "Rörvik",
+    "qid": "Q1025500"
+  },
+  {
+    "label": "Lingbo",
+    "qid": "Q1025506"
+  },
+  {
+    "label": "Fredrika",
+    "qid": "Q1025513"
+  },
+  {
+    "label": "Gnesta",
+    "qid": "Q1025938"
+  },
+  {
+    "label": "Ed",
+    "qid": "Q1026286"
+  },
+  {
+    "label": "Skärhamn",
+    "qid": "Q1026309"
+  },
+  {
+    "label": "Arvidsjaur",
+    "qid": "Q1026498"
+  },
+  {
+    "label": "Gammelstaden",
+    "qid": "Q1026845"
+  },
+  {
+    "label": "Hindås",
+    "qid": "Q1028980"
+  },
+  {
+    "label": "Laxå",
+    "qid": "Q1076290"
+  },
+  {
+    "label": "Bollstabruk",
+    "qid": "Q1104911"
+  },
+  {
+    "label": "Alvhem",
+    "qid": "Q1109681"
+  },
+  {
+    "label": "Knivsta",
+    "qid": "Q1120927"
+  },
+  {
+    "label": "Kebal",
+    "qid": "Q1142593"
+  },
+  {
+    "label": "Långsele",
+    "qid": "Q1144285"
+  },
+  {
+    "label": "Dalby",
+    "qid": "Q4550534"
+  },
+  {
+    "label": "Dals Rostock",
+    "qid": "Q1158074"
+  },
+  {
+    "label": "Dalsjöfors",
+    "qid": "Q1158083"
+  },
+  {
+    "label": "Degeberga",
+    "qid": "Q1182804"
+  },
+  {
+    "label": "Degerhamn",
+    "qid": "Q1182859"
+  },
+  {
+    "label": "Bara",
+    "qid": "Q1185188"
+  },
+  {
+    "label": "Vi",
+    "qid": "Q1193840"
+  },
+  {
+    "label": "Timrå",
+    "qid": "Q1195439"
+  },
+  {
+    "label": "Dorotea",
+    "qid": "Q1202958"
+  },
+  {
+    "label": "Docksta",
+    "qid": "Q1233779"
+  },
+  {
+    "label": "Lindö",
+    "qid": "Q1252935"
+  },
+  {
+    "label": "Vännäs",
+    "qid": "Q1272709"
+  },
+  {
+    "label": "Forsmark",
+    "qid": "Q1281247"
+  },
+  {
+    "label": "Jukkasjärvi",
+    "qid": "Q1284760"
+  },
+  {
+    "label": "Fjällbacka",
+    "qid": "Q1285177"
+  },
+  {
+    "label": "Onsala",
+    "qid": "Q1290728"
+  },
+  {
+    "label": "Svenljunga",
+    "qid": "Q1297746"
+  },
+  {
+    "label": "Forshaga",
+    "qid": "Q1303800"
+  },
+  {
+    "label": "Orrefors",
+    "qid": "Q1306067"
+  },
+  {
+    "label": "Fredriksberg",
+    "qid": "Q1317694"
+  },
+  {
+    "label": "Grängesberg",
+    "qid": "Q1323619"
+  },
+  {
+    "label": "Emmaboda",
+    "qid": "Q1338169"
+  },
+  {
+    "label": "Hemse",
+    "qid": "Q1343999"
+  },
+  {
+    "label": "Jakobsberg",
+    "qid": "Q1370248"
+  },
+  {
+    "label": "Skärblacka",
+    "qid": "Q1372181"
+  },
+  {
+    "label": "Köpingsvik",
+    "qid": "Q1377386"
+  },
+  {
+    "label": "Näsåker",
+    "qid": "Q1382853"
+  },
+  {
+    "label": "Stångby",
+    "qid": "Q1398087"
+  },
+  {
+    "label": "Fjugesta",
+    "qid": "Q1422463"
+  },
+  {
+    "label": "Jonsered",
+    "qid": "Q1426086"
+  },
+  {
+    "label": "Ovanåker",
+    "qid": "Q1447166"
+  },
+  {
+    "label": "Uttran",
+    "qid": "Q1448843"
+  },
+  {
+    "label": "Svärdsjö",
+    "qid": "Q1453241"
+  },
+  {
+    "label": "Järna",
+    "qid": "Q2298003"
+  },
+  {
+    "label": "Kastlösa",
+    "qid": "Q1462015"
+  },
+  {
+    "label": "Frillesås",
+    "qid": "Q1464921"
+  },
+  {
+    "label": "Fränsta",
+    "qid": "Q1471281"
+  },
+  {
+    "label": "Lyckeby",
+    "qid": "Q1473587"
+  },
+  {
+    "label": "Funäsdalen",
+    "qid": "Q1474779"
+  },
+  {
+    "label": "Furudal",
+    "qid": "Q1475205"
+  },
+  {
+    "label": "Färgelanda",
+    "qid": "Q1478884"
+  },
+  {
+    "label": "Färjestaden",
+    "qid": "Q1478888"
+  },
+  {
+    "label": "Färlöv",
+    "qid": "Q1478889"
+  },
+  {
+    "label": "Fåker",
+    "qid": "Q1479241"
+  },
+  {
+    "label": "Fårösund",
+    "qid": "Q1479259"
+  },
+  {
+    "label": "Tingstäde",
+    "qid": "Q1483611"
+  },
+  {
+    "label": "Töreboda",
+    "qid": "Q1485924"
+  },
+  {
+    "label": "Slite",
+    "qid": "Q1495534"
+  },
+  {
+    "label": "Gemla",
+    "qid": "Q1501148"
+  },
+  {
+    "label": "Havdhem",
+    "qid": "Q1516613"
+  },
+  {
+    "label": "Hammerdal",
+    "qid": "Q1519013"
+  },
+  {
+    "label": "Glommersträsk",
+    "qid": "Q1532004"
+  },
+  {
+    "label": "Gnosjö",
+    "qid": "Q1533298"
+  },
+  {
+    "label": "Gottne",
+    "qid": "Q1540012"
+  },
+  {
+    "label": "Grebbestad",
+    "qid": "Q1544485"
+  },
+  {
+    "label": "Västerhaninge",
+    "qid": "Q1544751"
+  },
+  {
+    "label": "Kubbe",
+    "qid": "Q1546757"
+  },
+  {
+    "label": "Grisslehamn",
+    "qid": "Q1547090"
+  },
+  {
+    "label": "Grums",
+    "qid": "Q1550418"
+  },
+  {
+    "label": "Gräddö",
+    "qid": "Q1551396"
+  },
+  {
+    "label": "Grästorp",
+    "qid": "Q1551485"
+  },
+  {
+    "label": "Brotorp",
+    "qid": "Q1553495"
+  },
+  {
+    "label": "Gullspång",
+    "qid": "Q1554356"
+  },
+  {
+    "label": "Gunnarsbyn",
+    "qid": "Q1554813"
+  },
+  {
+    "label": "Götene",
+    "qid": "Q1559732"
+  },
+  {
+    "label": "Tärnaby",
+    "qid": "Q1564081"
+  },
+  {
+    "label": "Skillingaryd",
+    "qid": "Q1565387"
+  },
+  {
+    "label": "Habo",
+    "qid": "Q1566951"
+  },
+  {
+    "label": "Högsby",
+    "qid": "Q1572742"
+  },
+  {
+    "label": "Hamburgsund",
+    "qid": "Q1573242"
+  },
+  {
+    "label": "Munkfors",
+    "qid": "Q1574389"
+  },
+  {
+    "label": "Handen",
+    "qid": "Q1574991"
+  },
+  {
+    "label": "Heby",
+    "qid": "Q1592909"
+  },
+  {
+    "label": "Mölle",
+    "qid": "Q1599139"
+  },
+  {
+    "label": "Idre",
+    "qid": "Q1610313"
+  },
+  {
+    "label": "Bjästa",
+    "qid": "Q1611156"
+  },
+  {
+    "label": "Herrljunga",
+    "qid": "Q1614296"
+  },
+  {
+    "label": "Robertsfors",
+    "qid": "Q1615045"
+  },
+  {
+    "label": "Storvreta",
+    "qid": "Q1616235"
+  },
+  {
+    "label": "Hjuvik",
+    "qid": "Q1621371"
+  },
+  {
+    "label": "Hok",
+    "qid": "Q1624217"
+  },
+  {
+    "label": "Mullsjö",
+    "qid": "Q1625556"
+  },
+  {
+    "label": "Hova",
+    "qid": "Q1631543"
+  },
+  {
+    "label": "Kungsängen",
+    "qid": "Q1632006"
+  },
+  {
+    "label": "Hultsfred",
+    "qid": "Q1636399"
+  },
+  {
+    "label": "Lödöse",
+    "qid": "Q1639127"
+  },
+  {
+    "label": "Husum",
+    "qid": "Q1639137"
+  },
+  {
+    "label": "Nossebro",
+    "qid": "Q1639452"
+  },
+  {
+    "label": "Markaryd",
+    "qid": "Q1639483"
+  },
+  {
+    "label": "Vansbro",
+    "qid": "Q1641227"
+  },
+  {
+    "label": "Mörbylånga",
+    "qid": "Q1641531"
+  },
+  {
+    "label": "Hällevik",
+    "qid": "Q1641992"
+  },
+  {
+    "label": "Hälsö",
+    "qid": "Q1642019"
+  },
+  {
+    "label": "Nusnäs",
+    "qid": "Q1642885"
+  },
+  {
+    "label": "Hönö",
+    "qid": "Q1644230"
+  },
+  {
+    "label": "Hörby",
+    "qid": "Q1644288"
+  },
+  {
+    "label": "Nysäter",
+    "qid": "Q1649922"
+  },
+  {
+    "label": "Krokom",
+    "qid": "Q1650203"
+  },
+  {
+    "label": "Utansjö",
+    "qid": "Q1654375"
+  },
+  {
+    "label": "Svenstavik",
+    "qid": "Q1656776"
+  },
+  {
+    "label": "Nordmaling",
+    "qid": "Q1680713"
+  },
+  {
+    "label": "Jordbro",
+    "qid": "Q1703720"
+  },
+  {
+    "label": "Järpen",
+    "qid": "Q1714951"
+  },
+  {
+    "label": "Jörn",
+    "qid": "Q1715632"
+  },
+  {
+    "label": "Ljungskile",
+    "qid": "Q1721409"
+  },
+  {
+    "label": "Öckerö",
+    "qid": "Q1725770"
+  },
+  {
+    "label": "Löderup",
+    "qid": "Q1728466"
+  },
+  {
+    "label": "Perstorp",
+    "qid": "Q1736327"
+  },
+  {
+    "label": "Katthammarsvik",
+    "qid": "Q1736833"
+  },
+  {
+    "label": "Kivik",
+    "qid": "Q1743988"
+  },
+  {
+    "label": "Gräfsnäs",
+    "qid": "Q1754560"
+  },
+  {
+    "label": "Vara",
+    "qid": "Q1754738"
+  },
+  {
+    "label": "Hjälmared",
+    "qid": "Q2634668"
+  },
+  {
+    "label": "Hagryd-Dala",
+    "qid": "Q1755466"
+  },
+  {
+    "label": "Ingared",
+    "qid": "Q1755510"
+  },
+  {
+    "label": "Bårslöv",
+    "qid": "Q1756003"
+  },
+  {
+    "label": "Bjuv",
+    "qid": "Q1760444"
+  },
+  {
+    "label": "Vilhelmina",
+    "qid": "Q1760456"
+  },
+  {
+    "label": "Södra Sunderbyn",
+    "qid": "Q1763367"
+  },
+  {
+    "label": "Klintehamn",
+    "qid": "Q1774733"
+  },
+  {
+    "label": "Sylta",
+    "qid": "Q1780980"
+  },
+  {
+    "label": "Hässelby villastad",
+    "qid": "Q1781561"
+  },
+  {
+    "label": "Vrångö",
+    "qid": "Q1784845"
+  },
+  {
+    "label": "Valbo",
+    "qid": "Q1786152"
+  },
+  {
+    "label": "Loddby",
+    "qid": "Q1788143"
+  },
+  {
+    "label": "Barsele",
+    "qid": "Q1792732"
+  },
+  {
+    "label": "Kuttainen",
+    "qid": "Q1794701"
+  },
+  {
+    "label": "Kaunisvaara",
+    "qid": "Q1794751"
+  },
+  {
+    "label": "Nyåker",
+    "qid": "Q1794825"
+  },
+  {
+    "label": "Norrfors",
+    "qid": "Q1794833"
+  },
+  {
+    "label": "Kyrkesund",
+    "qid": "Q1795181"
+  },
+  {
+    "label": "Örträsk",
+    "qid": "Q1795995"
+  },
+  {
+    "label": "Gräsmyr",
+    "qid": "Q1796015"
+  },
+  {
+    "label": "Lindome",
+    "qid": "Q1796281"
+  },
+  {
+    "label": "Kättilsmåla",
+    "qid": "Q1799687"
+  },
+  {
+    "label": "Skavkulla och Skillingenäs",
+    "qid": "Q1799694"
+  },
+  {
+    "label": "Fågelmara",
+    "qid": "Q1799710"
+  },
+  {
+    "label": "Rödeby",
+    "qid": "Q1799716"
+  },
+  {
+    "label": "Holmsjö",
+    "qid": "Q1799722"
+  },
+  {
+    "label": "Nävragöl",
+    "qid": "Q1799725"
+  },
+  {
+    "label": "Tving",
+    "qid": "Q1799731"
+  },
+  {
+    "label": "Gängletorp",
+    "qid": "Q1799736"
+  },
+  {
+    "label": "Drottningskär",
+    "qid": "Q1799743"
+  },
+  {
+    "label": "Fridlevstad",
+    "qid": "Q1799751"
+  },
+  {
+    "label": "Hällaryd",
+    "qid": "Q1799757"
+  },
+  {
+    "label": "Lörby",
+    "qid": "Q1799773"
+  },
+  {
+    "label": "Ronnebyhamn",
+    "qid": "Q1799780"
+  },
+  {
+    "label": "Nogersund",
+    "qid": "Q1799787"
+  },
+  {
+    "label": "Svängsta",
+    "qid": "Q1799793"
+  },
+  {
+    "label": "Valjeviken",
+    "qid": "Q1799933"
+  },
+  {
+    "label": "Torarp",
+    "qid": "Q1799938"
+  },
+  {
+    "label": "Norje",
+    "qid": "Q1799944"
+  },
+  {
+    "label": "Åryd",
+    "qid": "Q2438201"
+  },
+  {
+    "label": "Hallabro",
+    "qid": "Q1799952"
+  },
+  {
+    "label": "Hörvik",
+    "qid": "Q1800120"
+  },
+  {
+    "label": "Ormaryd",
+    "qid": "Q1800132"
+  },
+  {
+    "label": "Backaryd",
+    "qid": "Q1800137"
+  },
+  {
+    "label": "Ysane",
+    "qid": "Q1800143"
+  },
+  {
+    "label": "Rumskulla",
+    "qid": "Q1800148"
+  },
+  {
+    "label": "Listerby",
+    "qid": "Q1800151"
+  },
+  {
+    "label": "Lagan",
+    "qid": "Q1800209"
+  },
+  {
+    "label": "Ekängen",
+    "qid": "Q1800347"
+  },
+  {
+    "label": "Sund",
+    "qid": "Q1800807"
+  },
+  {
+    "label": "Solsidan",
+    "qid": "Q1800816"
+  },
+  {
+    "label": "Mariedal",
+    "qid": "Q1800821"
+  },
+  {
+    "label": "Lugnet och Skälsmara",
+    "qid": "Q1800824"
+  },
+  {
+    "label": "Svanvik",
+    "qid": "Q1800837"
+  },
+  {
+    "label": "Strömma",
+    "qid": "Q1800844"
+  },
+  {
+    "label": "Sörfors",
+    "qid": "Q1801788"
+  },
+  {
+    "label": "Sälgsjön",
+    "qid": "Q1801793"
+  },
+  {
+    "label": "Västerby",
+    "qid": "Q1801815"
+  },
+  {
+    "label": "Söderbärke",
+    "qid": "Q1801852"
+  },
+  {
+    "label": "Vistträsk",
+    "qid": "Q1803754"
+  },
+  {
+    "label": "Strömsund",
+    "qid": "Q26253468"
+  },
+  {
+    "label": "Dingle",
+    "qid": "Q1807347"
+  },
+  {
+    "label": "Svensbyn",
+    "qid": "Q1809445"
+  },
+  {
+    "label": "Knutby",
+    "qid": "Q1810048"
+  },
+  {
+    "label": "Kvarntorp",
+    "qid": "Q1811248"
+  },
+  {
+    "label": "Tingsryd",
+    "qid": "Q1813784"
+  },
+  {
+    "label": "Pålänge",
+    "qid": "Q1813971"
+  },
+  {
+    "label": "Molkom",
+    "qid": "Q1814865"
+  },
+  {
+    "label": "Uddebo",
+    "qid": "Q1817394"
+  },
+  {
+    "label": "Bensbyn",
+    "qid": "Q1818209"
+  },
+  {
+    "label": "Tranholmen",
+    "qid": "Q1820063"
+  },
+  {
+    "label": "Ytterån",
+    "qid": "Q1820122"
+  },
+  {
+    "label": "Gustavsfors",
+    "qid": "Q1820683"
+  },
+  {
+    "label": "Lessebo",
+    "qid": "Q1820923"
+  },
+  {
+    "label": "Bodafors",
+    "qid": "Q1821030"
+  },
+  {
+    "label": "Furuby",
+    "qid": "Q1821422"
+  },
+  {
+    "label": "Liden",
+    "qid": "Q1821497"
+  },
+  {
+    "label": "Gusselby",
+    "qid": "Q1825149"
+  },
+  {
+    "label": "Klockrike",
+    "qid": "Q1825937"
+  },
+  {
+    "label": "Lindsdal",
+    "qid": "Q1826326"
+  },
+  {
+    "label": "Tuolluvaara",
+    "qid": "Q1827848"
+  },
+  {
+    "label": "Ås",
+    "qid": "Q2184710"
+  },
+  {
+    "label": "Hammar",
+    "qid": "Q2522299"
+  },
+  {
+    "label": "Niemisel",
+    "qid": "Q1832764"
+  },
+  {
+    "label": "Tvärålund",
+    "qid": "Q1833017"
+  },
+  {
+    "label": "Ytternäs och Vreta",
+    "qid": "Q1833482"
+  },
+  {
+    "label": "Östadkulle",
+    "qid": "Q1834222"
+  },
+  {
+    "label": "Örtofta",
+    "qid": "Q1834690"
+  },
+  {
+    "label": "Solberga",
+    "qid": "Q10673096"
+  },
+  {
+    "label": "Hissjön",
+    "qid": "Q1837474"
+  },
+  {
+    "label": "Slottsbron",
+    "qid": "Q1837539"
+  },
+  {
+    "label": "Klässbol",
+    "qid": "Q1838827"
+  },
+  {
+    "label": "Ekenässjön",
+    "qid": "Q1839613"
+  },
+  {
+    "label": "Dals Långed",
+    "qid": "Q1839844"
+  },
+  {
+    "label": "Löddeköpinge",
+    "qid": "Q1840699"
+  },
+  {
+    "label": "Edsbruk",
+    "qid": "Q1848775"
+  },
+  {
+    "label": "Ransta",
+    "qid": "Q1849162"
+  },
+  {
+    "label": "Innertavle",
+    "qid": "Q1851431"
+  },
+  {
+    "label": "Stråssa",
+    "qid": "Q1851630"
+  },
+  {
+    "label": "Hakkas",
+    "qid": "Q1851843"
+  },
+  {
+    "label": "Kivinge",
+    "qid": "Q1852432"
+  },
+  {
+    "label": "Tvärskog",
+    "qid": "Q1852636"
+  },
+  {
+    "label": "Borggård",
+    "qid": "Q1854003"
+  },
+  {
+    "label": "Ingelstad",
+    "qid": "Q1857569"
+  },
+  {
+    "label": "Smedjebacken",
+    "qid": "Q1857610"
+  },
+  {
+    "label": "Bygdsiljum",
+    "qid": "Q1857949"
+  },
+  {
+    "label": "Djura",
+    "qid": "Q1859966"
+  },
+  {
+    "label": "Forssjö",
+    "qid": "Q1860089"
+  },
+  {
+    "label": "Bjursås",
+    "qid": "Q1861597"
+  },
+  {
+    "label": "Obbola",
+    "qid": "Q1861966"
+  },
+  {
+    "label": "Björketorp",
+    "qid": "Q1861969"
+  },
+  {
+    "label": "Emmaljunga",
+    "qid": "Q1862027"
+  },
+  {
+    "label": "Låssby",
+    "qid": "Q1863901"
+  },
+  {
+    "label": "Ornäs",
+    "qid": "Q1863989"
+  },
+  {
+    "label": "Tranemo",
+    "qid": "Q1864024"
+  },
+  {
+    "label": "Tureholm",
+    "qid": "Q1865068"
+  },
+  {
+    "label": "Rångedala",
+    "qid": "Q1867581"
+  },
+  {
+    "label": "Stöllet",
+    "qid": "Q1867744"
+  },
+  {
+    "label": "Stora Bugärde",
+    "qid": "Q1868276"
+  },
+  {
+    "label": "Eldsberga",
+    "qid": "Q1869005"
+  },
+  {
+    "label": "Rockneby",
+    "qid": "Q1869121"
+  },
+  {
+    "label": "Ullatti",
+    "qid": "Q1869970"
+  },
+  {
+    "label": "Los",
+    "qid": "Q1870454"
+  },
+  {
+    "label": "Magra",
+    "qid": "Q1872271"
+  },
+  {
+    "label": "Limedsforsen",
+    "qid": "Q1874373"
+  },
+  {
+    "label": "Brottby",
+    "qid": "Q1874690"
+  },
+  {
+    "label": "Bispberg",
+    "qid": "Q1874903"
+  },
+  {
+    "label": "Grycksbo",
+    "qid": "Q1876467"
+  },
+  {
+    "label": "Rödån",
+    "qid": "Q1876674"
+  },
+  {
+    "label": "Kvisljungeby",
+    "qid": "Q1877035"
+  },
+  {
+    "label": "Lundsbrunn",
+    "qid": "Q1877459"
+  },
+  {
+    "label": "Lärbro",
+    "qid": "Q1879295"
+  },
+  {
+    "label": "Långås",
+    "qid": "Q1879365"
+  },
+  {
+    "label": "Lönneberga",
+    "qid": "Q1879736"
+  },
+  {
+    "label": "Skagersvik",
+    "qid": "Q1881373"
+  },
+  {
+    "label": "Kungsgården",
+    "qid": "Q2264258"
+  },
+  {
+    "label": "Korsträsk",
+    "qid": "Q1883010"
+  },
+  {
+    "label": "Vassmolösa",
+    "qid": "Q1885035"
+  },
+  {
+    "label": "Vattnäs",
+    "qid": "Q1885150"
+  },
+  {
+    "label": "Boholmarna",
+    "qid": "Q1885651"
+  },
+  {
+    "label": "Vindeln",
+    "qid": "Q1886324"
+  },
+  {
+    "label": "Sunne",
+    "qid": "Q1886476"
+  },
+  {
+    "label": "Mölnbo",
+    "qid": "Q1886612"
+  },
+  {
+    "label": "Barnarp",
+    "qid": "Q1886667"
+  },
+  {
+    "label": "Stocka",
+    "qid": "Q1887491"
+  },
+  {
+    "label": "Skrea",
+    "qid": "Q1887946"
+  },
+  {
+    "label": "Malå",
+    "qid": "Q1888058"
+  },
+  {
+    "label": "Rydsnäs",
+    "qid": "Q1891437"
+  },
+  {
+    "label": "Skåpafors",
+    "qid": "Q1891564"
+  },
+  {
+    "label": "Svartå",
+    "qid": "Q1892387"
+  },
+  {
+    "label": "Löwenströmska lasarettet",
+    "qid": "Q1893244"
+  },
+  {
+    "label": "Västerljung",
+    "qid": "Q1894850"
+  },
+  {
+    "label": "Åsa",
+    "qid": "Q1895807"
+  },
+  {
+    "label": "Trönninge",
+    "qid": "Q2257920"
+  },
+  {
+    "label": "Harplinge",
+    "qid": "Q1896398"
+  },
+  {
+    "label": "Svarte",
+    "qid": "Q1896439"
+  },
+  {
+    "label": "Arrie",
+    "qid": "Q1898910"
+  },
+  {
+    "label": "Lottefors",
+    "qid": "Q1899695"
+  },
+  {
+    "label": "Torpsbruk",
+    "qid": "Q1899985"
+  },
+  {
+    "label": "Åbytorp",
+    "qid": "Q1900213"
+  },
+  {
+    "label": "Ekerö sommarstad",
+    "qid": "Q1900558"
+  },
+  {
+    "label": "Graversfors",
+    "qid": "Q1901052"
+  },
+  {
+    "label": "Östra Ljungby",
+    "qid": "Q1901778"
+  },
+  {
+    "label": "Edeby",
+    "qid": "Q1903675"
+  },
+  {
+    "label": "Backa, Kamperöd, Berg och Skogen",
+    "qid": "Q1903791"
+  },
+  {
+    "label": "Malmön",
+    "qid": "Q1904065"
+  },
+  {
+    "label": "Marieholm",
+    "qid": "Q2580603"
+  },
+  {
+    "label": "Merlänna",
+    "qid": "Q1905528"
+  },
+  {
+    "label": "Ödeborg",
+    "qid": "Q1907466"
+  },
+  {
+    "label": "Jörlanda",
+    "qid": "Q1909162"
+  },
+  {
+    "label": "Gladö kvarn",
+    "qid": "Q1909868"
+  },
+  {
+    "label": "Horda",
+    "qid": "Q1912043"
+  },
+  {
+    "label": "Norrö",
+    "qid": "Q1915001"
+  },
+  {
+    "label": "Lansjärv",
+    "qid": "Q1915241"
+  },
+  {
+    "label": "Lindholmen",
+    "qid": "Q1916777"
+  },
+  {
+    "label": "Flurkmark",
+    "qid": "Q1916789"
+  },
+  {
+    "label": "Boda",
+    "qid": "Q1917452"
+  },
+  {
+    "label": "Kangos",
+    "qid": "Q1917588"
+  },
+  {
+    "label": "Hanaskog",
+    "qid": "Q1919351"
+  },
+  {
+    "label": "Mellansel",
+    "qid": "Q1919508"
+  },
+  {
+    "label": "Mellbystrand",
+    "qid": "Q1919515"
+  },
+  {
+    "label": "Väskinde",
+    "qid": "Q1920028"
+  },
+  {
+    "label": "Bergvik",
+    "qid": "Q1920643"
+  },
+  {
+    "label": "Alster",
+    "qid": "Q1923270"
+  },
+  {
+    "label": "Väröbacka",
+    "qid": "Q1924379"
+  },
+  {
+    "label": "Eket",
+    "qid": "Q1924445"
+  },
+  {
+    "label": "Linderöd",
+    "qid": "Q1927269"
+  },
+  {
+    "label": "Linsell",
+    "qid": "Q1927754"
+  },
+  {
+    "label": "Nymölla",
+    "qid": "Q1928697"
+  },
+  {
+    "label": "Stenungsön",
+    "qid": "Q1928843"
+  },
+  {
+    "label": "Högfors",
+    "qid": "Q1933748"
+  },
+  {
+    "label": "Flädie",
+    "qid": "Q1934597"
+  },
+  {
+    "label": "Kumla kyrkby",
+    "qid": "Q1935073"
+  },
+  {
+    "label": "Stensele",
+    "qid": "Q1935387"
+  },
+  {
+    "label": "Vrena",
+    "qid": "Q1936607"
+  },
+  {
+    "label": "Alnarp",
+    "qid": "Q1937603"
+  },
+  {
+    "label": "Skogstorp",
+    "qid": "Q1971189"
+  },
+  {
+    "label": "Ljunga",
+    "qid": "Q1938833"
+  },
+  {
+    "label": "Aneby",
+    "qid": "Q1940596"
+  },
+  {
+    "label": "Hjärnarp",
+    "qid": "Q1943169"
+  },
+  {
+    "label": "Balsby",
+    "qid": "Q1944871"
+  },
+  {
+    "label": "Axvall",
+    "qid": "Q1947977"
+  },
+  {
+    "label": "Blackstalund",
+    "qid": "Q1948147"
+  },
+  {
+    "label": "Nordanö",
+    "qid": "Q1948457"
+  },
+  {
+    "label": "Billeberga",
+    "qid": "Q1950376"
+  },
+  {
+    "label": "Axmar by",
+    "qid": "Q1950491"
+  },
+  {
+    "label": "Stavreviken",
+    "qid": "Q1950831"
+  },
+  {
+    "label": "Ysby",
+    "qid": "Q1950872"
+  },
+  {
+    "label": "Nyborg",
+    "qid": "Q1951096"
+  },
+  {
+    "label": "Finkarby",
+    "qid": "Q1951912"
+  },
+  {
+    "label": "Hargshamn",
+    "qid": "Q1952590"
+  },
+  {
+    "label": "Norråker",
+    "qid": "Q1953874"
+  },
+  {
+    "label": "Skumparp",
+    "qid": "Q1954601"
+  },
+  {
+    "label": "Rörtången och Ödsmåls mosse",
+    "qid": "Q1954969"
+  },
+  {
+    "label": "Ensjön",
+    "qid": "Q1955363"
+  },
+  {
+    "label": "Fjällastorp",
+    "qid": "Q1956941"
+  },
+  {
+    "label": "Kåhög",
+    "qid": "Q1957260"
+  },
+  {
+    "label": "Målilla",
+    "qid": "Q1957597"
+  },
+  {
+    "label": "Fröseke",
+    "qid": "Q1958551"
+  },
+  {
+    "label": "Hasslö",
+    "qid": "Q1958953"
+  },
+  {
+    "label": "Sennan",
+    "qid": "Q1959063"
+  },
+  {
+    "label": "Stjärnsund",
+    "qid": "Q1961537"
+  },
+  {
+    "label": "Fredriksfors",
+    "qid": "Q1962758"
+  },
+  {
+    "label": "Pålsboda",
+    "qid": "Q1963133"
+  },
+  {
+    "label": "Blixbo",
+    "qid": "Q1966145"
+  },
+  {
+    "label": "Gunsta",
+    "qid": "Q1966215"
+  },
+  {
+    "label": "Gubbo",
+    "qid": "Q1966452"
+  },
+  {
+    "label": "Kyrktåsjö",
+    "qid": "Q1966593"
+  },
+  {
+    "label": "Broddbo",
+    "qid": "Q1966797"
+  },
+  {
+    "label": "Medåker",
+    "qid": "Q1966943"
+  },
+  {
+    "label": "Totebo",
+    "qid": "Q1967192"
+  },
+  {
+    "label": "Muodoslompolo",
+    "qid": "Q1967657"
+  },
+  {
+    "label": "Yngsjö",
+    "qid": "Q1968061"
+  },
+  {
+    "label": "Vittskövle",
+    "qid": "Q1968940"
+  },
+  {
+    "label": "Stoby",
+    "qid": "Q1969122"
+  },
+  {
+    "label": "Strömsholm",
+    "qid": "Q1969315"
+  },
+  {
+    "label": "Örsjö",
+    "qid": "Q1969336"
+  },
+  {
+    "label": "Arbrå",
+    "qid": "Q1970727"
+  },
+  {
+    "label": "Åstol",
+    "qid": "Q1970850"
+  },
+  {
+    "label": "Korsberga",
+    "qid": "Q2563676"
+  },
+  {
+    "label": "Rättvik",
+    "qid": "Q1975525"
+  },
+  {
+    "label": "Godegård",
+    "qid": "Q1975596"
+  },
+  {
+    "label": "Stehag",
+    "qid": "Q1977096"
+  },
+  {
+    "label": "Västra Älvsala",
+    "qid": "Q1978968"
+  },
+  {
+    "label": "Bjärtrå",
+    "qid": "Q1979696"
+  },
+  {
+    "label": "Borrby",
+    "qid": "Q1979924"
+  },
+  {
+    "label": "Munktorp",
+    "qid": "Q1981372"
+  },
+  {
+    "label": "Hogstorp",
+    "qid": "Q1981834"
+  },
+  {
+    "label": "Frinnaryd",
+    "qid": "Q1983704"
+  },
+  {
+    "label": "Söderåkra",
+    "qid": "Q1985678"
+  },
+  {
+    "label": "Bergsbyn",
+    "qid": "Q1986575"
+  },
+  {
+    "label": "Vargön",
+    "qid": "Q1986670"
+  },
+  {
+    "label": "Ursviken",
+    "qid": "Q1986998"
+  },
+  {
+    "label": "Brunna",
+    "qid": "Q1987306"
+  },
+  {
+    "label": "Bergshammar",
+    "qid": "Q1989289"
+  },
+  {
+    "label": "Barkarö",
+    "qid": "Q1989647"
+  },
+  {
+    "label": "Storuman",
+    "qid": "Q1991272"
+  },
+  {
+    "label": "Gunnarstorp",
+    "qid": "Q1991524"
+  },
+  {
+    "label": "Snöveltorp",
+    "qid": "Q1992163"
+  },
+  {
+    "label": "Tumbo",
+    "qid": "Q1992686"
+  },
+  {
+    "label": "Särna",
+    "qid": "Q1993188"
+  },
+  {
+    "label": "Pello",
+    "qid": "Q1993599"
+  },
+  {
+    "label": "Vidöåsen",
+    "qid": "Q1994003"
+  },
+  {
+    "label": "Bammarboda",
+    "qid": "Q1994606"
+  },
+  {
+    "label": "Oxie",
+    "qid": "Q1995123"
+  },
+  {
+    "label": "Nordingrå",
+    "qid": "Q1998180"
+  },
+  {
+    "label": "Östervåla",
+    "qid": "Q2001699"
+  },
+  {
+    "label": "Kyrkheddinge",
+    "qid": "Q2002781"
+  },
+  {
+    "label": "Sjötorp",
+    "qid": "Q2003551"
+  },
+  {
+    "label": "Spillersboda",
+    "qid": "Q2006732"
+  },
+  {
+    "label": "Veberöd",
+    "qid": "Q2007115"
+  },
+  {
+    "label": "Berghem",
+    "qid": "Q2007133"
+  },
+  {
+    "label": "Rönnäng",
+    "qid": "Q2007157"
+  },
+  {
+    "label": "Ängsholmen",
+    "qid": "Q2008534"
+  },
+  {
+    "label": "Arkelstorp",
+    "qid": "Q2008784"
+  },
+  {
+    "label": "Almunge",
+    "qid": "Q2010218"
+  },
+  {
+    "label": "Heberg",
+    "qid": "Q2010843"
+  },
+  {
+    "label": "Svenshögen",
+    "qid": "Q2011471"
+  },
+  {
+    "label": "Bona",
+    "qid": "Q2012085"
+  },
+  {
+    "label": "Fyllinge",
+    "qid": "Q2012671"
+  },
+  {
+    "label": "Mjällby",
+    "qid": "Q2012747"
+  },
+  {
+    "label": "Finsta",
+    "qid": "Q2012977"
+  },
+  {
+    "label": "Drag",
+    "qid": "Q2015364"
+  },
+  {
+    "label": "Vilshult",
+    "qid": "Q2016797"
+  },
+  {
+    "label": "Fotskäl",
+    "qid": "Q2016916"
+  },
+  {
+    "label": "Svanberga",
+    "qid": "Q2016991"
+  },
+  {
+    "label": "Oknö",
+    "qid": "Q2017367"
+  },
+  {
+    "label": "Fagerhult",
+    "qid": "Q3290907"
+  },
+  {
+    "label": "Herrestad",
+    "qid": "Q2018868"
+  },
+  {
+    "label": "Laisvall",
+    "qid": "Q2019132"
+  },
+  {
+    "label": "Kummelnäs",
+    "qid": "Q2020762"
+  },
+  {
+    "label": "Gistad",
+    "qid": "Q2021488"
+  },
+  {
+    "label": "Svinninge",
+    "qid": "Q2022099"
+  },
+  {
+    "label": "Tylösand",
+    "qid": "Q2024098"
+  },
+  {
+    "label": "Repbäcken",
+    "qid": "Q2024877"
+  },
+  {
+    "label": "Asperö",
+    "qid": "Q2025741"
+  },
+  {
+    "label": "Österstad",
+    "qid": "Q2026341"
+  },
+  {
+    "label": "Brömsebro",
+    "qid": "Q2027018"
+  },
+  {
+    "label": "Hedenäset",
+    "qid": "Q2027495"
+  },
+  {
+    "label": "Klågerup",
+    "qid": "Q2028407"
+  },
+  {
+    "label": "Strömsbruk",
+    "qid": "Q2028816"
+  },
+  {
+    "label": "Hasslerör",
+    "qid": "Q2028955"
+  },
+  {
+    "label": "Svärtinge",
+    "qid": "Q2031546"
+  },
+  {
+    "label": "Arnäsvall",
+    "qid": "Q2033534"
+  },
+  {
+    "label": "Revinge",
+    "qid": "Q2033591"
+  },
+  {
+    "label": "Ambjörnarp",
+    "qid": "Q2033596"
+  },
+  {
+    "label": "Koskullskulle",
+    "qid": "Q2033736"
+  },
+  {
+    "label": "Vibble",
+    "qid": "Q2034167"
+  },
+  {
+    "label": "Hovmantorp",
+    "qid": "Q2034409"
+  },
+  {
+    "label": "Hällbo",
+    "qid": "Q2034709"
+  },
+  {
+    "label": "Runhällen",
+    "qid": "Q2036132"
+  },
+  {
+    "label": "Sifferbo",
+    "qid": "Q2036844"
+  },
+  {
+    "label": "Hassela",
+    "qid": "Q2038169"
+  },
+  {
+    "label": "Hököpinge",
+    "qid": "Q2043041"
+  },
+  {
+    "label": "Indal",
+    "qid": "Q2044199"
+  },
+  {
+    "label": "Käringön",
+    "qid": "Q2045558"
+  },
+  {
+    "label": "Västra Ingelstad",
+    "qid": "Q2046666"
+  },
+  {
+    "label": "Bodås",
+    "qid": "Q2050299"
+  },
+  {
+    "label": "Kilsmo",
+    "qid": "Q2050405"
+  },
+  {
+    "label": "Kjulaås",
+    "qid": "Q2050814"
+  },
+  {
+    "label": "Hishult",
+    "qid": "Q2051243"
+  },
+  {
+    "label": "Ställdalen",
+    "qid": "Q2051464"
+  },
+  {
+    "label": "Götlunda",
+    "qid": "Q2051864"
+  },
+  {
+    "label": "Segersäng",
+    "qid": "Q2051972"
+  },
+  {
+    "label": "Bettna",
+    "qid": "Q2052614"
+  },
+  {
+    "label": "Sandhem",
+    "qid": "Q2054865"
+  },
+  {
+    "label": "Idkerberget",
+    "qid": "Q2055531"
+  },
+  {
+    "label": "Kåtilla",
+    "qid": "Q2055764"
+  },
+  {
+    "label": "Östra Karup",
+    "qid": "Q2056831"
+  },
+  {
+    "label": "Dångebo",
+    "qid": "Q2057526"
+  },
+  {
+    "label": "Farhult",
+    "qid": "Q2059650"
+  },
+  {
+    "label": "Svappavaara",
+    "qid": "Q2060689"
+  },
+  {
+    "label": "Skinnskatteberg",
+    "qid": "Q2060790"
+  },
+  {
+    "label": "Risliden",
+    "qid": "Q2061787"
+  },
+  {
+    "label": "Bengtsheden",
+    "qid": "Q2061922"
+  },
+  {
+    "label": "Norra Visby",
+    "qid": "Q2061978"
+  },
+  {
+    "label": "Runtuna",
+    "qid": "Q2062217"
+  },
+  {
+    "label": "Algutsrum",
+    "qid": "Q2062405"
+  },
+  {
+    "label": "Storfors",
+    "qid": "Q2062839"
+  },
+  {
+    "label": "Svaneholm",
+    "qid": "Q10684338"
+  },
+  {
+    "label": "Ramsele",
+    "qid": "Q2065347"
+  },
+  {
+    "label": "Sunnemo",
+    "qid": "Q2065495"
+  },
+  {
+    "label": "Burseryd",
+    "qid": "Q2066903"
+  },
+  {
+    "label": "Grimsås",
+    "qid": "Q2067120"
+  },
+  {
+    "label": "Björboholm",
+    "qid": "Q2067385"
+  },
+  {
+    "label": "Skogsby",
+    "qid": "Q2069832"
+  },
+  {
+    "label": "Kullersta",
+    "qid": "Q2070959"
+  },
+  {
+    "label": "Djurö",
+    "qid": "Q2071947"
+  },
+  {
+    "label": "Krokek",
+    "qid": "Q2072404"
+  },
+  {
+    "label": "Hagby",
+    "qid": "Q2074278"
+  },
+  {
+    "label": "Västra Hanhals",
+    "qid": "Q2075548"
+  },
+  {
+    "label": "Kärda",
+    "qid": "Q2075959"
+  },
+  {
+    "label": "Mogata",
+    "qid": "Q2076189"
+  },
+  {
+    "label": "Koppom",
+    "qid": "Q2076762"
+  },
+  {
+    "label": "Frostkåge",
+    "qid": "Q2077055"
+  },
+  {
+    "label": "Överhörnäs",
+    "qid": "Q2077385"
+  },
+  {
+    "label": "Stockamöllan",
+    "qid": "Q2082035"
+  },
+  {
+    "label": "Pershagen",
+    "qid": "Q2082788"
+  },
+  {
+    "label": "Håksberg",
+    "qid": "Q2084893"
+  },
+  {
+    "label": "Hörken",
+    "qid": "Q2085281"
+  },
+  {
+    "label": "Backa",
+    "qid": "Q3006803"
+  },
+  {
+    "label": "Tånnö",
+    "qid": "Q2086992"
+  },
+  {
+    "label": "Härad",
+    "qid": "Q2088190"
+  },
+  {
+    "label": "Tandsbyn",
+    "qid": "Q2088202"
+  },
+  {
+    "label": "Glava",
+    "qid": "Q2089495"
+  },
+  {
+    "label": "Årsunda",
+    "qid": "Q2089974"
+  },
+  {
+    "label": "Nyhem",
+    "qid": "Q2090839"
+  },
+  {
+    "label": "Långviksmon",
+    "qid": "Q2091729"
+  },
+  {
+    "label": "Gimåt",
+    "qid": "Q2092238"
+  },
+  {
+    "label": "Skolsta",
+    "qid": "Q2093774"
+  },
+  {
+    "label": "Skedet",
+    "qid": "Q2094050"
+  },
+  {
+    "label": "Tormestorp",
+    "qid": "Q2095032"
+  },
+  {
+    "label": "Norsholm",
+    "qid": "Q2095935"
+  },
+  {
+    "label": "Sävast",
+    "qid": "Q2096344"
+  },
+  {
+    "label": "Undersåker",
+    "qid": "Q2096354"
+  },
+  {
+    "label": "Slöinge",
+    "qid": "Q2096361"
+  },
+  {
+    "label": "Risudden",
+    "qid": "Q2097740"
+  },
+  {
+    "label": "Enviken",
+    "qid": "Q2098596"
+  },
+  {
+    "label": "Långshyttan",
+    "qid": "Q2100144"
+  },
+  {
+    "label": "Häggeby och Vreta",
+    "qid": "Q2101530"
+  },
+  {
+    "label": "Fors",
+    "qid": "Q2101993"
+  },
+  {
+    "label": "Sjuhalla",
+    "qid": "Q2102266"
+  },
+  {
+    "label": "Hjärup",
+    "qid": "Q2102400"
+  },
+  {
+    "label": "Lunne",
+    "qid": "Q2103450"
+  },
+  {
+    "label": "Stigtomta",
+    "qid": "Q2103821"
+  },
+  {
+    "label": "Södra Vi",
+    "qid": "Q2104311"
+  },
+  {
+    "label": "Pukavik",
+    "qid": "Q2106089"
+  },
+  {
+    "label": "Nilivaara",
+    "qid": "Q2107486"
+  },
+  {
+    "label": "Ludvigsborg",
+    "qid": "Q2109387"
+  },
+  {
+    "label": "Benareby",
+    "qid": "Q2112085"
+  },
+  {
+    "label": "Hummelsta",
+    "qid": "Q2112372"
+  },
+  {
+    "label": "Dalstorp",
+    "qid": "Q2113998"
+  },
+  {
+    "label": "Holsbybrunn",
+    "qid": "Q2114001"
+  },
+  {
+    "label": "Sjulsmark",
+    "qid": "Q2114259"
+  },
+  {
+    "label": "Tallåsen",
+    "qid": "Q2114400"
+  },
+  {
+    "label": "Stora Mellösa",
+    "qid": "Q2114782"
+  },
+  {
+    "label": "Gullringen",
+    "qid": "Q2114880"
+  },
+  {
+    "label": "Fäggeby",
+    "qid": "Q2116227"
+  },
+  {
+    "label": "Sävja",
+    "qid": "Q2117403"
+  },
+  {
+    "label": "Vårsta",
+    "qid": "Q2117458"
+  },
+  {
+    "label": "Finja",
+    "qid": "Q2117583"
+  },
+  {
+    "label": "Hälledal",
+    "qid": "Q2118164"
+  },
+  {
+    "label": "Selånger",
+    "qid": "Q2118695"
+  },
+  {
+    "label": "Stöde",
+    "qid": "Q2119399"
+  },
+  {
+    "label": "Torshälla huvud",
+    "qid": "Q2120039"
+  },
+  {
+    "label": "Karby",
+    "qid": "Q2194838"
+  },
+  {
+    "label": "Råda",
+    "qid": "Q15813795"
+  },
+  {
+    "label": "Morjärv",
+    "qid": "Q2195209"
+  },
+  {
+    "label": "Eksund",
+    "qid": "Q2195632"
+  },
+  {
+    "label": "Tösse",
+    "qid": "Q2196309"
+  },
+  {
+    "label": "Runemo",
+    "qid": "Q2196365"
+  },
+  {
+    "label": "Grönskåra",
+    "qid": "Q2196377"
+  },
+  {
+    "label": "Önneköp",
+    "qid": "Q2196433"
+  },
+  {
+    "label": "Gryt",
+    "qid": "Q2197387"
+  },
+  {
+    "label": "Sörmjöle",
+    "qid": "Q2197530"
+  },
+  {
+    "label": "Dannemora",
+    "qid": "Q2197561"
+  },
+  {
+    "label": "Ankarsvik",
+    "qid": "Q2197637"
+  },
+  {
+    "label": "Olofsbo",
+    "qid": "Q2197671"
+  },
+  {
+    "label": "Ljungaverk",
+    "qid": "Q2197852"
+  },
+  {
+    "label": "Håga",
+    "qid": "Q2198729"
+  },
+  {
+    "label": "Ekskogen",
+    "qid": "Q2199006"
+  },
+  {
+    "label": "Hökerum",
+    "qid": "Q2199221"
+  },
+  {
+    "label": "Abbekås",
+    "qid": "Q2199524"
+  },
+  {
+    "label": "Önnestad",
+    "qid": "Q2199635"
+  },
+  {
+    "label": "Forsheda",
+    "qid": "Q2199905"
+  },
+  {
+    "label": "Ölmstad",
+    "qid": "Q2204214"
+  },
+  {
+    "label": "Rud",
+    "qid": "Q2204317"
+  },
+  {
+    "label": "Fengersfors",
+    "qid": "Q2204858"
+  },
+  {
+    "label": "Oppboga",
+    "qid": "Q2205539"
+  },
+  {
+    "label": "Vikarbodarna och Skatan",
+    "qid": "Q2206729"
+  },
+  {
+    "label": "Örtagården",
+    "qid": "Q2208763"
+  },
+  {
+    "label": "Ödsmål",
+    "qid": "Q2209102"
+  },
+  {
+    "label": "Ingelsträde",
+    "qid": "Q2209448"
+  },
+  {
+    "label": "Hattudden, Björnösund och Björknäs",
+    "qid": "Q2210113"
+  },
+  {
+    "label": "Kvärlöv",
+    "qid": "Q2210515"
+  },
+  {
+    "label": "Hovenäset",
+    "qid": "Q2211499"
+  },
+  {
+    "label": "Muskö",
+    "qid": "Q2212132"
+  },
+  {
+    "label": "Hasslarp",
+    "qid": "Q2212986"
+  },
+  {
+    "label": "Törestorp",
+    "qid": "Q2213117"
+  },
+  {
+    "label": "Pershyttan",
+    "qid": "Q2213552"
+  },
+  {
+    "label": "Skedvi kyrkby",
+    "qid": "Q2214523"
+  },
+  {
+    "label": "Västanvik",
+    "qid": "Q18334897"
+  },
+  {
+    "label": "Rödbo",
+    "qid": "Q2215986"
+  },
+  {
+    "label": "Nye",
+    "qid": "Q2218485"
+  },
+  {
+    "label": "Hyssna",
+    "qid": "Q2218627"
+  },
+  {
+    "label": "Barkarby",
+    "qid": "Q2218918"
+  },
+  {
+    "label": "Harmånger",
+    "qid": "Q2219647"
+  },
+  {
+    "label": "Löberöd",
+    "qid": "Q2222483"
+  },
+  {
+    "label": "Frödinge",
+    "qid": "Q2223133"
+  },
+  {
+    "label": "Sikfors",
+    "qid": "Q2349186"
+  },
+  {
+    "label": "Tosseryd",
+    "qid": "Q2223554"
+  },
+  {
+    "label": "Njurundabommen",
+    "qid": "Q2223613"
+  },
+  {
+    "label": "Åled",
+    "qid": "Q2223918"
+  },
+  {
+    "label": "Häradsbygden",
+    "qid": "Q2224348"
+  },
+  {
+    "label": "Älvnäs",
+    "qid": "Q2224680"
+  },
+  {
+    "label": "Tomtebo",
+    "qid": "Q2224856"
+  },
+  {
+    "label": "Rängs sand",
+    "qid": "Q2227832"
+  },
+  {
+    "label": "Bodträskfors",
+    "qid": "Q2228884"
+  },
+  {
+    "label": "Sticklinge udde",
+    "qid": "Q2229140"
+  },
+  {
+    "label": "Nävekvarn",
+    "qid": "Q2230681"
+  },
+  {
+    "label": "Äng",
+    "qid": "Q2232307"
+  },
+  {
+    "label": "Saittarova",
+    "qid": "Q2232457"
+  },
+  {
+    "label": "Orrviken",
+    "qid": "Q2232816"
+  },
+  {
+    "label": "Viksjöfors",
+    "qid": "Q2233356"
+  },
+  {
+    "label": "Flyinge",
+    "qid": "Q2234445"
+  },
+  {
+    "label": "Njutånger",
+    "qid": "Q2234884"
+  },
+  {
+    "label": "Ramsjö",
+    "qid": "Q2235242"
+  },
+  {
+    "label": "Hyllinge",
+    "qid": "Q2235944"
+  },
+  {
+    "label": "Stidsvig",
+    "qid": "Q2236429"
+  },
+  {
+    "label": "Ringsegård",
+    "qid": "Q2236565"
+  },
+  {
+    "label": "Ytterstad",
+    "qid": "Q2238233"
+  },
+  {
+    "label": "Långasjö",
+    "qid": "Q2238302"
+  },
+  {
+    "label": "Emtunga",
+    "qid": "Q2238765"
+  },
+  {
+    "label": "Gunnebo",
+    "qid": "Q2239257"
+  },
+  {
+    "label": "Sävar",
+    "qid": "Q2239419"
+  },
+  {
+    "label": "Nybble",
+    "qid": "Q2239511"
+  },
+  {
+    "label": "Ingatorp",
+    "qid": "Q2240257"
+  },
+  {
+    "label": "Möklinta",
+    "qid": "Q2240906"
+  },
+  {
+    "label": "Kälarne",
+    "qid": "Q2240928"
+  },
+  {
+    "label": "Virsbo",
+    "qid": "Q2242516"
+  },
+  {
+    "label": "Fagersanna",
+    "qid": "Q2243828"
+  },
+  {
+    "label": "Byn",
+    "qid": "Q2244159"
+  },
+  {
+    "label": "Klingsta och Allsta",
+    "qid": "Q2244542"
+  },
+  {
+    "label": "Lindfors",
+    "qid": "Q2244933"
+  },
+  {
+    "label": "Gantofta",
+    "qid": "Q2245383"
+  },
+  {
+    "label": "Råby",
+    "qid": "Q2245740"
+  },
+  {
+    "label": "Bovallstrand",
+    "qid": "Q2246450"
+  },
+  {
+    "label": "Margretetorp",
+    "qid": "Q2246575"
+  },
+  {
+    "label": "Gössäter",
+    "qid": "Q2246788"
+  },
+  {
+    "label": "Vintrie",
+    "qid": "Q2249049"
+  },
+  {
+    "label": "Hällbybrunn",
+    "qid": "Q2249424"
+  },
+  {
+    "label": "Fisksätra",
+    "qid": "Q2250574"
+  },
+  {
+    "label": "Hedlunda",
+    "qid": "Q2251168"
+  },
+  {
+    "label": "Tuna-Hästberg",
+    "qid": "Q2251430"
+  },
+  {
+    "label": "Odensberg",
+    "qid": "Q2253339"
+  },
+  {
+    "label": "Hedesunda",
+    "qid": "Q2253373"
+  },
+  {
+    "label": "Björköby",
+    "qid": "Q2254139"
+  },
+  {
+    "label": "Marieberg",
+    "qid": "Q10577285"
+  },
+  {
+    "label": "Ström",
+    "qid": "Q2254896"
+  },
+  {
+    "label": "Olshammar",
+    "qid": "Q2257230"
+  },
+  {
+    "label": "Hultafors",
+    "qid": "Q2258739"
+  },
+  {
+    "label": "Rolfs",
+    "qid": "Q2259583"
+  },
+  {
+    "label": "Sjösa",
+    "qid": "Q2260986"
+  },
+  {
+    "label": "Gullaskruv",
+    "qid": "Q2261400"
+  },
+  {
+    "label": "Pauliström",
+    "qid": "Q2262389"
+  },
+  {
+    "label": "Örviken",
+    "qid": "Q2262794"
+  },
+  {
+    "label": "Stugun",
+    "qid": "Q2263677"
+  },
+  {
+    "label": "Tenhult",
+    "qid": "Q2264128"
+  },
+  {
+    "label": "Bredsel",
+    "qid": "Q2264200"
+  },
+  {
+    "label": "Tahult",
+    "qid": "Q2264331"
+  },
+  {
+    "label": "Stava",
+    "qid": "Q2264729"
+  },
+  {
+    "label": "Tuna",
+    "qid": "Q10706251"
+  },
+  {
+    "label": "Skillinge",
+    "qid": "Q2265371"
+  },
+  {
+    "label": "Billesholm",
+    "qid": "Q2266991"
+  },
+  {
+    "label": "Aspeboda",
+    "qid": "Q2267958"
+  },
+  {
+    "label": "Stora Vika",
+    "qid": "Q2268783"
+  },
+  {
+    "label": "Nordmark",
+    "qid": "Q2268799"
+  },
+  {
+    "label": "Löftaskog",
+    "qid": "Q2268993"
+  },
+  {
+    "label": "Q2269886",
+    "qid": "Q2269886"
+  },
+  {
+    "label": "Nordkroken",
+    "qid": "Q2270716"
+  },
+  {
+    "label": "Stora Mellby",
+    "qid": "Q2270962"
+  },
+  {
+    "label": "Tavelsjö",
+    "qid": "Q2271685"
+  },
+  {
+    "label": "Hemmesta",
+    "qid": "Q2273941"
+  },
+  {
+    "label": "Unnaryd",
+    "qid": "Q2274581"
+  },
+  {
+    "label": "Varekil",
+    "qid": "Q2274817"
+  },
+  {
+    "label": "Strömfors",
+    "qid": "Q2275230"
+  },
+  {
+    "label": "Täfteå",
+    "qid": "Q2277223"
+  },
+  {
+    "label": "Lanna",
+    "qid": "Q3352876"
+  },
+  {
+    "label": "Södra Vrams fälad",
+    "qid": "Q2277922"
+  },
+  {
+    "label": "Skoby",
+    "qid": "Q2279749"
+  },
+  {
+    "label": "Norrsundet",
+    "qid": "Q2280716"
+  },
+  {
+    "label": "Slandrom",
+    "qid": "Q2280797"
+  },
+  {
+    "label": "Edsbro",
+    "qid": "Q2280889"
+  },
+  {
+    "label": "Bjärsjölagård",
+    "qid": "Q2281613"
+  },
+  {
+    "label": "Sunnanå",
+    "qid": "Q2282117"
+  },
+  {
+    "label": "Igelstorp",
+    "qid": "Q2283600"
+  },
+  {
+    "label": "Brålanda",
+    "qid": "Q2283709"
+  },
+  {
+    "label": "Landfjärden",
+    "qid": "Q2283742"
+  },
+  {
+    "label": "Jättendal",
+    "qid": "Q2284009"
+  },
+  {
+    "label": "Björlanda",
+    "qid": "Q2285935"
+  },
+  {
+    "label": "Roknäs",
+    "qid": "Q2286593"
+  },
+  {
+    "label": "Grangärde",
+    "qid": "Q2286907"
+  },
+  {
+    "label": "Tjällmo",
+    "qid": "Q2287103"
+  },
+  {
+    "label": "Havstenssund",
+    "qid": "Q2287195"
+  },
+  {
+    "label": "Hävla",
+    "qid": "Q2287893"
+  },
+  {
+    "label": "Ope",
+    "qid": "Q2288034"
+  },
+  {
+    "label": "Väckelsång",
+    "qid": "Q2288329"
+  },
+  {
+    "label": "Stöcke",
+    "qid": "Q2288817"
+  },
+  {
+    "label": "Öje",
+    "qid": "Q2289309"
+  },
+  {
+    "label": "Teurajärvi",
+    "qid": "Q2289456"
+  },
+  {
+    "label": "Överboda",
+    "qid": "Q2290315"
+  },
+  {
+    "label": "Själevad",
+    "qid": "Q2291118"
+  },
+  {
+    "label": "Bremnäs",
+    "qid": "Q2291219"
+  },
+  {
+    "label": "Rottne",
+    "qid": "Q2291661"
+  },
+  {
+    "label": "Skåre",
+    "qid": "Q2292395"
+  },
+  {
+    "label": "Malmbäck",
+    "qid": "Q2292693"
+  },
+  {
+    "label": "Askeby",
+    "qid": "Q2293128"
+  },
+  {
+    "label": "Viskafors",
+    "qid": "Q2293295"
+  },
+  {
+    "label": "Tunnerstad",
+    "qid": "Q2295239"
+  },
+  {
+    "label": "Borsökna",
+    "qid": "Q2295654"
+  },
+  {
+    "label": "Smygehamn",
+    "qid": "Q2295657"
+  },
+  {
+    "label": "Smögen",
+    "qid": "Q2295696"
+  },
+  {
+    "label": "Sörstafors",
+    "qid": "Q2295993"
+  },
+  {
+    "label": "Vittsjö",
+    "qid": "Q2296795"
+  },
+  {
+    "label": "Olstorp",
+    "qid": "Q15149429"
+  },
+  {
+    "label": "Sjövik",
+    "qid": "Q2298881"
+  },
+  {
+    "label": "Näsviken",
+    "qid": "Q3352711"
+  },
+  {
+    "label": "Lövstalöt",
+    "qid": "Q2299647"
+  },
+  {
+    "label": "Storlien",
+    "qid": "Q2299668"
+  },
+  {
+    "label": "Äsperöd",
+    "qid": "Q2300410"
+  },
+  {
+    "label": "Västerhejde",
+    "qid": "Q2301300"
+  },
+  {
+    "label": "Tyringe",
+    "qid": "Q2301322"
+  },
+  {
+    "label": "Gårdby",
+    "qid": "Q2303101"
+  },
+  {
+    "label": "Likenäs",
+    "qid": "Q2303652"
+  },
+  {
+    "label": "Helås",
+    "qid": "Q2305809"
+  },
+  {
+    "label": "Östra Sönnarslöv",
+    "qid": "Q2306567"
+  },
+  {
+    "label": "Bredared",
+    "qid": "Q2306663"
+  },
+  {
+    "label": "Sandskogen",
+    "qid": "Q2306946"
+  },
+  {
+    "label": "Kyrkeby och Nereby",
+    "qid": "Q2307323"
+  },
+  {
+    "label": "Mörarp",
+    "qid": "Q2309144"
+  },
+  {
+    "label": "Västerhus",
+    "qid": "Q2310207"
+  },
+  {
+    "label": "Skottsund",
+    "qid": "Q2310851"
+  },
+  {
+    "label": "Hållsta",
+    "qid": "Q2503877"
+  },
+  {
+    "label": "Norsbron",
+    "qid": "Q2312819"
+  },
+  {
+    "label": "Nattavaara by",
+    "qid": "Q2312949"
+  },
+  {
+    "label": "Backberg",
+    "qid": "Q2314346"
+  },
+  {
+    "label": "Kovikshamn",
+    "qid": "Q2315140"
+  },
+  {
+    "label": "Södra Hertsölandet",
+    "qid": "Q2317632"
+  },
+  {
+    "label": "Lunnarp",
+    "qid": "Q2318359"
+  },
+  {
+    "label": "Näs bruk",
+    "qid": "Q2319697"
+  },
+  {
+    "label": "Haverdal",
+    "qid": "Q2322515"
+  },
+  {
+    "label": "Ramsberg",
+    "qid": "Q2323465"
+  },
+  {
+    "label": "Rindö",
+    "qid": "Q2323871"
+  },
+  {
+    "label": "Klitten",
+    "qid": "Q2324256"
+  },
+  {
+    "label": "Killhult och Älmhult",
+    "qid": "Q2324478"
+  },
+  {
+    "label": "Ardala",
+    "qid": "Q2324498"
+  },
+  {
+    "label": "Väjern",
+    "qid": "Q2325460"
+  },
+  {
+    "label": "Sjöberg",
+    "qid": "Q2325498"
+  },
+  {
+    "label": "Stensund",
+    "qid": "Q2325658"
+  },
+  {
+    "label": "Årstad",
+    "qid": "Q2325668"
+  },
+  {
+    "label": "Läckeby",
+    "qid": "Q2325686"
+  },
+  {
+    "label": "Sparreholm",
+    "qid": "Q2325731"
+  },
+  {
+    "label": "Vattholma",
+    "qid": "Q2326872"
+  },
+  {
+    "label": "Djurön",
+    "qid": "Q2327121"
+  },
+  {
+    "label": "Lenhovda",
+    "qid": "Q2327523"
+  },
+  {
+    "label": "Blentarp",
+    "qid": "Q2328025"
+  },
+  {
+    "label": "Tallvik",
+    "qid": "Q2328133"
+  },
+  {
+    "label": "Rävemåla",
+    "qid": "Q2328724"
+  },
+  {
+    "label": "Blombacka",
+    "qid": "Q2329513"
+  },
+  {
+    "label": "Jämjö",
+    "qid": "Q2330047"
+  },
+  {
+    "label": "Aröd och Timmervik",
+    "qid": "Q2330322"
+  },
+  {
+    "label": "Brastad",
+    "qid": "Q2335136"
+  },
+  {
+    "label": "Dannike",
+    "qid": "Q2336555"
+  },
+  {
+    "label": "Velanda",
+    "qid": "Q2337787"
+  },
+  {
+    "label": "Vallberga",
+    "qid": "Q2337966"
+  },
+  {
+    "label": "Smålandsstenar",
+    "qid": "Q2338168"
+  },
+  {
+    "label": "Djupekås",
+    "qid": "Q2339275"
+  },
+  {
+    "label": "Gysinge",
+    "qid": "Q2339533"
+  },
+  {
+    "label": "Skånes-Fagerhult",
+    "qid": "Q2340461"
+  },
+  {
+    "label": "Mellösa",
+    "qid": "Q2342502"
+  },
+  {
+    "label": "Djurmo",
+    "qid": "Q2343429"
+  },
+  {
+    "label": "Trädet",
+    "qid": "Q2343583"
+  },
+  {
+    "label": "Ormanäs och Stanstorp",
+    "qid": "Q2346178"
+  },
+  {
+    "label": "Västra Hagen",
+    "qid": "Q2347541"
+  },
+  {
+    "label": "Norra Lagnö",
+    "qid": "Q2348047"
+  },
+  {
+    "label": "Tjautjas",
+    "qid": "Q2348307"
+  },
+  {
+    "label": "Edsvalla",
+    "qid": "Q2348474"
+  },
+  {
+    "label": "Mollösund",
+    "qid": "Q2349356"
+  },
+  {
+    "label": "Rixö",
+    "qid": "Q2350797"
+  },
+  {
+    "label": "Sörvik",
+    "qid": "Q2352444"
+  },
+  {
+    "label": "Vena",
+    "qid": "Q2352894"
+  },
+  {
+    "label": "Högsjö",
+    "qid": "Q2353200"
+  },
+  {
+    "label": "Brännö",
+    "qid": "Q2353949"
+  },
+  {
+    "label": "Ränneslöv",
+    "qid": "Q2354103"
+  },
+  {
+    "label": "Ballingslöv",
+    "qid": "Q2356737"
+  },
+  {
+    "label": "Skålö",
+    "qid": "Q2358115"
+  },
+  {
+    "label": "Vårdsätra",
+    "qid": "Q2359724"
+  },
+  {
+    "label": "Tandsjöborg",
+    "qid": "Q2360317"
+  },
+  {
+    "label": "Älgarås",
+    "qid": "Q2360433"
+  },
+  {
+    "label": "Värmdö-Evlinge",
+    "qid": "Q2361108"
+  },
+  {
+    "label": "Nyliden",
+    "qid": "Q2361110"
+  },
+  {
+    "label": "Åmsele",
+    "qid": "Q2361529"
+  },
+  {
+    "label": "Trehörningsjö",
+    "qid": "Q2367031"
+  },
+  {
+    "label": "Järvsö",
+    "qid": "Q2367619"
+  },
+  {
+    "label": "Grevie",
+    "qid": "Q2368754"
+  },
+  {
+    "label": "Göta",
+    "qid": "Q2369220"
+  },
+  {
+    "label": "Valla",
+    "qid": "Q15802011"
+  },
+  {
+    "label": "Ersnäs",
+    "qid": "Q2372733"
+  },
+  {
+    "label": "Kinnarumma",
+    "qid": "Q2373192"
+  },
+  {
+    "label": "Sundsbruk",
+    "qid": "Q2373979"
+  },
+  {
+    "label": "Trånghalla",
+    "qid": "Q2374380"
+  },
+  {
+    "label": "Holmeja",
+    "qid": "Q2374644"
+  },
+  {
+    "label": "Ljungbyholm",
+    "qid": "Q2376187"
+  },
+  {
+    "label": "Delary",
+    "qid": "Q2376371"
+  },
+  {
+    "label": "Edane",
+    "qid": "Q2376437"
+  },
+  {
+    "label": "Timmersdala",
+    "qid": "Q2377746"
+  },
+  {
+    "label": "Björnömalmen och Klacknäset",
+    "qid": "Q2378068"
+  },
+  {
+    "label": "Mysterna",
+    "qid": "Q2378631"
+  },
+  {
+    "label": "Strömsfors",
+    "qid": "Q2379205"
+  },
+  {
+    "label": "Nissafors",
+    "qid": "Q2379596"
+  },
+  {
+    "label": "Segersta",
+    "qid": "Q2380467"
+  },
+  {
+    "label": "Ljusfallshammar",
+    "qid": "Q2380884"
+  },
+  {
+    "label": "Hara",
+    "qid": "Q2381164"
+  },
+  {
+    "label": "Odensbacken",
+    "qid": "Q2381684"
+  },
+  {
+    "label": "Piperskärr",
+    "qid": "Q2382788"
+  },
+  {
+    "label": "Malmslätt",
+    "qid": "Q2383474"
+  },
+  {
+    "label": "Mariannelund",
+    "qid": "Q2384321"
+  },
+  {
+    "label": "Viken och Holmsveden",
+    "qid": "Q2384561"
+  },
+  {
+    "label": "Lilla Tjärby",
+    "qid": "Q2384987"
+  },
+  {
+    "label": "Själsö",
+    "qid": "Q2385495"
+  },
+  {
+    "label": "Lundby",
+    "qid": "Q2386304"
+  },
+  {
+    "label": "Öjersjö",
+    "qid": "Q2386613"
+  },
+  {
+    "label": "Ljung",
+    "qid": "Q2387607"
+  },
+  {
+    "label": "Kvibille",
+    "qid": "Q2389558"
+  },
+  {
+    "label": "Östmark",
+    "qid": "Q2390975"
+  },
+  {
+    "label": "Bankeryd",
+    "qid": "Q2391850"
+  },
+  {
+    "label": "Klagstorp",
+    "qid": "Q2392188"
+  },
+  {
+    "label": "Gärdås",
+    "qid": "Q2393513"
+  },
+  {
+    "label": "Söderfors",
+    "qid": "Q2393606"
+  },
+  {
+    "label": "Ilsbo",
+    "qid": "Q2393690"
+  },
+  {
+    "label": "Klutmark",
+    "qid": "Q2393850"
+  },
+  {
+    "label": "Tvååker",
+    "qid": "Q2394008"
+  },
+  {
+    "label": "Bäckebo",
+    "qid": "Q2394168"
+  },
+  {
+    "label": "Torsby",
+    "qid": "Q3582130"
+  },
+  {
+    "label": "Bredviken",
+    "qid": "Q2398125"
+  },
+  {
+    "label": "Fagerås",
+    "qid": "Q2398916"
+  },
+  {
+    "label": "Hamrångefjärden",
+    "qid": "Q2399519"
+  },
+  {
+    "label": "Blankaholm",
+    "qid": "Q2400270"
+  },
+  {
+    "label": "Morup",
+    "qid": "Q2400461"
+  },
+  {
+    "label": "Juniskär",
+    "qid": "Q2400497"
+  },
+  {
+    "label": "Grelsbyn",
+    "qid": "Q2401771"
+  },
+  {
+    "label": "Åkarp",
+    "qid": "Q2402092"
+  },
+  {
+    "label": "Bergströmshusen",
+    "qid": "Q2403479"
+  },
+  {
+    "label": "Svedjan",
+    "qid": "Q2405479"
+  },
+  {
+    "label": "Läby",
+    "qid": "Q2405923"
+  },
+  {
+    "label": "Eneryda",
+    "qid": "Q2407700"
+  },
+  {
+    "label": "Jursla",
+    "qid": "Q2408749"
+  },
+  {
+    "label": "Totra",
+    "qid": "Q2409209"
+  },
+  {
+    "label": "Fornåsa",
+    "qid": "Q2409237"
+  },
+  {
+    "label": "Morgongåva",
+    "qid": "Q2413829"
+  },
+  {
+    "label": "Kalvsund",
+    "qid": "Q2413899"
+  },
+  {
+    "label": "Östra Frölunda",
+    "qid": "Q2416058"
+  },
+  {
+    "label": "Herrskog",
+    "qid": "Q2417483"
+  },
+  {
+    "label": "Vallda",
+    "qid": "Q2417856"
+  },
+  {
+    "label": "Åmynnet",
+    "qid": "Q2418177"
+  },
+  {
+    "label": "Vintjärn",
+    "qid": "Q2418319"
+  },
+  {
+    "label": "Ölmanäs",
+    "qid": "Q2418330"
+  },
+  {
+    "label": "Svenstorp",
+    "qid": "Q2418469"
+  },
+  {
+    "label": "Hjortkvarn",
+    "qid": "Q2418670"
+  },
+  {
+    "label": "Mariedamm",
+    "qid": "Q2418784"
+  },
+  {
+    "label": "Toftbyn",
+    "qid": "Q2419274"
+  },
+  {
+    "label": "Kolbäck",
+    "qid": "Q2419923"
+  },
+  {
+    "label": "Sollebrunn",
+    "qid": "Q2420672"
+  },
+  {
+    "label": "Målerås",
+    "qid": "Q2421014"
+  },
+  {
+    "label": "Vedum",
+    "qid": "Q2421492"
+  },
+  {
+    "label": "Kattarp",
+    "qid": "Q2422805"
+  },
+  {
+    "label": "Slaka",
+    "qid": "Q2423507"
+  },
+  {
+    "label": "Vessigebro",
+    "qid": "Q2423688"
+  },
+  {
+    "label": "Saxtorpsskogen",
+    "qid": "Q2424642"
+  },
+  {
+    "label": "Fågelsta",
+    "qid": "Q2425339"
+  },
+  {
+    "label": "Botsmark",
+    "qid": "Q2425415"
+  },
+  {
+    "label": "Hälgenäs",
+    "qid": "Q2426749"
+  },
+  {
+    "label": "Horndal",
+    "qid": "Q2427509"
+  },
+  {
+    "label": "Hammenhög",
+    "qid": "Q2428380"
+  },
+  {
+    "label": "Nibble",
+    "qid": "Q2429424"
+  },
+  {
+    "label": "Björklinge",
+    "qid": "Q2429843"
+  },
+  {
+    "label": "Bro",
+    "qid": "Q2430301"
+  },
+  {
+    "label": "Österslöv",
+    "qid": "Q2431080"
+  },
+  {
+    "label": "Hölö",
+    "qid": "Q2431323"
+  },
+  {
+    "label": "Pilgrimstad",
+    "qid": "Q2433216"
+  },
+  {
+    "label": "Fågelvikshöjden",
+    "qid": "Q2434665"
+  },
+  {
+    "label": "Torpshammar",
+    "qid": "Q2435554"
+  },
+  {
+    "label": "Bosnäs",
+    "qid": "Q2435695"
+  },
+  {
+    "label": "Böksholm",
+    "qid": "Q2435792"
+  },
+  {
+    "label": "Starrkärr och Näs",
+    "qid": "Q2436838"
+  },
+  {
+    "label": "Lövånger",
+    "qid": "Q2438300"
+  },
+  {
+    "label": "Färmanstorp och Skavkulla brygga",
+    "qid": "Q2438736"
+  },
+  {
+    "label": "Bergby",
+    "qid": "Q2438752"
+  },
+  {
+    "label": "Vannsätter",
+    "qid": "Q2439188"
+  },
+  {
+    "label": "Ersmark",
+    "qid": "Q2742608"
+  },
+  {
+    "label": "Kassjö",
+    "qid": "Q2439481"
+  },
+  {
+    "label": "Strångsjö",
+    "qid": "Q2441838"
+  },
+  {
+    "label": "Påskallavik",
+    "qid": "Q2443421"
+  },
+  {
+    "label": "Lotorp",
+    "qid": "Q2444014"
+  },
+  {
+    "label": "Persberg",
+    "qid": "Q2444830"
+  },
+  {
+    "label": "Tärnsjö",
+    "qid": "Q2445921"
+  },
+  {
+    "label": "Masugnsbyn",
+    "qid": "Q2446625"
+  },
+  {
+    "label": "Gargnäs",
+    "qid": "Q2448380"
+  },
+  {
+    "label": "Baggetorp",
+    "qid": "Q2449421"
+  },
+  {
+    "label": "Hasslöv",
+    "qid": "Q2449677"
+  },
+  {
+    "label": "Stavre",
+    "qid": "Q2450084"
+  },
+  {
+    "label": "Simris",
+    "qid": "Q2450627"
+  },
+  {
+    "label": "Nore",
+    "qid": "Q2450835"
+  },
+  {
+    "label": "Fjärdhundra",
+    "qid": "Q2452083"
+  },
+  {
+    "label": "Funbo",
+    "qid": "Q2453044"
+  },
+  {
+    "label": "Älvdalen",
+    "qid": "Q2453291"
+  },
+  {
+    "label": "Villshärad",
+    "qid": "Q2453301"
+  },
+  {
+    "label": "Nöbbele",
+    "qid": "Q2453721"
+  },
+  {
+    "label": "Sommen",
+    "qid": "Q2454441"
+  },
+  {
+    "label": "Tjörnarp",
+    "qid": "Q2454640"
+  },
+  {
+    "label": "Hynboholm och Grönäs",
+    "qid": "Q2456599"
+  },
+  {
+    "label": "Östra Grevie",
+    "qid": "Q2456824"
+  },
+  {
+    "label": "Skaulo",
+    "qid": "Q2457608"
+  },
+  {
+    "label": "Sandslån",
+    "qid": "Q2457823"
+  },
+  {
+    "label": "Kristvallabrunn",
+    "qid": "Q2457918"
+  },
+  {
+    "label": "Burlövs egnahem",
+    "qid": "Q2458141"
+  },
+  {
+    "label": "Hjärtum",
+    "qid": "Q2458955"
+  },
+  {
+    "label": "Tegelstrand och Vassviken",
+    "qid": "Q2460865"
+  },
+  {
+    "label": "Skällinge",
+    "qid": "Q2461859"
+  },
+  {
+    "label": "Junosuando",
+    "qid": "Q2464406"
+  },
+  {
+    "label": "Hagge",
+    "qid": "Q2464645"
+  },
+  {
+    "label": "Klevshult",
+    "qid": "Q2464715"
+  },
+  {
+    "label": "Storsund",
+    "qid": "Q2465902"
+  },
+  {
+    "label": "Skravelsjö",
+    "qid": "Q2466742"
+  },
+  {
+    "label": "Svanesund",
+    "qid": "Q2466808"
+  },
+  {
+    "label": "Jockfall",
+    "qid": "Q2467007"
+  },
+  {
+    "label": "Kuivakangas",
+    "qid": "Q2468172"
+  },
+  {
+    "label": "Södra Näs",
+    "qid": "Q2469555"
+  },
+  {
+    "label": "Nykil",
+    "qid": "Q2470206"
+  },
+  {
+    "label": "Hybo",
+    "qid": "Q2470881"
+  },
+  {
+    "label": "Edsele",
+    "qid": "Q2471357"
+  },
+  {
+    "label": "Hedeviken",
+    "qid": "Q2471380"
+  },
+  {
+    "label": "Fåglavik",
+    "qid": "Q2471849"
+  },
+  {
+    "label": "Strömbacka",
+    "qid": "Q2472471"
+  },
+  {
+    "label": "Finsjö",
+    "qid": "Q2473694"
+  },
+  {
+    "label": "Stigen",
+    "qid": "Q2474628"
+  },
+  {
+    "label": "Glumslöv",
+    "qid": "Q2476667"
+  },
+  {
+    "label": "Ulriksfors",
+    "qid": "Q2477520"
+  },
+  {
+    "label": "Vittjärv",
+    "qid": "Q2479711"
+  },
+  {
+    "label": "Loftahammar",
+    "qid": "Q2479746"
+  },
+  {
+    "label": "Torup",
+    "qid": "Q2481233"
+  },
+  {
+    "label": "Everöd",
+    "qid": "Q2481599"
+  },
+  {
+    "label": "Nästansjö",
+    "qid": "Q2482635"
+  },
+  {
+    "label": "Gonäs",
+    "qid": "Q2482662"
+  },
+  {
+    "label": "Bäckefors",
+    "qid": "Q2485434"
+  },
+  {
+    "label": "Rånäs",
+    "qid": "Q2485857"
+  },
+  {
+    "label": "Bjärnum",
+    "qid": "Q2487489"
+  },
+  {
+    "label": "Arentorp",
+    "qid": "Q2488369"
+  },
+  {
+    "label": "Länna",
+    "qid": "Q2489017"
+  },
+  {
+    "label": "Roteberg",
+    "qid": "Q2489378"
+  },
+  {
+    "label": "Svanstein",
+    "qid": "Q2489591"
+  },
+  {
+    "label": "Bälganet",
+    "qid": "Q2489914"
+  },
+  {
+    "label": "Matfors",
+    "qid": "Q2489976"
+  },
+  {
+    "label": "Rånnaväg",
+    "qid": "Q2490875"
+  },
+  {
+    "label": "Smedby",
+    "qid": "Q10671929"
+  },
+  {
+    "label": "Stenared",
+    "qid": "Q2491585"
+  },
+  {
+    "label": "Skelleftehamn",
+    "qid": "Q2491686"
+  },
+  {
+    "label": "Viby",
+    "qid": "Q10714964"
+  },
+  {
+    "label": "Förlösa",
+    "qid": "Q2493504"
+  },
+  {
+    "label": "Tävelsås",
+    "qid": "Q2494748"
+  },
+  {
+    "label": "Genevad",
+    "qid": "Q2494938"
+  },
+  {
+    "label": "Rydbo",
+    "qid": "Q2495286"
+  },
+  {
+    "label": "Edsgatan och Långenäs",
+    "qid": "Q2495351"
+  },
+  {
+    "label": "Hampetorp",
+    "qid": "Q2496253"
+  },
+  {
+    "label": "Klockestrand",
+    "qid": "Q2496332"
+  },
+  {
+    "label": "Bruksvallarna",
+    "qid": "Q2496677"
+  },
+  {
+    "label": "Sannahed",
+    "qid": "Q2497810"
+  },
+  {
+    "label": "Skebokvarn",
+    "qid": "Q2498004"
+  },
+  {
+    "label": "Mullhyttan",
+    "qid": "Q2498398"
+  },
+  {
+    "label": "Svartlå",
+    "qid": "Q2499857"
+  },
+  {
+    "label": "Fröjered",
+    "qid": "Q2500511"
+  },
+  {
+    "label": "Påarp",
+    "qid": "Q2505105"
+  },
+  {
+    "label": "Salbohed",
+    "qid": "Q2507956"
+  },
+  {
+    "label": "Fågelfors",
+    "qid": "Q2508641"
+  },
+  {
+    "label": "Kvidinge",
+    "qid": "Q2509589"
+  },
+  {
+    "label": "Avan",
+    "qid": "Q2509693"
+  },
+  {
+    "label": "Båtskärsnäs",
+    "qid": "Q2509848"
+  },
+  {
+    "label": "Täljö",
+    "qid": "Q2510059"
+  },
+  {
+    "label": "Braås",
+    "qid": "Q2513859"
+  },
+  {
+    "label": "Kågeröd",
+    "qid": "Q2514808"
+  },
+  {
+    "label": "Ödåkra",
+    "qid": "Q2515214"
+  },
+  {
+    "label": "Rundvik",
+    "qid": "Q2515860"
+  },
+  {
+    "label": "Klippans bruk",
+    "qid": "Q2517341"
+  },
+  {
+    "label": "Vattjom",
+    "qid": "Q2518156"
+  },
+  {
+    "label": "Nedre Gärdsjö",
+    "qid": "Q2518425"
+  },
+  {
+    "label": "Grytgöl",
+    "qid": "Q2518560"
+  },
+  {
+    "label": "Fjälkinge",
+    "qid": "Q2519014"
+  },
+  {
+    "label": "Granö",
+    "qid": "Q2519457"
+  },
+  {
+    "label": "Sundby",
+    "qid": "Q2519632"
+  },
+  {
+    "label": "Parkalompolo",
+    "qid": "Q2520647"
+  },
+  {
+    "label": "Kårsta",
+    "qid": "Q2521010"
+  },
+  {
+    "label": "Hägra",
+    "qid": "Q2521893"
+  },
+  {
+    "label": "Signehög och Norrmannebo",
+    "qid": "Q2521940"
+  },
+  {
+    "label": "Olsfors",
+    "qid": "Q2522912"
+  },
+  {
+    "label": "Alstermo",
+    "qid": "Q2523160"
+  },
+  {
+    "label": "Stenhamra",
+    "qid": "Q2524833"
+  },
+  {
+    "label": "Grimstorp",
+    "qid": "Q2526599"
+  },
+  {
+    "label": "Kungsäter",
+    "qid": "Q2527060"
+  },
+  {
+    "label": "Marbäck",
+    "qid": "Q2527382"
+  },
+  {
+    "label": "Mjöbäck",
+    "qid": "Q2529152"
+  },
+  {
+    "label": "Skepparslöv",
+    "qid": "Q2529429"
+  },
+  {
+    "label": "Brattås",
+    "qid": "Q2529475"
+  },
+  {
+    "label": "Smedstorp",
+    "qid": "Q2532176"
+  },
+  {
+    "label": "Kovland",
+    "qid": "Q2534012"
+  },
+  {
+    "label": "Oderljunga",
+    "qid": "Q2538849"
+  },
+  {
+    "label": "Sorunda",
+    "qid": "Q2539876"
+  },
+  {
+    "label": "Främmestad",
+    "qid": "Q2541117"
+  },
+  {
+    "label": "Lainio",
+    "qid": "Q2542766"
+  },
+  {
+    "label": "Halvarsgårdarna",
+    "qid": "Q2544419"
+  },
+  {
+    "label": "Kvegerö",
+    "qid": "Q2545057"
+  },
+  {
+    "label": "Hånger",
+    "qid": "Q2547152"
+  },
+  {
+    "label": "Hästveda",
+    "qid": "Q2548751"
+  },
+  {
+    "label": "Åsljunga",
+    "qid": "Q2549224"
+  },
+  {
+    "label": "Strandhugget",
+    "qid": "Q2549719"
+  },
+  {
+    "label": "Björkvik",
+    "qid": "Q2549927"
+  },
+  {
+    "label": "Ljungstorp och Jägersbo",
+    "qid": "Q2551276"
+  },
+  {
+    "label": "Norberg",
+    "qid": "Q2551945"
+  },
+  {
+    "label": "Stöpen",
+    "qid": "Q2553069"
+  },
+  {
+    "label": "Sjöbo sommarby och Svansjö sommarby",
+    "qid": "Q2553704"
+  },
+  {
+    "label": "Sövestad",
+    "qid": "Q2556250"
+  },
+  {
+    "label": "Vinnö",
+    "qid": "Q2556287"
+  },
+  {
+    "label": "Sköldinge",
+    "qid": "Q2557076"
+  },
+  {
+    "label": "Timmernabben",
+    "qid": "Q2557336"
+  },
+  {
+    "label": "Höviksnäs",
+    "qid": "Q2559865"
+  },
+  {
+    "label": "Barsebäck",
+    "qid": "Q2560819"
+  },
+  {
+    "label": "Upplanda",
+    "qid": "Q2562944"
+  },
+  {
+    "label": "Domsten",
+    "qid": "Q2563810"
+  },
+  {
+    "label": "Saltvik",
+    "qid": "Q2565790"
+  },
+  {
+    "label": "Gulleråsen",
+    "qid": "Q2568177"
+  },
+  {
+    "label": "Kilafors",
+    "qid": "Q2568240"
+  },
+  {
+    "label": "Bergkvara",
+    "qid": "Q2570136"
+  },
+  {
+    "label": "Fiskebäckskil",
+    "qid": "Q2572542"
+  },
+  {
+    "label": "Bäsna",
+    "qid": "Q2572756"
+  },
+  {
+    "label": "Laggarberg",
+    "qid": "Q2573599"
+  },
+  {
+    "label": "Åsbro",
+    "qid": "Q2573758"
+  },
+  {
+    "label": "Betsede",
+    "qid": "Q2573822"
+  },
+  {
+    "label": "Klapparvik, Malenedal och Källvik",
+    "qid": "Q2573844"
+  },
+  {
+    "label": "Bockara",
+    "qid": "Q2574393"
+  },
+  {
+    "label": "Stånga",
+    "qid": "Q2121212"
+  },
+  {
+    "label": "Jävre",
+    "qid": "Q2121226"
+  },
+  {
+    "label": "Ånneröd",
+    "qid": "Q2122411"
+  },
+  {
+    "label": "Prästmon",
+    "qid": "Q2122594"
+  },
+  {
+    "label": "Arvet",
+    "qid": "Q2122708"
+  },
+  {
+    "label": "Flerohopp",
+    "qid": "Q2122900"
+  },
+  {
+    "label": "Söderby-Karl",
+    "qid": "Q2124016"
+  },
+  {
+    "label": "Slätthult",
+    "qid": "Q2124403"
+  },
+  {
+    "label": "Skivarp",
+    "qid": "Q2124908"
+  },
+  {
+    "label": "Kulltorp",
+    "qid": "Q2126103"
+  },
+  {
+    "label": "Munka-Ljungby",
+    "qid": "Q2126314"
+  },
+  {
+    "label": "Hålland",
+    "qid": "Q2126739"
+  },
+  {
+    "label": "Tumlehed",
+    "qid": "Q2126899"
+  },
+  {
+    "label": "Strålsnäs",
+    "qid": "Q2127240"
+  },
+  {
+    "label": "Marmorbyn",
+    "qid": "Q2128206"
+  },
+  {
+    "label": "Ljung och Annelund",
+    "qid": "Q2128907"
+  },
+  {
+    "label": "Ljungsarp",
+    "qid": "Q2129530"
+  },
+  {
+    "label": "Härryda",
+    "qid": "Q2132726"
+  },
+  {
+    "label": "Björnlunda",
+    "qid": "Q2134242"
+  },
+  {
+    "label": "Venjan",
+    "qid": "Q2134383"
+  },
+  {
+    "label": "Vad",
+    "qid": "Q2134830"
+  },
+  {
+    "label": "Hjälm",
+    "qid": "Q2135154"
+  },
+  {
+    "label": "Jäderfors",
+    "qid": "Q2135457"
+  },
+  {
+    "label": "Färnäs",
+    "qid": "Q2136277"
+  },
+  {
+    "label": "Lucksta",
+    "qid": "Q2136669"
+  },
+  {
+    "label": "Sandarne",
+    "qid": "Q2137536"
+  },
+  {
+    "label": "Alunda",
+    "qid": "Q2137552"
+  },
+  {
+    "label": "Myresjö",
+    "qid": "Q2140394"
+  },
+  {
+    "label": "Vånga",
+    "qid": "Q33109402"
+  },
+  {
+    "label": "Bäckaskog",
+    "qid": "Q2142228"
+  },
+  {
+    "label": "Långared",
+    "qid": "Q2143863"
+  },
+  {
+    "label": "Rävlanda",
+    "qid": "Q2145009"
+  },
+  {
+    "label": "Kläppa",
+    "qid": "Q2145108"
+  },
+  {
+    "label": "Väderstad",
+    "qid": "Q2145883"
+  },
+  {
+    "label": "Rantajärvi",
+    "qid": "Q2147859"
+  },
+  {
+    "label": "Härslöv",
+    "qid": "Q2148364"
+  },
+  {
+    "label": "Bonäs",
+    "qid": "Q2148649"
+  },
+  {
+    "label": "Fotö",
+    "qid": "Q2150099"
+  },
+  {
+    "label": "Lerdala",
+    "qid": "Q2150183"
+  },
+  {
+    "label": "Marmaskogen",
+    "qid": "Q2152904"
+  },
+  {
+    "label": "Östanå",
+    "qid": "Q15898629"
+  },
+  {
+    "label": "Tofta",
+    "qid": "Q31899609"
+  },
+  {
+    "label": "Blåsmark",
+    "qid": "Q2154403"
+  },
+  {
+    "label": "Södersvik",
+    "qid": "Q2154685"
+  },
+  {
+    "label": "Gladsax",
+    "qid": "Q2155087"
+  },
+  {
+    "label": "Nyhammar",
+    "qid": "Q2156813"
+  },
+  {
+    "label": "Medle",
+    "qid": "Q2157662"
+  },
+  {
+    "label": "Brevik",
+    "qid": "Q2157979"
+  },
+  {
+    "label": "Östra Husby",
+    "qid": "Q2158116"
+  },
+  {
+    "label": "Västerlösa",
+    "qid": "Q2158219"
+  },
+  {
+    "label": "Sågmyra",
+    "qid": "Q2159690"
+  },
+  {
+    "label": "Horsaryd och Stilleryd",
+    "qid": "Q2160120"
+  },
+  {
+    "label": "Österforse",
+    "qid": "Q2161322"
+  },
+  {
+    "label": "Barnarp och Odensjö",
+    "qid": "Q2161782"
+  },
+  {
+    "label": "Bergeforsen",
+    "qid": "Q2163493"
+  },
+  {
+    "label": "Dala",
+    "qid": "Q2164122"
+  },
+  {
+    "label": "Vemdalen",
+    "qid": "Q2166310"
+  },
+  {
+    "label": "Gröstorp",
+    "qid": "Q2166797"
+  },
+  {
+    "label": "Hovid",
+    "qid": "Q2166870"
+  },
+  {
+    "label": "Åsen",
+    "qid": "Q2168401"
+  },
+  {
+    "label": "Svartehallen",
+    "qid": "Q2168753"
+  },
+  {
+    "label": "Hålta och Vävra",
+    "qid": "Q2168967"
+  },
+  {
+    "label": "Kättilstorp",
+    "qid": "Q2170786"
+  },
+  {
+    "label": "Tjärnheden",
+    "qid": "Q2170863"
+  },
+  {
+    "label": "Östnor",
+    "qid": "Q2175447"
+  },
+  {
+    "label": "Djulö kvarn",
+    "qid": "Q2175942"
+  },
+  {
+    "label": "Kartlandet och Ringstadmo",
+    "qid": "Q2178308"
+  },
+  {
+    "label": "Älta",
+    "qid": "Q2180312"
+  },
+  {
+    "label": "Björkfors",
+    "qid": "Q2180314"
+  },
+  {
+    "label": "Hagbyhöjden",
+    "qid": "Q2181385"
+  },
+  {
+    "label": "Nybrostrand",
+    "qid": "Q2182000"
+  },
+  {
+    "label": "Blötberget",
+    "qid": "Q2182167"
+  },
+  {
+    "label": "Väggarp",
+    "qid": "Q2182183"
+  },
+  {
+    "label": "Vålberg",
+    "qid": "Q2182282"
+  },
+  {
+    "label": "Bäckhammar",
+    "qid": "Q2182791"
+  },
+  {
+    "label": "Valje",
+    "qid": "Q2183139"
+  },
+  {
+    "label": "Orrhammar",
+    "qid": "Q2183662"
+  },
+  {
+    "label": "Särö",
+    "qid": "Q2183666"
+  },
+  {
+    "label": "Bredsjö",
+    "qid": "Q2183933"
+  },
+  {
+    "label": "Myggenäs",
+    "qid": "Q2184908"
+  },
+  {
+    "label": "Butbro",
+    "qid": "Q2185391"
+  },
+  {
+    "label": "Östhamra",
+    "qid": "Q2185474"
+  },
+  {
+    "label": "Trulsegården",
+    "qid": "Q2185720"
+  },
+  {
+    "label": "Risögrund",
+    "qid": "Q2185765"
+  },
+  {
+    "label": "Hilleshögby",
+    "qid": "Q2186545"
+  },
+  {
+    "label": "Friggesund",
+    "qid": "Q2186939"
+  },
+  {
+    "label": "Linneryd",
+    "qid": "Q2187596"
+  },
+  {
+    "label": "Rusksele",
+    "qid": "Q2187861"
+  },
+  {
+    "label": "Sandhult",
+    "qid": "Q2188202"
+  },
+  {
+    "label": "Rydal",
+    "qid": "Q2189662"
+  },
+  {
+    "label": "Osbyholm",
+    "qid": "Q2190502"
+  },
+  {
+    "label": "Äppelbo",
+    "qid": "Q2191139"
+  },
+  {
+    "label": "Immeln",
+    "qid": "Q2192238"
+  },
+  {
+    "label": "Vik",
+    "qid": "Q2192692"
+  },
+  {
+    "label": "Viken",
+    "qid": "Q2193830"
+  },
+  {
+    "label": "Rockhammar",
+    "qid": "Q2194628"
+  },
+  {
+    "label": "Kosta",
+    "qid": "Q2194673"
+  },
+  {
+    "label": "Åbyggeby",
+    "qid": "Q2574635"
+  },
+  {
+    "label": "Fellingsbro",
+    "qid": "Q2575078"
+  },
+  {
+    "label": "Fliseryd",
+    "qid": "Q2575494"
+  },
+  {
+    "label": "Ervalla",
+    "qid": "Q2575700"
+  },
+  {
+    "label": "Rydaholm",
+    "qid": "Q2577791"
+  },
+  {
+    "label": "Glemmingebro",
+    "qid": "Q2577970"
+  },
+  {
+    "label": "Vretstorp",
+    "qid": "Q2578169"
+  },
+  {
+    "label": "Strömsberg",
+    "qid": "Q2579565"
+  },
+  {
+    "label": "Andalen",
+    "qid": "Q2579900"
+  },
+  {
+    "label": "Bullmark",
+    "qid": "Q2580616"
+  },
+  {
+    "label": "Vinbergs kyrkby",
+    "qid": "Q2581151"
+  },
+  {
+    "label": "Traryd",
+    "qid": "Q2584179"
+  },
+  {
+    "label": "Sollerön",
+    "qid": "Q2585295"
+  },
+  {
+    "label": "Striberg",
+    "qid": "Q2586263"
+  },
+  {
+    "label": "Björkö",
+    "qid": "Q2586650"
+  },
+  {
+    "label": "Tollered",
+    "qid": "Q2588056"
+  },
+  {
+    "label": "Lerkil",
+    "qid": "Q2588229"
+  },
+  {
+    "label": "Edenryd",
+    "qid": "Q2588526"
+  },
+  {
+    "label": "Kållekärr",
+    "qid": "Q2588635"
+  },
+  {
+    "label": "Västibyn",
+    "qid": "Q2588763"
+  },
+  {
+    "label": "Hjältevad",
+    "qid": "Q2589223"
+  },
+  {
+    "label": "Karbenning",
+    "qid": "Q2592370"
+  },
+  {
+    "label": "Brantevik",
+    "qid": "Q2593706"
+  },
+  {
+    "label": "Bjärlöv",
+    "qid": "Q2593709"
+  },
+  {
+    "label": "Vissefjärda",
+    "qid": "Q2595719"
+  },
+  {
+    "label": "Ärla",
+    "qid": "Q2595911"
+  },
+  {
+    "label": "Gimmersta",
+    "qid": "Q2596364"
+  },
+  {
+    "label": "Asmundtorp",
+    "qid": "Q2599513"
+  },
+  {
+    "label": "Hedared",
+    "qid": "Q2600192"
+  },
+  {
+    "label": "Krika",
+    "qid": "Q2602627"
+  },
+  {
+    "label": "Brevikshalvön",
+    "qid": "Q2604319"
+  },
+  {
+    "label": "Alvesta",
+    "qid": "Q2604885"
+  },
+  {
+    "label": "Grythyttan",
+    "qid": "Q2605380"
+  },
+  {
+    "label": "Ryd",
+    "qid": "Q10658194"
+  },
+  {
+    "label": "Kvissleby",
+    "qid": "Q2606447"
+  },
+  {
+    "label": "Erikslund",
+    "qid": "Q2606842"
+  },
+  {
+    "label": "Ringarum",
+    "qid": "Q2607275"
+  },
+  {
+    "label": "Gullbrandstorp",
+    "qid": "Q2607808"
+  },
+  {
+    "label": "Östansjö",
+    "qid": "Q2607926"
+  },
+  {
+    "label": "Grimslöv",
+    "qid": "Q2607965"
+  },
+  {
+    "label": "Rolfstorp",
+    "qid": "Q2608625"
+  },
+  {
+    "label": "Edsta",
+    "qid": "Q2611006"
+  },
+  {
+    "label": "Baltora",
+    "qid": "Q2611086"
+  },
+  {
+    "label": "Skölsta",
+    "qid": "Q2611410"
+  },
+  {
+    "label": "Månkarbo",
+    "qid": "Q2611587"
+  },
+  {
+    "label": "Siknäs",
+    "qid": "Q2611914"
+  },
+  {
+    "label": "Våxtorp",
+    "qid": "Q2612450"
+  },
+  {
+    "label": "Sundhultsbrunn",
+    "qid": "Q2612762"
+  },
+  {
+    "label": "Förslöv",
+    "qid": "Q2613015"
+  },
+  {
+    "label": "Stenåsa",
+    "qid": "Q2613163"
+  },
+  {
+    "label": "Norra Åsum",
+    "qid": "Q2614023"
+  },
+  {
+    "label": "Rögla",
+    "qid": "Q2614672"
+  },
+  {
+    "label": "Stockvik",
+    "qid": "Q2614751"
+  },
+  {
+    "label": "Himle",
+    "qid": "Q2615027"
+  },
+  {
+    "label": "Rätansbyn",
+    "qid": "Q2616632"
+  },
+  {
+    "label": "Sibbhult",
+    "qid": "Q2616737"
+  },
+  {
+    "label": "Mjönäs",
+    "qid": "Q2618971"
+  },
+  {
+    "label": "Veinge",
+    "qid": "Q2619062"
+  },
+  {
+    "label": "Valskog",
+    "qid": "Q2619227"
+  },
+  {
+    "label": "Flisby",
+    "qid": "Q2620449"
+  },
+  {
+    "label": "Dösjebro",
+    "qid": "Q2621142"
+  },
+  {
+    "label": "Ullånger",
+    "qid": "Q2622251"
+  },
+  {
+    "label": "Buerås",
+    "qid": "Q2622468"
+  },
+  {
+    "label": "Bergagård",
+    "qid": "Q2623388"
+  },
+  {
+    "label": "Kungsberga",
+    "qid": "Q2626626"
+  },
+  {
+    "label": "Skansholm",
+    "qid": "Q2626724"
+  },
+  {
+    "label": "Hasselstad",
+    "qid": "Q2626801"
+  },
+  {
+    "label": "Olofstorp",
+    "qid": "Q2626816"
+  },
+  {
+    "label": "Skeda udde",
+    "qid": "Q2627088"
+  },
+  {
+    "label": "Alstad",
+    "qid": "Q2628051"
+  },
+  {
+    "label": "Bönan",
+    "qid": "Q2628760"
+  },
+  {
+    "label": "Tärendö",
+    "qid": "Q2630112"
+  },
+  {
+    "label": "Rosvik",
+    "qid": "Q2632382"
+  },
+  {
+    "label": "Alsterbro",
+    "qid": "Q2633229"
+  },
+  {
+    "label": "Böle",
+    "qid": "Q2634050"
+  },
+  {
+    "label": "Lillpite",
+    "qid": "Q2634076"
+  },
+  {
+    "label": "Borgsjöbyn",
+    "qid": "Q2634166"
+  },
+  {
+    "label": "Tobo",
+    "qid": "Q2635393"
+  },
+  {
+    "label": "Spjutstorp",
+    "qid": "Q2635733"
+  },
+  {
+    "label": "Brunn",
+    "qid": "Q2636132"
+  },
+  {
+    "label": "Gärds Köpinge",
+    "qid": "Q2636422"
+  },
+  {
+    "label": "Hammarslund",
+    "qid": "Q2636462"
+  },
+  {
+    "label": "Enbacka",
+    "qid": "Q2636944"
+  },
+  {
+    "label": "Löttorp",
+    "qid": "Q2637758"
+  },
+  {
+    "label": "Arontorp",
+    "qid": "Q2638181"
+  },
+  {
+    "label": "Falerum",
+    "qid": "Q2638424"
+  },
+  {
+    "label": "Hulu",
+    "qid": "Q2639642"
+  },
+  {
+    "label": "Mårdaklev",
+    "qid": "Q2640848"
+  },
+  {
+    "label": "Grönskan, Vedhamn och Baldersnäs",
+    "qid": "Q2645201"
+  },
+  {
+    "label": "Revsudden",
+    "qid": "Q2647367"
+  },
+  {
+    "label": "Halltorp",
+    "qid": "Q2647622"
+  },
+  {
+    "label": "Östad",
+    "qid": "Q2649110"
+  },
+  {
+    "label": "Sövde",
+    "qid": "Q2649257"
+  },
+  {
+    "label": "Jonslund",
+    "qid": "Q2650938"
+  },
+  {
+    "label": "Ekshärad",
+    "qid": "Q2651809"
+  },
+  {
+    "label": "Fjärås station",
+    "qid": "Q2651842"
+  },
+  {
+    "label": "Bränna",
+    "qid": "Q2652591"
+  },
+  {
+    "label": "Frövi",
+    "qid": "Q2654133"
+  },
+  {
+    "label": "Glanshammar",
+    "qid": "Q2655977"
+  },
+  {
+    "label": "Kvänum",
+    "qid": "Q2658219"
+  },
+  {
+    "label": "Mantorp",
+    "qid": "Q2658254"
+  },
+  {
+    "label": "Skruv",
+    "qid": "Q2658294"
+  },
+  {
+    "label": "Hassela kyrkby",
+    "qid": "Q2658372"
+  },
+  {
+    "label": "Knåda",
+    "qid": "Q2658708"
+  },
+  {
+    "label": "Ramnäs",
+    "qid": "Q2662195"
+  },
+  {
+    "label": "Gullabo",
+    "qid": "Q2662548"
+  },
+  {
+    "label": "Granby",
+    "qid": "Q2662878"
+  },
+  {
+    "label": "Billingsfors",
+    "qid": "Q2663175"
+  },
+  {
+    "label": "Kinnared",
+    "qid": "Q2663557"
+  },
+  {
+    "label": "Figeholm",
+    "qid": "Q2664011"
+  },
+  {
+    "label": "Sundbyholm",
+    "qid": "Q2665008"
+  },
+  {
+    "label": "Sunningen",
+    "qid": "Q2665416"
+  },
+  {
+    "label": "Blidsberg",
+    "qid": "Q2665431"
+  },
+  {
+    "label": "Udden",
+    "qid": "Q2665808"
+  },
+  {
+    "label": "Gripenberg",
+    "qid": "Q2665880"
+  },
+  {
+    "label": "Västerberg",
+    "qid": "Q2666121"
+  },
+  {
+    "label": "Bondstorp",
+    "qid": "Q2666648"
+  },
+  {
+    "label": "Parksidan",
+    "qid": "Q2667062"
+  },
+  {
+    "label": "Häradsbäck",
+    "qid": "Q2667238"
+  },
+  {
+    "label": "Myrviken",
+    "qid": "Q2668100"
+  },
+  {
+    "label": "Bruzaholm",
+    "qid": "Q2669257"
+  },
+  {
+    "label": "Gärsnäs",
+    "qid": "Q2670190"
+  },
+  {
+    "label": "Gamleby",
+    "qid": "Q2670538"
+  },
+  {
+    "label": "Stora Höga",
+    "qid": "Q2671027"
+  },
+  {
+    "label": "Vartofta",
+    "qid": "Q2671676"
+  },
+  {
+    "label": "Äsköping",
+    "qid": "Q2672347"
+  },
+  {
+    "label": "Assmundtorp och Skändla",
+    "qid": "Q2672586"
+  },
+  {
+    "label": "Bunkeflostrand",
+    "qid": "Q2673374"
+  },
+  {
+    "label": "Söderala",
+    "qid": "Q2673411"
+  },
+  {
+    "label": "Skyllberg",
+    "qid": "Q2675829"
+  },
+  {
+    "label": "Hornön",
+    "qid": "Q2676169"
+  },
+  {
+    "label": "Hofterup",
+    "qid": "Q2676260"
+  },
+  {
+    "label": "Björksele",
+    "qid": "Q2676272"
+  },
+  {
+    "label": "Vindön",
+    "qid": "Q2676602"
+  },
+  {
+    "label": "Furuvik",
+    "qid": "Q2676717"
+  },
+  {
+    "label": "Västtjärna, Östtjärna och Bomsarvet",
+    "qid": "Q2677384"
+  },
+  {
+    "label": "Marma",
+    "qid": "Q2678633"
+  },
+  {
+    "label": "Väring",
+    "qid": "Q2678920"
+  },
+  {
+    "label": "Gislövs läge och Simremarken",
+    "qid": "Q2679172"
+  },
+  {
+    "label": "Stora Dyrön",
+    "qid": "Q2680003"
+  },
+  {
+    "label": "Gyttorp",
+    "qid": "Q2680061"
+  },
+  {
+    "label": "Gråbo",
+    "qid": "Q2680101"
+  },
+  {
+    "label": "Horred",
+    "qid": "Q2680901"
+  },
+  {
+    "label": "Kappelshamn",
+    "qid": "Q2681542"
+  },
+  {
+    "label": "Hurva",
+    "qid": "Q2682068"
+  },
+  {
+    "label": "Ålberga",
+    "qid": "Q2682623"
+  },
+  {
+    "label": "Kullö",
+    "qid": "Q2682930"
+  },
+  {
+    "label": "Delsbo",
+    "qid": "Q2683285"
+  },
+  {
+    "label": "Älvros",
+    "qid": "Q2683613"
+  },
+  {
+    "label": "Timsfors",
+    "qid": "Q2683887"
+  },
+  {
+    "label": "Ammenäs",
+    "qid": "Q2684247"
+  },
+  {
+    "label": "Skarvsjöby",
+    "qid": "Q2684424"
+  },
+  {
+    "label": "Skeppsdalsström",
+    "qid": "Q2684912"
+  },
+  {
+    "label": "Hunnebostrand",
+    "qid": "Q2685807"
+  },
+  {
+    "label": "Älandsbro",
+    "qid": "Q2686495"
+  },
+  {
+    "label": "Heden",
+    "qid": "Q2687210"
+  },
+  {
+    "label": "Skede",
+    "qid": "Q2687554"
+  },
+  {
+    "label": "Marielund",
+    "qid": "Q27777776"
+  },
+  {
+    "label": "Nättraby",
+    "qid": "Q2687722"
+  },
+  {
+    "label": "Stöcksjö",
+    "qid": "Q2688536"
+  },
+  {
+    "label": "Zinkgruvan",
+    "qid": "Q2690637"
+  },
+  {
+    "label": "Enstaberga",
+    "qid": "Q2690710"
+  },
+  {
+    "label": "Unbyn",
+    "qid": "Q2691263"
+  },
+  {
+    "label": "Linghem",
+    "qid": "Q2691512"
+  },
+  {
+    "label": "Västra Ämtervik",
+    "qid": "Q2692715"
+  },
+  {
+    "label": "Boda glasbruk",
+    "qid": "Q2692720"
+  },
+  {
+    "label": "Grevie och Beden",
+    "qid": "Q2693066"
+  },
+  {
+    "label": "Fjärås kyrkby",
+    "qid": "Q2693152"
+  },
+  {
+    "label": "Alvik",
+    "qid": "Q2796883"
+  },
+  {
+    "label": "Färila",
+    "qid": "Q2693616"
+  },
+  {
+    "label": "Gullholmen",
+    "qid": "Q2693631"
+  },
+  {
+    "label": "Lekeryd",
+    "qid": "Q2693699"
+  },
+  {
+    "label": "Irsta",
+    "qid": "Q2693984"
+  },
+  {
+    "label": "Kusmark",
+    "qid": "Q2694138"
+  },
+  {
+    "label": "Furusjö",
+    "qid": "Q2695509"
+  },
+  {
+    "label": "Knislinge",
+    "qid": "Q2697738"
+  },
+  {
+    "label": "Nittorp",
+    "qid": "Q2698094"
+  },
+  {
+    "label": "Myckelgensjö",
+    "qid": "Q2698304"
+  },
+  {
+    "label": "Öxeryd",
+    "qid": "Q2699906"
+  },
+  {
+    "label": "Persbo",
+    "qid": "Q2700342"
+  },
+  {
+    "label": "Ostvik",
+    "qid": "Q2700628"
+  },
+  {
+    "label": "Karlholmsbruk",
+    "qid": "Q2702448"
+  },
+  {
+    "label": "Ödsmål och Åsebyberg",
+    "qid": "Q2705041"
+  },
+  {
+    "label": "Kimstad",
+    "qid": "Q2705168"
+  },
+  {
+    "label": "Måttsund",
+    "qid": "Q2707050"
+  },
+  {
+    "label": "Ullervad",
+    "qid": "Q2711105"
+  },
+  {
+    "label": "Hemmingsmark",
+    "qid": "Q2711517"
+  },
+  {
+    "label": "Södra Svartbyn",
+    "qid": "Q2711705"
+  },
+  {
+    "label": "Ölsta",
+    "qid": "Q2712411"
+  },
+  {
+    "label": "Åsensbruk",
+    "qid": "Q2712623"
+  },
+  {
+    "label": "Markitta",
+    "qid": "Q2713586"
+  },
+  {
+    "label": "Svalsta",
+    "qid": "Q2717853"
+  },
+  {
+    "label": "Landvetter",
+    "qid": "Q2718041"
+  },
+  {
+    "label": "Övertänger",
+    "qid": "Q2719961"
+  },
+  {
+    "label": "Herstadberg",
+    "qid": "Q2720267"
+  },
+  {
+    "label": "Skärgårdsstad",
+    "qid": "Q2720871"
+  },
+  {
+    "label": "Rappestad",
+    "qid": "Q2723125"
+  },
+  {
+    "label": "Kopparmora",
+    "qid": "Q2723730"
+  },
+  {
+    "label": "Nya Långenäs",
+    "qid": "Q2725078"
+  },
+  {
+    "label": "Hällingsjö",
+    "qid": "Q2730693"
+  },
+  {
+    "label": "Skeppsvik",
+    "qid": "Q2731716"
+  },
+  {
+    "label": "Öggestorp",
+    "qid": "Q2736021"
+  },
+  {
+    "label": "Ljungsbro",
+    "qid": "Q2736142"
+  },
+  {
+    "label": "Harads",
+    "qid": "Q2737240"
+  },
+  {
+    "label": "Västerbodarna",
+    "qid": "Q2737463"
+  },
+  {
+    "label": "Skattkärr",
+    "qid": "Q2737723"
+  },
+  {
+    "label": "Ljunghusen",
+    "qid": "Q2738425"
+  },
+  {
+    "label": "Jonstorp",
+    "qid": "Q2738847"
+  },
+  {
+    "label": "Norrbyn",
+    "qid": "Q2739447"
+  },
+  {
+    "label": "Åmot",
+    "qid": "Q2740091"
+  },
+  {
+    "label": "Järbo",
+    "qid": "Q2741549"
+  },
+  {
+    "label": "Arnö",
+    "qid": "Q2742521"
+  },
+  {
+    "label": "Gårdstånga",
+    "qid": "Q2743387"
+  },
+  {
+    "label": "Tygelsjö",
+    "qid": "Q2744244"
+  },
+  {
+    "label": "Norr-Hede",
+    "qid": "Q2745275"
+  },
+  {
+    "label": "Taberg",
+    "qid": "Q2745396"
+  },
+  {
+    "label": "Korskrogen",
+    "qid": "Q2745695"
+  },
+  {
+    "label": "Skärstad",
+    "qid": "Q2745780"
+  },
+  {
+    "label": "Tortuna",
+    "qid": "Q2747525"
+  },
+  {
+    "label": "Skottorp",
+    "qid": "Q2747897"
+  },
+  {
+    "label": "Frändefors",
+    "qid": "Q2748446"
+  },
+  {
+    "label": "Gårdskär",
+    "qid": "Q2748886"
+  },
+  {
+    "label": "Källby",
+    "qid": "Q2753703"
+  },
+  {
+    "label": "Saleby",
+    "qid": "Q2754408"
+  },
+  {
+    "label": "Tillberga",
+    "qid": "Q2754664"
+  },
+  {
+    "label": "Blyberg",
+    "qid": "Q2755740"
+  },
+  {
+    "label": "Tällberg",
+    "qid": "Q2763404"
+  },
+  {
+    "label": "Ånäset",
+    "qid": "Q2767049"
+  },
+  {
+    "label": "Anderslöv",
+    "qid": "Q2767924"
+  },
+  {
+    "label": "Toarp",
+    "qid": "Q2770435"
+  },
+  {
+    "label": "Myckle",
+    "qid": "Q2771094"
+  },
+  {
+    "label": "Högboda",
+    "qid": "Q2772987"
+  },
+  {
+    "label": "Billinge",
+    "qid": "Q2777507"
+  },
+  {
+    "label": "Vankiva",
+    "qid": "Q2779618"
+  },
+  {
+    "label": "Örserum",
+    "qid": "Q2779822"
+  },
+  {
+    "label": "Vikmanshyttan",
+    "qid": "Q2780140"
+  },
+  {
+    "label": "Skegrie",
+    "qid": "Q2780759"
+  },
+  {
+    "label": "Hällevadsholm",
+    "qid": "Q2781195"
+  },
+  {
+    "label": "Björneborg",
+    "qid": "Q2783471"
+  },
+  {
+    "label": "Annelöv",
+    "qid": "Q2783595"
+  },
+  {
+    "label": "Mockfjärd",
+    "qid": "Q2783875"
+  },
+  {
+    "label": "Köpmanholmen",
+    "qid": "Q2785610"
+  },
+  {
+    "label": "Lysvik",
+    "qid": "Q2786632"
+  },
+  {
+    "label": "Buskhyttan",
+    "qid": "Q2788330"
+  },
+  {
+    "label": "Sjunnen",
+    "qid": "Q2788707"
+  },
+  {
+    "label": "Haga",
+    "qid": "Q2789155"
+  },
+  {
+    "label": "Hasselfors",
+    "qid": "Q2789435"
+  },
+  {
+    "label": "Björnö",
+    "qid": "Q2789516"
+  },
+  {
+    "label": "Björna",
+    "qid": "Q2790005"
+  },
+  {
+    "label": "Sjuntorp",
+    "qid": "Q2790350"
+  },
+  {
+    "label": "Källö-Knippla",
+    "qid": "Q2790726"
+  },
+  {
+    "label": "Torhamn",
+    "qid": "Q2790766"
+  },
+  {
+    "label": "Glommen",
+    "qid": "Q2792187"
+  },
+  {
+    "label": "Träslövsläge",
+    "qid": "Q2793197"
+  },
+  {
+    "label": "Gammelgården",
+    "qid": "Q2794081"
+  },
+  {
+    "label": "Tråvad",
+    "qid": "Q2794995"
+  },
+  {
+    "label": "Hammarn",
+    "qid": "Q2795273"
+  },
+  {
+    "label": "Marmaverken",
+    "qid": "Q2795909"
+  },
+  {
+    "label": "Harg",
+    "qid": "Q4567322"
+  },
+  {
+    "label": "Arkösund",
+    "qid": "Q2799140"
+  },
+  {
+    "label": "Skedala",
+    "qid": "Q2799196"
+  },
+  {
+    "label": "Mjöhult",
+    "qid": "Q2799504"
+  },
+  {
+    "label": "Väne-Åsaka",
+    "qid": "Q2802737"
+  },
+  {
+    "label": "Ljustorp",
+    "qid": "Q2804239"
+  },
+  {
+    "label": "Rottneros",
+    "qid": "Q2804789"
+  },
+  {
+    "label": "Timmele",
+    "qid": "Q2838521"
+  },
+  {
+    "label": "Tunadal",
+    "qid": "Q2842068"
+  },
+  {
+    "label": "Limmared",
+    "qid": "Q2842587"
+  },
+  {
+    "label": "Svartvik",
+    "qid": "Q2846130"
+  },
+  {
+    "label": "Eggby",
+    "qid": "Q2850493"
+  },
+  {
+    "label": "Forserum",
+    "qid": "Q2854566"
+  },
+  {
+    "label": "Hammarby",
+    "qid": "Q2855490"
+  },
+  {
+    "label": "Blomstermåla",
+    "qid": "Q2861150"
+  },
+  {
+    "label": "Halla Heberg",
+    "qid": "Q2862487"
+  },
+  {
+    "label": "Västermyckeläng",
+    "qid": "Q2864156"
+  },
+  {
+    "label": "Askim",
+    "qid": "Q2866688"
+  },
+  {
+    "label": "Vidja",
+    "qid": "Q2867859"
+  },
+  {
+    "label": "Ulvkälla",
+    "qid": "Q2874060"
+  },
+  {
+    "label": "Enhagen-Ekbacken",
+    "qid": "Q2875711"
+  },
+  {
+    "label": "Kävsta",
+    "qid": "Q2878387"
+  },
+  {
+    "label": "Kanntorp",
+    "qid": "Q2882680"
+  },
+  {
+    "label": "Södra Klagshamn",
+    "qid": "Q2883749"
+  },
+  {
+    "label": "Vintrosa",
+    "qid": "Q2887103"
+  },
+  {
+    "label": "Stavsnäs",
+    "qid": "Q2887420"
+  },
+  {
+    "label": "Åselstad",
+    "qid": "Q2896535"
+  },
+  {
+    "label": "Nolvik",
+    "qid": "Q2898648"
+  },
+  {
+    "label": "Vinslöv",
+    "qid": "Q2905916"
+  },
+  {
+    "label": "Röbäck",
+    "qid": "Q2912196"
+  },
+  {
+    "label": "Ekeby-Almby",
+    "qid": "Q2912955"
+  },
+  {
+    "label": "Konga",
+    "qid": "Q2913597"
+  },
+  {
+    "label": "Finnerödja",
+    "qid": "Q2914305"
+  },
+  {
+    "label": "Gusum",
+    "qid": "Q2916112"
+  },
+  {
+    "label": "Puoltikasvaara",
+    "qid": "Q2920869"
+  },
+  {
+    "label": "Gånghester",
+    "qid": "Q2921055"
+  },
+  {
+    "label": "Ramstalund",
+    "qid": "Q2922057"
+  },
+  {
+    "label": "Bua",
+    "qid": "Q2927375"
+  },
+  {
+    "label": "Mörtnäs",
+    "qid": "Q2934594"
+  },
+  {
+    "label": "Bälgviken",
+    "qid": "Q2934890"
+  },
+  {
+    "label": "Forsmo",
+    "qid": "Q2938720"
+  },
+  {
+    "label": "Krylbo",
+    "qid": "Q2943699"
+  },
+  {
+    "label": "Skene",
+    "qid": "Q2943707"
+  },
+  {
+    "label": "Norrahammar",
+    "qid": "Q2944368"
+  },
+  {
+    "label": "Tun",
+    "qid": "Q2950373"
+  },
+  {
+    "label": "Hedekas",
+    "qid": "Q2952994"
+  },
+  {
+    "label": "Falla",
+    "qid": "Q2956523"
+  },
+  {
+    "label": "Dingtuna",
+    "qid": "Q2962508"
+  },
+  {
+    "label": "Johannedal",
+    "qid": "Q2963212"
+  },
+  {
+    "label": "Skepplanda",
+    "qid": "Q2966000"
+  },
+  {
+    "label": "Persön",
+    "qid": "Q2971138"
+  },
+  {
+    "label": "Sandkullen och Sågarehagen",
+    "qid": "Q2973272"
+  },
+  {
+    "label": "Östraby",
+    "qid": "Q2977669"
+  },
+  {
+    "label": "Vallvik",
+    "qid": "Q2983232"
+  },
+  {
+    "label": "Vittinge",
+    "qid": "Q2983418"
+  },
+  {
+    "label": "Junsele",
+    "qid": "Q2995125"
+  },
+  {
+    "label": "Dala-Floda",
+    "qid": "Q2996081"
+  },
+  {
+    "label": "Malungsfors",
+    "qid": "Q2997191"
+  },
+  {
+    "label": "Frösakull",
+    "qid": "Q2998789"
+  },
+  {
+    "label": "Örsundsbro",
+    "qid": "Q3006215"
+  },
+  {
+    "label": "Vejbystrand",
+    "qid": "Q3006951"
+  },
+  {
+    "label": "Östorp och Ådran",
+    "qid": "Q3013436"
+  },
+  {
+    "label": "Lillhärdal",
+    "qid": "Q3019256"
+  },
+  {
+    "label": "Q3023364",
+    "qid": "Q3023364"
+  },
+  {
+    "label": "Eriksmåla",
+    "qid": "Q3026734"
+  },
+  {
+    "label": "Lugnvik",
+    "qid": "Q3027521"
+  },
+  {
+    "label": "Gesunda",
+    "qid": "Q3032658"
+  },
+  {
+    "label": "Sätila",
+    "qid": "Q3032670"
+  },
+  {
+    "label": "Lauker",
+    "qid": "Q3033509"
+  },
+  {
+    "label": "Ucklum",
+    "qid": "Q3036168"
+  },
+  {
+    "label": "Sturefors",
+    "qid": "Q3036463"
+  },
+  {
+    "label": "Södra Bergsbyn och Stackgrönnan",
+    "qid": "Q3036953"
+  },
+  {
+    "label": "Ställberg",
+    "qid": "Q3039090"
+  },
+  {
+    "label": "Mehedeby",
+    "qid": "Q3049399"
+  },
+  {
+    "label": "Skultuna",
+    "qid": "Q3051144"
+  },
+  {
+    "label": "Höja",
+    "qid": "Q3052509"
+  },
+  {
+    "label": "Brevens bruk",
+    "qid": "Q3054647"
+  },
+  {
+    "label": "Larv",
+    "qid": "Q3055179"
+  },
+  {
+    "label": "Hovsta",
+    "qid": "Q3055207"
+  },
+  {
+    "label": "Vikingstad",
+    "qid": "Q3055238"
+  },
+  {
+    "label": "Strömsnäsbruk",
+    "qid": "Q3056196"
+  },
+  {
+    "label": "Ukna",
+    "qid": "Q3057770"
+  },
+  {
+    "label": "Almvik",
+    "qid": "Q3063764"
+  },
+  {
+    "label": "Frånö",
+    "qid": "Q3067409"
+  },
+  {
+    "label": "Tånga och Rögle",
+    "qid": "Q3081766"
+  },
+  {
+    "label": "Rabbalshede",
+    "qid": "Q3083929"
+  },
+  {
+    "label": "Tystberga",
+    "qid": "Q3084332"
+  },
+  {
+    "label": "Rydsgård",
+    "qid": "Q3086631"
+  },
+  {
+    "label": "Vänge",
+    "qid": "Q3087656"
+  },
+  {
+    "label": "Västerfärnebo",
+    "qid": "Q3088799"
+  },
+  {
+    "label": "Hedeskoga",
+    "qid": "Q3088823"
+  },
+  {
+    "label": "Blikstorp",
+    "qid": "Q3089770"
+  },
+  {
+    "label": "Södra Gäddvik",
+    "qid": "Q3091527"
+  },
+  {
+    "label": "Garphyttan",
+    "qid": "Q3098445"
+  },
+  {
+    "label": "Askersby",
+    "qid": "Q3101461"
+  },
+  {
+    "label": "Stora Rör",
+    "qid": "Q3112588"
+  },
+  {
+    "label": "Ulvåker",
+    "qid": "Q3117730"
+  },
+  {
+    "label": "Grödby",
+    "qid": "Q3118637"
+  },
+  {
+    "label": "Klövsjö",
+    "qid": "Q3119026"
+  },
+  {
+    "label": "Harbo",
+    "qid": "Q3120979"
+  },
+  {
+    "label": "Hjärsås",
+    "qid": "Q3127567"
+  },
+  {
+    "label": "Överum",
+    "qid": "Q3131205"
+  },
+  {
+    "label": "Sundom",
+    "qid": "Q3136973"
+  },
+  {
+    "label": "Kopparnäs",
+    "qid": "Q3139476"
+  },
+  {
+    "label": "Rosersberg",
+    "qid": "Q3146766"
+  },
+  {
+    "label": "Freluga",
+    "qid": "Q3147148"
+  },
+  {
+    "label": "Resarö",
+    "qid": "Q3148672"
+  },
+  {
+    "label": "Torreby",
+    "qid": "Q3150541"
+  },
+  {
+    "label": "Hällberga",
+    "qid": "Q3152552"
+  },
+  {
+    "label": "Segmon",
+    "qid": "Q3161335"
+  },
+  {
+    "label": "Stensjön",
+    "qid": "Q3170146"
+  },
+  {
+    "label": "Sexdrega",
+    "qid": "Q3176178"
+  },
+  {
+    "label": "Spångsholm",
+    "qid": "Q3176707"
+  },
+  {
+    "label": "Åmmeberg",
+    "qid": "Q3179963"
+  },
+  {
+    "label": "Sigtuna",
+    "qid": "Q3183470"
+  },
+  {
+    "label": "Älmsta",
+    "qid": "Q3185307"
+  },
+  {
+    "label": "Stora Herrestad",
+    "qid": "Q3185936"
+  },
+  {
+    "label": "Moheda",
+    "qid": "Q3188859"
+  },
+  {
+    "label": "Jämtön",
+    "qid": "Q3190035"
+  },
+  {
+    "label": "Kvillsfors",
+    "qid": "Q3195551"
+  },
+  {
+    "label": "Aspås",
+    "qid": "Q3198612"
+  },
+  {
+    "label": "Röda holme",
+    "qid": "Q3205882"
+  },
+  {
+    "label": "Nykyrka",
+    "qid": "Q3207717"
+  },
+  {
+    "label": "Kyrkhult",
+    "qid": "Q3217014"
+  },
+  {
+    "label": "Fridafors",
+    "qid": "Q3224517"
+  },
+  {
+    "label": "Sysslebäck",
+    "qid": "Q3231469"
+  },
+  {
+    "label": "Jämshög",
+    "qid": "Q3232599"
+  },
+  {
+    "label": "Nykroppa",
+    "qid": "Q3234094"
+  },
+  {
+    "label": "Töre",
+    "qid": "Q3235942"
+  },
+  {
+    "label": "Brunnsberg",
+    "qid": "Q3238156"
+  },
+  {
+    "label": "Frufällan",
+    "qid": "Q3239618"
+  },
+  {
+    "label": "Gällstad",
+    "qid": "Q3239727"
+  },
+  {
+    "label": "Hedvigsberg",
+    "qid": "Q3239838"
+  },
+  {
+    "label": "Horn",
+    "qid": "Q3239921"
+  },
+  {
+    "label": "Härnösand",
+    "qid": "Q3240427"
+  },
+  {
+    "label": "Åmotfors",
+    "qid": "Q3241305"
+  },
+  {
+    "label": "Överlida",
+    "qid": "Q3241562"
+  },
+  {
+    "label": "Väse",
+    "qid": "Q3251047"
+  },
+  {
+    "label": "Byske",
+    "qid": "Q3253869"
+  },
+  {
+    "label": "Åsenhöga",
+    "qid": "Q3254122"
+  },
+  {
+    "label": "Madängsholm",
+    "qid": "Q3258365"
+  },
+  {
+    "label": "Skärplinge",
+    "qid": "Q3262098"
+  },
+  {
+    "label": "Rydebäck",
+    "qid": "Q3272598"
+  },
+  {
+    "label": "Abborrberget",
+    "qid": "Q3273780"
+  },
+  {
+    "label": "Alberga",
+    "qid": "Q3274078"
+  },
+  {
+    "label": "Agunnaryd",
+    "qid": "Q3274133"
+  },
+  {
+    "label": "Allerum",
+    "qid": "Q3274209"
+  },
+  {
+    "label": "Angered",
+    "qid": "Q3274356"
+  },
+  {
+    "label": "Östra Bispgården",
+    "qid": "Q3277804"
+  },
+  {
+    "label": "Eda glasbruk",
+    "qid": "Q3280388"
+  },
+  {
+    "label": "Saxdalen",
+    "qid": "Q3280650"
+  },
+  {
+    "label": "Optand",
+    "qid": "Q3283288"
+  },
+  {
+    "label": "Bankekind",
+    "qid": "Q3283658"
+  },
+  {
+    "label": "Berga",
+    "qid": "Q31899647"
+  },
+  {
+    "label": "Bergshamra",
+    "qid": "Q15075055"
+  },
+  {
+    "label": "Björke",
+    "qid": "Q3283732"
+  },
+  {
+    "label": "Björkviken",
+    "qid": "Q3283772"
+  },
+  {
+    "label": "Björsäter",
+    "qid": "Q3283799"
+  },
+  {
+    "label": "Bor",
+    "qid": "Q3283825"
+  },
+  {
+    "label": "Borgstena",
+    "qid": "Q3283851"
+  },
+  {
+    "label": "Bottnaryd",
+    "qid": "Q3283871"
+  },
+  {
+    "label": "Bredaryd",
+    "qid": "Q3283889"
+  },
+  {
+    "label": "Bredsand",
+    "qid": "Q3283919"
+  },
+  {
+    "label": "Brokind",
+    "qid": "Q3283943"
+  },
+  {
+    "label": "Brändön",
+    "qid": "Q3283968"
+  },
+  {
+    "label": "Brännland",
+    "qid": "Q3283994"
+  },
+  {
+    "label": "Bygdeå",
+    "qid": "Q3284045"
+  },
+  {
+    "label": "Bärby",
+    "qid": "Q3284067"
+  },
+  {
+    "label": "Dalum",
+    "qid": "Q3284087"
+  },
+  {
+    "label": "Östra Ryd",
+    "qid": "Q3284111"
+  },
+  {
+    "label": "Sandsjöfors",
+    "qid": "Q3285834"
+  },
+  {
+    "label": "Danholn",
+    "qid": "Q3286360"
+  },
+  {
+    "label": "Dingersjö",
+    "qid": "Q3286478"
+  },
+  {
+    "label": "Drängsmark",
+    "qid": "Q3286544"
+  },
+  {
+    "label": "Dvärsätt",
+    "qid": "Q3286571"
+  },
+  {
+    "label": "Dyvelsten",
+    "qid": "Q3286606"
+  },
+  {
+    "label": "Nedansjö",
+    "qid": "Q3289076"
+  },
+  {
+    "label": "Krägga",
+    "qid": "Q3290262"
+  },
+  {
+    "label": "Ekedalen",
+    "qid": "Q3290752"
+  },
+  {
+    "label": "Emsfors",
+    "qid": "Q3290812"
+  },
+  {
+    "label": "Eskilsby och Snugga",
+    "qid": "Q3290854"
+  },
+  {
+    "label": "Fanbyn",
+    "qid": "Q3290993"
+  },
+  {
+    "label": "Forsby",
+    "qid": "Q3291048"
+  },
+  {
+    "label": "Fredriksdal",
+    "qid": "Q3291144"
+  },
+  {
+    "label": "Fristad",
+    "qid": "Q3291202"
+  },
+  {
+    "label": "Fårbo",
+    "qid": "Q3291269"
+  },
+  {
+    "label": "Grönhögen",
+    "qid": "Q3296685"
+  },
+  {
+    "label": "Sibo",
+    "qid": "Q3297321"
+  },
+  {
+    "label": "Länghem",
+    "qid": "Q3301385"
+  },
+  {
+    "label": "Garpenberg",
+    "qid": "Q3305026"
+  },
+  {
+    "label": "Gränum",
+    "qid": "Q3307574"
+  },
+  {
+    "label": "Västra Husby",
+    "qid": "Q3309808"
+  },
+  {
+    "label": "Sibble",
+    "qid": "Q3327958"
+  },
+  {
+    "label": "Jokkmokk",
+    "qid": "Q3335533"
+  },
+  {
+    "label": "Sya",
+    "qid": "Q3340730"
+  },
+  {
+    "label": "Misterhult",
+    "qid": "Q3350113"
+  },
+  {
+    "label": "Sunnansjö",
+    "qid": "Q3352386"
+  },
+  {
+    "label": "Vaplan",
+    "qid": "Q3352392"
+  },
+  {
+    "label": "Torsång",
+    "qid": "Q3352395"
+  },
+  {
+    "label": "Linghed",
+    "qid": "Q3352400"
+  },
+  {
+    "label": "Sangis",
+    "qid": "Q3352405"
+  },
+  {
+    "label": "Skog",
+    "qid": "Q3352418"
+  },
+  {
+    "label": "Svartbyn",
+    "qid": "Q3352430"
+  },
+  {
+    "label": "Klöverträsk",
+    "qid": "Q3352436"
+  },
+  {
+    "label": "Hålsjö",
+    "qid": "Q3352444"
+  },
+  {
+    "label": "Nikkala",
+    "qid": "Q3352452"
+  },
+  {
+    "label": "Vännäsberget",
+    "qid": "Q3352458"
+  },
+  {
+    "label": "Solvarbo",
+    "qid": "Q3352466"
+  },
+  {
+    "label": "Vallargärdet",
+    "qid": "Q3352695"
+  },
+  {
+    "label": "Våmhus",
+    "qid": "Q3352701"
+  },
+  {
+    "label": "Trödje",
+    "qid": "Q3352717"
+  },
+  {
+    "label": "Rot",
+    "qid": "Q3352725"
+  },
+  {
+    "label": "Norr Amsberg",
+    "qid": "Q3352733"
+  },
+  {
+    "label": "Vedevåg",
+    "qid": "Q3352742"
+  },
+  {
+    "label": "Kallax",
+    "qid": "Q3352747"
+  },
+  {
+    "label": "Kärsta och Bredsdal",
+    "qid": "Q3352753"
+  },
+  {
+    "label": "Munga",
+    "qid": "Q3352758"
+  },
+  {
+    "label": "Skebobruk",
+    "qid": "Q3352767"
+  },
+  {
+    "label": "Ängsvik",
+    "qid": "Q3352775"
+  },
+  {
+    "label": "Vattubrinken",
+    "qid": "Q3352778"
+  },
+  {
+    "label": "Norra Bro",
+    "qid": "Q3352783"
+  },
+  {
+    "label": "Håbo-Tibble kyrkby",
+    "qid": "Q3352792"
+  },
+  {
+    "label": "Viksäter",
+    "qid": "Q3352799"
+  },
+  {
+    "label": "Skyttorp",
+    "qid": "Q3352807"
+  },
+  {
+    "label": "Sulvik",
+    "qid": "Q3352813"
+  },
+  {
+    "label": "Oleby",
+    "qid": "Q3352821"
+  },
+  {
+    "label": "Hästhagen",
+    "qid": "Q3352829"
+  },
+  {
+    "label": "Jädraås",
+    "qid": "Q3352838"
+  },
+  {
+    "label": "Ölmbrotorp",
+    "qid": "Q3352847"
+  },
+  {
+    "label": "Herräng",
+    "qid": "Q3352856"
+  },
+  {
+    "label": "Norra Ingaröstrand",
+    "qid": "Q3352861"
+  },
+  {
+    "label": "Transtrand",
+    "qid": "Q3352868"
+  },
+  {
+    "label": "Rydöbruk",
+    "qid": "Q3353264"
+  },
+  {
+    "label": "Värsås",
+    "qid": "Q3353269"
+  },
+  {
+    "label": "Hällestad",
+    "qid": "Q3353277"
+  },
+  {
+    "label": "Gessie villastad",
+    "qid": "Q3353283"
+  },
+  {
+    "label": "Kristdala",
+    "qid": "Q3353573"
+  },
+  {
+    "label": "Sjögestad",
+    "qid": "Q3353584"
+  },
+  {
+    "label": "Karups sommarby",
+    "qid": "Q3353590"
+  },
+  {
+    "label": "Skepparkroken",
+    "qid": "Q3353608"
+  },
+  {
+    "label": "Landeryd",
+    "qid": "Q3353615"
+  },
+  {
+    "label": "Grebo",
+    "qid": "Q3353624"
+  },
+  {
+    "label": "Vitaby",
+    "qid": "Q3353629"
+  },
+  {
+    "label": "Kungshult",
+    "qid": "Q3353644"
+  },
+  {
+    "label": "Västra Torup",
+    "qid": "Q3353651"
+  },
+  {
+    "label": "Rinkabyholm",
+    "qid": "Q3353656"
+  },
+  {
+    "label": "Strövelstorp",
+    "qid": "Q3353662"
+  },
+  {
+    "label": "Hittarp",
+    "qid": "Q3353670"
+  },
+  {
+    "label": "Igelfors",
+    "qid": "Q3353693"
+  },
+  {
+    "label": "Norra Rörum",
+    "qid": "Q3353698"
+  },
+  {
+    "label": "Västra Karup",
+    "qid": "Q3353724"
+  },
+  {
+    "label": "Stjärnhov",
+    "qid": "Q3353732"
+  },
+  {
+    "label": "Mysingsö",
+    "qid": "Q3353814"
+  },
+  {
+    "label": "Hillared",
+    "qid": "Q3353822"
+  },
+  {
+    "label": "Gualöv",
+    "qid": "Q3353827"
+  },
+  {
+    "label": "Killeberg",
+    "qid": "Q3353884"
+  },
+  {
+    "label": "Tidö-Lindö",
+    "qid": "Q3353898"
+  },
+  {
+    "label": "Johansfors",
+    "qid": "Q3353905"
+  },
+  {
+    "label": "Sjötofta",
+    "qid": "Q3353912"
+  },
+  {
+    "label": "Hällabrottet",
+    "qid": "Q3353925"
+  },
+  {
+    "label": "Simlångsdalen",
+    "qid": "Q3353931"
+  },
+  {
+    "label": "Rönneshytta",
+    "qid": "Q3354155"
+  },
+  {
+    "label": "Lillkyrka",
+    "qid": "Q3354166"
+  },
+  {
+    "label": "Hjorted",
+    "qid": "Q3354175"
+  },
+  {
+    "label": "Påryd",
+    "qid": "Q3354182"
+  },
+  {
+    "label": "Latorpsbruk",
+    "qid": "Q3354188"
+  },
+  {
+    "label": "Holsljunga",
+    "qid": "Q3354195"
+  },
+  {
+    "label": "Rosenlund",
+    "qid": "Q3354202"
+  },
+  {
+    "label": "Trekanten",
+    "qid": "Q3354211"
+  },
+  {
+    "label": "Återvall",
+    "qid": "Q3354220"
+  },
+  {
+    "label": "Västra Klagstorp",
+    "qid": "Q3354228"
+  },
+  {
+    "label": "Landsbro",
+    "qid": "Q3354232"
+  },
+  {
+    "label": "Riala",
+    "qid": "Q3354235"
+  },
+  {
+    "label": "Raksta",
+    "qid": "Q3354293"
+  },
+  {
+    "label": "Jössefors",
+    "qid": "Q3354490"
+  },
+  {
+    "label": "Simonstorp",
+    "qid": "Q3354506"
+  },
+  {
+    "label": "Vegby",
+    "qid": "Q3354518"
+  },
+  {
+    "label": "Näsum",
+    "qid": "Q3354523"
+  },
+  {
+    "label": "Sjörröd",
+    "qid": "Q3354528"
+  },
+  {
+    "label": "Norrhult-Klavreström",
+    "qid": "Q3354561"
+  },
+  {
+    "label": "Rotebro",
+    "qid": "Q3354585"
+  },
+  {
+    "label": "Tångaberg",
+    "qid": "Q3355260"
+  },
+  {
+    "label": "Rydboholm",
+    "qid": "Q3358777"
+  },
+  {
+    "label": "Ulrika",
+    "qid": "Q3365375"
+  },
+  {
+    "label": "Hoverberg",
+    "qid": "Q3368761"
+  },
+  {
+    "label": "Rejmyre",
+    "qid": "Q3375836"
+  },
+  {
+    "label": "Västergarn",
+    "qid": "Q3392833"
+  },
+  {
+    "label": "Stackmora",
+    "qid": "Q3424726"
+  },
+  {
+    "label": "Östra Vemmerlöv",
+    "qid": "Q3427719"
+  },
+  {
+    "label": "Lakaträsk",
+    "qid": "Q3429273"
+  },
+  {
+    "label": "Fleninge",
+    "qid": "Q3435883"
+  },
+  {
+    "label": "Snogeröd",
+    "qid": "Q3438088"
+  },
+  {
+    "label": "Skorped",
+    "qid": "Q3453881"
+  },
+  {
+    "label": "Gimo",
+    "qid": "Q3470033"
+  },
+  {
+    "label": "Kurland",
+    "qid": "Q3470137"
+  },
+  {
+    "label": "Nyland",
+    "qid": "Q3470247"
+  },
+  {
+    "label": "Österhagen och Bergliden",
+    "qid": "Q3471364"
+  },
+  {
+    "label": "Os",
+    "qid": "Q3472268"
+  },
+  {
+    "label": "Häljarp",
+    "qid": "Q3472963"
+  },
+  {
+    "label": "Hällesåker",
+    "qid": "Q3473140"
+  },
+  {
+    "label": "Johannesudd",
+    "qid": "Q3473190"
+  },
+  {
+    "label": "Katrinedal",
+    "qid": "Q3473321"
+  },
+  {
+    "label": "Kolsva",
+    "qid": "Q3473443"
+  },
+  {
+    "label": "Östra Kallfors",
+    "qid": "Q3473978"
+  },
+  {
+    "label": "Östavall",
+    "qid": "Q3474026"
+  },
+  {
+    "label": "Västra Tommarp",
+    "qid": "Q3474108"
+  },
+  {
+    "label": "Sänna",
+    "qid": "Q3492923"
+  },
+  {
+    "label": "Sunnersta",
+    "qid": "Q3503923"
+  },
+  {
+    "label": "Dikanäs",
+    "qid": "Q3519084"
+  },
+  {
+    "label": "Maln",
+    "qid": "Q3527448"
+  },
+  {
+    "label": "Torpa",
+    "qid": "Q3532402"
+  },
+  {
+    "label": "Lanesund och Överby",
+    "qid": "Q3538518"
+  },
+  {
+    "label": "Lesjöfors",
+    "qid": "Q3541947"
+  },
+  {
+    "label": "Långträsk",
+    "qid": "Q3542333"
+  },
+  {
+    "label": "Lidatorp och Klövsta",
+    "qid": "Q3543026"
+  },
+  {
+    "label": "Lilla Stenby",
+    "qid": "Q3543034"
+  },
+  {
+    "label": "Lurudden",
+    "qid": "Q3543398"
+  },
+  {
+    "label": "Malmköping",
+    "qid": "Q3543408"
+  },
+  {
+    "label": "Rälla",
+    "qid": "Q3581893"
+  },
+  {
+    "label": "Stamsjö",
+    "qid": "Q3581969"
+  },
+  {
+    "label": "Söderby",
+    "qid": "Q26156345"
+  },
+  {
+    "label": "Norra Riksten",
+    "qid": "Q3588621"
+  },
+  {
+    "label": "Norrtälje",
+    "qid": "Q3588743"
+  },
+  {
+    "label": "Nygård",
+    "qid": "Q3589137"
+  },
+  {
+    "label": "Ramdala",
+    "qid": "Q3589206"
+  },
+  {
+    "label": "Skreanäs",
+    "qid": "Q3589277"
+  },
+  {
+    "label": "Vassbäck",
+    "qid": "Q3589391"
+  },
+  {
+    "label": "Rolfhamre och Måga",
+    "qid": "Q3590956"
+  },
+  {
+    "label": "Roma kyrkby",
+    "qid": "Q3591769"
+  },
+  {
+    "label": "Tulebo",
+    "qid": "Q3591927"
+  },
+  {
+    "label": "Skultorp",
+    "qid": "Q3592089"
+  },
+  {
+    "label": "Vansö kyrkby",
+    "qid": "Q3592090"
+  },
+  {
+    "label": "Rättarboda",
+    "qid": "Q3593689"
+  },
+  {
+    "label": "Strandnorum",
+    "qid": "Q3593731"
+  },
+  {
+    "label": "Skriketorp",
+    "qid": "Q3593876"
+  },
+  {
+    "label": "Upphärad",
+    "qid": "Q3593896"
+  },
+  {
+    "label": "Utby",
+    "qid": "Q3593929"
+  },
+  {
+    "label": "Vallåkra",
+    "qid": "Q3593954"
+  },
+  {
+    "label": "Tullinge",
+    "qid": "Q3622685"
+  },
+  {
+    "label": "Tureberg",
+    "qid": "Q3656344"
+  },
+  {
+    "label": "Fällfors",
+    "qid": "Q3908877"
+  },
+  {
+    "label": "Bergkarlås",
+    "qid": "Q3916755"
+  },
+  {
+    "label": "Ulebergshamn",
+    "qid": "Q4031840"
+  },
+  {
+    "label": "Flemingsberg",
+    "qid": "Q4117115"
+  },
+  {
+    "label": "Borghamn",
+    "qid": "Q4128745"
+  },
+  {
+    "label": "Ängelsberg",
+    "qid": "Q4348708"
+  },
+  {
+    "label": "Möcklö",
+    "qid": "Q4350383"
+  },
+  {
+    "label": "Kallhäll",
+    "qid": "Q4353510"
+  },
+  {
+    "label": "Böda",
+    "qid": "Q4452104"
+  },
+  {
+    "label": "Hedkärra",
+    "qid": "Q4511709"
+  },
+  {
+    "label": "Svanö",
+    "qid": "Q4534406"
+  },
+  {
+    "label": "Kullavik",
+    "qid": "Q4568251"
+  },
+  {
+    "label": "Mölntorp",
+    "qid": "Q4635055"
+  },
+  {
+    "label": "Alafors",
+    "qid": "Q4705562"
+  },
+  {
+    "label": "Lumsheden",
+    "qid": "Q4886832"
+  },
+  {
+    "label": "Björkskatan",
+    "qid": "Q4919690"
+  },
+  {
+    "label": "Klagshamn",
+    "qid": "Q4993667"
+  },
+  {
+    "label": "Gårdsjö",
+    "qid": "Q5036771"
+  },
+  {
+    "label": "Rätan",
+    "qid": "Q5146109"
+  },
+  {
+    "label": "Danmark",
+    "qid": "Q5273924"
+  },
+  {
+    "label": "Boviken",
+    "qid": "Q5332124"
+  },
+  {
+    "label": "Ella Park",
+    "qid": "Q5364554"
+  },
+  {
+    "label": "Viforsen och Tunbyn",
+    "qid": "Q5374319"
+  },
+  {
+    "label": "Enebyberg",
+    "qid": "Q5376722"
+  },
+  {
+    "label": "Rönninge",
+    "qid": "Q5391401"
+  },
+  {
+    "label": "Fittja",
+    "qid": "Q5455513"
+  },
+  {
+    "label": "Herrskogen",
+    "qid": "Q5744230"
+  },
+  {
+    "label": "Tye",
+    "qid": "Q5818807"
+  },
+  {
+    "label": "Hjulsbro",
+    "qid": "Q5873286"
+  },
+  {
+    "label": "Trångfors",
+    "qid": "Q5901961"
+  },
+  {
+    "label": "Inverness",
+    "qid": "Q6060183"
+  },
+  {
+    "label": "Jägarvallen",
+    "qid": "Q6319900"
+  },
+  {
+    "label": "Oxberg",
+    "qid": "Q6333445"
+  },
+  {
+    "label": "Vendelsö",
+    "qid": "Q6382776"
+  },
+  {
+    "label": "Huvudsta",
+    "qid": "Q6383632"
+  },
+  {
+    "label": "Käglinge",
+    "qid": "Q6453386"
+  },
+  {
+    "label": "Mjölkudden",
+    "qid": "Q6885396"
+  },
+  {
+    "label": "Näsbypark",
+    "qid": "Q7071399"
+  },
+  {
+    "label": "Rekarne",
+    "qid": "Q7310593"
+  },
+  {
+    "label": "Roslags Näsby",
+    "qid": "Q7369025"
+  },
+  {
+    "label": "Sörberge",
+    "qid": "Q7666414"
+  },
+  {
+    "label": "Trångsund",
+    "qid": "Q7849121"
+  },
+  {
+    "label": "Tynningö",
+    "qid": "Q7860562"
+  },
+  {
+    "label": "Täby kyrkby",
+    "qid": "Q7862142"
+  },
+  {
+    "label": "Ultuna",
+    "qid": "Q7880735"
+  },
+  {
+    "label": "Veda",
+    "qid": "Q7917894"
+  },
+  {
+    "label": "Viggbyholm",
+    "qid": "Q7928879"
+  },
+  {
+    "label": "Väsa",
+    "qid": "Q7944375"
+  },
+  {
+    "label": "Årnäs",
+    "qid": "Q8077196"
+  },
+  {
+    "label": "Halvorstorp",
+    "qid": "Q10293611"
+  },
+  {
+    "label": "Adolfsberg",
+    "qid": "Q10401439"
+  },
+  {
+    "label": "Agnesberg",
+    "qid": "Q10403223"
+  },
+  {
+    "label": "Arninge",
+    "qid": "Q10418270"
+  },
+  {
+    "label": "Asarum",
+    "qid": "Q10419121"
+  },
+  {
+    "label": "Bergsbrunna",
+    "qid": "Q10428491"
+  },
+  {
+    "label": "Bergsnäs",
+    "qid": "Q10428558"
+  },
+  {
+    "label": "Berthåga",
+    "qid": "Q10428783"
+  },
+  {
+    "label": "Björknäs",
+    "qid": "Q10430593"
+  },
+  {
+    "label": "Björndalen",
+    "qid": "Q10430694"
+  },
+  {
+    "label": "Björröd",
+    "qid": "Q10430769"
+  },
+  {
+    "label": "Blidö",
+    "qid": "Q10431331"
+  },
+  {
+    "label": "Bollstanäs",
+    "qid": "Q10432612"
+  },
+  {
+    "label": "Bonässund",
+    "qid": "Q10432958"
+  },
+  {
+    "label": "Brickebacken",
+    "qid": "Q10435537"
+  },
+  {
+    "label": "Brillinge",
+    "qid": "Q10435574"
+  },
+  {
+    "label": "Bäckseda",
+    "qid": "Q10438432"
+  },
+  {
+    "label": "Degernäs",
+    "qid": "Q10467705"
+  },
+  {
+    "label": "Egnahem",
+    "qid": "Q10480280"
+  },
+  {
+    "label": "Djupvik och Fagerfjäll",
+    "qid": "Q10493551"
+  },
+  {
+    "label": "Folkärna",
+    "qid": "Q10497508"
+  },
+  {
+    "label": "Frösundavik",
+    "qid": "Q10499779"
+  },
+  {
+    "label": "Funningen",
+    "qid": "Q10500144"
+  },
+  {
+    "label": "Garsås",
+    "qid": "Q10503178"
+  },
+  {
+    "label": "Gillstad",
+    "qid": "Q10504949"
+  },
+  {
+    "label": "Gissebo",
+    "qid": "Q10505059"
+  },
+  {
+    "label": "Glömminge",
+    "qid": "Q10506425"
+  },
+  {
+    "label": "Glömsta",
+    "qid": "Q10506430"
+  },
+  {
+    "label": "Gottskär",
+    "qid": "Q10507728"
+  },
+  {
+    "label": "Gribbylund",
+    "qid": "Q10508754"
+  },
+  {
+    "label": "Gyljen",
+    "qid": "Q10511297"
+  },
+  {
+    "label": "Hackefors",
+    "qid": "Q10515455"
+  },
+  {
+    "label": "Hagaberg",
+    "qid": "Q10515890"
+  },
+  {
+    "label": "Hamra",
+    "qid": "Q10516972"
+  },
+  {
+    "label": "Hansjö",
+    "qid": "Q10517470"
+  },
+  {
+    "label": "Helgered",
+    "qid": "Q10519535"
+  },
+  {
+    "label": "Hissmofors",
+    "qid": "Q10524582"
+  },
+  {
+    "label": "Hjortnäs",
+    "qid": "Q10524769"
+  },
+  {
+    "label": "Hjällbo",
+    "qid": "Q10524833"
+  },
+  {
+    "label": "Hjälteby",
+    "qid": "Q10524897"
+  },
+  {
+    "label": "Holmsveden",
+    "qid": "Q10525346"
+  },
+  {
+    "label": "Horla",
+    "qid": "Q10526276"
+  },
+  {
+    "label": "Hunnestad",
+    "qid": "Q10527209"
+  },
+  {
+    "label": "Hycklinge",
+    "qid": "Q10527920"
+  },
+  {
+    "label": "Hyllstofta",
+    "qid": "Q10529128"
+  },
+  {
+    "label": "Grovstanäs och Hysingsvik",
+    "qid": "Q10530902"
+  },
+  {
+    "label": "Flygsnäs och Hägnen",
+    "qid": "Q10531320"
+  },
+  {
+    "label": "Häverödal",
+    "qid": "Q10531912"
+  },
+  {
+    "label": "Håkanryd",
+    "qid": "Q10532006"
+  },
+  {
+    "label": "Håkantorp",
+    "qid": "Q10532013"
+  },
+  {
+    "label": "Högbo",
+    "qid": "Q10532218"
+  },
+  {
+    "label": "Högmarsö",
+    "qid": "Q10532322"
+  },
+  {
+    "label": "Hökön",
+    "qid": "Q10532519"
+  },
+  {
+    "label": "Höljes",
+    "qid": "Q10532534"
+  },
+  {
+    "label": "Hörja",
+    "qid": "Q10532600"
+  },
+  {
+    "label": "Hörle",
+    "qid": "Q10532608"
+  },
+  {
+    "label": "Jenny",
+    "qid": "Q10539933"
+  },
+  {
+    "label": "Järrestad",
+    "qid": "Q10541956"
+  },
+  {
+    "label": "Järva",
+    "qid": "Q10541986"
+  },
+  {
+    "label": "Kalkudden",
+    "qid": "Q10542675"
+  },
+  {
+    "label": "Karlsby",
+    "qid": "Q10543824"
+  },
+  {
+    "label": "Klavreström",
+    "qid": "Q10546131"
+  },
+  {
+    "label": "Kortebo",
+    "qid": "Q10548247"
+  },
+  {
+    "label": "Kråkberg",
+    "qid": "Q10549690"
+  },
+  {
+    "label": "Bökenäs, Korsanäs och Kuggeboda",
+    "qid": "Q10549812"
+  },
+  {
+    "label": "Kvarsebo",
+    "qid": "Q10550944"
+  },
+  {
+    "label": "Nordvära och Källstorp",
+    "qid": "Q10551671"
+  },
+  {
+    "label": "Kärra",
+    "qid": "Q10551880"
+  },
+  {
+    "label": "Köpmanholm",
+    "qid": "Q10552209"
+  },
+  {
+    "label": "Lahäll",
+    "qid": "Q10553388"
+  },
+  {
+    "label": "Laxsjö",
+    "qid": "Q10555292"
+  },
+  {
+    "label": "Lerberget",
+    "qid": "Q10559559"
+  },
+  {
+    "label": "Levar",
+    "qid": "Q10560672"
+  },
+  {
+    "label": "Lillån",
+    "qid": "Q10561923"
+  },
+  {
+    "label": "Jälla",
+    "qid": "Q10562443"
+  },
+  {
+    "label": "Lindshammar",
+    "qid": "Q10562629"
+  },
+  {
+    "label": "Ljungaviken",
+    "qid": "Q10568308"
+  },
+  {
+    "label": "Ljungsgård",
+    "qid": "Q10568376"
+  },
+  {
+    "label": "Lockebo",
+    "qid": "Q10568675"
+  },
+  {
+    "label": "Läppe",
+    "qid": "Q10572342"
+  },
+  {
+    "label": "Lövnäs",
+    "qid": "Q10572976"
+  },
+  {
+    "label": "Madesjö",
+    "qid": "Q10575130"
+  },
+  {
+    "label": "Malmbergets Dennewitz",
+    "qid": "Q10576066"
+  },
+  {
+    "label": "Marby och Marbystrand",
+    "qid": "Q10576934"
+  },
+  {
+    "label": "Maspelösa",
+    "qid": "Q10577978"
+  },
+  {
+    "label": "Mellby",
+    "qid": "Q10581237"
+  },
+  {
+    "label": "Moarna",
+    "qid": "Q10587136"
+  },
+  {
+    "label": "Munksund",
+    "qid": "Q10590321"
+  },
+  {
+    "label": "Månsarp",
+    "qid": "Q10593396"
+  },
+  {
+    "label": "Måsta",
+    "qid": "Q10593459"
+  },
+  {
+    "label": "Nordanå",
+    "qid": "Q10601970"
+  },
+  {
+    "label": "Norra Bredåker",
+    "qid": "Q10602417"
+  },
+  {
+    "label": "Norra Vram",
+    "qid": "Q10602616"
+  },
+  {
+    "label": "Notviken",
+    "qid": "Q10603807"
+  },
+  {
+    "label": "Nyehusen",
+    "qid": "Q10604650"
+  },
+  {
+    "label": "Nyhamnsläge",
+    "qid": "Q10604680"
+  },
+  {
+    "label": "Nyhyttan",
+    "qid": "Q10604711"
+  },
+  {
+    "label": "Nymö",
+    "qid": "Q10604849"
+  },
+  {
+    "label": "Nysättra",
+    "qid": "Q10604988"
+  },
+  {
+    "label": "Nyvång",
+    "qid": "Q10605008"
+  },
+  {
+    "label": "Tomta, Näsbyn och Hagen",
+    "qid": "Q10605324"
+  },
+  {
+    "label": "Näset",
+    "qid": "Q10605327"
+  },
+  {
+    "label": "Olshytteberget",
+    "qid": "Q10609372"
+  },
+  {
+    "label": "Ormesta",
+    "qid": "Q10611666"
+  },
+  {
+    "label": "Pauträsk",
+    "qid": "Q10621896"
+  },
+  {
+    "label": "Gisselgård",
+    "qid": "Q10648574"
+  },
+  {
+    "label": "Rannebergen",
+    "qid": "Q10649628"
+  },
+  {
+    "label": "Remsle",
+    "qid": "Q10650890"
+  },
+  {
+    "label": "Risby",
+    "qid": "Q10655723"
+  },
+  {
+    "label": "Robertsholm",
+    "qid": "Q10656162"
+  },
+  {
+    "label": "Romme",
+    "qid": "Q10656563"
+  },
+  {
+    "label": "Rossö",
+    "qid": "Q10657179"
+  },
+  {
+    "label": "Västra Runnaby",
+    "qid": "Q10657823"
+  },
+  {
+    "label": "Runsten-Bjärby",
+    "qid": "Q10657835"
+  },
+  {
+    "label": "Ryssa",
+    "qid": "Q10658307"
+  },
+  {
+    "label": "Råtorp",
+    "qid": "Q10658772"
+  },
+  {
+    "label": "Sandbäckshult",
+    "qid": "Q10661145"
+  },
+  {
+    "label": "Sandsbro",
+    "qid": "Q10661222"
+  },
+  {
+    "label": "Saxnäs",
+    "qid": "Q10662274"
+  },
+  {
+    "label": "Simremarken",
+    "qid": "Q10668144"
+  },
+  {
+    "label": "Sjunnerup",
+    "qid": "Q10669309"
+  },
+  {
+    "label": "Skiftinge",
+    "qid": "Q10670152"
+  },
+  {
+    "label": "Skintebo",
+    "qid": "Q10670219"
+  },
+  {
+    "label": "Skogshöjden",
+    "qid": "Q10670355"
+  },
+  {
+    "label": "Skälderviken",
+    "qid": "Q10670909"
+  },
+  {
+    "label": "Ringhals, Skällåkra och Lingome",
+    "qid": "Q10670926"
+  },
+  {
+    "label": "Skåne-Tranås",
+    "qid": "Q10671079"
+  },
+  {
+    "label": "Slutarp",
+    "qid": "Q10671723"
+  },
+  {
+    "label": "Ås, Slädaviken och Bullås",
+    "qid": "Q10671746"
+  },
+  {
+    "label": "Snöstorp",
+    "qid": "Q10672795"
+  },
+  {
+    "label": "Sparsör",
+    "qid": "Q10674479"
+  },
+  {
+    "label": "Sprängsviken",
+    "qid": "Q10676633"
+  },
+  {
+    "label": "Stare",
+    "qid": "Q10677592"
+  },
+  {
+    "label": "Steningehöjden",
+    "qid": "Q10678520"
+  },
+  {
+    "label": "Stennäset",
+    "qid": "Q10678579"
+  },
+  {
+    "label": "Stensholm",
+    "qid": "Q10679265"
+  },
+  {
+    "label": "Stensätra",
+    "qid": "Q10679301"
+  },
+  {
+    "label": "Stensättra tomtområde",
+    "qid": "Q10679308"
+  },
+  {
+    "label": "Sidus",
+    "qid": "Q10681097"
+  },
+  {
+    "label": "Storholmen",
+    "qid": "Q10681284"
+  },
+  {
+    "label": "Strömtorp",
+    "qid": "Q10682266"
+  },
+  {
+    "label": "Stäket",
+    "qid": "Q10682844"
+  },
+  {
+    "label": "Stångehamn",
+    "qid": "Q10682941"
+  },
+  {
+    "label": "Sätinge",
+    "qid": "Q10688182"
+  },
+  {
+    "label": "Sävsjöström",
+    "qid": "Q10688275"
+  },
+  {
+    "label": "Såtenäs",
+    "qid": "Q10688454"
+  },
+  {
+    "label": "Södertörns villastad",
+    "qid": "Q10688836"
+  },
+  {
+    "label": "Söderås",
+    "qid": "Q10688854"
+  },
+  {
+    "label": "Södra Bredåker",
+    "qid": "Q10688873"
+  },
+  {
+    "label": "Södra Åby",
+    "qid": "Q10689080"
+  },
+  {
+    "label": "Tallboda",
+    "qid": "Q10690254"
+  },
+  {
+    "label": "Tibble",
+    "qid": "Q14594749"
+  },
+  {
+    "label": "Tokarp",
+    "qid": "Q10699289"
+  },
+  {
+    "label": "Tovrida udde",
+    "qid": "Q10700666"
+  },
+  {
+    "label": "Tranvik",
+    "qid": "Q10701353"
+  },
+  {
+    "label": "Trehörna",
+    "qid": "Q10701699"
+  },
+  {
+    "label": "Trönningenäs",
+    "qid": "Q10705686"
+  },
+  {
+    "label": "Trönö",
+    "qid": "Q10705688"
+  },
+  {
+    "label": "Tullstorp",
+    "qid": "Q10706158"
+  },
+  {
+    "label": "Tungelsta",
+    "qid": "Q10706336"
+  },
+  {
+    "label": "Toarp och Tåstarp",
+    "qid": "Q10708141"
+  },
+  {
+    "label": "Ullvi",
+    "qid": "Q10708791"
+  },
+  {
+    "label": "Valinge",
+    "qid": "Q10712250"
+  },
+  {
+    "label": "Vallkärra",
+    "qid": "Q10712365"
+  },
+  {
+    "label": "Vanneberga",
+    "qid": "Q10712673"
+  },
+  {
+    "label": "Vitå",
+    "qid": "Q10716472"
+  },
+  {
+    "label": "Vivsta",
+    "qid": "Q10716492"
+  },
+  {
+    "label": "Solna strand",
+    "qid": "Q10716967"
+  },
+  {
+    "label": "Väja",
+    "qid": "Q10717228"
+  },
+  {
+    "label": "Norrbo och Västansjö",
+    "qid": "Q10717833"
+  },
+  {
+    "label": "Västra Vemmerlöv",
+    "qid": "Q10718407"
+  },
+  {
+    "label": "Yttermo",
+    "qid": "Q10723856"
+  },
+  {
+    "label": "Älgö",
+    "qid": "Q10725637"
+  },
+  {
+    "label": "Älvan",
+    "qid": "Q10725681"
+  },
+  {
+    "label": "Älvkarleö",
+    "qid": "Q10725715"
+  },
+  {
+    "label": "Älvsala",
+    "qid": "Q10725731"
+  },
+  {
+    "label": "Ängsbyn",
+    "qid": "Q10725915"
+  },
+  {
+    "label": "Årsta havsbad",
+    "qid": "Q10726733"
+  },
+  {
+    "label": "Öja",
+    "qid": "Q10727162"
+  },
+  {
+    "label": "Öjebyn",
+    "qid": "Q10727194"
+  },
+  {
+    "label": "Öllsjö",
+    "qid": "Q10727291"
+  },
+  {
+    "label": "Öna",
+    "qid": "Q10727345"
+  },
+  {
+    "label": "Östanvik",
+    "qid": "Q10727791"
+  },
+  {
+    "label": "Överhärde",
+    "qid": "Q10728594"
+  },
+  {
+    "label": "Nödinge",
+    "qid": "Q11885056"
+  },
+  {
+    "label": "Norra Muskö",
+    "qid": "Q13067548"
+  },
+  {
+    "label": "Humlamaden och Hemmestorps björke, boke och fure",
+    "qid": "Q13099364"
+  },
+  {
+    "label": "Järavallen",
+    "qid": "Q13107102"
+  },
+  {
+    "label": "Ytterby",
+    "qid": "Q13108096"
+  },
+  {
+    "label": "Frestaby",
+    "qid": "Q14524438"
+  },
+  {
+    "label": "Fruvik",
+    "qid": "Q14524470"
+  },
+  {
+    "label": "Lindalen",
+    "qid": "Q14524970"
+  },
+  {
+    "label": "Odenslunda",
+    "qid": "Q14538750"
+  },
+  {
+    "label": "Sollentuna",
+    "qid": "Q14544612"
+  },
+  {
+    "label": "Tappström (bostadsområde)",
+    "qid": "Q14544684"
+  },
+  {
+    "label": "Flacksta",
+    "qid": "Q14757685"
+  },
+  {
+    "label": "Odlaren",
+    "qid": "Q14757710"
+  },
+  {
+    "label": "Oppeby",
+    "qid": "Q14757712"
+  },
+  {
+    "label": "Sahl",
+    "qid": "Q14759790"
+  },
+  {
+    "label": "Betåsen",
+    "qid": "Q14760439"
+  },
+  {
+    "label": "Åkers krutbruk",
+    "qid": "Q14768478"
+  },
+  {
+    "label": "Ärna",
+    "qid": "Q14768532"
+  },
+  {
+    "label": "Storfinnforsen",
+    "qid": "Q14786572"
+  },
+  {
+    "label": "Forsområdet",
+    "qid": "Q14816288"
+  },
+  {
+    "label": "Näs",
+    "qid": "Q112596304"
+  },
+  {
+    "label": "Röbrinken",
+    "qid": "Q14876485"
+  },
+  {
+    "label": "Garpen",
+    "qid": "Q14934047"
+  },
+  {
+    "label": "Hanöläge",
+    "qid": "Q14945812"
+  },
+  {
+    "label": "Möckeln",
+    "qid": "Q15058691"
+  },
+  {
+    "label": "Stenis",
+    "qid": "Q15060142"
+  },
+  {
+    "label": "Spjutsbygd",
+    "qid": "Q15077888"
+  },
+  {
+    "label": "Bispfors",
+    "qid": "Q15096907"
+  },
+  {
+    "label": "Marklunda",
+    "qid": "Q15100164"
+  },
+  {
+    "label": "Ajaureforsen",
+    "qid": "Q15100344"
+  },
+  {
+    "label": "Stärnö",
+    "qid": "Q15103480"
+  },
+  {
+    "label": "Krafslösa",
+    "qid": "Q15105524"
+  },
+  {
+    "label": "Borgeby",
+    "qid": "Q15105835"
+  },
+  {
+    "label": "Lindås",
+    "qid": "Q15113357"
+  },
+  {
+    "label": "Torskors",
+    "qid": "Q15113512"
+  },
+  {
+    "label": "Målilla kyrkby",
+    "qid": "Q15120949"
+  },
+  {
+    "label": "Lundaskog",
+    "qid": "Q15120965"
+  },
+  {
+    "label": "Ekbacken",
+    "qid": "Q15130625"
+  },
+  {
+    "label": "Mörbylånga by",
+    "qid": "Q15132976"
+  },
+  {
+    "label": "Björneröd",
+    "qid": "Q15206165"
+  },
+  {
+    "label": "Solberga och Ålem",
+    "qid": "Q15214462"
+  },
+  {
+    "label": "Bäckehagen",
+    "qid": "Q15220708"
+  },
+  {
+    "label": "Rydet",
+    "qid": "Q15229392"
+  },
+  {
+    "label": "Dalfors",
+    "qid": "Q15229441"
+  },
+  {
+    "label": "Källfallet",
+    "qid": "Q15233548"
+  },
+  {
+    "label": "Digerberget",
+    "qid": "Q15240713"
+  },
+  {
+    "label": "Degeränget",
+    "qid": "Q15243929"
+  },
+  {
+    "label": "Brämhult",
+    "qid": "Q15390598"
+  },
+  {
+    "label": "Norra Rätansbyn",
+    "qid": "Q15601856"
+  },
+  {
+    "label": "Källby norra",
+    "qid": "Q15616754"
+  },
+  {
+    "label": "Sandsjön och Sågbacken",
+    "qid": "Q15616758"
+  },
+  {
+    "label": "Djupedalsäng",
+    "qid": "Q15622737"
+  },
+  {
+    "label": "Kapellvången",
+    "qid": "Q15645750"
+  },
+  {
+    "label": "Radbyn",
+    "qid": "Q15646185"
+  },
+  {
+    "label": "Långängen",
+    "qid": "Q15663790"
+  },
+  {
+    "label": "Vickan",
+    "qid": "Q15700847"
+  },
+  {
+    "label": "Ekås",
+    "qid": "Q15704320"
+  },
+  {
+    "label": "Ryda",
+    "qid": "Q15707556"
+  },
+  {
+    "label": "Södra Vram",
+    "qid": "Q15718209"
+  },
+  {
+    "label": "Hanken",
+    "qid": "Q15725626"
+  },
+  {
+    "label": "Hasselösund",
+    "qid": "Q15728627"
+  },
+  {
+    "label": "Söndraby",
+    "qid": "Q15730719"
+  },
+  {
+    "label": "Strömnäs",
+    "qid": "Q15730774"
+  },
+  {
+    "label": "Sanna",
+    "qid": "Q15733167"
+  },
+  {
+    "label": "Hörnebo",
+    "qid": "Q15735140"
+  },
+  {
+    "label": "Korsnäs",
+    "qid": "Q15735246"
+  },
+  {
+    "label": "Önnestads backar",
+    "qid": "Q15739091"
+  },
+  {
+    "label": "Kumbelnäs",
+    "qid": "Q15754959"
+  },
+  {
+    "label": "Matsknutsgårdarna",
+    "qid": "Q15779421"
+  },
+  {
+    "label": "Båtbyggartorp",
+    "qid": "Q15873630"
+  },
+  {
+    "label": "Östanbyn",
+    "qid": "Q15894415"
+  },
+  {
+    "label": "Laggarudden",
+    "qid": "Q15918090"
+  },
+  {
+    "label": "Korsgården",
+    "qid": "Q16031373"
+  },
+  {
+    "label": "Ljungs Berg",
+    "qid": "Q16498518"
+  },
+  {
+    "label": "Åssjöns norra strand",
+    "qid": "Q16502235"
+  },
+  {
+    "label": "Sjöboviken",
+    "qid": "Q16505484"
+  },
+  {
+    "label": "Skarpö",
+    "qid": "Q17265820"
+  },
+  {
+    "label": "Ekenhaga",
+    "qid": "Q18288862"
+  },
+  {
+    "label": "Ekskogen, Älgeby och Långsjötorp",
+    "qid": "Q18288910"
+  },
+  {
+    "label": "Helgö",
+    "qid": "Q18290555"
+  },
+  {
+    "label": "Husby och Tuna",
+    "qid": "Q18290732"
+  },
+  {
+    "label": "Hätte, Seglarvik och Sandvik",
+    "qid": "Q18290824"
+  },
+  {
+    "label": "Johannisfors",
+    "qid": "Q18291041"
+  },
+  {
+    "label": "Koviksudde och Skeviksstrand",
+    "qid": "Q18291364"
+  },
+  {
+    "label": "Kränge",
+    "qid": "Q18291432"
+  },
+  {
+    "label": "Laggarsvik och Linanäs",
+    "qid": "Q18291623"
+  },
+  {
+    "label": "Lagnöviken",
+    "qid": "Q18291626"
+  },
+  {
+    "label": "Lerbäckshult",
+    "qid": "Q18291709"
+  },
+  {
+    "label": "Luddingsbo",
+    "qid": "Q18292029"
+  },
+  {
+    "label": "Lycksta",
+    "qid": "Q18292071"
+  },
+  {
+    "label": "Malmen",
+    "qid": "Q18292174"
+  },
+  {
+    "label": "Munkebäck",
+    "qid": "Q18292406"
+  },
+  {
+    "label": "Märsön",
+    "qid": "Q18292454"
+  },
+  {
+    "label": "Nolsjö",
+    "qid": "Q18292545"
+  },
+  {
+    "label": "Norraby",
+    "qid": "Q18292607"
+  },
+  {
+    "label": "Sanda",
+    "qid": "Q18332412"
+  },
+  {
+    "label": "Hällbacken och Sinksundet",
+    "qid": "Q18332539"
+  },
+  {
+    "label": "Skotthed",
+    "qid": "Q18332631"
+  },
+  {
+    "label": "Vibyäng",
+    "qid": "Q18332669"
+  },
+  {
+    "label": "Smedseröd",
+    "qid": "Q18332709"
+  },
+  {
+    "label": "Smidö",
+    "qid": "Q18332712"
+  },
+  {
+    "label": "Steninge",
+    "qid": "Q18332851"
+  },
+  {
+    "label": "Stensnäset och Trummenäs",
+    "qid": "Q18332858"
+  },
+  {
+    "label": "Oxnö och Svärdsö",
+    "qid": "Q18333583"
+  },
+  {
+    "label": "Sånga Säby",
+    "qid": "Q18333617"
+  },
+  {
+    "label": "Säve",
+    "qid": "Q18333657"
+  },
+  {
+    "label": "Södra Vindö",
+    "qid": "Q18333766"
+  },
+  {
+    "label": "Tavleliden",
+    "qid": "Q18333839"
+  },
+  {
+    "label": "Klövedal",
+    "qid": "Q18334237"
+  },
+  {
+    "label": "Valsäng",
+    "qid": "Q18334532"
+  },
+  {
+    "label": "Venngarn",
+    "qid": "Q18334604"
+  },
+  {
+    "label": "Åmunnen",
+    "qid": "Q18335197"
+  },
+  {
+    "label": "Ängsmon",
+    "qid": "Q18335271"
+  },
+  {
+    "label": "Öbolandet",
+    "qid": "Q18335286"
+  },
+  {
+    "label": "Örstig",
+    "qid": "Q18335333"
+  },
+  {
+    "label": "Norra Vindö",
+    "qid": "Q18335395"
+  },
+  {
+    "label": "Getterön",
+    "qid": "Q19977744"
+  },
+  {
+    "label": "Kagghamra tomtområde",
+    "qid": "Q20240949"
+  },
+  {
+    "label": "Nyhagen och Översättra",
+    "qid": "Q20640433"
+  },
+  {
+    "label": "Sättra",
+    "qid": "Q20655726"
+  },
+  {
+    "label": "Hästängen",
+    "qid": "Q20740020"
+  },
+  {
+    "label": "Lännersta",
+    "qid": "Q22684214"
+  },
+  {
+    "label": "Gropen",
+    "qid": "Q26197350"
+  },
+  {
+    "label": "Hemsjö",
+    "qid": "Q27670010"
+  },
+  {
+    "label": "Spjälkö och Saxemara",
+    "qid": "Q27677416"
+  },
+  {
+    "label": "Upplands Väsby och Sollentuna",
+    "qid": "Q27894678"
+  },
+  {
+    "label": "Lidköping norra",
+    "qid": "Q28122055"
+  },
+  {
+    "label": "Kallfors",
+    "qid": "Q28153276"
+  },
+  {
+    "label": "Södra Pitholm",
+    "qid": "Q137383521"
+  },
+  {
+    "label": "Spånlöt",
+    "qid": "Q28170991"
+  },
+  {
+    "label": "Ubbhult norra",
+    "qid": "Q28319450"
+  },
+  {
+    "label": "Nygårds hagar",
+    "qid": "Q28340583"
+  },
+  {
+    "label": "Spekeröd",
+    "qid": "Q28363086"
+  },
+  {
+    "label": "Örsundsbro norra",
+    "qid": "Q28371824"
+  },
+  {
+    "label": "Skörby",
+    "qid": "Q28432860"
+  },
+  {
+    "label": "Vad, Åsbacka och Långrör",
+    "qid": "Q28658978"
+  },
+  {
+    "label": "Laxforsen väst",
+    "qid": "Q30013440"
+  },
+  {
+    "label": "Ramvik",
+    "qid": "Q30251808"
+  },
+  {
+    "label": "Färgens östra strand",
+    "qid": "Q30320339"
+  },
+  {
+    "label": "Rynge och Vallösa",
+    "qid": "Q30334282"
+  },
+  {
+    "label": "Nordöstra Göteborg",
+    "qid": "Q31201433"
+  },
+  {
+    "label": "Brännäset och Boviken",
+    "qid": "Q31561626"
+  },
+  {
+    "label": "Jungfrusund",
+    "qid": "Q31856610"
+  },
+  {
+    "label": "Edsvalla Övre bruket",
+    "qid": "Q31871579"
+  },
+  {
+    "label": "Hillsta och Se",
+    "qid": "Q31883529"
+  },
+  {
+    "label": "Naglarby",
+    "qid": "Q31883683"
+  },
+  {
+    "label": "Källhagen",
+    "qid": "Q31884029"
+  },
+  {
+    "label": "Höggeröd",
+    "qid": "Q31887776"
+  },
+  {
+    "label": "Sjöskogen och Strand",
+    "qid": "Q31887890"
+  },
+  {
+    "label": "Målsta",
+    "qid": "Q31896654"
+  },
+  {
+    "label": "Slite norra",
+    "qid": "Q31899601"
+  },
+  {
+    "label": "Harkie",
+    "qid": "Q31899707"
+  },
+  {
+    "label": "Valåsen och Labbsand",
+    "qid": "Q31899724"
+  },
+  {
+    "label": "Prästängen",
+    "qid": "Q31899764"
+  },
+  {
+    "label": "Grängesberg västra",
+    "qid": "Q31899779"
+  },
+  {
+    "label": "Sandudden och Hörks hage",
+    "qid": "Q31899782"
+  },
+  {
+    "label": "Harkskär och Utvalnäs",
+    "qid": "Q31899803"
+  },
+  {
+    "label": "Långasand och Ugglarp",
+    "qid": "Q31899833"
+  },
+  {
+    "label": "Svartudden",
+    "qid": "Q31899851"
+  },
+  {
+    "label": "Björnås",
+    "qid": "Q31899871"
+  },
+  {
+    "label": "Havsbaden",
+    "qid": "Q31899877"
+  },
+  {
+    "label": "Strandskogen, Restenäs och Ulvesund",
+    "qid": "Q31899958"
+  },
+  {
+    "label": "Kristevik och Sundsandvik",
+    "qid": "Q31899963"
+  },
+  {
+    "label": "Inskogen",
+    "qid": "Q31899982"
+  },
+  {
+    "label": "Kurveröd",
+    "qid": "Q31930798"
+  },
+  {
+    "label": "Oxhalsö",
+    "qid": "Q33108668"
+  },
+  {
+    "label": "Malstaby",
+    "qid": "Q33108791"
+  },
+  {
+    "label": "Jursta",
+    "qid": "Q33108884"
+  },
+  {
+    "label": "Åkersberg",
+    "qid": "Q33109068"
+  },
+  {
+    "label": "Vångelsta",
+    "qid": "Q33109093"
+  },
+  {
+    "label": "Åda",
+    "qid": "Q33109370"
+  },
+  {
+    "label": "Grännäs",
+    "qid": "Q33109394"
+  },
+  {
+    "label": "Bråbacka",
+    "qid": "Q33110232"
+  },
+  {
+    "label": "Sundsstrand",
+    "qid": "Q33110244"
+  },
+  {
+    "label": "Rösselvik",
+    "qid": "Q33110397"
+  },
+  {
+    "label": "Häggvall",
+    "qid": "Q33110430"
+  },
+  {
+    "label": "Löstorp",
+    "qid": "Q33110474"
+  },
+  {
+    "label": "Hälleviksstrand",
+    "qid": "Q33110764"
+  },
+  {
+    "label": "Geijersholm",
+    "qid": "Q33111051"
+  },
+  {
+    "label": "Röfors",
+    "qid": "Q33111153"
+  },
+  {
+    "label": "Hustahöjden",
+    "qid": "Q33111261"
+  },
+  {
+    "label": "Eriksbo",
+    "qid": "Q33111282"
+  },
+  {
+    "label": "Lima",
+    "qid": "Q33111345"
+  },
+  {
+    "label": "Kallmora",
+    "qid": "Q33111383"
+  },
+  {
+    "label": "Rödön",
+    "qid": "Q33111647"
+  },
+  {
+    "label": "Stenåsen",
+    "qid": "Q49097163"
+  },
+  {
+    "label": "Kareby och Ringby",
+    "qid": "Q49097184"
+  },
+  {
+    "label": "Lilla Edet västra",
+    "qid": "Q50294245"
+  },
+  {
+    "label": "Arvidsvik",
+    "qid": "Q50294774"
+  },
+  {
+    "label": "Heden och Skansbacken",
+    "qid": "Q50300235"
+  },
+  {
+    "label": "Fredriksberg östra",
+    "qid": "Q50300299"
+  },
+  {
+    "label": "Malmberget östra",
+    "qid": "Q50300378"
+  },
+  {
+    "label": "Romakloster",
+    "qid": "Q57589764"
+  },
+  {
+    "label": "Turinge och Vidbynäs",
+    "qid": "Q73485754"
+  },
+  {
+    "label": "Sydöstra Fullerö",
+    "qid": "Q73579281"
+  },
+  {
+    "label": "Lundby och Malm",
+    "qid": "Q73590837"
+  },
+  {
+    "label": "Hulukvarn, Ulvstorp, Västersjön och Hedenstorp",
+    "qid": "Q73600574"
+  },
+  {
+    "label": "Stora Frö och Haga Park",
+    "qid": "Q73719323"
+  },
+  {
+    "label": "Groröd, Svenseröd, Torskog och Källeröd",
+    "qid": "Q73864971"
+  },
+  {
+    "label": "Björnåsen",
+    "qid": "Q73958794"
+  },
+  {
+    "label": "Östra Balltorp",
+    "qid": "Q73961312"
+  },
+  {
+    "label": "Sjömarken och Viared",
+    "qid": "Q73978013"
+  },
+  {
+    "label": "Västra Hallstahammar",
+    "qid": "Q73992877"
+  },
+  {
+    "label": "Södra Hallstahammar",
+    "qid": "Q73994904"
+  },
+  {
+    "label": "Grönalid",
+    "qid": "Q74000415"
+  },
+  {
+    "label": "Österå, Uggelviken och Hökviken",
+    "qid": "Q74141425"
+  },
+  {
+    "label": "Övermarken, Skatan och Maran",
+    "qid": "Q74169658"
+  },
+  {
+    "label": "Fullerö hage",
+    "qid": "Q96358632"
+  },
+  {
+    "label": "Repisvaara",
+    "qid": "Q96746007"
+  },
+  {
+    "label": "Gamla Nynäs",
+    "qid": "Q112049666"
+  },
+  {
+    "label": "Runsten",
+    "qid": "Q112085677"
+  },
+  {
+    "label": "Södra Freberga",
+    "qid": "Q112167909"
+  },
+  {
+    "label": "Västra Balltorp",
+    "qid": "Q112168133"
+  },
+  {
+    "label": "Sjölanda",
+    "qid": "Q112263343"
+  },
+  {
+    "label": "Rimsjöhöjden",
+    "qid": "Q112274800"
+  },
+  {
+    "label": "Östra Hanhals och Torkelstorp",
+    "qid": "Q112686117"
+  },
+  {
+    "label": "Vettekulla och Matvik",
+    "qid": "Q131354942"
+  },
+  {
+    "label": "Västra Näs, Sandviken och Siretorp",
+    "qid": "Q131360248"
+  },
+  {
+    "label": "Snurrom",
+    "qid": "Q131411225"
+  },
+  {
+    "label": "Vellinge östra",
+    "qid": "Q131436656"
+  },
+  {
+    "label": "Härsby, Mälby, Eke och Ösby",
+    "qid": "Q131442044"
+  },
+  {
+    "label": "Vattholma västra",
+    "qid": "Q131460000"
+  },
+  {
+    "label": "Kyrkeby, Ballabo och Ivarslund",
+    "qid": "Q131548424"
+  },
+  {
+    "label": "Gällersta, Södra Bro och Gällerstafallen",
+    "qid": "Q131567178"
+  },
+  {
+    "label": "Norra Pitholm",
+    "qid": "Q137383502"
+  }
+]
