@@ -155,8 +155,11 @@ def sync_wikidata_artists(
     print(f"Found {len(dancedb_artists)} artists in DanceDB, {len(artists_with_p3)} have P3")
 
     from src.models.danslogen.data import load_band_map
-    danslogen_bands = set(load_band_map().keys())
-    print(f"Found {len(danslogen_bands)} bands in danslogen (from DanceDB artists)")
+    try:
+        danslogen_bands = set(load_band_map().keys())
+    except Exception:
+        danslogen_bands = {a.get("label", "").lower() for a in dancedb_artists if a.get("label")}
+    print(f"Found {len(danslogen_bands)} bands in DanceDB")
 
     missing_bands = []
     needs_p3 = []
