@@ -178,7 +178,12 @@ def ensure_venues(date_str: str | None = None) -> None:
             bygdegardarna_data = json.loads(bygdegardarna_file.read_text())
             bygdegardarna_venues = {v["title"].lower(): v for v in bygdegardarna_data if v.get("qid")}
             bygdegardarna_names = list(bygdegardarna_venues.keys())
-            print(f"Loaded {len(bygdegardarna_venues)} bygdegardarna venues for auto-match")
+            bygdegardarna_cities = {}
+            for v in bygdegardarna_data:
+                city = v.get("meta", {}).get("city", "").lower()
+                if city and v.get("qid"):
+                    bygdegardarna_cities[city] = v
+            print(f"Loaded {len(bygdegardarna_venues)} bygdegardarna venues ({len(bygdegardarna_cities)} cities) for auto-match")
 
     folketshus_dir = config.data_dir / "folketshus" / "enriched"
     folketshus_venues = {}
@@ -361,7 +366,34 @@ def ensure_venues(date_str: str | None = None) -> None:
                         f.write(json.dumps({"venue_name": venue_name, "qid": addr_data.get("qid", ""), "lat": addr_data.get("lat"), "lng": addr_data.get("lng"), "created_at": date_str}) + "\n")
                     break
             else:
-                new_venues.append(venue_name)
+                matched_city = False
+                if bygdegardarna_cities:
+                    city_matches = []
+                    for city, city_venue in bygdegardarna_cities.items():
+                        if city in venue_lower or venue_lower in city:
+                            city_matches.append((city, city_venue))
+                    if city_matches:
+                        confirm = questionary.confirm(
+                            f"Match '{venue_name}' to bygdegardarna city '{city_matches[0][0]}'?"
+                        ).ask()
+                        if confirm:
+                            city, city_venue = city_matches[0]
+                            existing_venues[venue_lower] = {
+                                "qid": city_venue.get("qid", ""),
+                                "lat": city_venue.get("lat"),
+                                "lng": city_venue.get("lng"),
+                                "aliases": [],
+                            }
+                            logger.info(f"Matched '{venue_name}' to bygdegardarna city '{city}'")
+                            matched_city = True
+                            matched += 1
+                            
+                            venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                            venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                            with open(venue_mapping_file, "a") as f:
+                                f.write(json.dumps({"venue_name": venue_name, "qid": city_venue.get("qid", ""), "lat": city_venue.get("lat"), "lng": city_venue.get("lng"), "created_at": date_str}) + "\n")
+                if not matched_city:
+                    new_venues.append(venue_name)
         else:
             new_venues.append(venue_name)
 
