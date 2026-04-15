@@ -24,9 +24,11 @@ class TestVenueResolverInit:
 
 class TestVenueResolverLoadDancedbVenues:
     @patch("src.models.onbeat.venue_resolver.Path.exists")
+    @patch("src.models.onbeat.venue_resolver.Path.read_text")
     @patch("src.models.onbeat.venue_resolver.json.loads")
-    def test_loads_cached_venues(self, mock_json_loads, mock_exists):
+    def test_loads_cached_venues(self, mock_json_loads, mock_read_text, mock_exists):
         mock_exists.return_value = True
+        mock_read_text.return_value = '{"Q123": {"label": "Test Venue", "aliases": []}}'
         mock_json_loads.return_value = {"Q123": {"label": "Test Venue", "aliases": []}}
 
         resolver = VenueResolver()
@@ -57,9 +59,11 @@ class TestVenueResolverLoadDancedbVenues:
 
 class TestVenueResolverLoadFolketshusVenues:
     @patch("src.models.onbeat.venue_resolver.Path.exists")
+    @patch("src.models.onbeat.venue_resolver.Path.read_text")
     @patch("src.models.onbeat.venue_resolver.json.loads")
-    def test_loads_folketshus_venues(self, mock_json_loads, mock_exists):
+    def test_loads_folketshus_venues(self, mock_json_loads, mock_read_text, mock_exists):
         mock_exists.return_value = True
+        mock_read_text.return_value = '[{"name": "Folkets Hus", "qid": "Q456", "external_id": "FH123"}, {"name": "Another Venue", "qid": null}]'
         mock_json_loads.return_value = [
             {"name": "Folkets Hus", "qid": "Q456", "external_id": "FH123"},
             {"name": "Another Venue", "qid": None},
@@ -87,9 +91,11 @@ class TestVenueResolverLoadFolketshusVenues:
 
 class TestVenueResolverLoadBygdegardarnaVenues:
     @patch("src.models.onbeat.venue_resolver.Path.exists")
+    @patch("src.models.onbeat.venue_resolver.Path.read_text")
     @patch("src.models.onbeat.venue_resolver.json.loads")
-    def test_loads_bygdegardarna_venues(self, mock_json_loads, mock_exists):
+    def test_loads_bygdegardarna_venues(self, mock_json_loads, mock_read_text, mock_exists):
         mock_exists.return_value = True
+        mock_read_text.return_value = '[{"title": "Bygdegarden 1", "meta": {"permalink": "abc"}}, {"title": "Bygdegarden 2"}]'
         mock_json_loads.return_value = [
             {"title": "Bygdegarden 1", "meta": {"permalink": "abc"}},
             {"title": "Bygdegarden 2"},

@@ -84,7 +84,9 @@ class SyncStep:
             return True
         if any(not self._has_content(f) for f in self.input_files):
             return True
-        return any(not f.exists() for f in self.output_files) if self.output_files else False
+        if not self.output_files:
+            return True
+        return any(not f.exists() for f in self.output_files)
 
     def run(self, force: bool = False, dry_run: bool = False) -> None:
         """Run the step if needed."""
@@ -95,7 +97,13 @@ class SyncStep:
             else:
                 self.func()
         else:
-            print(f"\n[SKIP] {self.name} - prerequisites met")
+            outputs_exist = self.output_files and all(f.exists() for f in self.output_files)
+            if outputs_exist and self.input_files:
+                print(f"\n[DONE] {self.name} - already completed")
+            elif outputs_exist:
+                print(f"\n[SKIP] {self.name} - output already exists")
+            else:
+                print(f"\n[SKIP] {self.name} - prerequisites not met")
 
 
 def get_data_dir() -> Path:
@@ -169,6 +177,8 @@ def sync_danslogen(
     """Sync danslogen events with prerequisite checking."""
     from src.models.danslogen.events.scrape import scrape_danslogen, upload_events
     from src.models.dancedb.venue_ops import ensure_venues, ensure_artists
+    from src.models.dancedb.venue_ops import scrape_bygdegardarna, scrape_dancedb_venues, match_venues
+    from src.models.folketshus.venue import run as scrape_folketshus
     from src.models.wikidata.operations import sync_wikidata_artists, scrape_wikidata_artists
 
     if month is None or year is None:
@@ -182,6 +192,10 @@ def sync_danslogen(
     danslogen_event_file = data_dir / "danslogen" / "events" / f"{date_str}-{month.lower()}.json"
     venues_file = data_dir / "dancedb" / "venues" / f"{date_str}.json"
     dancedb_events_file = EVENTS_DIR / f"{date_str}.json"
+
+    bygdegardarna_file = data_dir / "bygdegardarna" / f"{date_str}.json"
+    dancedb_venues_file = data_dir / "dancedb" / "venues" / f"{date_str}.json"
+    enriched_file = data_dir / "bygdegardarna" / "enriched" / f"{date_str}.json"
 
     print("\n" + "=" * 50)
     print(f"SYNC DANSLOGEN: {month} {year}")
@@ -222,25 +236,49 @@ def sync_danslogen(
             output_files=[danslogen_event_file],
         ),
         SyncStep(
-            "5. Ensure venues exist",
+            "5. Scrape bygdegardarna venues",
+            lambda: scrape_bygdegardarna(date_str=date_str),
+            input_files=[],
+            output_files=[bygdegardarna_file],
+        ),
+        SyncStep(
+            "6. Scrape folketshus venues",
+            lambda: scrape_folketshus(date_str=date_str, match=True),
+            input_files=[],
+            output_files=[],
+        ),
+        SyncStep(
+            "7. Fetch DanceDB venues",
+            lambda: scrape_dancedb_venues(date_str=date_str),
+            input_files=[],
+            output_files=[dancedb_venues_file],
+        ),
+        SyncStep(
+            "8. Match venues to DanceDB",
+            lambda: match_venues(date_str=date_str, skip_prompts=True),
+            input_files=[bygdegardarna_file, dancedb_venues_file],
+            output_files=[enriched_file],
+        ),
+        SyncStep(
+            "9. Ensure venues exist",
             lambda: ensure_venues(date_str=date_str, dry_run=dry_run),
             input_files=[danslogen_event_file],
             output_files=[venues_file],
         ),
         SyncStep(
-            "6. Ensure artists exist",
+            "10. Ensure artists exist",
             lambda: ensure_artists(date_str=date_str, dry_run=dry_run),
             input_files=[danslogen_event_file],
             output_files=[],
         ),
         SyncStep(
-            "7. Fetch DanceDB events",
+            "11. Fetch DanceDB events",
             lambda: fetch_dancedb_events(date_str=date_str),
             input_files=[],
             output_files=[dancedb_events_file],
         ),
         SyncStep(
-            "8. Upload events",
+            "12. Upload events",
             lambda: upload_events(
                 input_file=str(danslogen_event_file),
                 date_str=date_str,
@@ -278,6 +316,7 @@ def sync_bygdegardarna(
 
     bygdegardarna_file = data_dir / "bygdegardarna" / f"{date_str}.json"
     dancedb_venues_file = data_dir / "dancedb" / "venues" / f"{date_str}.json"
+    enriched_file = data_dir / "bygdegardarna" / "enriched" / f"{date_str}.json"
 
     print("\n" + "=" * 50)
     print("SYNC BYGDEGARDARNA")
@@ -303,7 +342,7 @@ def sync_bygdegardarna(
             "3. Match venues to DanceDB",
             lambda: match_venues(date_str=date_str, skip_prompts=True),
             input_files=[bygdegardarna_file, dancedb_venues_file],
-            output_files=[],
+            output_files=[enriched_file],
         ),
     ]
 
