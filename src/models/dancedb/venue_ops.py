@@ -372,7 +372,7 @@ def ensure_venues(date_str: str | None = None) -> None:
         folketshus_match = None
         venue_lower = venue_name.lower()
         if folketshus_names:
-            fuzzy = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=80)
+            fuzzy = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=90)
             if fuzzy:
                 folketshus_match = folketshus_venues[fuzzy[0]]
                 print(f"Found in folketshus: {fuzzy[0]} ({fuzzy[1]}, external_id: {folketshus_match['external_id']})")

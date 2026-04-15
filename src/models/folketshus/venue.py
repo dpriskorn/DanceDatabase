@@ -9,6 +9,7 @@ import questionary
 import requests
 from bs4 import BeautifulSoup
 from pydantic import BaseModel
+from wikibaseintegrator import WikibaseIntegrator
 
 import config
 from src.models.dancedb.client import DancedbClient
@@ -191,7 +192,10 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
             if fuzzy:
                 matched_qid = fuzzy[1]
                 print(f"Fuzzy match: {venue.name} -> {matched_qid} ('{fuzzy[0]}', score={fuzzy[2]})")
-            else:
+                confirm = questionary.confirm(f"Accept fuzzy match ({fuzzy[2]:.1f}%?)").ask()
+                if not confirm:
+                    matched_qid = None
+            if not matched_qid:
                 for qid, (lat2, lng2) in db_coords.items():
                     dist = haversine_distance(venue.lat, venue.lng, lat2, lng2)
                     if dist <= COORD_DISTANCE_KM:
@@ -220,12 +224,12 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
 def create_venue_with_p44(venue: FolketshusVenue) -> str | None:
     """Create venue in DanceDB with P44 external ID."""
     from wikibaseintegrator import datatypes
-    from wikibaseintegrator.bwitems import Item
 
     external_id = venue.external_id or extract_external_id(venue.url)
     label = venue.name
 
-    new_item = Item.new()
+    wbi = WikibaseIntegrator(login=DancedbClient().wbi.login)
+    new_item = wbi.item.new()
     new_item.labels.set("sv", label)
     new_item.descriptions.set("sv", "dansställe")
 
@@ -237,7 +241,7 @@ def create_venue_with_p44(venue: FolketshusVenue) -> str | None:
         new_item.claims.add(datatypes.ExternalID(prop_nr="P44", value=external_id))
 
     try:
-        new_item.write(login=DancedbClient().wbi.login)
+        new_item.write()
         qid = new_item.id
         logger.info(f"Created venue '{label}' with P44={external_id}: {qid}")
         return qid
