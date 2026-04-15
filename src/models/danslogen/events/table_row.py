@@ -1,5 +1,5 @@
 import re
-from typing import Optional
+from typing import ClassVar, Optional
 
 from bs4 import Tag
 from pydantic import BaseModel, field_validator
@@ -21,6 +21,8 @@ class DanslogenTableRow(BaseModel):
     lan: str = ""
     ovrigt: str = ""
 
+    VENUE_KEYWORDS: ClassVar[set[str]] = {'folkets', 'bygdegård', 'bygdegard', 'park', 'kulturhus', 'hallen', 'centrum', 'fritids', 'medborgar'}
+
     @field_validator('time', mode='before')
     @classmethod
     def parse_time(cls, v):
@@ -41,6 +43,15 @@ class DanslogenTableRow(BaseModel):
         if not v or not v.strip():
             return ""
         return v.strip()
+
+    @classmethod
+    def _shift_columns_if_venue_empty(cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str) -> tuple[str, str, str, str, str]:
+        """Handle case where venue cell is empty but next cell contains venue data."""
+        if not venue_val and ort_val:
+            ort_lower = ort_val.lower()
+            if any(keyword in ort_lower for keyword in cls.VENUE_KEYWORDS):
+                return ort_val, kommun_val, lan_val, ovrigt_val, ""
+        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
 
     @classmethod
     def from_row(cls, row: Tag) -> Optional['DanslogenTableRow']:
@@ -69,6 +80,10 @@ class DanslogenTableRow(BaseModel):
             kommun_val = cells[6].get_text(strip=True)
             lan_val = cells[7].get_text(strip=True)
             ovrigt_val = cells[8].get_text(strip=True)
+
+        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_venue_empty(
+            venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+        )
 
         if not band_val or not band_val.strip():
             return None

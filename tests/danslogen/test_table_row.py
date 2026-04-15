@@ -112,3 +112,28 @@ class TestDanslogenTableRowFromRow:
         ])
         result = DanslogenTableRow.from_row(row)
         assert result is None
+
+    def test_shifts_columns_when_venue_empty(self):
+        row = self.create_mock_row([
+            "Fre", "24", "19.00-22.30", "Kjelles Danskavalkad",
+            "", "Folkets Hus Bastuträsk", "Bastuträsk", "Norsjö", "Västerbotten", ""
+        ])
+        result = DanslogenTableRow.from_row(row)
+        assert result is not None
+        assert result.venue == "Folkets Hus Bastuträsk"
+        assert result.ort == "Bastuträsk"
+        assert result.kommun == "Norsjö"
+        assert result.lan == "Västerbotten"
+        assert result.ovrigt == ""
+
+    def test_no_shift_when_venue_present(self):
+        row = self.create_mock_row([
+            "Ons", "3", "18.00-22.00", "Streaplers",
+            "Brunnen Eringsboda", "Eringsboda", "Ronneby", "Blekinge", ""
+        ])
+        result = DanslogenTableRow.from_row(row)
+        assert result is not None
+        assert result.venue == "Brunnen Eringsboda"
+        assert result.ort == "Eringsboda"
+        assert result.kommun == "Ronneby"
+        assert result.lan == "Blekinge"
