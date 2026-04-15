@@ -9,6 +9,7 @@ sys.path.insert(0, str(__file__).rsplit('/', 1)[0])
 COMMANDS = {
     "DANSLOGEN": [
         ("scrape-danslogen", "Fetch danslogen event rows"),
+        ("scrape-danslogen-artists", "Fetch artists from danslogen"),
         ("ensure-danslogen-venues", "Ensure danslogen venues exist in DanceDB"),
         ("upload-danslogen-events", "Upload danslogen events to DanceDB"),
         ("ensure-danslogen-venues", "Ensure danslogen venues exist in DanceDB"),
@@ -57,6 +58,7 @@ from src.models.danslogen.event_ops import (
     scrape_danslogen,
     upload_events,
 )
+from src.models.danslogen.artist_ops import scrape_artists
 from src.models.onbeat.run import run as scrape_onbeat
 from src.models.cogwork.scrape import scrape as scrape_cogwork
 from src.models.cogwork.upload import upload as upload_cogwork
@@ -118,6 +120,11 @@ def main():
                    help="Month name (default: april)")
     p.add_argument("-y", "--year", type=int, default=2026,
                    help="Year (default: 2026)")
+
+    p = sub.add_parser("scrape-danslogen-artists",
+                       help="Fetch artists from danslogen")
+    p.add_argument("-d", "--date", default=None,
+                   help="Date for output (YYYY-MM-DD, default: today)")
 
     p = sub.add_parser("scrape-dancedb-venues",
                      help="Fetch existing venues from DanceDB")
@@ -305,6 +312,10 @@ def main():
 
     elif args.command == "scrape-danslogen":
         scrape_danslogen(args.month, args.year)
+
+    elif args.command == "scrape-danslogen-artists":
+        date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")
+        scrape_artists(date_str)
 
     elif args.command == "scrape-dancedb-venues":
         date_str = getattr(args, 'date', None) or date.today().strftime("%Y-%m-%d")

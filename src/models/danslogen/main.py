@@ -22,6 +22,7 @@ from src.models.danslogen.band_mapper import BandMapper
 from src.models.danslogen.venue_mapper import VenueMapper
 from src.models.danslogen.event import DanslogenEvent
 from src.models.danslogen.table_row import DanslogenTableRow
+from src.models.danslogen.artist_row import DanslogenArtistRow
 from src.models._utils.datetime_utils import MONTH_NUM_TO_NAME, combine_date_and_time, parse_time_range, parse_date
 
 logger = logging.getLogger(__name__)
@@ -210,7 +211,45 @@ class Danslogen:
         self.events = self.parse_month(month)
         return self.events
 
+    def fetch_artists_page(self) -> None:
+        url = f"{self.baseurl}/dansband/alla"
+        response = requests.get(url)
+        response.raise_for_status()
+        self.soup = BeautifulSoup(response.text, "lxml")
+        logger.info("Fetched artists page: %s", url)
+
+    def parse_artists(self) -> List[DanslogenArtistRow]:
+        table = self.soup.find("table")
+        if not table:
+            logger.warning("No table found on artists page")
+            return []
+
+        artists: List[DanslogenArtistRow] = []
+        rows = table.select("tr[class='even'], tr[class='odd']")
+        logger.info("Found %d artist rows", len(rows))
+
+        for row in rows:
+            try:
+                artist = DanslogenArtistRow.from_row(row)
+                if artist:
+                    artists.append(artist)
+            except Exception as e:
+                logger.warning("Failed to parse artist row: %s", e)
+                continue
+
+        logger.info("Parsed %d artists", len(artists))
+        return artists
+
+    def scrape_artists(self) -> List[DanslogenArtistRow]:
+        self.fetch_artists_page()
+        return self.parse_artists()
+
 
 def scrape_month(month: str = "april") -> List[DanceEvent]:
     scraper = Danslogen(month)
     return scraper.scrape_month(month)
+
+
+def scrape_artists() -> List[DanslogenArtistRow]:
+    scraper = Danslogen()
+    return scraper.scrape_artists()
