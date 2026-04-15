@@ -227,6 +227,24 @@ def ensure_venues(date_str: str | None = None) -> None:
 
     print(f"Found {len(existing_venues)} existing venues in DanceDB")
 
+    venue_mappings_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+    if venue_mappings_file.exists():
+        print(f"Loading venue mappings from {venue_mappings_file.name}...")
+        with open(venue_mappings_file) as f:
+            for line in f:
+                if line.strip():
+                    try:
+                        mapping = json.loads(line)
+                        name = mapping.get("venue_name", "").lower()
+                        qid = mapping.get("qid", "")
+                        lat = mapping.get("lat")
+                        lng = mapping.get("lng")
+                        if name and qid and lat and lng and name not in existing_venues:
+                            existing_venues[name] = {"qid": qid, "lat": lat, "lng": lng, "aliases": []}
+                    except json.JSONDecodeError:
+                        continue
+        print(f"Loaded {len(existing_venues)} venues (including mappings)")
+
     bygdegardarna_addresses = {}
     bygdegardarna_files_to_check = []
     
