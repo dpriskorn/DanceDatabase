@@ -27,12 +27,13 @@ class DancedbClient:
 
     def search_band(self, band_name: str) -> Optional[str]:
         sparql = f"""
+        PREFIX dd: <https://dance.wikibase.cloud/entity/>
+        PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
         SELECT ?item WHERE {{
           ?item rdfs:label "{band_name}"@sv .
-          {{ ?item wdt:P31 wd:Q215380 }} UNION
-          {{ ?item wdt:P31 wd:Q2088357 }} UNION
-          {{ ?item wdt:P31 wd:Q486161 }}
-          FILTER NOT EXISTS {{ ?item wdt:P576 ?dissolutionDate }}
+          {{ ?item ddt:P1 dd:Q225 }}
         }}
         """
         try:
@@ -57,6 +58,7 @@ class DancedbClient:
             new_item = self.wbi.item.new()
             new_item.labels.set('sv', band_name)
             new_item.labels.set('en', band_name)
+            new_item.descriptions.set('sv', 'artist')
             new_item.claims.add(datatypes.Item(prop_nr='P1', value='Q225'))
             if spelplan_id:
                 spelplan_url = f"https://danslogen.se/spelplan/{spelplan_id}"
@@ -148,9 +150,14 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
     def search_venue(self, venue_name: str) -> Optional[str]:
         """Search for venue by exact label match."""
         sparql = f"""
+        PREFIX dd: <https://dance.wikibase.cloud/entity/>
+        PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
         SELECT ?item WHERE {{
           ?item rdfs:label "{venue_name}"@sv .
-          ?item wdt:P1 wd:Q20 .
+          ?item ddt:P1 dd:Q20 .
         }}
         """
         try:
