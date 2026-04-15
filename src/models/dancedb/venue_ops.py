@@ -225,7 +225,10 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
     events = json.loads(dansevents_file.read_text())
     venues_needed = set(e.get("location") for e in events if e.get("location"))
-    print(f"Need venues for {len(venues_needed)} unique locations")
+print(f"Need venues for {len(venues_needed)} unique locations")
+
+    step1_done = False
+    step2_done = False
 
     new_venues = []
     matched = 0
@@ -235,8 +238,15 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
             matched += 1
             continue
 
+        if not step1_done:
+            logger.info("Step 1: Exact matches in DanceDB")
+            step1_done = True
+
         folkets_match = False
         if folketshus_names:
+            if not step2_done:
+                logger.info(f"Step 2: Fuzzy matching against {len(folketshus_names)} folketshus venues (threshold 90%)...")
+                step2_done = True
             fuzzy_folkets = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=90)
             if fuzzy_folkets:
                 folkets_match = folketshus_venues[fuzzy_folkets[0]]
@@ -250,8 +260,10 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
                 matched += 1
                 continue
 
-        byg_match = False
         if bygdegardarna_names:
+            if not step2_done:
+                logger.info(f"Step 3: Fuzzy matching against {len(bygdegardarna_names)} bygdegardarna venues (threshold 90%)...")
+                step2_done = True
             fuzzy_byg = fuzz_process.extractOne(venue_lower, bygdegardarna_names, score_cutoff=90)
             if fuzzy_byg:
                 byg_match = bygdegardarna_venues[fuzzy_byg[0]]
