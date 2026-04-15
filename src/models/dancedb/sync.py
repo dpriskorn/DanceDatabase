@@ -90,17 +90,8 @@ class SyncStep:
 
     def run(self, force: bool = False) -> None:
         """Run the step if needed."""
-        if self.needs_run(force):
-            print(f"\n[RUN] {self.name}")
-            self.func()
-        else:
-            outputs_exist = self.output_files and all(f.exists() for f in self.output_files)
-            if outputs_exist and self.input_files:
-                print(f"\n[DONE] {self.name} - already completed")
-            elif outputs_exist:
-                print(f"\n[SKIP] {self.name} - output already exists")
-            else:
-                print(f"\n[SKIP] {self.name} - prerequisites not met")
+        print(f"\n[RUN] {self.name}")
+        self.func()
 
 
 def get_data_dir() -> Path:
@@ -112,16 +103,11 @@ def get_data_dir() -> Path:
 
 def run_sync_steps(
     steps: list[SyncStep],
-    force: bool = False,
     only_scrape: bool = False,
 ) -> None:
     """Run a list of sync steps with prerequisite checking."""
     for step in steps:
-        if only_scrape and step.output_files:
-            if all(f.exists() for f in step.output_files):
-                print(f"\n[SKIP] {step.name} - output already exists")
-                continue
-        step.run(force=force)
+        step.run()
 
 
 def scrape_all(month: str, year: int) -> None:
@@ -167,7 +153,6 @@ def sync_danslogen(
     month: str | None = None,
     year: int | None = None,
     limit: int | None = None,
-    force: bool = False,
     only_scrape: bool = False,
 ) -> bool:
     """Sync danslogen events with prerequisite checking."""
@@ -282,7 +267,7 @@ def sync_danslogen(
         ),
     ]
 
-    run_sync_steps(steps, force=force, only_scrape=only_scrape)
+    run_sync_steps(steps, only_scrape=only_scrape)
 
     print("\n" + "=" * 50)
     print("DANSLOGEN SYNC COMPLETE")
@@ -291,7 +276,6 @@ def sync_danslogen(
 
 
 def sync_bygdegardarna(
-    force: bool = False,
     only_scrape: bool = False,
 ) -> bool:
     """Sync bygdegardarna venues with prerequisite checking."""
@@ -329,7 +313,7 @@ def sync_bygdegardarna(
         ),
     ]
 
-    run_sync_steps(steps, force=force, only_scrape=only_scrape)
+    run_sync_steps(steps, only_scrape=only_scrape)
 
     print("\n" + "=" * 50)
     print("BYGDEGARDARNA SYNC COMPLETE")
@@ -393,7 +377,6 @@ def sync_all(
     month: str | None = None,
     year: int | None = None,
     limit: int | None = None,
-    force: bool = False,
     only_scrape: bool = False,
 ) -> bool:
     """Sync all sources with prerequisite checking."""
@@ -408,8 +391,8 @@ def sync_all(
     scrape_all(month=month, year=year)
 
     sources = [
-        ("DANSLOGEN", lambda: sync_danslogen(month=month, year=year, limit=limit, force=force, only_scrape=only_scrape)),
-        ("BYGDEGARDARNA", lambda: sync_bygdegardarna(force=force, only_scrape=only_scrape)),
+        ("DANSLOGEN", lambda: sync_danslogen(month=month, year=year, limit=limit, only_scrape=only_scrape)),
+        ("BYGDEGARDARNA", lambda: sync_bygdegardarna(only_scrape=only_scrape)),
         ("ONBEAT", lambda: sync_onbeat()),
         ("COGWORK", lambda: sync_cogwork()),
         ("FOLKETSHUS", lambda: sync_folketshus()),

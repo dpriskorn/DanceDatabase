@@ -167,11 +167,9 @@ def main():
     p.add_argument("-m", "--month", default=None, help="Month name (default: current month)")
     p.add_argument("-y", "--year", type=int, default=None, help="Year (default: current year)")
     p.add_argument("-l", "--limit", type=int, default=None, help="Limit number of events")
-    p.add_argument("-f", "--force", action="store_true", help="Force run even if prerequisites met")
     p.add_argument("--only-scrape", action="store_true", help="Only scrape, skip uploads")
 
     p = sub.add_parser("sync-bygdegardarna", help="Sync bygdegardarna: scrape → fetch-dancedb → match-bygdegardarna-venues")
-    p.add_argument("-f", "--force", action="store_true", help="Force run even if prerequisites met")
     p.add_argument("--only-scrape", action="store_true", help="Only scrape, skip uploads")
 
     p = sub.add_parser("sync-onbeat", help="Sync onbeat: scrape + upload")
@@ -184,7 +182,6 @@ def main():
     p.add_argument("-m", "--month", default=None, help="Month name (default: current month)")
     p.add_argument("-y", "--year", type=int, default=None, help="Year (default: current year)")
     p.add_argument("-l", "--limit", type=int, default=None, help="Limit number of events")
-    p.add_argument("-f", "--force", action="store_true", help="Force run even if prerequisites met")
     p.add_argument("--only-scrape", action="store_true", help="Only scrape, skip uploads")
 
     args = parser.parse_args()
@@ -266,12 +263,11 @@ def main():
             month=args.month,
             year=args.year,
             limit=args.limit,
-            force=args.force,
             only_scrape=args.only_scrape,
         )
 
     elif args.command == "sync-bygdegardarna":
-        sync_bygdegardarna(force=args.force, only_scrape=args.only_scrape)
+        sync_bygdegardarna(only_scrape=args.only_scrape)
 
     elif args.command == "sync-onbeat":
         sync_onbeat()
@@ -287,7 +283,6 @@ def main():
             month=args.month,
             year=args.year,
             limit=args.limit,
-            force=args.force,
             only_scrape=args.only_scrape,
         )
 

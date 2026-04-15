@@ -227,10 +227,15 @@ def sync_wikidata_artists(
                 print("Skipping (skip all)")
                 continue
 
-            response = questionary.select(
-                f"Add P3 (Wikidata ID)={wd_qid} to {band_name}?",
-                choices=["Yes", "Skip", "Skip all", "Abort"],
-            ).ask()
+            import os
+            if os.isatty(0):
+                response = questionary.select(
+                    f"Add P3 (Wikidata ID)={wd_qid} to {band_name}?",
+                    choices=["Yes", "Skip", "Skip all", "Abort"],
+                ).ask()
+            else:
+                print(f"  Auto-confirming: Add P3 (Wikidata ID)={wd_qid} to {band_name}")
+                response = "Yes"
 
             if response == "Yes":
                 print(f"Adding P3 (Wikidata ID)={wd_qid} to {band_name} ({db_qid})...")
@@ -275,15 +280,20 @@ def sync_wikidata_artists(
                 print("Skipping (skip all)")
                 continue
 
+            import os
             choices = ["Yes"]
             if wd_qid:
                 choices.append("Yes + add P3 (Wikidata ID)")
             choices.extend(["Skip", "Skip all", "Abort"])
 
-            response = questionary.select(
-                f"Create artist '{band_name}' in DanceDB?",
-                choices=choices,
-            ).ask()
+            if os.isatty(0):
+                response = questionary.select(
+                    f"Create artist '{band_name}' in DanceDB?",
+                    choices=choices,
+                ).ask()
+            else:
+                print(f"  Auto-confirming: Create artist '{band_name}'")
+                response = "Yes"
 
             if response and "Yes" in response:
                 add_p3 = "add P3" in response and wd_qid is not None

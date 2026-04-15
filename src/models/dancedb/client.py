@@ -179,10 +179,16 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             logger.error(f"Error searching for '{venue_name}': {e}")
             return None
 
-    def create_venue(self, venue_name: str, latitude: float = 0.0, longitude: float = 0.0) -> str:
+    def create_venue(self, venue_name: str, latitude: float = 0.0, longitude: float = 0.0, external_ids: dict[str, str] | None = None) -> str:
         """Create a new venue on DanceDB with optional coordinates."""
-        if not questionary.confirm(f"Create new venue '{venue_name}' on DanceDB?", default=True).ask():
-            raise Exception(f"User declined to create venue: {venue_name}")
+        import os
+
+        is_tty = os.isatty(0)
+        if is_tty:
+            if not questionary.confirm(f"Create new venue '{venue_name}' on DanceDB?", default=True).ask():
+                raise Exception(f"User declined to create venue: {venue_name}")
+        else:
+            print(f"Auto-confirming: Create new venue '{venue_name}' on DanceDB")
 
         try:
             new_item = self.wbi.item.new()
@@ -193,6 +199,9 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
                 new_item.claims.add(
                     datatypes.GlobeCoordinate(prop_nr="P4", latitude=latitude, longitude=longitude, precision=0.0001, globe="http://www.wikidata.org/entity/Q2")
                 )
+            if external_ids:
+                for prop, value in external_ids.items():
+                    new_item.claims.add(datatypes.String(prop_nr=prop, value=value))
             new_item.write(login=self.wbi.login)
             qid = new_item.id
             url = f"{self.base_url}/wiki/Item:{qid}"
@@ -200,7 +209,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             rich.print(f"[green]Created venue: {url}[/green]")
             return qid
         except Exception as e:
-            logger.error(f"Error creating venue '{venue_name}': {e}")
+            logger.error(f"Error creating venue '{venue_name}': %s", e)
             raise
 
     def get_or_create_venue(self, venue_name: str, latitude: float = 0.0, longitude: float = 0.0) -> str:
@@ -261,3 +270,54 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         except Exception as e:
             logger.error(f"Error creating event: {e}")
             return False
+
+    def create_event(self, label_sv: str, venue_qid: str, start_timestamp: str, end_timestamp: str | None = None, status_qid: str = "Q566", instance_of: str = "Q2", artist_qid: str | None = None) -> str | None:
+        """Create a new event on DanceDB.
+
+        Args:
+            label_sv: Event label in Swedish
+            venue_qid: Venue QID
+            start_timestamp: Start timestamp (ISO format)
+            end_timestamp: End timestamp (ISO format)
+            status_qid: Q566 (planned), Q567 (cancelled), etc.
+            instance_of: Q2 (event)
+            artist_qid: Artist QID (optional)
+
+        Returns the created event QID or None on failure.
+        """
+        import os
+
+        is_tty = os.isatty(0)
+        if is_tty:
+            if not questionary.confirm(f"Create new event '{label_sv}' on DanceDB?", default=True).ask():
+                raise Exception(f"User declined to create event: {label_sv}")
+        else:
+            print(f"Auto-confirming: Create new event '{label_sv}'")
+
+        try:
+            event = self.wbi.item.new()
+            event.labels.set("sv", label_sv)
+            event.labels.set("en", label_sv)
+            event.claims.add(datatypes.Item(prop_nr="P1", value=instance_of))
+            event.claims.add(datatypes.Item(prop_nr="P7", value=venue_qid))
+            
+            # Format timestamps for Wikibase: +YYYY-MM-DDTHH:MM:00Z
+            from datetime import datetime
+            start_dt = datetime.fromisoformat(start_timestamp.replace("+01:00", "").replace("+02:00", ""))
+            start_clean = f"+{start_dt.strftime('%Y-%m-%dT00:00:00Z')}"
+            event.claims.add(datatypes.Time(prop_nr="P5", time=start_clean, precision="day"))
+            if end_timestamp:
+                end_dt = datetime.fromisoformat(end_timestamp.replace("+01:00", "").replace("+02:00", ""))
+                end_clean = f"+{end_dt.strftime('%Y-%m-%dT00:00:00Z')}"
+                event.claims.add(datatypes.Time(prop_nr="P6", time=end_clean, precision="day"))
+            event.claims.add(datatypes.Item(prop_nr="P43", value=status_qid))
+            if artist_qid:
+                event.claims.add(datatypes.Item(prop_nr="P56", value=artist_qid))
+            item_qid = event.write(login=self.wbi.login)
+            url = f"{self.base_url}/wiki/Item:{item_qid}"
+            logger.info(f"Created event '{label_sv}' on DanceDB: {url}")
+            rich.print(f"[green]Created event: {url}[/green]")
+            return item_qid
+        except Exception as e:
+            logger.error(f"Error creating event '{label_sv}': %s", e)
+            raise

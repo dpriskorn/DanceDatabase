@@ -153,9 +153,10 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
     print(f"Saved to {enriched_file}")
 
 
-def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
+def ensure_venues(date_str: str | None = None) -> None:
     """Ensure danslogen venues exist in DanceDB before uploading events."""
     from datetime import datetime
+    import os
 
     import questionary
     from rapidfuzz import process as fuzz_process
@@ -163,6 +164,8 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     month_name = datetime.strptime(date_str, "%Y-%m-%d").strftime("%B").lower()
     print(f"\n=== Ensuring venues exist for {date_str} ===")
+
+    is_tty = os.isatty(0)
 
     dansevents_file = config.danslogen_dir / "events" / f"{date_str}-{month_name}.json"
     if not dansevents_file.exists():
@@ -310,7 +313,7 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
     print(f"\nMissing venues: {new_venues}")
 
     db_client = None
-    if not dry_run and new_venues:
+    if new_venues:
         print("Logging in to DanceDB...")
         db_client = DancedbClient()
         print("Logged in.")
@@ -333,23 +336,27 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
 
         coords = None
         if folketshus_match:
-            if dry_run:
-                coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
-                print(f"  [DRY RUN] Using folketshus coordinates: {coords['lat']}, {coords['lng']}")
-            else:
+            if is_tty:
                 use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
                 if use_coords:
                     coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
+            else:
+                coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
+                print(f"  Auto-confirming: Using folketshus coordinates: {coords['lat']}, {coords['lng']}")
 
         if not folketshus_match or not coords:
-            print("Enter coordinates (lat, lng) or press Enter to skip:")
-            coords_input = input("> ").strip()
-            if coords_input:
-                try:
-                    lat, lng = map(float, coords_input.split(","))
-                    coords = {"lat": lat, "lng": lng}
-                except ValueError:
-                    print("Invalid format, skipping")
+            if is_tty:
+                print("Enter coordinates (lat, lng) or press Enter to skip:")
+                coords_input = input("> ").strip()
+                if coords_input:
+                    try:
+                        lat, lng = map(float, coords_input.split(","))
+                        coords = {"lat": lat, "lng": lng}
+                    except ValueError:
+                        print("Invalid format, skipping")
+            else:
+                print(f"  Skipping (no coordinates, not TTY): {venue_name}")
+                continue
 
         if not coords:
             print("Skipping venue creation (no coordinates)")
@@ -358,11 +365,6 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
         external_ids = None
         if folketshus_match:
             external_ids = {"P44": folketshus_match["external_id"]}
-
-        if dry_run:
-            ids_str = f" (external_ids: {external_ids})" if external_ids else ""
-            print(f"[DRY RUN] Would create: {venue_name} at {coords}{ids_str}")
-            continue
 
         qid = create_venue(venue_name, coords["lat"], coords["lng"], external_ids=external_ids, client=db_client)
         if qid:
