@@ -137,3 +137,16 @@ class TestDanslogenTableRowFromRow:
         assert result.ort == "Eringsboda"
         assert result.kommun == "Ronneby"
         assert result.lan == "Blekinge"
+
+    def test_shifts_columns_when_lan_empty(self):
+        row = self.create_mock_row([
+            "Tor", "23", "14.00-17.00", "Lennart Erlandssons",
+            "Folkets Hus Röfors", "Röfors", "Laxå", "", "Örebro"
+        ])
+        result = DanslogenTableRow.from_row(row)
+        assert result is not None
+        assert result.venue == "Folkets Hus Röfors"
+        assert result.ort == "Röfors"
+        assert result.kommun == "Laxå"
+        assert result.lan == "Örebro"
+        assert result.ovrigt == ""

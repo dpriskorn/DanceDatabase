@@ -9,6 +9,13 @@ from src.models.exceptions import InvalidRowError
 TIME_RANGE_PATTERN = re.compile(r'^\d{1,2}\.\d{2}-\d{1,2}\.\d{2}$')
 VALID_WEEKDAYS = {'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'}
 
+VALID_LAN = {
+    'Stockholms', 'Uppsala', 'Södermanlands', 'Östergötlands', 'Jönköpings',
+    'Kronobergs', 'Kalmar', 'Gotlands', 'Blekinge', 'Skåne', 'Hallands',
+    'Västra Götalands', 'Värmlands', 'Örebro', 'Västmanlands', 'Dalarnas',
+    'Gävleborgs', 'Västernorrlands', 'Jämtlands', 'Västerbottens', 'Norrbottens',
+}
+
 
 class DanslogenTableRow(BaseModel):
     weekday: str
@@ -58,6 +65,16 @@ class DanslogenTableRow(BaseModel):
         return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
 
     @classmethod
+    def _shift_columns_if_lan_empty(cls, venue_val: str, ort_val: str, kommun_val: str, lan_val: str, ovrigt_val: str) -> tuple[str, str, str, str, str]:
+        """Handle case where lan is empty but ovrigt contains a county name."""
+        if not lan_val and ovrigt_val:
+            ovrigt_stripped = ovrigt_val.strip()
+            for lan in VALID_LAN:
+                if ovrigt_stripped == lan or ovrigt_stripped.startswith(lan + ' '):
+                    return venue_val, ort_val, kommun_val, ovrigt_val, ""
+        return venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+
+    @classmethod
     def from_row(cls, row: Tag) -> Optional['DanslogenTableRow']:
         cells = row.find_all('td')
         if len(cells) < 9:
@@ -86,6 +103,10 @@ class DanslogenTableRow(BaseModel):
             ovrigt_val = cells[8].get_text(strip=True)
 
         venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_venue_empty(
+            venue_val, ort_val, kommun_val, lan_val, ovrigt_val
+        )
+
+        venue_val, ort_val, kommun_val, lan_val, ovrigt_val = cls._shift_columns_if_lan_empty(
             venue_val, ort_val, kommun_val, lan_val, ovrigt_val
         )
 
