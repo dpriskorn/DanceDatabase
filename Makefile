@@ -2,9 +2,9 @@
 
 lint:
 	ruff check .
-
-lint-fix:
-	ruff check . --fix
+	black --check .
+	mypy .
+	isort --check .
 
 test:
 	pytest
