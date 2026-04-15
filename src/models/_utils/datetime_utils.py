@@ -72,10 +72,14 @@ def parse_datetime_range(date_str: str, time_str: str, year: int = 2026) -> tupl
             return None, None
 
         start_dt = datetime(year, month_num, day_num, start_h, start_m, tzinfo=CET)
-        end_dt = datetime(year, month_num, day_num, end_h, end_m, tzinfo=CET)
 
-        if end_dt.hour <= 3:
-            end_dt = end_dt + timedelta(days=1)
+        if end_h >= 24:
+            end_h = end_h - 24
+
+        if end_h <= 3:
+            end_dt = datetime(year, month_num, day_num, end_h, end_m, tzinfo=CET) + timedelta(days=1)
+        else:
+            end_dt = datetime(year, month_num, day_num, end_h, end_m, tzinfo=CET)
     else:
         try:
             start_h, start_m = map(int, time_clean.strip().split(":"))
@@ -140,10 +144,18 @@ def combine_date_and_time(date: datetime, time_str: str, year: int = 2026) -> tu
         except ValueError:
             return None, None
 
+        if end_h >= 24:
+            end_h = end_h - 24
+
+        if end_h <= 3:
+            next_day = True
+        else:
+            next_day = False
+
         start_dt = datetime(date.year, date.month, date.day, start_h, start_m, tzinfo=CET)
         end_dt = datetime(date.year, date.month, date.day, end_h, end_m, tzinfo=CET)
 
-        if end_dt.hour <= 3:
+        if next_day:
             end_dt = end_dt + timedelta(days=1)
     else:
         try:
