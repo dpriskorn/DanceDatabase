@@ -348,6 +348,12 @@ def ensure_venues(date_str: str | None = None, dry_run: bool = False) -> None:
         if qid:
             print(f"Created: https://dance.wikibase.cloud/wiki/Item:{qid}")
             existing_venues[venue_name.lower()] = {"qid": qid, "lat": coords["lat"], "lng": coords["lng"]}
+
+            venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+            venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(venue_mapping_file, "a") as f:
+                f.write(json.dumps({"venue_name": venue_name, "qid": qid, "lat": coords["lat"], "lng": coords["lng"], "created_at": date_str}) + "\n")
+            print(f"  -> Saved mapping to {venue_mapping_file.name}")
         else:
             print("Failed to create venue")
 

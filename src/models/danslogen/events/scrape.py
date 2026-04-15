@@ -133,6 +133,17 @@ def upload_events(
                 venues_lookup[qid] = {"label": v, "qid": qid}
         print(f"Loaded {len(venues_lookup)} venues for display from {venues_file.name}")
 
+    # Load newly created venue mappings from jsonl
+    venue_mappings: dict[str, str] = {}
+    venue_mappings_file = Path("data/dancedb/venue_mappings.jsonl")
+    if venue_mappings_file.exists():
+        with open(venue_mappings_file) as f:
+            for line in f:
+                if line.strip():
+                    m = json.loads(line)
+                    venue_mappings[m["venue_name"].lower()] = m["qid"]
+        print(f"Loaded {len(venue_mappings)} venue mappings from jsonl")
+
     input_path = Path(input_file)
     if not input_path.exists():
         print(f"Error: Input file not found: {input_file}")
@@ -166,6 +177,12 @@ def upload_events(
         artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
         start_ts = event.start_timestamp
         end_ts = event.end_timestamp
+        location = event.location or ""
+
+        if not venue_qid and location:
+            venue_qid = venue_mappings.get(location.lower())
+            if venue_qid:
+                event.identifiers.dancedatabase.venue = venue_qid
 
         if not venue_qid:
             logger.warning("Skipping event %d - no venue QID", i)
