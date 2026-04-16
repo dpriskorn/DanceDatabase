@@ -8,6 +8,8 @@ logger = logging.getLogger(__name__)
 
 BYGDEGARDARNA_DIR = Path("data") / "bygdegardarna"
 ENRICHED_BYG_DIR = Path("data") / "bygdegardarna" / "enriched"
+FOLKETSHUS_DIR = Path("data") / "folketshus"
+FOLKETSHUS_ENRICHED_DIR = FOLKETSHUS_DIR / "enriched"
 DANCEDB_ARTISTS_DIR = Path("data") / "dancedb" / "artists"
 DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
 DANSLOGEN_ARTISTS_DIR = Path("data") / "danslogen" / "artists"
@@ -119,6 +121,29 @@ class DanslogenData:
             return {}
         venues = json.loads(path.read_text())
         return {v.get("title", ""): v for v in venues if v.get("title") and v.get("qid")}
+
+    def load_folketshus_venues(self, date_str: str) -> dict[str, dict]:
+        """Load venues from folketshus enriched data (has coordinates + QIDs).
+
+        Returns: dict[name_lower -> venue_dict]
+        """
+        available_files = sorted(FOLKETSHUS_ENRICHED_DIR.glob("*.json"), reverse=True)
+        
+        path = None
+        for check_path in available_files:
+            if check_path.exists():
+                venues = json.loads(check_path.read_text())
+                if len(venues) >= 100:
+                    path = check_path
+                    break
+                path = check_path
+        
+        if not path or not path.exists():
+            logger.warning("Folketshus venues not found")
+            return {}
+        venues = json.loads(path.read_text())
+        logger.info(f"Loaded {len(venues)} folketshus venues from {path.name}")
+        return {v.get("name", "").lower(): v for v in venues if v.get("name")}
 
     def load_dancedb_venues(self, date_str: str) -> dict[str, dict]:
         """Load DanceDB venues from scrape.

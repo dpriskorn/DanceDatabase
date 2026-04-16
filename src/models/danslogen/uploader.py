@@ -44,8 +44,9 @@ class DanslogenUploader:
             print("DRY RUN - no changes will be made to DanceDB")
 
         byg_venues = self.loader.load_bygdegardarna_venues(self.date_str)
+        folketshus_venues = self.loader.load_folketshus_venues(self.date_str)
         db_venues = self.loader.load_dancedb_venues(self.date_str)
-        print(f"Loaded {len(byg_venues)} bygdegardarna venues, {len(db_venues)} DanceDB venues")
+        print(f"Loaded {len(byg_venues)} bygdegardarna venues, {len(folketshus_venues)} folketshus venues, {len(db_venues)} DanceDB venues")
 
         if not dry_run:
             self.client = DancedbClient()
@@ -53,6 +54,7 @@ class DanslogenUploader:
         venue_matcher = VenueMatcher(
             client=self.client,
             byg_venues=byg_venues,
+            folketshus_venues=folketshus_venues,
             db_venues=db_venues,
             interactive=not dry_run,
         )

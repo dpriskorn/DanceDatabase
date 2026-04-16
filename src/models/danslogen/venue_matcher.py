@@ -23,11 +23,13 @@ class VenueMatcher:
         self,
         client: Optional[DancedbClient] = None,
         byg_venues: Optional[dict[str, dict]] = None,
+        folketshus_venues: Optional[dict[str, dict]] = None,
         db_venues: Optional[dict[str, dict]] = None,
         interactive: bool = True,
     ):
         self.client = client
         self.byg_venues = byg_venues or {}
+        self.folketshus_venues = folketshus_venues or {}
         self.db_venues = db_venues or {}
         self.interactive = interactive
         self._venue_mapper = VenueMapper(client=client)
@@ -38,9 +40,11 @@ class VenueMatcher:
         Flow:
         1. Exact match against DanceDB venues (dynamic)
         2. Exact match against bygdegardarna
-        3. Fuzzy match against DanceDB venues
-        4. Fuzzy match against bygdegardarna
-        5. Create new venue if coords available (from bygdegardarna or prompt)
+        3. Exact match against folketshus
+        4. Fuzzy match against DanceDB venues
+        5. Fuzzy match against bygdegardarna
+        6. Fuzzy match against folketshus
+        7. Create new venue if coords available (from bygdegardarna/folketshus or prompt)
 
         Returns QID or None if not found.
         Raises KeyboardInterrupt if user skips/aborts.
@@ -59,6 +63,10 @@ class VenueMatcher:
         if qid:
             return qid
 
+        qid = self._find_in_folketshus(venue_name)
+        if qid:
+            return qid
+
         if self.client is None:
             return None
 
@@ -74,10 +82,40 @@ class VenueMatcher:
             return exact
 
         venues_with_qid = {v.get("title", ""): v.get("qid", "") for v in self.byg_venues.values() if v.get("qid")}
-        fuzzy = fuzzy_match_qid(venue_name, venues_with_qid, remove_terms=config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA)
+        fuzzy = fuzzy_match_qid(
+            venue_name, venues_with_qid, remove_terms=config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA
+        )
         if fuzzy:
             ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
-            logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (cleaned='%s', %.1f%%)%s", venue_name, fuzzy.matched_label, fuzzy.cleaned_input, fuzzy.score, ff_warn)
+            logger.info(
+                "Fuzzy matched venue '%s' to bygdegardarna '%s' (cleaned='%s', %.1f%%)%s",
+                venue_name, fuzzy.matched_label, fuzzy.cleaned_input, fuzzy.score, ff_warn,
+            )
+            return fuzzy.qid
+
+        return None
+
+    def _find_in_folketshus(self, venue_name: str) -> Optional[str]:
+        """Find in folketshus venues (exact or fuzzy)."""
+        if not self.folketshus_venues:
+            return None
+
+        exact = next((v.get("qid") for name, v in self.folketshus_venues.items() if name.lower() == venue_name.lower() and v.get("qid")), None)
+        if exact:
+            return exact
+
+        venues_with_qid = {
+            v.get("name", ""): v.get("qid", "") for v in self.folketshus_venues.values() if v.get("qid")
+        }
+        fuzzy = fuzzy_match_qid(
+            venue_name, venues_with_qid, remove_terms=config.FUZZY_REMOVE_TERMS_FOLKETSHUS
+        )
+        if fuzzy:
+            ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
+            logger.info(
+                "Fuzzy matched venue '%s' to folketshus '%s' (cleaned='%s', %.1f%%)%s",
+                venue_name, fuzzy.matched_label, fuzzy.cleaned_input, fuzzy.score, ff_warn,
+            )
             return fuzzy.qid
 
         return None
@@ -85,10 +123,13 @@ class VenueMatcher:
     def _create_if_needed(self, venue_name: str, ort: str) -> Optional[str]:
         """Create venue if coordinates available.
 
-        Gets coords from bygdegardarna, or prompts user.
+        Gets coords from bygdegardarna/folketshus, or prompts user.
         If not interactive, returns None instead of prompting.
         """
         lat, lng = self._get_coords_from_bygdegardarna(venue_name)
+
+        if lat is None or lng is None:
+            lat, lng = self._get_coords_from_folketshus(venue_name)
 
         if lat is None or lng is None:
             if not self.interactive:
@@ -153,5 +194,19 @@ class VenueMatcher:
             if title.lower() == venue_name.lower():
                 pos = v.get("position", {})
                 return pos.get("lat"), pos.get("lng")
+
+        return None, None
+
+    def _get_coords_from_folketshus(self, venue_name: str) -> tuple[Optional[float], Optional[float]]:
+        """Get coordinates from folketshus for venue."""
+        if not self.folketshus_venues:
+            return None, None
+
+        for name, v in self.folketshus_venues.items():
+            if name.lower() == venue_name.lower():
+                lat = v.get("lat")
+                lng = v.get("lng")
+                if lat and lng:
+                    return lat, lng
 
         return None, None
