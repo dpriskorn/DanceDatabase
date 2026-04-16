@@ -328,9 +328,19 @@ def _merge_duplicate_venues(args) -> None:
             continue
         elif "Merge" in choice:
             try:
-                from wikibaseintegrator.wbi_helpers import merge_items
+                from wikibaseintegrator.wbi_helpers import merge_items, mediawiki_api_call
                 merge_items(from_id=from_qid, to_id=to_qid, login=client.login, is_bot=True, ignore_conflicts=["description"])
-                print(f"  SUCCESS: Merged {from_qid} into {to_qid}")
+                print(f"  Merged {from_qid} into {to_qid}")
+                mediawiki_api_call(
+                    method='POST',
+                    action='wbcreateredirect',
+                    fromid=from_qid,
+                    toid=to_qid,
+                    token=client.login.edit_token,
+                    bot=True,
+                    login=client.login
+                )
+                print(f"  Created redirect: {from_qid} -> {to_qid}")
             except Exception as e:
                 print(f"  ERROR: {e}")
         print()
