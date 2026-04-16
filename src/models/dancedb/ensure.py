@@ -326,7 +326,7 @@ def ensure_venues(date_str: str | None = None) -> None:
                 folkets_original = folketshus_normalized[fuzzy_folkets[0]]
                 folkets_match = folketshus_venues[folkets_original]
                 gmaps_url = folkets_match.get("gmaps_url", "")
-                if fuzzy_folkets[1] == 100.0:
+                if fuzzy_folkets[1] >= config.FUZZY_AUTOMATCH_THRESHOLD_VENUE_FOLKETSHUS:
                     matched += 1
                     matched_auto += 1
                     existing_venues[venue_lower] = {
@@ -339,7 +339,7 @@ def ensure_venues(date_str: str | None = None) -> None:
                     venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
                     with open(venue_mapping_file, "a") as f:
                         f.write(json.dumps({"venue_name": venue_name, "qid": folkets_match.get("qid", ""), "lat": folkets_match.get("lat"), "lng": folkets_match.get("lng"), "gmaps_url": gmaps_url, "created_at": date_str}) + "\n")
-                    print(f"Auto-matched: '{venue_name}' → folketshus '{folkets_original}' (100.0%)")
+                    print(f"Auto-matched: '{venue_name}' → folketshus '{folkets_original}' ({fuzzy_folkets[1]:.1f}%)")
                     continue
                 confirm = questionary.select(
                     f"Match '{venue_name}' to folketshus '{folkets_original}' ({fuzzy_folkets[1]:.1f}%)?\n→ {gmaps_url}",
