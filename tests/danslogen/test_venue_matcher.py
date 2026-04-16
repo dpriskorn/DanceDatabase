@@ -1,6 +1,7 @@
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from src.models.danslogen.venue_matcher import VenueMatcher
+from src.utils.venue_resolver import VenueSourceData
 
 
 class TestVenueMatcherFindInBygdegardarna:
@@ -9,14 +10,17 @@ class TestVenueMatcherFindInBygdegardarna:
             "test venue": {"qid": "Q456", "title": "Test Venue", "position": {"lat": 59.0, "lng": 18.0}},
         }
         matcher = VenueMatcher(byg_venues=byg_venues)
-        result = matcher._find_in_bygdegardarna("Test Venue")
+        resolver = matcher._get_resolver()
+        data = resolver._ensure_data_loaded()
 
+        result = resolver._exact_match_bygdegardarna("Test Venue", data)
         assert result == "Q456"
 
     def test_returns_none_for_no_byg_venues(self):
         matcher = VenueMatcher(byg_venues=None)
-        result = matcher._find_in_bygdegardarna("Test Venue")
-
+        result = matcher._get_resolver()._exact_match_bygdegardarna(
+            "Test Venue", VenueSourceData()
+        )
         assert result is None
 
 

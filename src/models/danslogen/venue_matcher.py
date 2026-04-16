@@ -9,6 +9,7 @@ from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.fuzzy import fuzzy_match_qid
 from src.models.danslogen.venue_mapper import VenueMapper
 from src.utils.coords import parse_coords
+from src.utils.venue_resolver import UnifiedVenueResolver, VenueSourceData
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 class VenueMatcher:
     """Resolves venue names to QIDs with coordinate matching.
 
+    This class is now a compatibility wrapper around UnifiedVenueResolver.
     Raises KeyboardInterrupt on abort (user skips coords).
     """
 
@@ -33,6 +35,23 @@ class VenueMatcher:
         self.db_venues = db_venues or {}
         self.interactive = interactive
         self._venue_mapper = VenueMapper(client=client)
+        self._resolver: Optional[UnifiedVenueResolver] = None
+
+    def _get_resolver(self) -> UnifiedVenueResolver:
+        if self._resolver is None:
+            byg_list = list(self.byg_venues.values())
+            folk_list = list(self.folketshus_venues.values())
+            data = VenueSourceData(
+                dancedb=self.db_venues,
+                bygdegardarna=byg_list,
+                folketshus=folk_list,
+            )
+            self._resolver = UnifiedVenueResolver(
+                data=data,
+                client=self.client,
+                interactive=self.interactive,
+            )
+        return self._resolver
 
     def resolve(self, venue_name: str, ort: str = "") -> Optional[str]:
         """Resolve venue name to QID.
@@ -59,162 +78,4 @@ class VenueMatcher:
         if qid:
             return qid
 
-        qid = self._find_in_bygdegardarna(venue_name)
-        if qid:
-            return qid
-
-        qid = self._find_in_folketshus(venue_name)
-        if qid:
-            return qid
-
-        if self.client is None:
-            return None
-
-        return self._create_if_needed(venue_name, ort)
-
-    def _find_in_bygdegardarna(self, venue_name: str) -> Optional[str]:
-        """Find in bygdegardarna venues (exact or fuzzy)."""
-        if not self.byg_venues:
-            return None
-
-        exact = next((v.get("qid") for title, v in self.byg_venues.items() if title.lower() == venue_name.lower() and v.get("qid")), None)
-        if exact:
-            return exact
-
-        venues_with_qid = {v.get("title", ""): v.get("qid", "") for v in self.byg_venues.values() if v.get("qid")}
-        fuzzy = fuzzy_match_qid(
-            venue_name, venues_with_qid, remove_terms=config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA
-        )
-        if fuzzy:
-            ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
-            logger.info(
-                "Fuzzy matched venue '%s' to bygdegardarna '%s' (cleaned='%s', %.1f%%)%s",
-                venue_name, fuzzy.matched_label, fuzzy.cleaned_input, fuzzy.score, ff_warn,
-            )
-            return fuzzy.qid
-
-        return None
-
-    def _find_in_folketshus(self, venue_name: str) -> Optional[str]:
-        """Find in folketshus venues (exact or fuzzy)."""
-        if not self.folketshus_venues:
-            return None
-
-        exact = next((v.get("qid") for name, v in self.folketshus_venues.items() if name.lower() == venue_name.lower() and v.get("qid")), None)
-        if exact:
-            return exact
-
-        venues_with_qid = {
-            v.get("name", ""): v.get("qid", "") for v in self.folketshus_venues.values() if v.get("qid")
-        }
-        fuzzy = fuzzy_match_qid(
-            venue_name, venues_with_qid, remove_terms=config.FUZZY_REMOVE_TERMS_FOLKETSHUS
-        )
-        if fuzzy:
-            ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
-            logger.info(
-                "Fuzzy matched venue '%s' to folketshus '%s' (cleaned='%s', %.1f%%)%s",
-                venue_name, fuzzy.matched_label, fuzzy.cleaned_input, fuzzy.score, ff_warn,
-            )
-            return fuzzy.qid
-
-        return None
-
-    def _create_if_needed(self, venue_name: str, ort: str) -> Optional[str]:
-        """Create venue if coordinates available.
-
-        Gets coords from bygdegardarna/folketshus, or prompts user.
-        If not interactive, returns None instead of prompting.
-        """
-        lat, lng = self._get_coords_from_bygdegardarna(venue_name)
-
-        if lat is None or lng is None:
-            lat, lng = self._get_coords_from_folketshus(venue_name)
-
-        if lat is None or lng is None:
-            if not self.interactive:
-                return None
-
-            venue_full = f"{venue_name}, {ort}" if ort else venue_name
-            try:
-                coord_str = questionary.text(f"Enter coordinates for '{venue_full}' (lat,lng or 'skip' to abort)").ask()
-            except KeyboardInterrupt:
-                raise KeyboardInterrupt()
-
-            if coord_str.lower() == "skip":
-                logger.error("Aborting: venue '%s' requires coordinates", venue_full)
-                raise KeyboardInterrupt()
-
-            if coord_str:
-                coords = parse_coords(coord_str)
-                if coords:
-                    lat = coords["lat"]
-                    lng = coords["lng"]
-                else:
-                    logger.error("Invalid coordinate format '%s'", coord_str)
-                    raise KeyboardInterrupt()
-
-        if lat is None or lng is None:
-            from src.utils.geodb import get_ship_coordinates
-            ship_coords = get_ship_coordinates(venue_name)
-            if ship_coords:
-                lat = ship_coords["lat"]
-                lng = ship_coords["lng"]
-                logger.info("Matched '%s' to ship pattern, using default coordinates", venue_name)
-
-        if lat is None or lng is None:
-            return None
-
-        if not self.interactive:
-            return None
-
-        label = f"{venue_name}, {ort}" if ort else venue_name
-        print(f'\nCreate venue: "{label}" at ({lat}, {lng})')
-
-        confirm = questionary.select("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
-
-        if confirm == "Skip":
-            logger.info("Skipping venue '%s'", label)
-            return None
-        elif confirm == "Skip all":
-            logger.info("Skipping all remaining venues...")
-            return "SKIP_ALL"
-        elif confirm == "Abort":
-            print("Aborting...")
-            sys.exit(0)
-
-        try:
-            qid = self.client.create_venue_from_mapping(venue_name, ort, lat, lng)
-            if qid:
-                logger.info("Created venue '%s' -> %s", venue_name, qid)
-                print(f"Uploaded: https://dance.wikibase.cloud/wiki/Item:{qid}")
-            return qid
-        except Exception as e:
-            logger.error("Could not create venue '%s': %s", venue_name, e)
-            raise
-
-    def _get_coords_from_bygdegardarna(self, venue_name: str) -> tuple[Optional[float], Optional[float]]:
-        """Get coordinates from bygdegardarna for venue."""
-        if not self.byg_venues:
-            return None, None
-
-        for title, v in self.byg_venues.items():
-            if title.lower() == venue_name.lower():
-                pos = v.get("position", {})
-                return pos.get("lat"), pos.get("lng")
-
-        return None, None
-
-    def _get_coords_from_folketshus(self, venue_name: str) -> tuple[Optional[float], Optional[float]]:
-        """Get coordinates from folketshus for venue."""
-        if not self.folketshus_venues:
-            return None, None
-
-        for name, v in self.folketshus_venues.items():
-            if name.lower() == venue_name.lower():
-                lat = v.get("lat")
-                lng = v.get("lng")
-                if lat and lng:
-                    return lat, lng
-
-        return None, None
+        return self._get_resolver().resolve(venue_name, ort)
