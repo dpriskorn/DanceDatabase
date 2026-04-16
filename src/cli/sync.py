@@ -323,7 +323,10 @@ def _merge_duplicate_venues(args) -> None:
             continue
         elif "Merge" in choice:
             try:
-                client.wbi.item.merge_items(from_id=v1["qid"], to_id=v2["qid"], login=client.login)
+                from wikibaseintegrator.wbi_helpers import merge_items_and_create_redirect
+                merge_items_and_create_redirect(
+                    qids=[v1["qid"], v2["qid"]], login=client.login, is_bot=True, ignore_conflicts=["description"]
+                )
                 print(f"  SUCCESS: Merged {v1['qid']} into {v2['qid']}")
             except Exception as e:
                 print(f"  ERROR: {e}")
