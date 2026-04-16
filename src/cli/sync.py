@@ -73,13 +73,14 @@ def add_sync_subparsers(sub) -> dict:
 
 
 def _scrape_all(args) -> None:
-    from src.models.dancedb.sync import scrape_all
+    from src.models.dancedb.sync_all import scrape_all
+    from src.cli.base import get_month_year
     month, year = get_month_year(args.month, args.year)
     scrape_all(month=month, year=year)
 
 
 def _sync_danslogen(args) -> None:
-    from src.models.dancedb.sync import sync_danslogen
+    from src.models.dancedb.sync_danslogen import sync_danslogen, get_month_year
     month, year = get_month_year(args.month, args.year)
     sync_danslogen(
         month=month,
@@ -90,27 +91,28 @@ def _sync_danslogen(args) -> None:
 
 
 def _sync_bygdegardarna(args) -> None:
-    from src.models.dancedb.sync import sync_bygdegardarna
+    from src.models.dancedb.sync_bygdegardarna import sync_bygdegardarna
     sync_bygdegardarna(only_scrape=args.only_scrape)
 
 
 def _sync_onbeat(args) -> None:
-    from src.models.dancedb.sync import sync_onbeat
+    from src.models.dancedb.sync_onbeat import sync_onbeat
     sync_onbeat()
 
 
 def _sync_cogwork(args) -> None:
-    from src.models.dancedb.sync import sync_cogwork
+    from src.models.dancedb.sync_cogwork import sync_cogwork
     sync_cogwork()
 
 
 def _sync_folketshus(args) -> None:
-    from src.models.dancedb.sync import sync_folketshus
+    from src.models.dancedb.sync_folketshus import sync_folketshus
     sync_folketshus()
 
 
 def _sync_all(args) -> None:
-    from src.models.dancedb.sync import sync_all
+    from src.models.dancedb.sync_all import sync_all
+    from src.models.dancedb.sync_danslogen import get_month_year
     month, year = get_month_year(args.month, args.year)
     sync_all(
         month=month,

@@ -6,7 +6,7 @@ import urllib.parse
 from datetime import date
 
 import questionary
-from rapidfuzz import process as fuzz_process
+from rapidfuzz import fuzz, process as fuzz_process
 from wikibaseintegrator.wbi_config import config as wbi_config
 
 import config
@@ -257,11 +257,12 @@ def ensure_venues(date_str: str | None = None) -> None:
                 continue
 
         matched_addr = False
-        if bygdegardarna_addresses:
+        if bygdegardarna_addresses and len(venue_lower) >= 5:
             fuzzy_addr = fuzz_process.extractOne(
                 venue_lower,
                 list(bygdegardarna_addresses.keys()),
-                score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA
+                scorer=fuzz_process.fuzz.token_sort_ratio,
+                score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA + 2
             )
             if fuzzy_addr:
                 addr_data = bygdegardarna_addresses[fuzzy_addr[0]]
@@ -295,11 +296,12 @@ def ensure_venues(date_str: str | None = None) -> None:
 
         if not matched_addr:
             matched_city = False
-            if bygdegardarna_cities:
+            if bygdegardarna_cities and len(venue_lower) >= 5:
                 fuzzy_city = fuzz_process.extractOne(
                     venue_lower,
                     list(bygdegardarna_cities.keys()),
-                    score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA
+                    scorer=fuzz_process.fuzz.token_sort_ratio,
+                    score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA + 2
                 )
                 if fuzzy_city:
                     city_venue = bygdegardarna_cities[fuzzy_city[0]]

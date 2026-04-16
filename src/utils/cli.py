@@ -1,5 +1,7 @@
 """Shared CLI utilities."""
 from datetime import date
+from pathlib import Path
+from typing import Any
 
 
 def get_date_str(date_arg: str | None) -> str:
@@ -14,6 +16,31 @@ def get_month_year(month_arg: str | None, year_arg: int | None) -> tuple[str, in
     
     from src.models.dancedb.sync_ops import get_current_month_year
     return get_current_month_year()
+
+
+def get_data_dir() -> Path:
+    """Get the data directory path."""
+    import config
+    return config.data_dir
+
+
+def ensure_dir(path: Path) -> None:
+    """Ensure directory exists."""
+    path.mkdir(parents=True, exist_ok=True)
+
+
+def load_json(path: Path) -> Any:
+    """Load JSON file."""
+    import json
+    return json.loads(path.read_text())
+
+
+def save_json(data: Any, path: Path, **kwargs) -> None:
+    """Save JSON file."""
+    import json
+    ensure_dir(path.parent)
+    with open(path, "w") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2, **kwargs)
 
 
 def add_common_date_parser(parser) -> None:
