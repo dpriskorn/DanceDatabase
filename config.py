@@ -30,9 +30,9 @@ FUZZY_THRESHOLD_VENUE_ONBEAT = 85
 FUZZY_THRESHOLD_ARTIST_DANSLOGEN = 90
 FUZZY_THRESHOLD_ARTIST_ONBEAT = 85
 
-FUZZY_REMOVE_TERMS_BYGDEGARDARNA = ["folkets hus", "förening", "gård"]
-FUZZY_REMOVE_TERMS_DANSLOGEN = ["folkets hus", "förening", "gård"]
-FUZZY_REMOVE_TERMS_FOLKETSHUS = ["folkets hus", "förening", "gård"]
-FUZZY_REMOVE_TERMS_ONBEAT = ["folkets hus", "förening", "gård"]
+FUZZY_REMOVE_TERMS_BYGDEGARDARNA = ["folkets park", "folkets hus", "förening", "gård"]
+FUZZY_REMOVE_TERMS_DANSLOGEN = ["folkets park", "folkets hus", "förening", "gård"]
+FUZZY_REMOVE_TERMS_FOLKETSHUS = ["folkets park", "folkets hus", "förening", "gård"]
+FUZZY_REMOVE_TERMS_ONBEAT = ["folkets park", "folkets hus", "förening", "gård"]
 FUZZY_REMOVE_TERMS_ARTIST_DANSLOGEN = []
 FUZZY_REMOVE_TERMS_ARTIST_ONBEAT = []
