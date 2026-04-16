@@ -286,6 +286,8 @@ def _merge_duplicate_venues(args) -> None:
                     best_score = max(best_score, score)
 
             if best_score >= fuzzy_threshold:
+                if v1["qid"] == v2["qid"]:
+                    continue
                 candidates.append({
                     "v1": v1,
                     "v2": v2,
@@ -328,34 +330,9 @@ def _merge_duplicate_venues(args) -> None:
             continue
         elif "Merge" in choice:
             try:
-                from wikibaseintegrator.wbi_helpers import merge_items, edit_entity
+                from wikibaseintegrator.wbi_helpers import merge_items
                 merge_items(from_id=from_qid, to_id=to_qid, login=client.login, is_bot=True, ignore_conflicts=["description"])
                 print(f"  Merged {from_qid} into {to_qid}")
-
-                edit_entity(
-                    id=from_qid,
-                    data={},
-                    clear=True,
-                    login=client.login,
-                    is_bot=True,
-                )
-                print(f"  Cleared {from_qid}")
-
-                session = client.login.get_session()
-                api_url = client.login.mediawiki_api_url
-                data = {
-                    "action": "wbcreateredirect",
-                    "from": from_qid,
-                    "to": to_qid,
-                    "token": client.login.get_edit_token(),
-                    "bot": "1",
-                }
-                response = session.post(api_url, data=data)
-                result = response.json()
-                if "error" in result:
-                    print(f"  Redirect error: {result['error']['info']}")
-                else:
-                    print(f"  Created redirect: {from_qid} -> {to_qid}")
             except Exception as e:
                 print(f"  ERROR: {e}")
         print()
