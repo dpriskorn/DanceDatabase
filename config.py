@@ -1,5 +1,4 @@
 import logging
-import os
 from datetime import timedelta, timezone
 from pathlib import Path
 
@@ -24,5 +23,9 @@ static_dir: Path = data_dir / "static"
 
 CET = timezone(timedelta(hours=1))
 
-# Fuzzy matching threshold (0-100) - higher = stricter matching
-FUZZY_THRESHOLD = 90
+FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA = 80
+FUZZY_THRESHOLD_VENUE_DANSLOGEN = 90
+FUZZY_THRESHOLD_VENUE_FOLKETSHUS = 80
+FUZZY_THRESHOLD_VENUE_ONBEAT = 85
+FUZZY_THRESHOLD_ARTIST_DANSLOGEN = 90
+FUZZY_THRESHOLD_ARTIST_ONBEAT = 85

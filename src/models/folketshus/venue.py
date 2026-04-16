@@ -83,7 +83,7 @@ def fuzzy_match(text: str, candidates: dict[str, str]) -> tuple[str, str, float]
     """Fuzzy match text against candidates. Returns (label, qid, score) or None."""
     from rapidfuzz import fuzz
 
-    threshold = config.FUZZY_THRESHOLD
+    threshold = config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS
     text_lower = text.lower()
     best = None
     best_score = 0

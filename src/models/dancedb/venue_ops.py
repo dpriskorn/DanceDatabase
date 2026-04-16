@@ -139,7 +139,7 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
             matched_count += 1
         else:
             fuzzy = fuzzy_match_qid(title, db_labels)
-            if fuzzy and fuzzy[2] >= config.FUZZY_THRESHOLD:
+            if fuzzy and fuzzy[2] >= config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA:
                 venue["qid"] = fuzzy[1]
                 enriched.append(venue)
                 matched_count += 1
@@ -318,9 +318,9 @@ def ensure_venues(date_str: str | None = None) -> None:
         folkets_match = False
         if folketshus_names:
             if not step2_done:
-                logger.info(f"Step 2: Fuzzy matching against {len(folketshus_names)} folketshus venues (threshold 90%)...")
+                logger.info(f"Step 2: Fuzzy matching against {len(folketshus_names)} folketshus venues (threshold {config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS}%)...")
                 step2_done = True
-            fuzzy_folkets = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=90)
+            fuzzy_folkets = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS)
             if fuzzy_folkets:
                 folkets_match = folketshus_venues[fuzzy_folkets[0]]
                 existing_venues[venue_lower] = {
@@ -340,9 +340,9 @@ def ensure_venues(date_str: str | None = None) -> None:
 
         if bygdegardarna_names:
             if not step2_done:
-                logger.info(f"Step 3: Fuzzy matching against {len(bygdegardarna_names)} bygdegardarna venues (threshold 90%)...")
+                logger.info(f"Step 3: Fuzzy matching against {len(bygdegardarna_names)} bygdegardarna venues (threshold {config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA}%)...")
                 step2_done = True
-            fuzzy_byg = fuzz_process.extractOne(venue_lower, bygdegardarna_names, score_cutoff=90)
+            fuzzy_byg = fuzz_process.extractOne(venue_lower, bygdegardarna_names, score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA)
             if fuzzy_byg:
                 byg_match = bygdegardarna_venues[fuzzy_byg[0]]
                 existing_venues[venue_lower] = {

@@ -1,5 +1,6 @@
 from typing import Optional
 
+import config
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.data import load_band_map, load_danslogen_artists
 from src.models.danslogen.fuzzy import fuzzy_match_qid
@@ -44,7 +45,7 @@ class BandMapper:
         if exact:
             return exact
 
-        fuzzy = fuzzy_match_qid(band_name, band_map)
+        fuzzy = fuzzy_match_qid(band_name, band_map, threshold=config.FUZZY_THRESHOLD_ARTIST_DANSLOGEN)
         if fuzzy:
             matched_key, qid, score = fuzzy
             self._band_map[matched_key.lower()] = qid
