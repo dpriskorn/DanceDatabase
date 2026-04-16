@@ -310,7 +310,7 @@ def _merge_duplicate_venues(args) -> None:
 
         choice = questionary.select(
             f"Merge '{v1['qid']}' into '{v2['qid']}'?",
-            choices=["Skip", "Skip all", f"Merge {v1['qid']} -> {v2['qid']} (Recommended)", "Abort"]
+            choices=[f"Merge {v1['qid']} -> {v2['qid']} (Recommended)", "Skip", "Skip all", "Abort"]
         ).ask()
 
         if choice == "Abort":
