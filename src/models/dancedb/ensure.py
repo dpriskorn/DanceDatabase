@@ -510,11 +510,13 @@ def ensure_venues(date_str: str | None = None) -> None:
 
         if coords:
             from src.utils import geodb
+            logger.info(f"Searching local geodb for venues near ({coords['lat']}, {coords['lng']}) within {config.COORD_MATCH_THRESHOLD_KM}km...")
             geodb_matches = geodb.find_nearby(
                 coords["lat"], coords["lng"], 
                 threshold_km=config.COORD_MATCH_THRESHOLD_KM,
                 limit=10
             )
+            logger.info(f"Local geodb search returned {len(geodb_matches)} matches")
             if geodb_matches:
                 print(f"\nFound {len(geodb_matches)} local match(es) by coordinates:")
                 for m in geodb_matches:
@@ -563,6 +565,8 @@ def ensure_venues(date_str: str | None = None) -> None:
                     sys.exit(0)
                 elif "Create new venue" in selected:
                     pass
+            else:
+                logger.info("No local matches found, falling through to DanceDB")
 
         if coords and not folketshus_match and folketshus_venues:
             for fh_name, fh_venue in folketshus_venues.items():
