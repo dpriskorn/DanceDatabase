@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 """CLI for DanceDB operations."""
+import logging
 import sys
-from datetime import date
 
+import config
+
+logging.basicConfig(
+    level=config.loglevel,
+    format="%(asctime)s: %(levelname)s: %(message)s",
+    datefmt="%H:%M"
+)
 sys.path.insert(0, str(__file__).rsplit("/", 1)[0])
 
 COMMANDS = {
@@ -17,6 +24,7 @@ COMMANDS = {
         ("scrape-bygdegardarna", "Fetch bygdegardarna venues with coordinates"),
         ("scrape-dancedb-venues", "Fetch existing venues from DanceDB"),
         ("match-bygdegardarna-venues", "Match bygdegardarna venues to DanceDB"),
+        ("find-duplicate-venues", "Find venues within 100m of each other"),
     ],
     "ONBEAT": [
         ("scrape-onbeat", "Fetch events"),

@@ -50,6 +50,10 @@ def add_sync_subparsers(sub) -> dict:
     p.add_argument("-d", "--date", default=None, help="Date for input files (YYYY-MM-DD, default: today)")
     p.add_argument("--skip-prompts", action="store_true", help="Skip interactive prompts, auto-match fuzzy >=85")
     handlers["match-bygdegardarna-venues"] = _match_bygdegardarna_venues
+
+    p = sub.add_parser("find-duplicate-venues", help="Find venues within 100m of each other")
+    p.add_argument("-t", "--threshold", type=float, default=0.1, help="Distance threshold in km (default: 0.1 = 100m)")
+    handlers["find-duplicate-venues"] = _find_duplicate_venues
     
     p = sub.add_parser("scrape-folketshus", help="Fetch folketshus och parker venues")
     p.add_argument("-d", "--date", default=None, help="Date for output (YYYY-MM-DD, default: today)")
@@ -162,3 +166,58 @@ def _sync_wikidata_artists(args) -> None:
     from src.models.wikidata.operations import sync_wikidata_artists
     date_str = get_date_str(args.date)
     sync_wikidata_artists(date_str, month=args.month, year=args.year)
+
+
+def _find_duplicate_venues(args) -> None:
+    from src.models.dancedb.client import DancedbClient
+    from src.utils.distance import haversine_distance
+    import config
+
+    threshold_km = args.threshold
+    print(f"\n=== Finding duplicate venues (within {threshold_km*1000:.0f}m) ===")
+
+    client = DancedbClient()
+    venues = client.fetch_venues_from_dancedb()
+
+    venues_with_coords = []
+    for v in venues:
+        p4 = v.get("p4", "")
+        if p4:
+            try:
+                coords = p4.replace("Point(", "").replace(")", "").split(" ")
+                lng, lat = float(coords[0]), float(coords[1])
+                venues_with_coords.append({
+                    "qid": v["qid"],
+                    "label": v["label"],
+                    "lat": lat,
+                    "lng": lng,
+                })
+            except Exception:
+                continue
+
+    print(f"Found {len(venues_with_coords)} venues with coordinates")
+
+    duplicates = []
+    for i, v1 in enumerate(venues_with_coords):
+        for v2 in venues_with_coords[i+1:]:
+            dist = haversine_distance(v1["lat"], v1["lng"], v2["lat"], v2["lng"])
+            if dist <= threshold_km:
+                duplicates.append({
+                    "v1": v1,
+                    "v2": v2,
+                    "distance_km": dist,
+                })
+
+    duplicates.sort(key=lambda x: x["distance_km"])
+
+    print(f"Found {len(duplicates)} potential duplicate pairs:\n")
+    for i, dup in enumerate(duplicates, 1):
+        v1, v2 = dup["v1"], dup["v2"]
+        dist_m = dup["distance_km"] * 1000
+        url1 = f"https://dance.wikibase.cloud/wiki/Item:{v1['qid']}"
+        url2 = f"https://dance.wikibase.cloud/wiki/Item:{v2['qid']}"
+        print(f"{i}. {v1['label']} ({v1['qid']}) <-> {v2['label']} ({v2['qid']})")
+        print(f"   Distance: {dist_m:.0f}m")
+        print(f"   {url1}")
+        print(f"   {url2}")
+        print()
