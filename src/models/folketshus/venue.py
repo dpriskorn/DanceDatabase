@@ -79,10 +79,13 @@ def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> fl
     return R * c
 
 
-def fuzzy_match(text: str, candidates: dict[str, str], remove_terms: list[str] | None = None) -> tuple[str, str, str, float, str, str] | None:
-    """Fuzzy match text against candidates. Returns (original_text, matched_label, qid, score, cleaned_input, cleaned_label) or None."""
+from src.utils.fuzzy import is_false_fuzzy_match, normalize_for_fuzzy
+from src.utils.fuzzy_models import FuzzyMatchResult
+
+
+def fuzzy_match(text: str, candidates: dict[str, str], remove_terms: list[str] | None = None) -> FuzzyMatchResult | None:
+    """Fuzzy match text against candidates. Returns FuzzyMatchResult or None."""
     from rapidfuzz import fuzz
-    from src.utils.fuzzy import normalize_for_fuzzy
 
     threshold = config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS
     normalized_input = normalize_for_fuzzy(text, remove_terms)
@@ -96,7 +99,16 @@ def fuzzy_match(text: str, candidates: dict[str, str], remove_terms: list[str] |
             best_score = score
             best = (label, qid, normalized_label, normalized_input)
     if best_score >= threshold:
-        return (text, best[0], best[1], best_score, best[3], best[2])
+        false_friend = is_false_fuzzy_match(normalized_input, best[2])
+        return FuzzyMatchResult(
+            original_input=text,
+            matched_label=best[0],
+            qid=best[1],
+            score=best_score,
+            cleaned_input=best[3],
+            cleaned_label=best[2],
+            false_friend=false_friend,
+        )
     return None
 
 
@@ -216,16 +228,24 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
             else:
                 fuzzy = fuzzy_match(venue.name, db_labels, remove_terms=config.FUZZY_REMOVE_TERMS_FOLKETSHUS)
                 if fuzzy:
-                    matched_qid = fuzzy[2]
-                    print(f"[{i}/{total}] Fuzzy match: {fuzzy[0]} -> {matched_qid} ('{fuzzy[1]}', input='{fuzzy[4]}', match='{fuzzy[5]}', {fuzzy[3]:.1f}%)")
-                    choice = questionary.select(
-                        f"Accept fuzzy match ({fuzzy[2]:.1f}%?)?",
-                        choices=["Yes (Recommended)", "Skip", "Abort"],
-                    ).ask()
+                    matched_qid = fuzzy.qid
+                    ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
+                    print(f"[{i}/{total}] Fuzzy match: {fuzzy.original_input} -> {matched_qid} ('{fuzzy.matched_label}', input='{fuzzy.cleaned_input}', match='{fuzzy.cleaned_label}', {fuzzy.score:.1f}%){ff_warn}")
+                    
+                    if fuzzy.false_friend:
+                        choice = questionary.select(
+                            "This is a known false friend. Accept anyway?",
+                            choices=["Skip (Recommended)", "Yes", "Abort"],
+                        ).ask()
+                    else:
+                        choice = questionary.select(
+                            f"Accept fuzzy match ({fuzzy.score:.1f}%?)?",
+                            choices=["Yes (Recommended)", "Skip", "Abort"],
+                        ).ask()
                     if choice == "Abort":
                         print("\nAborted.")
                         sys.exit(0)
-                    if choice == "Skip":
+                    if choice == "Skip" or (fuzzy.false_friend and choice == "Skip (Recommended)"):
                         matched_qid = None
 
         if matched_qid:

@@ -76,9 +76,9 @@ class VenueMatcher:
         venues_with_qid = {v.get("title", ""): v.get("qid", "") for v in self.byg_venues.values() if v.get("qid")}
         fuzzy = fuzzy_match_qid(venue_name, venues_with_qid, remove_terms=config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA)
         if fuzzy:
-            matched_key, qid, score, cleaned = fuzzy
-            logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (cleaned='%s', score=%d)", venue_name, matched_key, cleaned, score)
-            return qid
+            ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
+            logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (cleaned='%s', %.1f%%)%s", venue_name, fuzzy.matched_label, fuzzy.cleaned_input, fuzzy.score, ff_warn)
+            return fuzzy.qid
 
         return None
 

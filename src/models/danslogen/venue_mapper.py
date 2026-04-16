@@ -47,10 +47,10 @@ class VenueMapper:
         logger.debug("Venue no exact match, trying fuzzy: '%s'", venue_name)
         fuzzy = fuzzy_match_qid(venue_name, venue_map, remove_terms=config.FUZZY_REMOVE_TERMS_DANSLOGEN)
         if fuzzy:
-            matched_key, qid, score, cleaned = fuzzy
-            logger.debug("Venue fuzzy match: '%s' (cleaned='%s') -> '%s' (%s%%)", venue_name, cleaned, matched_key, score)
-            self._venue_map[matched_key.lower()] = qid
-            return qid
+            ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
+            logger.debug("Venue fuzzy match: '%s' (cleaned='%s') -> '%s' (%.1f%%)%s", venue_name, fuzzy.cleaned_input, fuzzy.matched_label, fuzzy.score, ff_warn)
+            self._venue_map[fuzzy.matched_label.lower()] = fuzzy.qid
+            return fuzzy.qid
 
         logger.debug("Venue not found: '%s' (tried %d venues)", venue_name, len(venue_map))
         return None

@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 from src.models.danslogen.main import Danslogen, scrape_month
+from src.utils.fuzzy_models import FuzzyMatchResultQid
 
 
 class TestDanslogenFetchMonth:
@@ -45,7 +46,7 @@ class TestDanslogenMapBandQid:
     @patch("src.models.danslogen.band_mapper.fuzzy_match_qid")
     def test_map_band_qid_fuzzy_match(self, mock_fuzzy, mock_load_band_map):
         mock_load_band_map.return_value = {"lasse stefanz": "Q270"}
-        mock_fuzzy.return_value = ("Lasse Stefanz", "Q270", 90, "lasse stefanz orkester")
+        mock_fuzzy.return_value = FuzzyMatchResultQid(matched_label="Lasse Stefanz", qid="Q270", score=90, cleaned_input="lasse stefanz orkester", false_friend=False)
         scraper = Danslogen(interactive=False)
         result = scraper.map_band_qid("Lasse Stefanz orkester")
         assert result == "Q270"

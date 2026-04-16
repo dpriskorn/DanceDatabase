@@ -30,9 +30,25 @@ FUZZY_THRESHOLD_VENUE_ONBEAT = 85
 FUZZY_THRESHOLD_ARTIST_DANSLOGEN = 90
 FUZZY_THRESHOLD_ARTIST_ONBEAT = 85
 
-FUZZY_REMOVE_TERMS_BYGDEGARDARNA = ["folkets park", "folkets hus", "förening", "gård"]
-FUZZY_REMOVE_TERMS_DANSLOGEN = ["folkets park", "folkets hus", "förening", "gård"]
-FUZZY_REMOVE_TERMS_FOLKETSHUS = ["folkets park", "folkets hus", "förening", "gård"]
-FUZZY_REMOVE_TERMS_ONBEAT = ["folkets park", "folkets hus", "förening", "gård"]
+FUZZY_REMOVE_TERMS_BYGDEGARDARNA = ["folkets park", "folkets hus", "förening", "gård", "lösa", "arp", "hult"]
+FUZZY_REMOVE_TERMS_DANSLOGEN = ["folkets park", "folkets hus", "förening", "gård", "lösa", "arp", "hult"]
+FUZZY_REMOVE_TERMS_FOLKETSHUS = ["folkets park", "folkets hus", "förening", "gård", "lösa", "arp", "hult"]
+FUZZY_REMOVE_TERMS_ONBEAT = ["folkets park", "folkets hus", "förening", "gård", "lösa", "arp", "hult"]
 FUZZY_REMOVE_TERMS_ARTIST_DANSLOGEN = []
 FUZZY_REMOVE_TERMS_ARTIST_ONBEAT = []
+
+FUZZY_FALSE_FRIENDS = {
+    "alvesta": ["avesta"],
+    "avesta": ["alvesta"],
+    "landskrona": ["karlskrona"],
+    "karlskrona": ["landskrona"],
+    "trosa": ["kungälv", "knivsta"],
+    "kungälv": ["trosa", "knivsta"],
+    "knivsta": ["trosa", "kungälv"],
+    "roma": ["romme"],
+    "romme": ["roma"],
+    "hög": ["högsby"],
+    "högsby": ["hög"],
+    "ramlösa": ["ramnäs"],
+    "ramnäs": ["ramlösa"],
+}

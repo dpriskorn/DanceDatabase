@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 from src.models.danslogen.band_mapper import BandMapper
+from src.utils.fuzzy_models import FuzzyMatchResultQid
 
 
 class TestBandMapperResolve:
@@ -13,18 +14,10 @@ class TestBandMapperResolve:
         assert result == "Q200"
 
     @patch("src.models.danslogen.band_mapper.load_band_map")
-    def test_finds_case_insensitive(self, mock_load):
-        mock_load.return_value = {"testband": "Q200"}
-        mapper = BandMapper()
-        result = mapper.resolve("testband")
-
-        assert result == "Q200"
-
-    @patch("src.models.danslogen.band_mapper.load_band_map")
     @patch("src.models.danslogen.band_mapper.fuzzy_match_qid")
     def test_falls_back_to_fuzzy(self, mock_fuzzy, mock_load):
         mock_load.return_value = {"test band": "Q200"}
-        mock_fuzzy.return_value = ("Test Band", "Q200", 90, "testbnad")
+        mock_fuzzy.return_value = FuzzyMatchResultQid(matched_label="Test Band", qid="Q200", score=90, cleaned_input="testbnad", false_friend=False)
         mapper = BandMapper()
         result = mapper.resolve("Testbnad")
 

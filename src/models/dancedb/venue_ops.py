@@ -140,11 +140,12 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
             matched_count += 1
         else:
             fuzzy = fuzzy_match_qid(title, db_labels, remove_terms=config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA)
-            if fuzzy and fuzzy[2] >= config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA:
-                venue["qid"] = fuzzy[1]
+            if fuzzy and fuzzy.score >= config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA:
+                venue["qid"] = fuzzy.qid
                 enriched.append(venue)
                 matched_count += 1
-                logger.info(f"Fuzzy matched '{title}' to '{fuzzy[0]}' (score={fuzzy[2]})")
+                ff_warn = " ⚠️ FALSE FRIEND" if fuzzy.false_friend else ""
+                logger.info(f"Fuzzy matched '{title}' to '{fuzzy.matched_label}' (input='{fuzzy.cleaned_input}', score={fuzzy.score:.1f}{ff_warn})")
             else:
                 unmatched.append(venue)
 
