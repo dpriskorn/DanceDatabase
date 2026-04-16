@@ -294,6 +294,7 @@ def ensure_venues(date_str: str | None = None) -> None:
             fuzzy_byg = fuzz_process.extractOne(
                 normalize_for_fuzzy(venue_lower, config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA),
                 bygdegardarna_normalized.keys(),
+                scorer=fuzz.token_set_ratio,
                 score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA
             )
             if fuzzy_byg:
@@ -320,6 +321,7 @@ def ensure_venues(date_str: str | None = None) -> None:
             fuzzy_folkets = fuzz_process.extractOne(
                 normalize_for_fuzzy(venue_lower, config.FUZZY_REMOVE_TERMS_FOLKETSHUS),
                 folketshus_normalized.keys(),
+                scorer=fuzz.token_set_ratio,
                 score_cutoff=95
             )
             if fuzzy_folkets:
@@ -369,7 +371,7 @@ def ensure_venues(date_str: str | None = None) -> None:
             fuzzy_addr = fuzz_process.extractOne(
                 venue_lower,
                 list(bygdegardarna_addresses.keys()),
-                scorer=fuzz.token_sort_ratio,
+                scorer=fuzz.token_set_ratio,
                 score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA + 2
             )
             if fuzzy_addr:
@@ -408,7 +410,7 @@ def ensure_venues(date_str: str | None = None) -> None:
                 fuzzy_city = fuzz_process.extractOne(
                     venue_lower,
                     list(bygdegardarna_cities.keys()),
-                    scorer=fuzz.token_sort_ratio,
+                    scorer=fuzz.token_set_ratio,
                     score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA + 2
                 )
                 if fuzzy_city:
@@ -472,6 +474,7 @@ def ensure_venues(date_str: str | None = None) -> None:
             fuzzy = fuzz_process.extractOne(
                 normalize_for_fuzzy(venue_lower, config.FUZZY_REMOVE_TERMS_FOLKETSHUS),
                 folketshus_normalized.keys(),
+                scorer=fuzz.token_set_ratio,
                 score_cutoff=config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS
             )
             if fuzzy:
