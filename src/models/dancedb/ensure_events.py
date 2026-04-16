@@ -33,25 +33,25 @@ def fetch_events_from_dancedb(date_str: str | None = None, save: bool = True) ->
     configure_wbi()
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
-    sparql = """
+    sparql = f"""
 PREFIX dd: <https://dance.wikibase.cloud/entity/>
 PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?event ?eventLabel ?start ?end ?venue ?venueLabel WHERE {
-    ?event ddt:P1 dd:Q2 .
+SELECT ?event ?eventLabel ?start ?end ?venue ?venueLabel WHERE {{
+    ?event ddt:{config.DANCE_PROP_INSTANCE_OF} dd:{config.DANCE_INSTANCE_EVENT} .
 
-    OPTIONAL { ?event ddt:P5 ?start . }
-    OPTIONAL { ?event ddt:P6 ?end . }
+    OPTIONAL {{ ?event ddt:{config.DANCE_PROP_START} ?start . }}
+    OPTIONAL {{ ?event ddt:{config.DANCE_PROP_END} ?end . }}
 
-    OPTIONAL { ?event rdfs:label ?svLabel FILTER(LANG(?svLabel)="sv") }
-    OPTIONAL { ?event rdfs:label ?enLabel FILTER(LANG(?enLabel)="en") }
+    OPTIONAL {{ ?event rdfs:label ?svLabel FILTER(LANG(?svLabel)="sv") }}
+    OPTIONAL {{ ?event rdfs:label ?enLabel FILTER(LANG(?enLabel)="en") }}
     BIND(COALESCE(?svLabel, ?enLabel, STR(?event)) AS ?eventLabel)
 
-    OPTIONAL { ?event ddt:P7 ?venue }
-    OPTIONAL { ?venue rdfs:label ?svVenueLabel FILTER(LANG(?svVenueLabel)="sv") }
+    OPTIONAL {{ ?event ddt:{config.DANCE_PROP_VENUE} ?venue }}
+    OPTIONAL {{ ?venue rdfs:label ?svVenueLabel FILTER(LANG(?svVenueLabel)="sv") }}
     BIND(COALESCE(?svVenueLabel, "") AS ?venueLabel)
-}
+}}
     """
     results = execute_sparql_query(query=sparql)
     events = []
@@ -97,8 +97,16 @@ SELECT ?event ?eventLabel ?start ?end ?venue ?venueLabel WHERE {
     if save and date_str:
         output_file = config.dancedb_events_dir / f"{date_str}.json"
         config.dancedb_events_dir.mkdir(parents=True, exist_ok=True)
-        output_file.write_text(json.dumps(events, indent=2, ensure_ascii=False))
-        logger.info(f"Saved {len(events)} events to {output_file}")
+        
+        unique_events = {}
+        for e in events:
+            qid = e.get("event_qid")
+            if qid and qid not in unique_events:
+                unique_events[qid] = e
+        
+        output = list(unique_events.values())
+        output_file.write_text(json.dumps(output, indent=2, ensure_ascii=False))
+        logger.info(f"Saved {len(output)} unique events to {output_file}")
     
     return events
 
