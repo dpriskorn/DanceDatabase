@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -8,8 +9,10 @@ from src.models.danslogen.data import DataNotFoundError, _reset_instance, get_to
 
 class TestGetTodayStr:
     def test_returns_today_formatted(self):
-        result = get_today_str()
-        assert result == "2026-04-15"
+        with patch("src.models.danslogen.data.date") as mock_date:
+            mock_date.today.return_value = date(2026, 4, 15)
+            result = get_today_str()
+            assert result == "2026-04-15"
 
 
 class TestLoadBandMap:
@@ -36,7 +39,7 @@ class TestLoadBandMap:
             {"qid": "Q123", "label": "Test Band", "aliases": ["Test", "Band"]},
             {"qid": "Q456", "label": "Another Band", "aliases": []},
         ]
-        artists_file.read_text.return_value = json.dumps(artists_content)
+        artists_file.read_text = MagicMock(return_value=json.dumps(artists_content))
         artists_file.name = "2026-04-15.json"
 
         def mock_truediv(self, other):
@@ -61,7 +64,7 @@ class TestLoadBandMap:
             {"qid": "Q123"},
             {},
         ]
-        artists_file.read_text.return_value = json.dumps(artists_content)
+        artists_file.read_text = MagicMock(return_value=json.dumps(artists_content))
         artists_file.name = "2026-04-15.json"
 
         def mock_truediv(self, other):
@@ -98,7 +101,7 @@ class TestLoadVenueMap:
             "Q123": {"label": "Test Venue", "aliases": ["Venue", "Test"]},
             "Q456": {"label": "Another Venue", "aliases": []},
         }
-        venues_file.read_text.return_value = json.dumps(venues_content)
+        venues_file.read_text = MagicMock(return_value=json.dumps(venues_content))
         venues_file.name = "2026-04-15.json"
 
         def mock_truediv(self, other):
@@ -122,7 +125,7 @@ class TestLoadVenueMap:
             "Q123": {},
             "Q456": {"label": ""},
         }
-        venues_file.read_text.return_value = json.dumps(venues_content)
+        venues_file.read_text = MagicMock(return_value=json.dumps(venues_content))
         venues_file.name = "2026-04-15.json"
 
         def mock_truediv(self, other):
