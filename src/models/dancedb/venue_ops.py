@@ -300,9 +300,10 @@ def ensure_venues(date_str: str | None = None) -> None:
                 qid = v.get("qid", "")
                 gmaps = GoogleMaps(address=address, lat=position["lat"], lng=position["lng"])
                 gmaps_url = gmaps.url
+                permalink = meta.get("permalink", "")
                 if qid:
-                    bygdegardarna_addresses[title] = {"qid": qid, "lat": position["lat"], "lng": position["lng"], "address": address, "gmaps_url": gmaps_url}
-                bygdegardarna_addresses[address] = {"lat": position["lat"], "lng": position["lng"], "address": address, "qid": qid, "gmaps_url": gmaps_url}
+                    bygdegardarna_addresses[title] = {"qid": qid, "lat": position["lat"], "lng": position["lng"], "address": address, "gmaps_url": gmaps_url, "permalink": permalink}
+                bygdegardarna_addresses[address] = {"lat": position["lat"], "lng": position["lng"], "address": address, "qid": qid, "gmaps_url": gmaps_url, "permalink": permalink}
     
     print(f"Loaded {len(bygdegardarna_addresses)} bygdegardarna addresses for address matching")
 
@@ -395,8 +396,10 @@ def ensure_venues(date_str: str | None = None) -> None:
             for addr_key, addr_data in bygdegardarna_addresses.items():
                 if venue_lower in addr_key or addr_key in venue_lower:
                     gmaps_url = addr_data.get("gmaps_url", "")
+                    permalink = addr_data.get("permalink", "")
+                    url_info = f"bygdegardarna.se: {permalink}" if permalink else f"Google: {gmaps_url}"
                     confirm = questionary.rawselect(
-                        f"Match '{venue_name}' to bygdegardarna address '{addr_data.get('address')}'?\n→ {gmaps_url}",
+                        f"Match '{venue_name}' to bygdegardarna address '{addr_data.get('address')}'?\n→ {url_info}",
                         choices=["Yes (Recommended)", "No", "Abort"],
                     ).ask()
                     if confirm == "No":
@@ -416,7 +419,7 @@ def ensure_venues(date_str: str | None = None) -> None:
                     venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
                     venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
                     with open(venue_mapping_file, "a") as f:
-                        f.write(json.dumps({"venue_name": venue_name, "qid": addr_data.get("qid", ""), "lat": addr_data.get("lat"), "lng": addr_data.get("lng"), "gmaps_url": gmaps_url, "created_at": date_str}) + "\n")
+                        f.write(json.dumps({"venue_name": venue_name, "qid": addr_data.get("qid", ""), "lat": addr_data.get("lat"), "lng": addr_data.get("lng"), "gmaps_url": gmaps_url, "permalink": permalink, "created_at": date_str}) + "\n")
                     break
             else:
                 matched_city = False
@@ -426,9 +429,13 @@ def ensure_venues(date_str: str | None = None) -> None:
                         if city in venue_lower or venue_lower in city:
                             city_matches.append((city, city_venue))
                     if city_matches:
-                        gmaps_url = city_matches[0][1].get("gmaps_url", "")
+                        city_venue = city_matches[0][1]
+                        gmaps_url = city_venue.get("gmaps_url", "")
+                        meta = city_venue.get("meta", {})
+                        permalink = meta.get("permalink", "") or city_venue.get("permalink", "")
+                        url_info = f"bygdegardarna.se: {permalink}" if permalink else f"Google: {gmaps_url}"
                         confirm = questionary.rawselect(
-                            f"Match '{venue_name}' to bygdegardarna city '{city_matches[0][0]}'?\n→ {gmaps_url}",
+                            f"Match '{venue_name}' to bygdegardarna city '{city_matches[0][0]}'?\n→ {url_info}",
                             choices=["Yes (Recommended)", "No", "Abort"],
                         ).ask()
                         if confirm == "No":
@@ -446,6 +453,11 @@ def ensure_venues(date_str: str | None = None) -> None:
                         logger.info(f"Matched '{venue_name}' to bygdegardarna city '{city}'")
                         matched_city = True
                         matched += 1
+
+                        venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                        venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                        with open(venue_mapping_file, "a") as f:
+                            f.write(json.dumps({"venue_name": venue_name, "qid": city_venue.get("qid", ""), "lat": city_venue.get("lat"), "lng": city_venue.get("lng"), "gmaps_url": city_venue.get("gmaps_url", ""), "permalink": city_venue.get("permalink", ""), "created_at": date_str}) + "\n")
 
                 if not matched_city:
                     new_venues.append(venue_name)
