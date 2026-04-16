@@ -24,7 +24,6 @@ COMMANDS = {
         ("scrape-bygdegardarna", "Fetch bygdegardarna venues with coordinates"),
         ("scrape-dancedb-venues", "Fetch existing venues from DanceDB"),
         ("match-bygdegardarna-venues", "Match bygdegardarna venues to DanceDB"),
-        ("find-duplicate-venues", "Find venues within 100m of each other"),
     ],
     "ONBEAT": [
         ("scrape-onbeat", "Fetch events"),
@@ -42,6 +41,10 @@ COMMANDS = {
         ("scrape-wikidata-artists", "Fetch artists from Wikidata"),
         ("match-wikidata-artists", "Match DanceDB artists to Wikidata"),
         ("sync-wikidata-artists", "Create missing artists from danslogen"),
+    ],
+    "MAINTENANCE": [
+        ("find-duplicate-venues", "Find venues within 100m of each other"),
+        ("merge-duplicate-venues", "Merge duplicate venues (close + similar names)"),
     ],
     "SYNC (FULL WORKFLOWS)": [
         ("sync-danslogen", "bygdegardarna → folketshus → scrape → match → ensure-venues → upload"),

@@ -54,6 +54,11 @@ def add_sync_subparsers(sub) -> dict:
     p = sub.add_parser("find-duplicate-venues", help="Find venues within 100m of each other")
     p.add_argument("-t", "--threshold", type=float, default=0.1, help="Distance threshold in km (default: 0.1 = 100m)")
     handlers["find-duplicate-venues"] = _find_duplicate_venues
+
+    p = sub.add_parser("merge-duplicate-venues", help="Merge duplicate venues (close + similar names)")
+    p.add_argument("-t", "--threshold", type=float, default=0.1, help="Distance threshold in km (default: 0.1 = 100m)")
+    p.add_argument("--fuzzy", type=float, default=90, help="Fuzzy match threshold for label similarity (default: 90)")
+    handlers["merge-duplicate-venues"] = _merge_duplicate_venues
     
     p = sub.add_parser("scrape-folketshus", help="Fetch folketshus och parker venues")
     p.add_argument("-d", "--date", default=None, help="Date for output (YYYY-MM-DD, default: today)")
@@ -224,4 +229,102 @@ def _find_duplicate_venues(args) -> None:
         print(f"   Distance: {dist_m:.0f}m")
         print(f"   {url1}")
         print(f"   {url2}")
+        print()
+
+
+def _merge_duplicate_venues(args) -> None:
+    from src.models.dancedb.client import DancedbClient
+    from src.utils.distance import haversine_distance
+    from src.utils.fuzzy import normalize_for_fuzzy
+    from rapidfuzz import fuzz
+    import questionary
+    import config
+
+    threshold_km = args.threshold
+    fuzzy_threshold = args.fuzzy
+
+    print(f"\n=== Finding merge candidates (distance <{threshold_km*1000:.0f}m, fuzzy >={fuzzy_threshold}%) ===")
+
+    client = DancedbClient()
+    venues = client.fetch_venues_from_dancedb()
+
+    venues_with_coords = []
+    for v in venues:
+        p4 = v.get("p4", "")
+        if p4:
+            try:
+                coords = p4.replace("Point(", "").replace(")", "").split(" ")
+                lng, lat = float(coords[0]), float(coords[1])
+                venues_with_coords.append({
+                    "qid": v["qid"],
+                    "label": v["label"],
+                    "aliases": v.get("aliases", []),
+                    "lat": lat,
+                    "lng": lng,
+                })
+            except Exception:
+                continue
+
+    print(f"Found {len(venues_with_coords)} venues with coordinates")
+
+    candidates = []
+    for i, v1 in enumerate(venues_with_coords):
+        for v2 in venues_with_coords[i+1:]:
+            dist = haversine_distance(v1["lat"], v1["lng"], v2["lat"], v2["lng"])
+            if dist > threshold_km:
+                continue
+
+            v1_names = [v1["label"]] + v1.get("aliases", [])
+            v2_names = [v2["label"]] + v2.get("aliases", [])
+
+            best_score = 0
+            for n1 in v1_names:
+                for n2 in v2_names:
+                    n1_norm = normalize_for_fuzzy(n1.lower(), [])
+                    n2_norm = normalize_for_fuzzy(n2.lower(), [])
+                    score = fuzz.ratio(n1_norm, n2_norm)
+                    best_score = max(best_score, score)
+
+            if best_score >= fuzzy_threshold:
+                candidates.append({
+                    "v1": v1,
+                    "v2": v2,
+                    "distance_km": dist,
+                    "fuzzy_score": best_score,
+                })
+
+    candidates.sort(key=lambda x: (x["fuzzy_score"], -x["distance_km"]))
+
+    print(f"Found {len(candidates)} merge candidates\n")
+
+    for i, c in enumerate(candidates, 1):
+        v1, v2 = c["v1"], c["v2"]
+        dist_m = c["distance_km"] * 1000
+        url1 = f"https://dance.wikibase.cloud/wiki/Item:{v1['qid']}"
+        url2 = f"https://dance.wikibase.cloud/wiki/Item:{v2['qid']}"
+
+        print(f"{i}. {v1['label']} ({v1['qid']}) <-> {v2['label']} ({v2['qid']})")
+        print(f"   Distance: {dist_m:.0f}m | Fuzzy: {c['fuzzy_score']:.0f}%")
+        print(f"   {url1}")
+        print(f"   {url2}")
+
+        choice = questionary.select(
+            f"Merge '{v1['qid']}' into '{v2['qid']}'?",
+            choices=["Skip", "Skip all", f"Merge {v1['qid']} -> {v2['qid']} (Recommended)", "Abort"]
+        ).ask()
+
+        if choice == "Abort":
+            print("Aborting...")
+            break
+        elif choice == "Skip all":
+            print("Skipping remaining candidates.")
+            break
+        elif choice == "Skip":
+            continue
+        elif "Merge" in choice:
+            try:
+                client.wbi.item.merge_items(from_id=v1["qid"], to_id=v2["qid"], login=client.login)
+                print(f"  SUCCESS: Merged {v1['qid']} into {v2['qid']}")
+            except Exception as e:
+                print(f"  ERROR: {e}")
         print()
