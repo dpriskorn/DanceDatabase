@@ -221,7 +221,7 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
                     ).ask()
                     if choice == "Abort":
                         print("\nAborted.")
-                        return enriched, unmatched
+                        sys.exit(0)
                     if choice == "Skip":
                         matched_qid = None
 
