@@ -2,15 +2,167 @@
 
 import logging
 import sys
+from datetime import datetime, timezone as tz
+from pathlib import Path
 
+import json
 import questionary
 import rich
+from rapidfuzz import fuzz
 
 import config
+from config import CET
 from src.models.dancedb.client import DancedbClient
 from src.models.dancedb.status import detect_event_status
+from src.models.export.dance_event import DanceEvent
 
 logger = logging.getLogger(__name__)
+
+
+def _load_existing_events(date_str: str) -> dict[str, dict]:
+    """Load existing events from DanceDB for deduplication."""
+    events_file = Path("data/dancedb/events") / f"{date_str}.json"
+    if not events_file.exists():
+        print(f"Warning: No existing events file at {events_file}")
+        return {}
+
+    existing_events = json.loads(events_file.read_text())
+    print(f"Loaded {len(existing_events)} existing events from {events_file.name}")
+
+    lookup: dict[str, dict] = {}
+    for e in existing_events:
+        venue_qid = e.get("venue_qid", "")
+        start_ts = e.get("start_date", e.get("start_timestamp", ""))
+        label = e.get("event_label", e.get("label", ""))
+        qid = e.get("event_qid", e.get("qid", ""))
+        if venue_qid and start_ts:
+            key = f"{venue_qid}|{start_ts[:10]}"
+            lookup[key] = {"qid": qid, "label": label}
+
+    print(f"Loaded {len(lookup)} existing events for deduplication")
+    return lookup
+
+
+def _load_artists_lookup(date_str: str) -> dict[str, dict]:
+    """Load artists from JSON for display."""
+    artists_file = Path("data/dancedb/artists") / f"{date_str}.json"
+    if not artists_file.exists():
+        return {}
+
+    artists_data = json.loads(artists_file.read_text())
+    lookup = {a.get("qid", ""): a for a in artists_data}
+    print(f"Loaded {len(lookup)} artists for display")
+    return lookup
+
+
+def _load_venues_lookup(date_str: str) -> dict[str, dict]:
+    """Load venues from JSON for display."""
+    venues_dir = Path("data/dancedb/venues")
+    venues_file = venues_dir / f"{date_str}.json"
+    if not venues_file.exists():
+        venues_files = sorted(venues_dir.glob("*.json"), reverse=True)
+        venues_file = venues_files[0] if venues_files else None
+
+    if not venues_file or not venues_file.exists():
+        return {}
+
+    venues_data = json.loads(venues_file.read_text())
+    lookup = {}
+    for qid, v in venues_data.items():
+        if isinstance(v, dict):
+            lookup[qid] = v
+        else:
+            lookup[qid] = {"label": v, "qid": qid}
+
+    print(f"Loaded {len(lookup)} venues from {venues_file.name}")
+    return lookup
+
+
+def _load_venue_mappings() -> dict[str, str]:
+    """Load venue mappings from jsonl file."""
+    venue_mappings_file = Path("data/dancedb/venue_mappings.jsonl")
+    if not venue_mappings_file.exists():
+        return {}
+
+    mappings: dict[str, str] = {}
+    with open(venue_mappings_file) as f:
+        for line in f:
+            if line.strip():
+                m = json.loads(line)
+                mappings[m["venue_name"].lower()] = m["qid"]
+
+    print(f"Loaded {len(mappings)} venue mappings from jsonl")
+    return mappings
+
+
+def _resolve_venue_qid(event: DanceEvent, venue_mappings: dict[str, str]) -> str:
+    """Resolve venue QID from event or mappings."""
+    venue_qid = event.identifiers.dancedatabase.venue if event.identifiers else None
+    if not venue_qid and event.location:
+        venue_qid = venue_mappings.get(event.location.lower())
+    return venue_qid or ""
+
+
+def _convert_timestamps(start_ts, end_ts) -> tuple[datetime | None, datetime | None]:
+    """Convert datetime timestamps, check for past events."""
+    start_dt: datetime | None = None
+    end_dt: datetime | None = None
+
+    if hasattr(start_ts, "year"):
+        start_dt = start_ts if start_ts.tzinfo else start_ts.replace(tzinfo=CET)
+        now = datetime.now(tz=CET)
+        if start_dt < now:
+            return None, None
+
+    if hasattr(end_ts, "year"):
+        end_dt = end_ts if end_ts.tzinfo else end_ts.replace(tzinfo=CET)
+
+    return start_dt, end_dt
+
+
+def _check_duplicate(
+    existing_lookup: dict[str, dict],
+    venue_qid: str,
+    start_ts: str,
+    label: str,
+) -> tuple[bool, str]:
+    """Check if event already exists in DanceDB."""
+    if not existing_lookup or not start_ts:
+        return False, ""
+
+    date_key = f"{venue_qid}|{start_ts[:10]}"
+    existing = existing_lookup.get(date_key)
+    if not existing:
+        return False, ""
+
+    ratio = fuzz.ratio(label.lower(), existing["label"].lower())
+    if ratio >= 85:
+        return True, existing["qid"]
+
+    return False, existing["label"]
+
+
+def _display_event(
+    index: int,
+    total: int,
+    label: str,
+    venue_qid: str,
+    start_ts: str,
+    end_ts: str,
+    venue_info: dict,
+    artist_qid: str | None,
+    artist_info: dict,
+) -> None:
+    """Display event info for user confirmation."""
+    print(f"\n[{index}/{total}] {label}")
+    venue_label = venue_info.get("label", "")
+    print(f"  Venue: {venue_qid}{f' ({venue_label})' if venue_label else ''}")
+    print(f"  Start: {start_ts}")
+    if end_ts:
+        print(f"  End: {end_ts}")
+    if artist_qid:
+        artist_label = artist_info.get("label", "")
+        print(f"  Artist: {artist_qid}{f' ({artist_label})' if artist_label else ''}")
 
 
 def scrape_danslogen(month: str = "april", year: int = 2026) -> None:
@@ -58,87 +210,18 @@ def upload_events(
     dry_run: bool = False,
     limit: int | None = None,
 ) -> None:
-    """Upload danslogen events to DanceDB.
-
-    Loads existing events from data/dancedb/events/{date}.json for deduplication.
-    """
-    import json
-    import os
-
-    from rapidfuzz import fuzz
+    """Upload danslogen events to DanceDB."""
+    from datetime import date as dt
 
     from src.models.export.dance_event import DanceEvent
 
     print("\n=== Upload danslogen events ===")
 
-    # Load existing events from JSON for deduplication
-    from datetime import date as dt
-    from pathlib import Path
-
-    existing_events = []
     date_str = date_str or dt.today().strftime("%Y-%m-%d")
     if not input_file:
         input_file = str(config.danslogen_dir / "events" / f"{date_str}-{month.lower()}.json")
     input_path = Path(input_file)
-    events_file = Path("data/dancedb/events") / f"{date_str}.json"
-    if events_file.exists():
-        existing_events = json.loads(events_file.read_text())
-        print(f"Loaded {len(existing_events)} existing events from {events_file.name}")
-    else:
-        print(f"Warning: No existing events file found at {events_file}")
-        print("Run 'poetry run python cli.py ensure-event-venues' first to fetch events from DanceDB")
 
-    # Build lookup for existing events
-    existing_lookup: dict[str, dict] = {}
-    for e in existing_events:
-        venue_qid = e.get("venue_qid", "")
-        start_ts = e.get("start_date", e.get("start_timestamp", ""))
-        label = e.get("event_label", e.get("label", ""))
-        qid = e.get("event_qid", e.get("qid", ""))
-        if venue_qid and start_ts:
-            key = f"{venue_qid}|{start_ts[:10]}"
-            existing_lookup[key] = {"qid": qid, "label": label}
-
-    print(f"Loaded {len(existing_lookup)} existing events for deduplication")
-
-    # Load artists from JSON for display
-    artists_lookup: dict[str, dict] = {}
-    artists_file = Path("data/dancedb/artists") / f"{date_str}.json"
-    if artists_file.exists():
-        artists_data = json.loads(artists_file.read_text())
-        for a in artists_data:
-            artists_lookup[a.get("qid", "")] = a
-        print(f"Loaded {len(artists_lookup)} artists for display")
-
-    # Load venues from JSON for display
-    venues_lookup: dict[str, dict] = {}
-    venues_dir = Path("data/dancedb/venues")
-    venues_file = venues_dir / f"{date_str}.json"
-    if not venues_file.exists():
-        venues_files = sorted(venues_dir.glob("*.json"), reverse=True)
-        if venues_files:
-            venues_file = venues_files[0]
-    if venues_file.exists():
-        venues_data = json.loads(venues_file.read_text())
-        for qid, v in venues_data.items():
-            if isinstance(v, dict):
-                venues_lookup[qid] = v
-            else:
-                venues_lookup[qid] = {"label": v, "qid": qid}
-        print(f"Loaded {len(venues_lookup)} venues for display from {venues_file.name}")
-
-    # Load newly created venue mappings from jsonl
-    venue_mappings: dict[str, str] = {}
-    venue_mappings_file = Path("data/dancedb/venue_mappings.jsonl")
-    if venue_mappings_file.exists():
-        with open(venue_mappings_file) as f:
-            for line in f:
-                if line.strip():
-                    m = json.loads(line)
-                    venue_mappings[m["venue_name"].lower()] = m["qid"]
-        print(f"Loaded {len(venue_mappings)} venue mappings from jsonl")
-
-    input_path = Path(input_file)
     if not input_path.exists():
         print(f"Error: Input file not found: {input_file}")
         return
@@ -146,13 +229,16 @@ def upload_events(
     events_data = json.loads(input_path.read_text())
     if limit:
         events_data = events_data[:limit]
-        print(f"(Limited to {limit} events)")
-
     print(f"Loaded {len(events_data)} events from {input_file}")
 
     if not events_data:
         print("No events to upload.")
         return
+
+    existing_lookup = _load_existing_events(date_str)
+    artists_lookup = _load_artists_lookup(date_str)
+    venues_lookup = _load_venues_lookup(date_str)
+    venue_mappings = _load_venue_mappings()
 
     client = DancedbClient()
     uploaded = 0
@@ -167,78 +253,36 @@ def upload_events(
             continue
 
         label = event.label.get("sv", "Untitled") if event.label else "Untitled"
-        venue_qid = event.identifiers.dancedatabase.venue if event.identifiers else None
-        artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
-        start_ts = event.start_timestamp
-        end_ts = event.end_timestamp
-        location = event.location or ""
-
-        if not venue_qid and location:
-            venue_qid = venue_mappings.get(location.lower())
-            if venue_qid:
-                event.identifiers.dancedatabase.venue = venue_qid
+        venue_qid = _resolve_venue_qid(event, venue_mappings)
 
         if not venue_qid:
             raise ValueError(
-                f"Event {i} has no venue QID: {label} (location: {location}). "
+                f"Event {i} has no venue QID: {label} (location: {event.location}). "
                 "Ensure venue is mapped in DanceDB first."
             )
 
-        # Auto-skip events that already started
-        from datetime import datetime
-        from config import CET
+        artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
+        start_ts, end_ts = _convert_timestamps(event.start_timestamp, event.end_timestamp)
 
-        start_ts_is_dt = hasattr(start_ts, "year")
-        if start_ts_is_dt:
-            now = datetime.now(tz=CET)
-            start_dt = start_ts if start_ts.tzinfo else start_ts.replace(tzinfo=CET)
-            if start_dt < now:
-                print(f"\n[{i}/{len(events_data)}] {label}")
-                print(f"  SKIP (already started: {start_dt})")
-                skip_count += 1
-                continue
-            start_ts = start_ts.strftime("%Y-%m-%dT%H:%M:%S")
+        if start_ts is None:
+            print(f"[{i}/{len(events_data)}] {label}")
+            print(f"  SKIP (already started)")
+            skip_count += 1
+            continue
 
-        # Check for duplicate in existing events
-        if existing_lookup and start_ts:
-            date_key = f"{venue_qid}|{start_ts[:10]}"
-            existing = existing_lookup.get(date_key)
-            if existing:
-                ratio = fuzz.ratio(label.lower(), existing["label"].lower())
-                if ratio >= 85:
-                    print(f"\n[{i}/{len(events_data)}] {label}")
-                    print(f"  SKIP (already exists: {existing['qid']})")
-                    skip_count += 1
-                    continue
-                else:
-                    print(f"\n[{i}/{len(events_data)}] {label}")
-                    print(f"  WARNING: Same venue/date but different label: {existing['label']} (fuzzy match: {ratio}%)")
-                    if not yes:
-                        confirm = questionary.select("Event may already exist. Upload anyway?", choices=["Skip", "Upload", "Skip all", "Abort"]).ask()
-                        if confirm == "Skip":
-                            skip_count += 1
-                            continue
-                        elif confirm == "Skip all":
-                            print(f"Skipping remaining {len(events_data) - i} events...")
-                            skip_count += len(events_data) - i
-                            break
-                        elif confirm == "Abort":
-                            print("Aborting...")
-                            sys.exit(0)
+        start_ts_str = start_ts.strftime("+%Y-%m-%dT%H:%M:00Z")
+        is_dup, dup_info = _check_duplicate(existing_lookup, venue_qid, start_ts_str, label)
+        if is_dup:
+            print(f"[{i}/{len(events_data)}] {label}")
+            print(f"  SKIP (already exists: {dup_info})")
+            skip_count += 1
+            continue
 
         rich.print(event_dict)
 
-        print(f"\n[{i}/{len(events_data)}] {label}")
         venue_info = venues_lookup.get(venue_qid, {})
-        venue_label = venue_info.get("label", "")
-        print(f"  Venue: {venue_qid}{f' ({venue_label})' if venue_label else ''}")
-        print(f"  Start: {start_ts}")
-        print(f"  End: {end_ts}")
-
-        if artist_qid:
-            artist_info = artists_lookup.get(artist_qid, {})
-            artist_label = artist_info.get("label", "")
-            print(f"  Artist: {artist_qid}{f' ({artist_label})' if artist_label else ''}")
+        artist_info = artists_lookup.get(artist_qid, {}) if artist_qid else {}
+        _display_event(i, len(events_data), label, venue_qid, start_ts, end_ts, venue_info, artist_qid, artist_info)
 
         confirm = questionary.select("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
 
@@ -247,7 +291,7 @@ def upload_events(
             continue
         elif confirm == "Skip all":
             print(f"Skipping remaining {len(events_data) - i} events...")
-            skip_count += len(events_data) - i
+            skip_count = len(events_data) - i
             break
         elif confirm == "Abort":
             print("Aborting...")
@@ -257,8 +301,7 @@ def upload_events(
             desc = event.description.get("sv", "") if event.description else ""
             search_text = f"{label} {desc}"
             status_qid, _ = detect_event_status(search_text)
-            instance_of = event.instance_of if hasattr(event, "instance_of") else config.DANCE_INSTANCE_EVENT
-            artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
+            instance_of = event.instance_of or config.DANCE_INSTANCE_EVENT
             dance_styles = event.identifiers.dancedatabase.dance_styles if event.identifiers else []
 
             qid = client.create_event(

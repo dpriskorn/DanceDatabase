@@ -340,8 +340,8 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             event.labels.set("en", f"Event {start.isoformat()}")
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value=config.DANCE_INSTANCE_EVENT))
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_VENUE, value=venue_qid))
-            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_START, value=start.strftime("+%Y-%m-%dT00:00:00Z")))
-            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_END, value=end.strftime("+%Y-%m-%dT00:00:00Z")))
+            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_START, value=start.strftime("+%Y-%m-%dT%H:%M:00Z")))
+            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_END, value=end.strftime("+%Y-%m-%dT%H:%M:00Z")))
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_STATUS, value=status_qid))
             item_qid = event.write(login=self.wbi.login)
             logger.info(f"Created event {item_qid} for band {band_qid} at venue {venue_qid}")
@@ -350,14 +350,24 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             logger.error(f"Error creating event: {e}")
             return False
 
-    def create_event(self, label_sv: str, venue_qid: str, start_timestamp: str, end_timestamp: str | None = None, status_qid: str = config.DANCE_STATUS_PLANNED, instance_of: str = config.DANCE_INSTANCE_EVENT, artist_qid: str | None = None, dance_styles: list[str] | None = None) -> str | None:
+    def create_event(
+        self,
+        label_sv: str,
+        venue_qid: str,
+        start_timestamp: datetime,
+        end_timestamp: datetime | None = None,
+        status_qid: str = config.DANCE_STATUS_PLANNED,
+        instance_of: str = config.DANCE_INSTANCE_EVENT,
+        artist_qid: str | None = None,
+        dance_styles: list[str] | None = None,
+    ) -> str | None:
         """Create a new event on DanceDB.
 
         Args:
             label_sv: Event label in Swedish
             venue_qid: Venue QID
-            start_timestamp: Start timestamp (ISO format)
-            end_timestamp: End timestamp (ISO format)
+            start_timestamp: Start timestamp (datetime)
+            end_timestamp: End timestamp (datetime, optional)
             status_qid: Q566 (planned), Q567 (cancelled), etc.
             instance_of: Q2 (event)
             artist_qid: Artist QID (optional)
@@ -381,14 +391,13 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value=instance_of))
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_VENUE, value=venue_qid))
 
-            from datetime import datetime
-            start_dt = datetime.fromisoformat(start_timestamp.replace("+01:00", "").replace("+02:00", ""))
-            start_clean = f"+{start_dt.strftime('%Y-%m-%dT00:00:00Z')}"
-            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_START, value=start_clean))
+            start_dt = start_timestamp if start_timestamp.tzinfo else start_timestamp.replace(tzinfo=config.CET)
+            start_str = start_dt.strftime("+%Y-%m-%dT%H:%M:00Z")
+            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_START, value=start_str))
             if end_timestamp:
-                end_dt = datetime.fromisoformat(end_timestamp.replace("+01:00", "").replace("+02:00", ""))
-                end_clean = f"+{end_dt.strftime('%Y-%m-%dT00:00:00Z')}"
-                event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_END, value=end_clean))
+                end_dt = end_timestamp if end_timestamp.tzinfo else end_timestamp.replace(tzinfo=config.CET)
+                end_str = end_dt.strftime("+%Y-%m-%dT%H:%M:00Z")
+                event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_END, value=end_str))
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_STATUS, value=status_qid))
             if artist_qid:
                 event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_ARTIST, value=artist_qid))
