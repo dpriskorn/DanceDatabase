@@ -508,6 +508,62 @@ def ensure_venues(date_str: str | None = None) -> None:
                 if not coords:
                     print("Invalid format, skipping")
 
+        if coords:
+            from src.utils import geodb
+            geodb_matches = geodb.find_nearby(
+                coords["lat"], coords["lng"], 
+                threshold_km=config.COORD_MATCH_THRESHOLD_KM,
+                limit=10
+            )
+            if geodb_matches:
+                print(f"\nFound {len(geodb_matches)} local match(es) by coordinates:")
+                for m in geodb_matches:
+                    src = m["source"]
+                    ext = m.get("external_id", "")
+                    qid_info = f", Q{m['qid']}" if m.get("qid") else ""
+                    print(f"  - {m['name']} ({src}, {m['distance_km']*1000:.0f}m{ qid_info})")
+                
+                choices = [f"{m['name']} ({m['source']}, {m['distance_km']*1000:.0f}m)" for m in geodb_matches]
+                choices.extend(["Create new venue (skip matches)", "Abort"])
+                selected = questionary.select(
+                    f"Match '{venue_name}' to local venue?",
+                    choices=choices,
+                ).ask()
+                
+                if selected and "Create new venue" not in selected and "Abort" not in selected:
+                    for m in geodb_matches:
+                        if selected.startswith(m["name"]):
+                            matched_qid = m.get("qid")
+                            matched_source = m["source"]
+                            matched_external_id = m.get("external_id", "")
+                            
+                            if matched_qid:
+                                logger.info(f"Matched '{venue_name}' to {matched_source} venue {matched_qid} by coordinates")
+                                print(f"Using existing {matched_source} venue: {m['name']} (Q{matched_qid})")
+                                existing_venues[venue_name.lower()] = {"qid": matched_qid, "lat": coords["lat"], "lng": coords["lng"], "aliases": []}
+                                venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                                venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                                with open(venue_mapping_file, "a") as f:
+                                    f.write(json.dumps({
+                                        "venue_name": venue_name, "qid": matched_qid, "lat": coords["lat"], "lng": coords["lng"],
+                                        "source": matched_source, "external_id": matched_external_id, "created_at": date_str
+                                    }) + "\n")
+                                print(f"  -> Saved mapping to {venue_mapping_file.name}")
+                            else:
+                                print(f"Using {matched_source} coordinates: {m['lat']}, {m['lng']}")
+                                coords = {"lat": m["lat"], "lng": m["lng"]}
+                                if matched_source == "folketshus":
+                                    folketshus_match = {"lat": m["lat"], "lng": m["lng"], "external_id": matched_external_id}
+                                elif matched_source == "bygdegardarna":
+                                    pass
+                            break
+                    continue
+                elif "Abort" in selected:
+                    print("Aborting...")
+                    sys.exit(0)
+                elif "Create new venue" in selected:
+                    pass
+
         if coords and not folketshus_match and folketshus_venues:
             for fh_name, fh_venue in folketshus_venues.items():
                 fh_lat = fh_venue.get("lat")
