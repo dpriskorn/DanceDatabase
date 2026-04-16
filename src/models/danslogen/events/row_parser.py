@@ -5,6 +5,7 @@ from typing import Optional
 
 from pydantic import AnyUrl, TypeAdapter
 
+import config
 from config import CET
 from src.models._utils.datetime_utils import combine_date_and_time, parse_date
 from src.models.danslogen.band_mapper import BandMapper
@@ -126,7 +127,7 @@ class RowParser:
         - länsdans → Q677 (dance_styles), Q677 (instance_of - länsdans)
         """
         dance_styles = []
-        instance_of = "Q2"  # default: event
+        instance_of = config.DANCE_INSTANCE_EVENT  # default: event
         ovrigt_stripped = ovrigt.strip()
 
         # Check case-sensitive first (SPF, PRO)

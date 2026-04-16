@@ -257,7 +257,7 @@ def upload_events(
             desc = event.description.get("sv", "") if event.description else ""
             search_text = f"{label} {desc}"
             status_qid, _ = detect_event_status(search_text)
-            instance_of = event.instance_of if hasattr(event, "instance_of") else "Q2"
+            instance_of = event.instance_of if hasattr(event, "instance_of") else config.DANCE_INSTANCE_EVENT
             artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
             dance_styles = event.identifiers.dancedatabase.dance_styles if event.identifiers else []
 
