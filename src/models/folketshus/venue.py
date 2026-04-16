@@ -99,7 +99,7 @@ def fuzzy_match(text: str, candidates: dict[str, str], remove_terms: list[str] |
             best_score = score
             best = (label, qid, normalized_label, normalized_input)
     if best_score >= threshold:
-        false_friend = is_false_fuzzy_match(normalized_input, best[2])
+        false_friend = is_false_fuzzy_match(normalized_input, best[2], remove_terms)
         return FuzzyMatchResult(
             original_input=text,
             matched_label=best[0],

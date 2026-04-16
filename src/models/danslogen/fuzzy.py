@@ -24,7 +24,7 @@ def fuzzy_match_qid(venue_name: str, qid_map: dict[str, str], threshold: int | N
     if result and result[1] >= threshold:
         original_key = normalized_map[result[0]][0]
         cleaned_label = result[0]
-        false_friend = is_false_fuzzy_match(normalized_input, cleaned_label)
+        false_friend = is_false_fuzzy_match(normalized_input, cleaned_label, remove_terms)
         return FuzzyMatchResultQid(
             matched_label=original_key,
             qid=qid_map[original_key],

@@ -22,7 +22,12 @@ def normalize_for_fuzzy(text: str, remove_terms_list: Optional[list[str]] = None
     return normalized
 
 
-def is_false_fuzzy_match(cleaned_input: str, cleaned_match: str) -> bool:
+def is_false_fuzzy_match(cleaned_input: str, cleaned_match: str, remove_terms: list[str] = []) -> bool:
     """Check if cleaned terms are known false friends."""
     false_friends = getattr(config, "FUZZY_FALSE_FRIENDS", {})
-    return cleaned_match in false_friends.get(cleaned_input, [])
+    norm_input = normalize_for_fuzzy(cleaned_input, remove_terms)
+    for key in false_friends:
+        norm_key = normalize_for_fuzzy(key, remove_terms)
+        if norm_input == norm_key:
+            return cleaned_match in false_friends[key]
+    return False

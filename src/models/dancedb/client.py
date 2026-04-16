@@ -188,6 +188,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             new_item = self.wbi.item.new()
             new_item.labels.set("sv", venue_name)
             new_item.labels.set("en", venue_name)
+            new_item.descriptions.set("sv", "dansställe")
             new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q20"))
             if latitude and longitude:
                 new_item.claims.add(
