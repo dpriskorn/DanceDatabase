@@ -20,7 +20,7 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
     date_str = date_str or date.today().strftime("%Y-%m-%d")
     print(f"\n=== Ensuring onbeat venues exist for {date_str} ===")
 
-    onbeat_file = Path(f"data/onbeat/{date_str}.json")
+    onbeat_file = config.onbeat_dir / f"{date_str}.json"
     if not onbeat_file.exists():
         print(f"Error: onbeat data not found: {onbeat_file}")
         print("Run 'scrape-onbeat' first to fetch events.")
@@ -30,14 +30,14 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
     events = onbeat_data.get("events", [])
     print(f"Loaded {len(events)} events from {onbeat_file}")
 
-    dancedb_file = Path("data/dancedb/venues/2026-04-12.json")
+    dancedb_file = config.dancedb_venues_dir / "2026-04-12.json"
     if dancedb_file.exists():
         dancedb_venues = json.loads(dancedb_file.read_text())
     else:
         dancedb_venues = {}
     print(f"Loaded {len(dancedb_venues)} venues from DanceDB")
 
-    folketshus_file = Path("data/folketshus/enriched/2026-04-14.json")
+    folketshus_file = config.folketshus_enriched_dir / "2026-04-14.json"
     if folketshus_file.exists():
         folketshus_data = json.loads(folketshus_file.read_text())
         folketshus_venues = {v["name"].lower(): v for v in folketshus_data if v.get("qid")}
@@ -45,7 +45,7 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
         folketshus_venues = {}
     print(f"Loaded {len(folketshus_venues)} venues from Folketshus")
 
-    bygdegard_file = Path("data/bygdegardarna/2026-04-14.json")
+    bygdegard_file = config.bygdegardarna_dir / "2026-04-14.json"
     if bygdegard_file.exists():
         bygdegard_venues = json.loads(bygdegard_file.read_text())
     else:

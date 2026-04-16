@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 def _load_existing_events(date_str: str) -> dict[str, dict]:
     """Load existing events from DanceDB for deduplication."""
-    events_file = Path("data/dancedb/events") / f"{date_str}.json"
+    events_file = config.dancedb_dir / "events" / f"{date_str}.json"
     if not events_file.exists():
         print(f"Warning: No existing events file at {events_file}")
         return {}
@@ -45,7 +45,7 @@ def _load_existing_events(date_str: str) -> dict[str, dict]:
 
 def _load_artists_lookup(date_str: str) -> dict[str, dict]:
     """Load artists from JSON for display."""
-    artists_file = Path("data/dancedb/artists") / f"{date_str}.json"
+    artists_file = config.dancedb_artists_dir / f"{date_str}.json"
     if not artists_file.exists():
         return {}
 
@@ -57,7 +57,7 @@ def _load_artists_lookup(date_str: str) -> dict[str, dict]:
 
 def _load_venues_lookup(date_str: str) -> dict[str, dict]:
     """Load venues from JSON for display."""
-    venues_dir = Path("data/dancedb/venues")
+    venues_dir = config.dancedb_venues_dir
     venues_file = venues_dir / f"{date_str}.json"
     if not venues_file.exists():
         venues_files = sorted(venues_dir.glob("*.json"), reverse=True)
@@ -80,7 +80,7 @@ def _load_venues_lookup(date_str: str) -> dict[str, dict]:
 
 def _load_venue_mappings() -> dict[str, str]:
     """Load venue mappings from jsonl file."""
-    venue_mappings_file = Path("data/dancedb/venue_mappings.jsonl")
+    venue_mappings_file = config.dancedb_dir / "venue_mappings.jsonl"
     if not venue_mappings_file.exists():
         return {}
 

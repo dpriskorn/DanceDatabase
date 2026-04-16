@@ -2,8 +2,8 @@
 
 import json
 import logging
-from pathlib import Path
 
+import config
 from src.models.danslogen.main import Danslogen
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ def scrape_artists(date_str: str) -> None:
     Args:
         date_str: Date string for output filename (YYYY-MM-DD)
     """
-    artists_dir = Path("data/danslogen/artists")
+    artists_dir = config.danslogen_artists_dir
     output_file = artists_dir / f"{date_str}.json"
 
     artists_dir.mkdir(parents=True, exist_ok=True)

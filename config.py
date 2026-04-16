@@ -15,10 +15,20 @@ PROJECT_ROOT = Path(__file__).parent.resolve()
 
 data_dir: Path = PROJECT_ROOT / "data"
 bygdegardarna_dir: Path = data_dir / "bygdegardarna"
+folketshus_dir: Path = data_dir / "folketshus"
+onbeat_dir: Path = data_dir / "onbeat"
 dancedb_dir: Path = data_dir / "dancedb"
+dancedb_artists_dir: Path = dancedb_dir / "artists"
+dancedb_venues_dir: Path = dancedb_dir / "venues"
+dancedb_events_dir: Path = dancedb_dir / "events"
 danslogen_dir: Path = data_dir / "danslogen"
+danslogen_artists_dir: Path = danslogen_dir / "artists"
+danslogen_events_dir: Path = danslogen_dir / "events"
 wikidata_dir: Path = data_dir / "wikidata"
 enrich_dir: Path = data_dir / "bygdegardarna" / "enriched"
+folketshus_unmatched_dir: Path = folketshus_dir / "unmatched"
+folketshus_enriched_dir: Path = folketshus_dir / "enriched"
+bygdegardarna_enriched_dir: Path = bygdegardarna_dir / "enriched"
 static_dir: Path = data_dir / "static"
 
 CET = timezone(timedelta(hours=1))

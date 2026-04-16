@@ -4,15 +4,9 @@ from datetime import date
 from pathlib import Path
 from typing import Optional
 
-logger = logging.getLogger(__name__)
+import config
 
-BYGDEGARDARNA_DIR = Path("data") / "bygdegardarna"
-ENRICHED_BYG_DIR = Path("data") / "bygdegardarna" / "enriched"
-FOLKETSHUS_DIR = Path("data") / "folketshus"
-FOLKETSHUS_ENRICHED_DIR = FOLKETSHUS_DIR / "enriched"
-DANCEDB_ARTISTS_DIR = Path("data") / "dancedb" / "artists"
-DANCEDB_VENUES_DIR = Path("data") / "dancedb" / "venues"
-DANSLOGEN_ARTISTS_DIR = Path("data") / "danslogen" / "artists"
+logger = logging.getLogger(__name__)
 
 
 class DataNotFoundError(Exception):
@@ -43,9 +37,9 @@ class DanslogenData:
             return self._band_map
 
         today = self.get_today_str()
-        artists_file = DANCEDB_ARTISTS_DIR / f"{today}.json"
-        if not DANCEDB_ARTISTS_DIR.exists():
-            raise DataNotFoundError(f"DanceDB artists directory not found: {DANCEDB_ARTISTS_DIR}")
+        artists_file = config.dancedb_artists_dir / f"{today}.json"
+        if not config.dancedb_artists_dir.exists():
+            raise DataNotFoundError(f"DanceDB artists directory not found: {config.dancedb_artists_dir}")
         if not artists_file.exists():
             raise DataNotFoundError(f"Artists data file not found for today: {artists_file}")
 
@@ -76,9 +70,9 @@ class DanslogenData:
             return self._venue_map
 
         today = self.get_today_str()
-        venues_file = DANCEDB_VENUES_DIR / f"{today}.json"
-        if not DANCEDB_VENUES_DIR.exists():
-            raise DataNotFoundError(f"DanceDB venues directory not found: {DANCEDB_VENUES_DIR}")
+        venues_file = config.dancedb_venues_dir / f"{today}.json"
+        if not config.dancedb_venues_dir.exists():
+            raise DataNotFoundError(f"DanceDB venues directory not found: {config.dancedb_venues_dir}")
         if not venues_file.exists():
             raise DataNotFoundError(f"Venues data file not found for today: {venues_file}")
 
@@ -103,7 +97,7 @@ class DanslogenData:
 
         Returns: dict[title_lower -> venue_dict]
         """
-        path = BYGDEGARDARNA_DIR / f"{date_str}.json"
+        path = config.bygdegardarna_dir / f"{date_str}.json"
         if not path.exists():
             logger.warning(f"Bygdegardarna venues not found: {path}")
             return {}
@@ -115,7 +109,7 @@ class DanslogenData:
 
         Returns: dict[title -> venue_dict]
         """
-        path = ENRICHED_BYG_DIR / f"{date_str}.json"
+        path = config.bygdegardarna_enriched_dir / f"{date_str}.json"
         if not path.exists():
             logger.warning(f"Matched venues not found: {path}")
             return {}
@@ -127,7 +121,7 @@ class DanslogenData:
 
         Returns: dict[name_lower -> venue_dict]
         """
-        available_files = sorted(FOLKETSHUS_ENRICHED_DIR.glob("*.json"), reverse=True)
+        available_files = sorted(config.folketshus_enriched_dir.glob("*.json"), reverse=True)
         
         path = None
         for check_path in available_files:
@@ -150,7 +144,7 @@ class DanslogenData:
 
         Returns: dict[qid -> venue_dict]
         """
-        path = DANCEDB_VENUES_DIR / f"{date_str}.json"
+        path = config.dancedb_venues_dir / f"{date_str}.json"
         if not path.exists():
             logger.warning(f"DanceDB venues not found: {path}")
             return {}
@@ -207,7 +201,7 @@ def load_danslogen_artists() -> dict[str, dict]:
     Returns dict mapping band name (lowercase) to {name, spelplan_id}.
     """
     today = get_today_str()
-    artists_file = DANSLOGEN_ARTISTS_DIR / f"{today}.json"
+    artists_file = config.danslogen_artists_dir / f"{today}.json"
     if not artists_file.exists():
         logger.warning(f"Danslogen artists file not found: {artists_file}")
         return {}

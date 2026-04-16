@@ -17,14 +17,14 @@ class TestGetTodayStr:
 
 
 class TestLoadBandMap:
-    @patch("src.models.danslogen.data.DANCEDB_ARTISTS_DIR")
+    @patch("config.dancedb_artists_dir")
     def test_raises_error_when_directory_missing(self, mock_dir):
         mock_dir.exists.return_value = False
         with pytest.raises(DataNotFoundError) as exc_info:
             load_band_map()
         assert "DanceDB artists directory not found" in str(exc_info.value)
 
-    @patch("src.models.danslogen.data.DANCEDB_ARTISTS_DIR")
+    @patch("config.dancedb_artists_dir")
     def test_raises_error_when_file_missing(self, mock_dir):
         mock_dir.exists.return_value = True
         mock_dir.__truediv__ = lambda self, x: MagicMock(exists=lambda: False)
@@ -35,7 +35,7 @@ class TestLoadBandMap:
     @patch("pathlib.Path.exists")
     @patch("pathlib.Path.read_text")
     @patch("src.models.danslogen.data.get_today_str")
-    @patch("src.models.danslogen.data.DANCEDB_ARTISTS_DIR")
+    @patch("config.dancedb_artists_dir")
     def test_loads_band_map_successfully(self, mock_dir, mock_today, mock_read, mock_exists):
         _reset_instance()
         artists_content = [
@@ -56,7 +56,7 @@ class TestLoadBandMap:
     @patch("pathlib.Path.exists")
     @patch("pathlib.Path.read_text")
     @patch("src.models.danslogen.data.get_today_str")
-    @patch("src.models.danslogen.data.DANCEDB_ARTISTS_DIR")
+    @patch("config.dancedb_artists_dir")
     def test_handles_missing_qid_or_label(self, mock_dir, mock_today, mock_read, mock_exists):
         _reset_instance()
         artists_content = [
@@ -73,14 +73,14 @@ class TestLoadBandMap:
 
 
 class TestLoadVenueMap:
-    @patch("src.models.danslogen.data.DANCEDB_VENUES_DIR")
+    @patch("config.dancedb_venues_dir")
     def test_raises_error_when_directory_missing(self, mock_dir):
         mock_dir.exists.return_value = False
         with pytest.raises(DataNotFoundError) as exc_info:
             load_venue_map()
         assert "DanceDB venues directory not found" in str(exc_info.value)
 
-    @patch("src.models.danslogen.data.DANCEDB_VENUES_DIR")
+    @patch("config.dancedb_venues_dir")
     def test_raises_error_when_file_missing(self, mock_dir):
         mock_dir.exists.return_value = True
         mock_dir.__truediv__ = lambda self, x: MagicMock(exists=lambda: False)
@@ -91,7 +91,7 @@ class TestLoadVenueMap:
     @patch("pathlib.Path.exists")
     @patch("pathlib.Path.read_text")
     @patch("src.models.danslogen.data.get_today_str")
-    @patch("src.models.danslogen.data.DANCEDB_VENUES_DIR")
+    @patch("config.dancedb_venues_dir")
     def test_loads_venue_map_successfully(self, mock_dir, mock_today, mock_read, mock_exists):
         _reset_instance()
         venues_content = {
@@ -112,7 +112,7 @@ class TestLoadVenueMap:
     @patch("pathlib.Path.exists")
     @patch("pathlib.Path.read_text")
     @patch("src.models.danslogen.data.get_today_str")
-    @patch("src.models.danslogen.data.DANCEDB_VENUES_DIR")
+    @patch("config.dancedb_venues_dir")
     def test_handles_missing_label(self, mock_dir, mock_today, mock_read, mock_exists):
         _reset_instance()
         venues_content = {

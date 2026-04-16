@@ -38,8 +38,8 @@ HEADERS = {
 
 COORD_DISTANCE_KM = 1.0
 
-UNMATCHED_DIR = Path("data") / "folketshus" / "unmatched"
-ENRICHED_DIR = Path("data") / "folketshus" / "enriched"
+UNMATCHED_DIR = config.folketshus_unmatched_dir
+ENRICHED_DIR = config.folketshus_enriched_dir
 
 
 class FolketshusVenue(BaseModel):

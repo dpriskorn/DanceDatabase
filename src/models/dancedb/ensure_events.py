@@ -1,15 +1,13 @@
 """Ensure all event venues exist in DanceDB."""
 
+import json
 import logging
+from datetime import date
 from pathlib import Path
 
 import config
 
 logger = logging.getLogger(__name__)
-
-DATA_DIR = Path("data")
-EVENTS_DIR = DATA_DIR / "dancedb" / "events"
-ARTISTS_DIR = DATA_DIR / "dancedb" / "artists"
 
 
 def configure_wbi():
@@ -22,8 +20,16 @@ def configure_wbi():
     wbi_config["USER_AGENT"] = config.user_agent
 
 
-def fetch_events_from_dancedb() -> list[dict]:
-    """Fetch all events from DanceDB via SPARQL."""
+def fetch_events_from_dancedb(date_str: str | None = None, save: bool = True) -> list[dict]:
+    """Fetch all events from DanceDB via SPARQL.
+    
+    Args:
+        date_str: Date string for output file (YYYY-MM-DD, default: today)
+        save: Whether to save events to JSON file (default: True)
+    
+    Returns:
+        List of event dicts with qid, label, start_date, venue info
+    """
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
     sparql = """
@@ -94,6 +100,13 @@ SELECT ?event ?eventLabel ?start_date ?venue ?venueLabel WHERE {
         )
 
     logger.info(f"Fetched {len(events)} events from DanceDB")
+    
+    if save and date_str:
+        output_file = config.dancedb_events_dir / f"{date_str}.json"
+        config.dancedb_events_dir.mkdir(parents=True, exist_ok=True)
+        output_file.write_text(json.dumps(events, indent=2, ensure_ascii=False))
+        logger.info(f"Saved {len(events)} events to {output_file}")
+    
     return events
 
 

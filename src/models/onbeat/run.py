@@ -3,25 +3,20 @@
 import json
 import logging
 from datetime import date
-from pathlib import Path
+
+import config
+from src.models.onbeat.events import OnbeatEvents
 
 logger = logging.getLogger(__name__)
 
-ONBEAT_DATA_DIR = Path("data/onbeat")
+ONBEAT_DATA_DIR = config.onbeat_dir
 
 
 def run(dry_run: bool = False) -> None:
     """Fetch onbeat events."""
     print("\n=== Scrape onbeat events ===")
 
-    try:
-        from src.models.onbeat.events import OnbeatEvents
-    except ImportError:
-        print("Error: onbeat module not available")
-        return
-
-    page_url = "https://onbeat.dance/"
-    events = OnbeatEvents(page_url=page_url)
+    events = OnbeatEvents(page_url="https://onbeat.dance/")
     events.parse_events()
     event_list = events.events
 

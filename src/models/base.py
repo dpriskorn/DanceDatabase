@@ -8,6 +8,7 @@ class DataSource(ABC):
     """Abstract base class for data sources."""
 
     name: str
+    data_dir: Path | None = None
 
     @abstractmethod
     def scrape(self, **kwargs) -> list[dict[str, Any]]:
@@ -19,11 +20,19 @@ class DataSource(ABC):
         """Upload events to DanceDB. Returns number of uploaded events."""
         pass
 
+    def get_data_dir(self) -> Path:
+        """Get the data directory for this source."""
+        if self.data_dir:
+            return self.data_dir
+        import config
+        return config.data_dir / self.name
+
 
 class VenueSource(ABC):
     """Abstract base class for venue sources."""
 
     name: str
+    data_dir: Path | None = None
 
     @abstractmethod
     def scrape_venues(self, **kwargs) -> list[dict[str, Any]]:
@@ -34,3 +43,10 @@ class VenueSource(ABC):
     def match_venues(self, venues: list[dict[str, Any]], **kwargs) -> list[dict[str, Any]]:
         """Match venues to DanceDB. Returns matched venues."""
         pass
+
+    def get_data_dir(self) -> Path:
+        """Get the data directory for this source."""
+        if self.data_dir:
+            return self.data_dir
+        import config
+        return config.data_dir / self.name

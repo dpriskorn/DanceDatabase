@@ -23,6 +23,7 @@ COMMANDS = {
     "VENUES": [
         ("scrape-bygdegardarna", "Fetch bygdegardarna venues with coordinates"),
         ("scrape-dancedb-venues", "Fetch existing venues from DanceDB"),
+        ("scrape-dancedb-events", "Fetch existing events from DanceDB"),
         ("match-bygdegardarna-venues", "Match bygdegardarna venues to DanceDB"),
     ],
     "ONBEAT": [

@@ -46,6 +46,10 @@ def add_sync_subparsers(sub) -> dict:
     p.add_argument("-d", "--date", default=None, help="Date for output (YYYY-MM-DD, default: today)")
     handlers["scrape-dancedb-venues"] = _scrape_dancedb_venues
     
+    p = sub.add_parser("scrape-dancedb-events", help="Fetch existing events from DanceDB")
+    p.add_argument("-d", "--date", default=None, help="Date for output (YYYY-MM-DD, default: today)")
+    handlers["scrape-dancedb-events"] = _scrape_dancedb_events
+    
     p = sub.add_parser("match-bygdegardarna-venues", help="Match bygdegardarna venues to DanceDB")
     p.add_argument("-d", "--date", default=None, help="Date for input files (YYYY-MM-DD, default: today)")
     p.add_argument("--skip-prompts", action="store_true", help="Skip interactive prompts, auto-match fuzzy >=85")
@@ -143,6 +147,12 @@ def _scrape_dancedb_venues(args) -> None:
     from src.models.dancedb.venue_ops import scrape_dancedb_venues
     date_str = get_date_str(args.date)
     scrape_dancedb_venues(date_str)
+
+
+def _scrape_dancedb_events(args) -> None:
+    from src.models.dancedb.ensure_events import fetch_events_from_dancedb
+    date_str = get_date_str(args.date)
+    fetch_events_from_dancedb(date_str, save=True)
 
 
 def _match_bygdegardarna_venues(args) -> None:

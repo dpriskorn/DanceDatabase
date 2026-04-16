@@ -343,7 +343,8 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_START, value=start.strftime("+%Y-%m-%dT%H:%M:00Z")))
             event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_END, value=end.strftime("+%Y-%m-%dT%H:%M:00Z")))
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_STATUS, value=status_qid))
-            item_qid = event.write(login=self.wbi.login)
+            event.write(login=self.wbi.login)
+            item_qid = event.id
             logger.info(f"Created event {item_qid} for band {band_qid} at venue {venue_qid}")
             return True
         except Exception as e:
@@ -360,7 +361,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         instance_of: str = config.DANCE_INSTANCE_EVENT,
         artist_qid: str | None = None,
         dance_styles: list[str] | None = None,
-    ) -> str | None:
+    ) -> str:
         """Create a new event on DanceDB.
 
         Args:
@@ -401,10 +402,13 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_STATUS, value=status_qid))
             if artist_qid:
                 event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_ARTIST, value=artist_qid))
+            else:
+                logger.warning("No artist QID for event")
             if dance_styles:
                 for ds in dance_styles:
                     event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_DANCE_STYLE, value=ds))
-            item_qid = event.write(login=self.wbi.login)
+            event.write(login=self.wbi.login)
+            item_qid = event.id
             url = f"{self.base_url}/wiki/Item:{item_qid}"
             logger.info(f"Created event '{label_sv}' on DanceDB: {url}")
             rich.print(f"[green]Created event: {url}[/green]")
