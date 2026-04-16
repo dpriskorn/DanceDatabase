@@ -52,7 +52,7 @@ class DancedbClient:
             return None
 
     def create_band(self, band_name: str, spelplan_id: str = "") -> str:
-        confirm = questionary.rawselect(
+        confirm = questionary.select(
             f"Create new band '{band_name}' on DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
         ).ask()
         if confirm == "No":
@@ -188,7 +188,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
 
     def create_venue(self, venue_name: str, latitude: float = 0.0, longitude: float = 0.0, external_ids: dict[str, str] | None = None) -> str:
         """Create a new venue on DanceDB with optional coordinates."""
-        confirm = questionary.rawselect(
+        confirm = questionary.select(
             f"Create new venue '{venue_name}' on DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
         ).ask()
         if confirm == "No":
@@ -293,7 +293,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
 
         Returns the created event QID or None on failure.
         """
-        confirm = questionary.rawselect(
+        confirm = questionary.select(
             f"Create new event '{label_sv}' on DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
         ).ask()
         if confirm == "No":

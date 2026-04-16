@@ -398,7 +398,7 @@ def ensure_venues(date_str: str | None = None) -> None:
                     gmaps_url = addr_data.get("gmaps_url", "")
                     permalink = addr_data.get("permalink", "")
                     url_info = f"bygdegardarna.se: {permalink}" if permalink else f"Google: {gmaps_url}"
-                    confirm = questionary.rawselect(
+                    confirm = questionary.select(
                         f"Match '{venue_name}' to bygdegardarna address '{addr_data.get('address')}'?\n→ {url_info}",
                         choices=["Yes (Recommended)", "No", "Abort"],
                     ).ask()
@@ -434,7 +434,7 @@ def ensure_venues(date_str: str | None = None) -> None:
                         meta = city_venue.get("meta", {})
                         permalink = meta.get("permalink", "") or city_venue.get("permalink", "")
                         url_info = f"bygdegardarna.se: {permalink}" if permalink else f"Google: {gmaps_url}"
-                        confirm = questionary.rawselect(
+                        confirm = questionary.select(
                             f"Match '{venue_name}' to bygdegardarna city '{city_matches[0][0]}'?\n→ {url_info}",
                             choices=["Yes (Recommended)", "No", "Abort"],
                         ).ask()
@@ -502,7 +502,7 @@ def ensure_venues(date_str: str | None = None) -> None:
         print(f"Google: {gmaps}")
 
         if folketshus_match:
-            use_coords = questionary.rawselect(
+            use_coords = questionary.select(
                 f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?",
                 choices=["Yes (Recommended)", "No", "Abort"],
             ).ask()
@@ -672,7 +672,7 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
             print(f"Google: {gmaps}")
 
         try:
-            confirm = questionary.rawselect(
+            confirm = questionary.select(
                 f"Create venue '{venue_name}' in DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
             ).ask()
         except Exception:

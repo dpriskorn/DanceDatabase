@@ -201,7 +201,7 @@ def upload_events(
                     print(f"\n[{i}/{len(events_data)}] {label}")
                     print(f"  WARNING: Same venue/date but different label: {existing['label']} (fuzzy match: {ratio}%)")
                     if not yes:
-                        confirm = questionary.rawselect("Event may already exist. Upload anyway?", choices=["Skip", "Upload", "Skip all", "Abort"]).ask()
+                        confirm = questionary.select("Event may already exist. Upload anyway?", choices=["Skip", "Upload", "Skip all", "Abort"]).ask()
                         if confirm == "Skip":
                             skip_count += 1
                             continue
@@ -227,7 +227,7 @@ def upload_events(
             artist_label = artist_info.get("label", "")
             print(f"  Artist: {artist_qid}{f' ({artist_label})' if artist_label else ''}")
 
-        confirm = questionary.rawselect("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
+        confirm = questionary.select("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
 
         if confirm == "Skip":
             skip_count += 1

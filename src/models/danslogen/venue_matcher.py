@@ -163,7 +163,7 @@ class VenueMatcher:
         label = f"{venue_name}, {ort}" if ort else venue_name
         print(f'\nCreate venue: "{label}" at ({lat}, {lng})')
 
-        confirm = questionary.rawselect("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
+        confirm = questionary.select("Upload to DanceDB?", choices=["Yes (Recommended)", "Skip", "Skip all", "Abort"]).ask()
 
         if confirm == "Skip":
             logger.info("Skipping venue '%s'", label)

@@ -238,7 +238,7 @@ class CogworkEvent(BaseModel):
         venue_qid = self.map_venue_qid(venue_text)
         if not venue_qid:
             logger.warning(f"Could not map to a venue QID from this text: '{venue_text}' see {self.shop_url}")
-            confirm = questionary.rawselect(
+            confirm = questionary.select(
                 f"Could not map venue: '{venue_text[:50]}...'", choices=["Skip", "Continue", "Abort"]
             ).ask()
             if confirm == "Skip":
@@ -268,7 +268,7 @@ class CogworkEvent(BaseModel):
                         self.dance_styles_qids.add(self.dance_style_qid_map[chosen])
                         logger.debug(f"User selected dance style: {chosen} ({self.dance_style_qid_map[chosen]})")
                     else:
-                        confirm = questionary.rawselect(
+                        confirm = questionary.select(
                             f"Could not map dance style from: '{style_text[:50]}...'", choices=["Skip", "Continue", "Abort"]
                         ).ask()
                         if confirm == "Skip":
