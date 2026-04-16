@@ -379,6 +379,11 @@ def ensure_venues(date_str: str | None = None) -> None:
         if bygdegardarna_addresses:
             for addr_key, addr_data in bygdegardarna_addresses.items():
                 if venue_lower in addr_key or addr_key in venue_lower:
+                    confirm = questionary.confirm(
+                        f"Match '{venue_name}' to bygdegardarna address '{addr_data.get('address')}'?"
+                    ).ask()
+                    if not confirm:
+                        continue
                     existing_venues[venue_lower] = {
                         "qid": addr_data.get("qid", ""),
                         "lat": addr_data.get("lat"),
