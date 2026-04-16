@@ -12,6 +12,7 @@ import config
 from src.models.bygdegardarna.scrape import scrape
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.fuzzy import fuzzy_match_qid
+from src.utils.coords import parse_coords
 
 logger = logging.getLogger(__name__)
 
@@ -437,9 +438,7 @@ def ensure_venues(date_str: str | None = None) -> None:
         gmaps = f'https://www.google.com/maps/search/{urllib.parse.quote(venue_name, safe="")}'
         osm = f'https://www.openstreetmap.org/search?query={urllib.parse.quote(venue_name, safe="")}'
         print(f"Google: {gmaps}")
-        print(f"OSM: {osm}")
-
-        coords = None
+        from utils.coords import parse_coords
         if folketshus_match:
             use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
             if use_coords:
@@ -449,10 +448,8 @@ def ensure_venues(date_str: str | None = None) -> None:
             print("Enter coordinates (lat, lng) or press Enter to skip:")
             coords_input = input("> ").strip()
             if coords_input:
-                try:
-                    lat, lng = map(float, coords_input.split(","))
-                    coords = {"lat": lat, "lng": lng}
-                except ValueError:
+                coords = parse_coords(coords_input)
+                if not coords:
                     print("Invalid format, skipping")
 
         if not coords:
@@ -621,8 +618,7 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
             try:
                 coords_input = input("> ").strip()
                 if coords_input:
-                    lat, lng = map(float, coords_input.split(","))
-                    coords = {"lat": lat, "lng": lng}
+                    coords = parse_coords(coords_input)
             except Exception:
                 print("Invalid format, skipping")
                 continue

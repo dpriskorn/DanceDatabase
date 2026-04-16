@@ -7,6 +7,7 @@ import questionary
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.fuzzy import fuzzy_match_qid
 from src.models.danslogen.venue_mapper import VenueMapper
+from src.utils.coords import parse_coords
 
 logger = logging.getLogger(__name__)
 
@@ -103,12 +104,12 @@ class VenueMatcher:
                 raise KeyboardInterrupt()
 
             if coord_str:
-                try:
-                    parts = [p.strip() for p in coord_str.split(",")]
-                    lat = float(parts[0])
-                    lng = float(parts[1])
-                except (ValueError, IndexError) as e:
-                    logger.error("Invalid coordinate format '%s': %s", coord_str, e)
+                coords = parse_coords(coord_str)
+                if coords:
+                    lat = coords["lat"]
+                    lng = coords["lng"]
+                else:
+                    logger.error("Invalid coordinate format '%s'", coord_str)
                     raise KeyboardInterrupt()
 
         if lat is None or lng is None:
