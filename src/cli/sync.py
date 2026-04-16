@@ -89,7 +89,8 @@ def _scrape_all(args) -> None:
 
 
 def _sync_danslogen(args) -> None:
-    from src.models.dancedb.sync_danslogen import sync_danslogen, get_month_year
+    from src.cli.base import get_month_year
+    from src.models.dancedb.sync_danslogen import sync_danslogen
     month, year = get_month_year(args.month, args.year)
     sync_danslogen(
         month=month,
