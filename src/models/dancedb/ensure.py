@@ -261,7 +261,7 @@ def ensure_venues(date_str: str | None = None) -> None:
             fuzzy_addr = fuzz_process.extractOne(
                 venue_lower,
                 list(bygdegardarna_addresses.keys()),
-                scorer=fuzz_process.fuzz.token_sort_ratio,
+                scorer=fuzz.token_sort_ratio,
                 score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA + 2
             )
             if fuzzy_addr:
@@ -300,7 +300,7 @@ def ensure_venues(date_str: str | None = None) -> None:
                 fuzzy_city = fuzz_process.extractOne(
                     venue_lower,
                     list(bygdegardarna_cities.keys()),
-                    scorer=fuzz_process.fuzz.token_sort_ratio,
+                    scorer=fuzz.token_sort_ratio,
                     score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA + 2
                 )
                 if fuzzy_city:
