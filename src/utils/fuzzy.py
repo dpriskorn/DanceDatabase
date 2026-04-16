@@ -29,5 +29,6 @@ def is_false_fuzzy_match(cleaned_input: str, cleaned_match: str, remove_terms: l
     for key in false_friends:
         norm_key = normalize_for_fuzzy(key, remove_terms)
         if norm_input == norm_key:
-            return cleaned_match in false_friends[key]
+            norm_values = [normalize_for_fuzzy(v, remove_terms) for v in false_friends[key]]
+            return cleaned_match in norm_values
     return False
