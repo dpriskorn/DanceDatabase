@@ -1,6 +1,7 @@
 import json
 import logging
 import math
+import sys
 import urllib.parse
 from datetime import date
 from pathlib import Path
@@ -13,6 +14,16 @@ from wikibaseintegrator import WikibaseIntegrator
 
 import config
 from src.models.dancedb.client import DancedbClient
+
+
+def require_tty():
+    """Ensure running in interactive terminal."""
+    if not sys.stdin.isatty():
+        raise RuntimeError(
+            "This operation requires an interactive terminal.\n"
+            "No TTY detected. Please run interactively with: poetry run python cli.py scrape-folketshus"
+        )
+    return True
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=config.loglevel)
@@ -261,7 +272,8 @@ def create_venue_with_p44(venue: FolketshusVenue) -> str | None:
         return None
 
 
-def run(date_str: str | None = None, match: bool = False) -> None:
+def run(date_str: str | None = None) -> None:
+    require_tty()  # Must run interactively
     logger.info("Fetching folketshus och parker venues...")
     venues = fetch_members()
     print(f"Found {len(venues)} venues.")
@@ -270,24 +282,19 @@ def run(date_str: str | None = None, match: bool = False) -> None:
     UNMATCHED_DIR.mkdir(parents=True, exist_ok=True)
     ENRICHED_DIR.mkdir(parents=True, exist_ok=True)
 
-    if match:
-        enriched, unmatched = match_venues(venues)
+    enriched, unmatched = match_venues(venues)
 
-        enriched_file = ENRICHED_DIR / f"{date_val}.json"
-        enriched_file.write_text(json.dumps(enriched, indent=2, ensure_ascii=False) + "\n")
-        print(f"Saved enriched to {enriched_file}")
+    enriched_file = ENRICHED_DIR / f"{date_val}.json"
+    enriched_file.write_text(json.dumps(enriched, indent=2, ensure_ascii=False) + "\n")
+    print(f"Saved enriched to {enriched_file}")
 
-        unmatched_file = UNMATCHED_DIR / f"{date_val}.json"
-        unmatched_file.write_text(json.dumps([v.model_dump() for v in unmatched], indent=2, ensure_ascii=False) + "\n")
-        print(f"Saved unmatched to {unmatched_file}")
+    unmatched_file = UNMATCHED_DIR / f"{date_val}.json"
+    unmatched_file.write_text(json.dumps([v.model_dump() for v in unmatched], indent=2, ensure_ascii=False) + "\n")
+    print(f"Saved unmatched to {unmatched_file}")
 
-        print(f"\nMatched: {len(enriched)}")
-        print(f"Unmatched: {len(unmatched)}")
+    print(f"\nMatched: {len(enriched)}")
+    print(f"Unmatched: {len(unmatched)}")
 
-        if unmatched:
-            print(f"\nUnmatched venues saved to {unmatched_file}")
-            print("Create venues on-demand during event upload, not upfront.")
-    else:
-        output_file = UNMATCHED_DIR / f"{date_val}.json"
-        output_file.write_text(json.dumps([v.model_dump() for v in venues], indent=2, ensure_ascii=False) + "\n")
-        print(f"Saved to {output_file}")
+    if unmatched:
+        print(f"\nUnmatched venues saved to {unmatched_file}")
+        print("Create venues on-demand during event upload, not upfront.")

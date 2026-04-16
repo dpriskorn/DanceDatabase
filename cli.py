@@ -140,9 +140,8 @@ def main():
     p.add_argument("-s", "--source", default=None, help="Specific source (default: all)")
 
     # === FOLKETSHUS ===
-    p = sub.add_parser("scrape-folketshus", help="Fetch folketshus och parker venues")
+    p = sub.add_parser("scrape-folketshus", help="Fetch folketshus och parker venues and match to DanceDB")
     p.add_argument("-d", "--date", default=None, help="Date for output (YYYY-MM-DD, default: today)")
-    p.add_argument("-m", "--match", action="store_true", help="Match venues to DanceDB and create new venues")
 
     # === WIKIDATA ===
     p = sub.add_parser("scrape-wikidata-artists", help="Fetch artists from Wikidata")
@@ -253,7 +252,7 @@ def main():
 
     # FOLKETSHUS
     elif args.command == "scrape-folketshus":
-        scrape_folketshus(date_str=getattr(args, "date", None), match=args.match)
+        scrape_folketshus(date_str=getattr(args, "date", None))
 
     # SYNC COMMANDS
     elif args.command == "sync-danslogen":

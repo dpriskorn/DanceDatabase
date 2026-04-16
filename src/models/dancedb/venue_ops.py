@@ -2,6 +2,7 @@
 
 import json
 import logging
+import sys
 import urllib.parse
 from datetime import date
 
@@ -13,6 +14,16 @@ from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.fuzzy import fuzzy_match_qid
 
 logger = logging.getLogger(__name__)
+
+
+def require_tty():
+    """Ensure running in interactive terminal."""
+    if not sys.stdin.isatty():
+        raise RuntimeError(
+            "This operation requires an interactive terminal.\n"
+            "No TTY detected. Please run interactively."
+        )
+    return True
 
 
 def create_venue(venue_name: str, lat: float, lng: float, external_ids: dict[str, str] | None = None, client=None) -> str | None:
@@ -153,8 +164,8 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
 
 def ensure_venues(date_str: str | None = None) -> None:
     """Ensure danslogen venues exist in DanceDB before uploading events."""
+    require_tty()  # Must run interactively
     from datetime import datetime
-    import os
 
     import questionary
     from rapidfuzz import process as fuzz_process

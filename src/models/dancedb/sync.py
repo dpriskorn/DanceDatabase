@@ -142,7 +142,7 @@ def scrape_all(month: str, year: int) -> None:
     scrape_cogwork(source=None)
 
     print("\n[6/6] Scrape folketshus venues...")
-    scrape_folketshus(date_str=date_str, match=False)
+    scrape_folketshus(date_str=date_str)
 
     print("\n" + "=" * 50)
     print("SCRAPING COMPLETE")
@@ -220,7 +220,7 @@ def sync_danslogen(
         ),
         SyncStep(
             "6. Scrape folketshus venues",
-            lambda: scrape_folketshus(date_str=date_str, match=True),
+            lambda: scrape_folketshus(date_str=date_str),
             input_files=[],
             output_files=[],
         ),
@@ -365,7 +365,7 @@ def sync_folketshus() -> bool:
     print("SYNC FOLKETSHUS")
     print("=" * 50)
 
-    scrape_folketshus(date_str=None, match=True)
+    scrape_folketshus(date_str=None)
 
     print("\n" + "=" * 50)
     print("FOLKETSHUS SYNC COMPLETE")
