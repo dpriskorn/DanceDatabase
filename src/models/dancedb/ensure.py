@@ -30,6 +30,70 @@ def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> fl
     return R * c
 
 
+def find_dancedb_venues_by_coords(lat: float, lng: float, threshold_km: float = 0.1) -> list[dict]:
+    """Query DanceDB for venues within distance threshold.
+
+    Uses wikibase:box for bounding box query, then filters by exact haversine distance.
+    Returns list of {qid, label, lat, lng, distance_km}.
+    """
+    from wikibaseintegrator.wbi_helpers import execute_sparql_query
+
+    lat_delta = threshold_km / 111
+    lng_delta = threshold_km / (111 * math.cos(math.radians(lat)))
+
+    lng_min = lng - lng_delta
+    lng_max = lng + lng_delta
+    lat_min = lat - lat_delta
+    lat_max = lat + lat_delta
+
+    sparql = f"""
+    PREFIX dd: <https://dance.wikibase.cloud/entity/>
+    PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+    PREFIX bd: <http://www.bigdata.com/rdf#>
+
+    SELECT ?item ?itemLabel ?location WHERE {{
+      SERVICE wikibase:box {{
+        ?item ddt:P4 ?location .
+        bd:serviceParam wikibase:cornerWest "Point({lng_min} {lat_min})"^^geo:wktLiteral .
+        bd:serviceParam wikibase:cornerEast "Point({lng_max} {lat_max})"^^geo:wktLiteral .
+      }}
+      ?item ddt:P1 dd:Q20 .
+      OPTIONAL {{ ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel) = "sv") }}
+    }}
+    """
+    try:
+        results = execute_sparql_query(query=sparql)
+    except Exception as e:
+        logger.warning(f"SPARQL error: {e}")
+        return []
+
+    matches = []
+    for binding in results.get("results", {}).get("bindings", []):
+        qid = binding.get("item", {}).get("value", "").rsplit("/", 1)[-1]
+        label = binding.get("itemLabel", {}).get("value", "")
+        geo_str = binding.get("location", {}).get("value", "")
+        if not qid or not geo_str:
+            continue
+        try:
+            coords = geo_str.replace("Point(", "").replace(")", "").split(" ")
+            venue_lng, venue_lat = float(coords[0]), float(coords[1])
+            dist = haversine_distance(lat, lng, venue_lat, venue_lng)
+            if dist <= threshold_km:
+                matches.append({
+                    "qid": qid,
+                    "label": label or qid,
+                    "lat": venue_lat,
+                    "lng": venue_lng,
+                    "distance_km": dist,
+                })
+        except Exception as e:
+            logger.warning(f"Parse error for {geo_str}: {e}")
+
+    matches.sort(key=lambda x: x["distance_km"])
+    return matches
+
+
 def require_tty():
     """Ensure running in interactive terminal."""
     if not sys.stdin.isatty():
@@ -425,6 +489,42 @@ def ensure_venues(date_str: str | None = None) -> None:
                         logger.info(f"Coord match: '{venue_name}' matches folketshus '{fh_name}' at {dist:.3f}km")
                         print(f"Matched by coordinates: {fh_name} ({dist:.3f}km, external_id: {fh_venue['external_id']}, qid: {fh_venue.get('qid', 'N/A')})")
                         break
+
+        if coords and not folketshus_match:
+            dancedb_matches = find_dancedb_venues_by_coords(
+                coords["lat"], coords["lng"], threshold_km=config.COORD_MATCH_THRESHOLD_KM
+            )
+            if dancedb_matches:
+                print(f"\nFound {len(dancedb_matches)} DanceDB venue(s) within {config.COORD_MATCH_THRESHOLD_KM}km:")
+                choices = [f"{m['label']} ({m['distance_km']*1000:.0f}m, {m['qid']})" for m in dancedb_matches]
+                choices.extend(["Create new venue (skip DanceDB)", "Abort"])
+                selected = questionary.select(
+                    f"Match '{venue_name}' to existing DanceDB venue?",
+                    choices=choices,
+                ).ask()
+                if selected and "Create new venue" not in selected and "Abort" not in selected:
+                    for m in dancedb_matches:
+                        if selected.startswith(m["label"]):
+                            existing_qid = m["qid"]
+                            logger.info(f"Matched '{venue_name}' to DanceDB venue {existing_qid} by coordinates")
+                            print(f"Using existing DanceDB venue: {m['label']} ({m['qid']})")
+                            existing_venues[venue_name.lower()] = {"qid": existing_qid, "lat": coords["lat"], "lng": coords["lng"]}
+                            venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                            venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                            with open(venue_mapping_file, "a") as f:
+                                f.write(json.dumps({
+                                    "venue_name": venue_name, "qid": existing_qid, "lat": coords["lat"], "lng": coords["lng"],
+                                    "source": "dancedb", "created_at": date_str
+                                }) + "\n")
+                            print(f"  -> Saved mapping to {venue_mapping_file.name}")
+                            break
+                    else:
+                        continue
+                elif "Abort" in selected:
+                    print("Aborting...")
+                    sys.exit(0)
+                elif "Create new venue" in selected:
+                    pass
 
         if not coords:
             print("Skipping venue creation (no coordinates)")
