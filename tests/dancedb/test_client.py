@@ -144,3 +144,67 @@ class TestDancedbClientGetOrCreateBand:
                 assert result == "Q999"
                 mock_search.assert_called_once_with("NewBand")
                 mock_create.assert_called_once_with("NewBand", "")
+
+
+class TestDancedbClientFindVenuesByCoordinates:
+    @patch("src.models.dancedb.client.Login")
+    def test_find_venues_by_coordinates_within_threshold(self, mock_login):
+        mock_login.return_value = MagicMock()
+
+        with patch("src.models.dancedb.client.execute_sparql_query") as mock_sparql:
+            mock_sparql.return_value = {
+                "results": {
+                    "bindings": [
+                        {
+                            "item": {"value": "https://dance.wikibase.cloud/wiki/Q568"},
+                            "itemLabel": {"value": "Sundsvalls stadshus"},
+                            "location": {"value": "Point(17.306618 62.390405)"},
+                        }
+                    ]
+                }
+            }
+
+            client = DancedbClient()
+            result = client.find_venues_by_coordinates(62.390405, 17.306618, threshold_km=0.1)
+
+            assert len(result) == 1
+            assert result[0]["qid"] == "Q568"
+            assert result[0]["label"] == "Sundsvalls stadshus"
+            mock_sparql.assert_called_once()
+
+    @patch("src.models.dancedb.client.Login")
+    def test_find_venues_by_coordinates_outside_threshold(self, mock_login):
+        mock_login.return_value = MagicMock()
+
+        with patch("src.models.dancedb.client.execute_sparql_query") as mock_sparql:
+            mock_sparql.return_value = {"results": {"bindings": []}}
+
+            client = DancedbClient()
+            result = client.find_venues_by_coordinates(62.393405, 17.306618, threshold_km=0.1)
+
+            assert len(result) == 0
+            mock_sparql.assert_called_once()
+
+    @patch("src.models.dancedb.client.Login")
+    def test_find_venues_by_coordinates_parses_geo_correctly(self, mock_login):
+        mock_login.return_value = MagicMock()
+
+        with patch("src.models.dancedb.client.execute_sparql_query") as mock_sparql:
+            mock_sparql.return_value = {
+                "results": {
+                    "bindings": [
+                        {
+                            "item": {"value": "https://dance.wikibase.cloud/wiki/Q568"},
+                            "itemLabel": {"value": "Sundsvalls stadshus"},
+                            "location": {"value": "Point(17.306618 62.390405)"},
+                        }
+                    ]
+                }
+            }
+
+            client = DancedbClient()
+            result = client.find_venues_by_coordinates(62.390405, 17.306618, threshold_km=0.1)
+
+            assert result[0]["lat"] == 62.390405
+            assert result[0]["lng"] == 17.306618
+            assert 0 <= result[0]["distance_km"] <= 0.1
