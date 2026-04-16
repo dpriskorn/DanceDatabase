@@ -79,8 +79,8 @@ def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> fl
     return R * c
 
 
-def fuzzy_match(text: str, candidates: dict[str, str], remove_terms: list[str] | None = None) -> tuple[str, str, float, str, str] | None:
-    """Fuzzy match text against candidates. Returns (label, qid, score, cleaned_input, cleaned_label) or None."""
+def fuzzy_match(text: str, candidates: dict[str, str], remove_terms: list[str] | None = None) -> tuple[str, str, str, float, str, str] | None:
+    """Fuzzy match text against candidates. Returns (original_text, matched_label, qid, score, cleaned_input, cleaned_label) or None."""
     from rapidfuzz import fuzz
     from src.utils.fuzzy import normalize_for_fuzzy
 
@@ -96,7 +96,7 @@ def fuzzy_match(text: str, candidates: dict[str, str], remove_terms: list[str] |
             best_score = score
             best = (label, qid, normalized_label, normalized_input)
     if best_score >= threshold:
-        return (best[0], best[1], best_score, best[2], best[3])
+        return (text, best[0], best[1], best_score, best[3], best[2])
     return None
 
 
@@ -216,8 +216,8 @@ def match_venues(venues: list[FolketshusVenue]) -> tuple[list[dict], list[Folket
             else:
                 fuzzy = fuzzy_match(venue.name, db_labels, remove_terms=config.FUZZY_REMOVE_TERMS_FOLKETSHUS)
                 if fuzzy:
-                    matched_qid = fuzzy[1]
-                    print(f"[{i}/{total}] Fuzzy match: {venue.name} -> {matched_qid} (input='{fuzzy[3]}', match='{fuzzy[4]}', {fuzzy[2]:.1f}%)")
+                    matched_qid = fuzzy[2]
+                    print(f"[{i}/{total}] Fuzzy match: {fuzzy[0]} -> {matched_qid} ('{fuzzy[1]}', input='{fuzzy[4]}', match='{fuzzy[5]}', {fuzzy[3]:.1f}%)")
                     choice = questionary.select(
                         f"Accept fuzzy match ({fuzzy[2]:.1f}%?)?",
                         choices=["Yes (Recommended)", "Skip", "Abort"],
