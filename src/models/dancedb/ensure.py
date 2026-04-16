@@ -258,6 +258,7 @@ def ensure_venues(date_str: str | None = None) -> None:
 
     new_venues = []
     matched = 0
+    matched_auto = 0
     for idx, venue_name in enumerate(venues_list):
         remaining = total_venues - idx
         print(f"=== [{idx + 1}/{total_venues}] Remaining: {remaining} ===")
@@ -270,22 +271,14 @@ def ensure_venues(date_str: str | None = None) -> None:
                     venue_lower = key
                     break
         if existing:
+            matched += 1
+            matched_auto += 1
+            venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+            venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
             gmaps = GoogleMaps(lat=existing.get("lat"), lng=existing.get("lng"))
-            confirm = questionary.select(
-                f"Match '{venue_name}' to DanceDB '{venue_lower}'?\n→ {gmaps.url}",
-                choices=["Yes (Recommended)", "No", "Abort"],
-            ).ask()
-            if confirm == "No":
-                pass
-            elif confirm == "Abort":
-                print("Aborting...")
-                sys.exit(0)
-            else:
-                matched += 1
-                venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
-                venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
-                with open(venue_mapping_file, "a") as f:
-                    f.write(json.dumps({"venue_name": venue_name, "qid": existing["qid"], "lat": existing.get("lat"), "lng": existing.get("lng"), "gmaps_url": gmaps.url, "created_at": date_str}) + "\n")
+            with open(venue_mapping_file, "a") as f:
+                f.write(json.dumps({"venue_name": venue_name, "qid": existing["qid"], "lat": existing.get("lat"), "lng": existing.get("lng"), "gmaps_url": gmaps.url, "created_at": date_str}) + "\n")
+            print(f"Auto-matched: '{venue_name}' → {venue_lower}")
             continue
 
         if not step1_done:
@@ -438,7 +431,8 @@ def ensure_venues(date_str: str | None = None) -> None:
             if not matched_addr and not matched_city:
                 new_venues.append(venue_name)
 
-    print(f"Matched: {matched}")
+    print(f"Auto-matched (exact): {matched_auto}")
+    print(f"Matched (with prompt): {matched}")
     print(f"Need to create: {len(new_venues)}")
 
     if not new_venues:
