@@ -1,7 +1,6 @@
 """Ensure venues exist in DanceDB."""
 import json
 import logging
-import math
 import sys
 import urllib.parse
 from datetime import date
@@ -12,22 +11,12 @@ from wikibaseintegrator.wbi_config import config as wbi_config
 
 import config
 from src.models.dancedb.client import DancedbClient
+from src.utils.distance import haversine_distance
 from src.utils.fuzzy import normalize_for_fuzzy
 from src.utils.google_maps import GoogleMaps
 from src.utils.qid import Qid
 
 logger = logging.getLogger(__name__)
-
-
-def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
-    """Calculate distance between two points in km."""
-    R = 6371
-    phi1, phi2 = math.radians(lat1), math.radians(lat2)
-    dphi = math.radians(lat2 - lat1)
-    dlambda = math.radians(lng2 - lng1)
-    a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    return R * c
 
 
 def find_dancedb_venues_by_coords(lat: float, lng: float, threshold_km: float = 0.1) -> list[dict]:
@@ -490,8 +479,8 @@ def ensure_venues(date_str: str | None = None) -> None:
                         print(f"Matched by coordinates: {fh_name} ({dist:.3f}km, external_id: {fh_venue['external_id']}, qid: {fh_venue.get('qid', 'N/A')})")
                         break
 
-        if coords and not folketshus_match:
-            dancedb_matches = find_dancedb_venues_by_coords(
+        if coords and not folketshus_match and db_client:
+            dancedb_matches = db_client.find_venues_by_coordinates(
                 coords["lat"], coords["lng"], threshold_km=config.COORD_MATCH_THRESHOLD_KM
             )
             if dancedb_matches:
