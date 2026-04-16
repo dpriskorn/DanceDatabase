@@ -277,12 +277,12 @@ def create_venue_with_p44(venue: FolketshusVenue) -> str | None:
     new_item.labels.set("sv", label)
     new_item.descriptions.set("sv", "dansställe")
 
-    new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q20"))
+    new_item.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value="Q20"))
     new_item.claims.add(
-        datatypes.GlobeCoordinate(prop_nr="P4", latitude=venue.lat, longitude=venue.lng, precision=0.0001, globe="http://www.wikidata.org/entity/Q2")
+        datatypes.GlobeCoordinate(prop_nr=config.DANCE_PROP_COORDINATES, latitude=venue.lat, longitude=venue.lng, precision=0.0001, globe="http://www.wikidata.org/entity/Q2")
     )
     if external_id:
-        new_item.claims.add(datatypes.ExternalID(prop_nr="P44", value=external_id))
+        new_item.claims.add(datatypes.ExternalID(prop_nr=config.DANCE_PROP_FOLKETSHUS_ID, value=external_id))
 
     try:
         new_item.write()

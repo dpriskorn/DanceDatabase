@@ -27,7 +27,7 @@ def add_danslogen_subparsers(sub) -> dict:
     handlers["ensure-event-venues"] = _ensure_event_venues
     
     p = sub.add_parser("upload-danslogen-events", help="Upload danslogen events to DanceDB")
-    p.add_argument("-i", "--input-file", default="data/danslogen/april.json", help="Input JSON file")
+    p.add_argument("-i", "--input-file", default=None, help="Input JSON file (default: data/danslogen/events/{date}-{month}.json)")
     p.add_argument("-d", "--date", default=None, help="Date for venue data (YYYY-MM-DD, default: today)")
     p.add_argument("-m", "--month", default="april", help="Month name (default: april)")
     p.add_argument("-l", "--limit", type=int, default=None, help="Limit number of rows to process")

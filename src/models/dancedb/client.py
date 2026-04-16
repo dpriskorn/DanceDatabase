@@ -67,9 +67,9 @@ class DancedbClient:
             new_item.labels.set("sv", band_name)
             new_item.labels.set("en", band_name)
             new_item.descriptions.set("sv", "artist")
-            new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q225"))
+            new_item.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value="Q225"))
             if spelplan_id:
-                new_item.claims.add(datatypes.String(prop_nr="P46", value=spelplan_id))
+                new_item.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_SPELPLAN_ID, value=spelplan_id))
                 logger.info(f"Band '{band_name}' P46: %s", spelplan_id)
             else:
                 logger.warning(f"Band '{band_name}' created WITHOUT spelplan_id (P46)")
@@ -273,10 +273,10 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             new_item.labels.set("sv", venue_name)
             new_item.labels.set("en", venue_name)
             new_item.descriptions.set("sv", "dansställe")
-            new_item.claims.add(datatypes.Item(prop_nr="P1", value="Q20"))
+            new_item.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value="Q20"))
             if latitude and longitude:
                 new_item.claims.add(
-                    datatypes.GlobeCoordinate(prop_nr="P4", latitude=latitude, longitude=longitude, precision=0.0001, globe="http://www.wikidata.org/entity/Q2")
+                    datatypes.GlobeCoordinate(prop_nr=config.DANCE_PROP_COORDINATES, latitude=latitude, longitude=longitude, precision=0.0001, globe="http://www.wikidata.org/entity/Q2")
                 )
             if external_ids:
                 for prop, value in external_ids.items():
@@ -314,7 +314,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         """Set P46 (spelplan ID) on existing artist item. Returns True on success."""
         try:
             item = self.wbi.item.get(qid)
-            item.claims.add(datatypes.String(prop_nr="P46", value=spelplan_id))
+            item.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_SPELPLAN_ID, value=spelplan_id))
             item.write(login=self.wbi.login)
             logger.info(f"Added P46 to artist {qid}: {spelplan_id}")
             return True
@@ -338,11 +338,11 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             event = self.wbi.item.new()
             event.labels.set("sv", f"Event {start.isoformat()}")
             event.labels.set("en", f"Event {start.isoformat()}")
-            event.claims.add(datatypes.Item(prop_nr="P1", value="Q2"))
-            event.claims.add(datatypes.Item(prop_nr="P7", value=venue_qid))
-            event.claims.add(datatypes.Time(prop_nr="P5", time=start.strftime("+%Y-%m-%dT%H:%M:%S00"), precision=11))
-            event.claims.add(datatypes.Time(prop_nr="P6", time=end.strftime("+%Y-%m-%dT%H:%M:%S00"), precision=11))
-            event.claims.add(datatypes.Item(prop_nr="P43", value=status_qid))
+            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value="Q2"))
+            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_VENUE, value=venue_qid))
+            event.claims.add(datatypes.Time(prop_nr=config.DANCE_PROP_START, time=start.strftime("+%Y-%m-%dT00:00:00Z"), precision=8))
+            event.claims.add(datatypes.Time(prop_nr=config.DANCE_PROP_END, time=end.strftime("+%Y-%m-%dT00:00:00Z"), precision=8))
+            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_STATUS, value=status_qid))
             item_qid = event.write(login=self.wbi.login)
             logger.info(f"Created event {item_qid} for band {band_qid} at venue {venue_qid}")
             return True
@@ -350,7 +350,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             logger.error(f"Error creating event: {e}")
             return False
 
-    def create_event(self, label_sv: str, venue_qid: str, start_timestamp: str, end_timestamp: str | None = None, status_qid: str = "Q566", instance_of: str = "Q2", artist_qid: str | None = None) -> str | None:
+    def create_event(self, label_sv: str, venue_qid: str, start_timestamp: str, end_timestamp: str | None = None, status_qid: str = "Q566", instance_of: str = "Q2", artist_qid: str | None = None, dance_styles: list[str] | None = None) -> str | None:
         """Create a new event on DanceDB.
 
         Args:
@@ -361,6 +361,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             status_qid: Q566 (planned), Q567 (cancelled), etc.
             instance_of: Q2 (event)
             artist_qid: Artist QID (optional)
+            dance_styles: List of dance style QIDs (e.g., Q4 for bugg och fox)
 
         Returns the created event QID or None on failure.
         """
@@ -377,21 +378,23 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             event = self.wbi.item.new()
             event.labels.set("sv", label_sv)
             event.labels.set("en", label_sv)
-            event.claims.add(datatypes.Item(prop_nr="P1", value=instance_of))
-            event.claims.add(datatypes.Item(prop_nr="P7", value=venue_qid))
-            
-            # Format timestamps for Wikibase: +YYYY-MM-DDTHH:MM:00Z
+            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value=instance_of))
+            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_VENUE, value=venue_qid))
+
             from datetime import datetime
             start_dt = datetime.fromisoformat(start_timestamp.replace("+01:00", "").replace("+02:00", ""))
             start_clean = f"+{start_dt.strftime('%Y-%m-%dT00:00:00Z')}"
-            event.claims.add(datatypes.Time(prop_nr="P5", time=start_clean, precision="day"))
+            event.claims.add(datatypes.Time(prop_nr=config.DANCE_PROP_START, time=start_clean, precision=8))
             if end_timestamp:
                 end_dt = datetime.fromisoformat(end_timestamp.replace("+01:00", "").replace("+02:00", ""))
                 end_clean = f"+{end_dt.strftime('%Y-%m-%dT00:00:00Z')}"
-                event.claims.add(datatypes.Time(prop_nr="P6", time=end_clean, precision="day"))
-            event.claims.add(datatypes.Item(prop_nr="P43", value=status_qid))
+                event.claims.add(datatypes.Time(prop_nr=config.DANCE_PROP_END, time=end_clean, precision=8))
+            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_STATUS, value=status_qid))
             if artist_qid:
-                event.claims.add(datatypes.Item(prop_nr="P56", value=artist_qid))
+                event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_ARTIST, value=artist_qid))
+            if dance_styles:
+                for ds in dance_styles:
+                    event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_DANCE_STYLE, value=ds))
             item_qid = event.write(login=self.wbi.login)
             url = f"{self.base_url}/wiki/Item:{item_qid}"
             logger.info(f"Created event '{label_sv}' on DanceDB: {url}")

@@ -143,4 +143,8 @@ class RowParser:
                 dance_styles.append("Q677")
             instance_of = "Q677"  # länsdans takes precedence
 
+        # Default to bugg och fox (Q4) for regular danslogen events
+        if not dance_styles:
+            dance_styles = ["Q4"]
+
         return dance_styles, instance_of

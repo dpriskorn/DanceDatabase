@@ -179,15 +179,28 @@ def upload_events(
                 event.identifiers.dancedatabase.venue = venue_qid
 
         if not venue_qid:
-            logger.warning("Skipping event %d - no venue QID", i)
-            skip_count += 1
-            continue
+            raise ValueError(
+                f"Event {i} has no venue QID: {label} (location: {location}). "
+                "Ensure venue is mapped in DanceDB first."
+            )
+
+        # Auto-skip events that already started
+        from datetime import datetime
+        from config import CET
+
+        start_ts_is_dt = hasattr(start_ts, "year")
+        if start_ts_is_dt:
+            now = datetime.now(tz=CET)
+            start_dt = start_ts if start_ts.tzinfo else start_ts.replace(tzinfo=CET)
+            if start_dt < now:
+                print(f"\n[{i}/{len(events_data)}] {label}")
+                print(f"  SKIP (already started: {start_dt})")
+                skip_count += 1
+                continue
+            start_ts = start_ts.strftime("%Y-%m-%dT%H:%M:%S")
 
         # Check for duplicate in existing events
         if existing_lookup and start_ts:
-            # Convert datetime to string if needed
-            if hasattr(start_ts, "strftime"):
-                start_ts = start_ts.strftime("%Y-%m-%dT%H:%M:%S")
             date_key = f"{venue_qid}|{start_ts[:10]}"
             existing = existing_lookup.get(date_key)
             if existing:
@@ -246,6 +259,7 @@ def upload_events(
             status_qid, _ = detect_event_status(search_text)
             instance_of = event.instance_of if hasattr(event, "instance_of") else "Q2"
             artist_qid = event.identifiers.dancedatabase.artist if event.identifiers else None
+            dance_styles = event.identifiers.dancedatabase.dance_styles if event.identifiers else []
 
             qid = client.create_event(
                 label_sv=label,
@@ -255,6 +269,7 @@ def upload_events(
                 status_qid=status_qid,
                 instance_of=instance_of,
                 artist_qid=artist_qid,
+                dance_styles=dance_styles,
             )
             if qid:
                 print(f"  Uploaded: https://dance.wikibase.cloud/wiki/Item:{qid}")
