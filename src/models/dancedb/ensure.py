@@ -251,12 +251,16 @@ def ensure_venues(date_str: str | None = None) -> None:
     venues_needed = set(e.get("location") for e in events if e.get("location"))
     print(f"Need venues for {len(venues_needed)} unique locations")
 
+    venues_list = list(venues_needed)
+    total_venues = len(venues_list)
     step1_done = False
     step2_done = False
 
     new_venues = []
     matched = 0
-    for venue_name in venues_needed:
+    for idx, venue_name in enumerate(venues_list):
+        remaining = total_venues - idx
+        print(f"=== [{idx + 1}/{total_venues}] Remaining: {remaining} ===")
         venue_lower = venue_name.lower()
         existing = existing_venues.get(venue_lower)
         if not existing:
@@ -316,6 +320,41 @@ def ensure_venues(date_str: str | None = None) -> None:
                 with open(venue_mapping_file, "a") as f:
                     f.write(json.dumps({"venue_name": venue_name, "qid": byg_match.get("qid", ""), "lat": byg_match.get("lat"), "lng": byg_match.get("lng"), "gmaps_url": byg_match.get("gmaps_url", ""), "created_at": date_str}) + "\n")
                 continue
+
+        folkets_match = False
+        if folketshus_names:
+            folketshus_normalized = {normalize_for_fuzzy(n, config.FUZZY_REMOVE_TERMS_FOLKETSHUS): n for n in folketshus_names}
+            fuzzy_folkets = fuzz_process.extractOne(
+                normalize_for_fuzzy(venue_lower, config.FUZZY_REMOVE_TERMS_FOLKETSHUS),
+                folketshus_normalized.keys(),
+                score_cutoff=95
+            )
+            if fuzzy_folkets:
+                folkets_original = folketshus_normalized[fuzzy_folkets[0]]
+                folkets_match = folketshus_venues[folkets_original]
+                existing_venues[venue_lower] = {
+                    "qid": folkets_match.get("qid", ""),
+                    "lat": folkets_match.get("lat"),
+                    "lng": folkets_match.get("lng"),
+                    "aliases": [],
+                }
+                gmaps_url = folkets_match.get("gmaps_url", "")
+                confirm = questionary.select(
+                    f"Match '{venue_name}' to folketshus '{folkets_original}' ({fuzzy_folkets[1]:.1f}%)?\n→ {gmaps_url}",
+                    choices=["Yes (Recommended)", "No", "Abort"],
+                ).ask()
+                if confirm == "No":
+                    pass
+                elif confirm == "Abort":
+                    print("Aborting...")
+                    sys.exit(0)
+                else:
+                    matched += 1
+                    venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+                    venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+                    with open(venue_mapping_file, "a") as f:
+                        f.write(json.dumps({"venue_name": venue_name, "qid": folkets_match.get("qid", ""), "lat": folkets_match.get("lat"), "lng": folkets_match.get("lng"), "gmaps_url": gmaps_url, "created_at": date_str}) + "\n")
+                    continue
 
         matched_addr = False
         if bygdegardarna_addresses and len(venue_lower) >= 5:
