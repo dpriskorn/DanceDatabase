@@ -308,9 +308,14 @@ def _merge_duplicate_venues(args) -> None:
         print(f"   {url1}")
         print(f"   {url2}")
 
+        qid1_num = int(v1["qid"].replace("Q", ""))
+        qid2_num = int(v2["qid"].replace("Q", ""))
+        from_qid = f"Q{max(qid1_num, qid2_num)}"
+        to_qid = f"Q{min(qid1_num, qid2_num)}"
+
         choice = questionary.select(
-            f"Merge '{v1['qid']}' into '{v2['qid']}'?",
-            choices=[f"Merge {v1['qid']} -> {v2['qid']} (Recommended)", "Skip", "Skip all", "Abort"]
+            f"Merge '{from_qid}' into '{to_qid}'?",
+            choices=[f"Merge {from_qid} -> {to_qid} (Recommended)", "Skip", "Skip all", "Abort"]
         ).ask()
 
         if choice == "Abort":
@@ -324,8 +329,8 @@ def _merge_duplicate_venues(args) -> None:
         elif "Merge" in choice:
             try:
                 from wikibaseintegrator.wbi_helpers import merge_items
-                merge_items(from_id=v1["qid"], to_id=v2["qid"], login=client.login, is_bot=True, ignore_conflicts=["description"])
-                print(f"  SUCCESS: Merged {v1['qid']} into {v2['qid']}")
+                merge_items(from_id=from_qid, to_id=to_qid, login=client.login, is_bot=True, ignore_conflicts=["description"])
+                print(f"  SUCCESS: Merged {from_qid} into {to_qid}")
             except Exception as e:
                 print(f"  ERROR: {e}")
         print()
