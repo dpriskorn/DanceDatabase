@@ -180,7 +180,10 @@ def _find_duplicate_venues(args) -> None:
     venues = client.fetch_venues_from_dancedb()
 
     venues_with_coords = []
+    seen_qids = set()
     for v in venues:
+        if v["qid"] in seen_qids:
+            continue
         p4 = v.get("p4", "")
         if p4:
             try:
@@ -192,10 +195,11 @@ def _find_duplicate_venues(args) -> None:
                     "lat": lat,
                     "lng": lng,
                 })
+                seen_qids.add(v["qid"])
             except Exception:
                 continue
 
-    print(f"Found {len(venues_with_coords)} venues with coordinates")
+    print(f"Found {len(venues_with_coords)} venues with unique coordinates")
 
     duplicates = []
     for i, v1 in enumerate(venues_with_coords):
