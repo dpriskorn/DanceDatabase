@@ -45,7 +45,7 @@ class TestDanslogenMapBandQid:
     @patch("src.models.danslogen.band_mapper.fuzzy_match_qid")
     def test_map_band_qid_fuzzy_match(self, mock_fuzzy, mock_load_band_map):
         mock_load_band_map.return_value = {"lasse stefanz": "Q270"}
-        mock_fuzzy.return_value = ("Lasse Stefanz", "Q270", 90)
+        mock_fuzzy.return_value = ("Lasse Stefanz", "Q270", 90, "lasse stefanz orkester")
         scraper = Danslogen(interactive=False)
         result = scraper.map_band_qid("Lasse Stefanz orkester")
         assert result == "Q270"

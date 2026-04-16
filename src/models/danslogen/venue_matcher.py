@@ -4,6 +4,7 @@ from typing import Optional
 
 import questionary
 
+import config
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.fuzzy import fuzzy_match_qid
 from src.models.danslogen.venue_mapper import VenueMapper
@@ -73,10 +74,10 @@ class VenueMatcher:
             return exact
 
         venues_with_qid = {v.get("title", ""): v.get("qid", "") for v in self.byg_venues.values() if v.get("qid")}
-        fuzzy = fuzzy_match_qid(venue_name, venues_with_qid)
+        fuzzy = fuzzy_match_qid(venue_name, venues_with_qid, remove_terms=config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA)
         if fuzzy:
-            matched_key, qid, score = fuzzy
-            logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (score=%d)", venue_name, matched_key, score)
+            matched_key, qid, score, cleaned = fuzzy
+            logger.info("Fuzzy matched venue '%s' to bygdegardarna '%s' (cleaned='%s', score=%d)", venue_name, matched_key, cleaned, score)
             return qid
 
         return None

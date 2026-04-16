@@ -24,7 +24,7 @@ class TestBandMapperResolve:
     @patch("src.models.danslogen.band_mapper.fuzzy_match_qid")
     def test_falls_back_to_fuzzy(self, mock_fuzzy, mock_load):
         mock_load.return_value = {"test band": "Q200"}
-        mock_fuzzy.return_value = ("Test Band", "Q200", 90)
+        mock_fuzzy.return_value = ("Test Band", "Q200", 90, "testbnad")
         mapper = BandMapper()
         result = mapper.resolve("Testbnad")
 

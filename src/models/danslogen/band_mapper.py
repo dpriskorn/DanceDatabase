@@ -45,9 +45,9 @@ class BandMapper:
         if exact:
             return exact
 
-        fuzzy = fuzzy_match_qid(band_name, band_map, threshold=config.FUZZY_THRESHOLD_ARTIST_DANSLOGEN)
+        fuzzy = fuzzy_match_qid(band_name, band_map, threshold=config.FUZZY_THRESHOLD_ARTIST_DANSLOGEN, remove_terms=config.FUZZY_REMOVE_TERMS_ARTIST_DANSLOGEN)
         if fuzzy:
-            matched_key, qid, score = fuzzy
+            matched_key, qid, score, cleaned = fuzzy
             self._band_map[matched_key.lower()] = qid
             return qid
 

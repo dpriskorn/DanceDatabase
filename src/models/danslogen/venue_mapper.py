@@ -1,6 +1,7 @@
 import logging
 from typing import Optional
 
+import config
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.data import load_venue_map
 from src.models.danslogen.fuzzy import fuzzy_match_qid
@@ -44,10 +45,10 @@ class VenueMapper:
             return exact
 
         logger.debug("Venue no exact match, trying fuzzy: '%s'", venue_name)
-        fuzzy = fuzzy_match_qid(venue_name, venue_map)
+        fuzzy = fuzzy_match_qid(venue_name, venue_map, remove_terms=config.FUZZY_REMOVE_TERMS_DANSLOGEN)
         if fuzzy:
-            matched_key, qid, score = fuzzy
-            logger.debug("Venue fuzzy match: '%s' -> '%s' (%s%%)", venue_name, matched_key, score)
+            matched_key, qid, score, cleaned = fuzzy
+            logger.debug("Venue fuzzy match: '%s' (cleaned='%s') -> '%s' (%s%%)", venue_name, cleaned, matched_key, score)
             self._venue_map[matched_key.lower()] = qid
             return qid
 

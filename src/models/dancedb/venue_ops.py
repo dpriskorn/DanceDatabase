@@ -13,6 +13,7 @@ from src.models.bygdegardarna.scrape import scrape
 from src.models.dancedb.client import DancedbClient
 from src.models.danslogen.fuzzy import fuzzy_match_qid
 from src.utils.coords import parse_coords
+from src.utils.fuzzy import normalize_for_fuzzy
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +139,7 @@ def match_venues(date_str: str | None = None, skip_prompts: bool = False) -> Non
             enriched.append(venue)
             matched_count += 1
         else:
-            fuzzy = fuzzy_match_qid(title, db_labels)
+            fuzzy = fuzzy_match_qid(title, db_labels, remove_terms=config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA)
             if fuzzy and fuzzy[2] >= config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA:
                 venue["qid"] = fuzzy[1]
                 enriched.append(venue)
@@ -320,16 +321,23 @@ def ensure_venues(date_str: str | None = None) -> None:
             if not step2_done:
                 logger.info(f"Step 2: Fuzzy matching against {len(folketshus_names)} folketshus venues (threshold {config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS}%)...")
                 step2_done = True
-            fuzzy_folkets = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS)
+            
+            folketshus_normalized = {normalize_for_fuzzy(n, config.FUZZY_REMOVE_TERMS_FOLKETSHUS): n for n in folketshus_names}
+            fuzzy_folkets = fuzz_process.extractOne(
+                normalize_for_fuzzy(venue_lower, config.FUZZY_REMOVE_TERMS_FOLKETSHUS),
+                folketshus_normalized.keys(),
+                score_cutoff=config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS
+            )
             if fuzzy_folkets:
-                folkets_match = folketshus_venues[fuzzy_folkets[0]]
+                folkets_original = folketshus_normalized[fuzzy_folkets[0]]
+                folkets_match = folketshus_venues[folkets_original]
                 existing_venues[venue_lower] = {
                     "qid": folkets_match.get("qid", ""),
                     "lat": folkets_match.get("lat"),
                     "lng": folkets_match.get("lng"),
                     "aliases": [],
                 }
-                logger.info(f"Matched '{venue_name}' to folketshus '{fuzzy_folkets[0]}' ({fuzzy_folkets[1]}%)")
+                logger.info(f"Matched '{venue_name}' to folketshus '{folkets_original}' ({fuzzy_folkets[1]}%)")
                 matched += 1
                 
                 venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
@@ -342,16 +350,23 @@ def ensure_venues(date_str: str | None = None) -> None:
             if not step2_done:
                 logger.info(f"Step 3: Fuzzy matching against {len(bygdegardarna_names)} bygdegardarna venues (threshold {config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA}%)...")
                 step2_done = True
-            fuzzy_byg = fuzz_process.extractOne(venue_lower, bygdegardarna_names, score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA)
+            
+            bygdegardarna_normalized = {normalize_for_fuzzy(n, config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA): n for n in bygdegardarna_names}
+            fuzzy_byg = fuzz_process.extractOne(
+                normalize_for_fuzzy(venue_lower, config.FUZZY_REMOVE_TERMS_BYGDEGARDARNA),
+                bygdegardarna_normalized.keys(),
+                score_cutoff=config.FUZZY_THRESHOLD_VENUE_BYGDEGARDARNA
+            )
             if fuzzy_byg:
-                byg_match = bygdegardarna_venues[fuzzy_byg[0]]
+                byg_original = bygdegardarna_normalized[fuzzy_byg[0]]
+                byg_match = bygdegardarna_venues[byg_original]
                 existing_venues[venue_lower] = {
                     "qid": byg_match["qid"],
                     "lat": byg_match.get("lat"),
                     "lng": byg_match.get("lng"),
                     "aliases": [],
                 }
-                logger.info(f"Matched '{venue_name}' to bygdegardarna '{fuzzy_byg[0]}' ({fuzzy_byg[1]}%)")
+                logger.info(f"Matched '{venue_name}' to bygdegardarna '{byg_original}' ({fuzzy_byg[1]}%)")
                 matched += 1
                 
                 venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
@@ -430,8 +445,15 @@ def ensure_venues(date_str: str | None = None) -> None:
         folketshus_match = None
         venue_lower = venue_name.lower()
         if folketshus_names:
-            fuzzy = fuzz_process.extractOne(venue_lower, folketshus_names, score_cutoff=90)
+            folketshus_normalized = {normalize_for_fuzzy(n, config.FUZZY_REMOVE_TERMS_FOLKETSHUS): n for n in folketshus_names}
+            fuzzy = fuzz_process.extractOne(
+                normalize_for_fuzzy(venue_lower, config.FUZZY_REMOVE_TERMS_FOLKETSHUS),
+                folketshus_normalized.keys(),
+                score_cutoff=config.FUZZY_THRESHOLD_VENUE_FOLKETSHUS
+            )
             if fuzzy:
+                folkets_original = folketshus_normalized[fuzzy[0]]
+                folketshus_match = folketshus_venues[folkets_original]
                 folketshus_match = folketshus_venues[fuzzy[0]]
                 print(f"Found in folketshus: {fuzzy[0]} ({fuzzy[1]}, external_id: {folketshus_match['external_id']})")
 
