@@ -1,6 +1,7 @@
 """Ensure venues exist in DanceDB."""
 import json
 import logging
+import math
 import sys
 import urllib.parse
 from datetime import date
