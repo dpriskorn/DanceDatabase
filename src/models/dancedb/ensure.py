@@ -167,20 +167,24 @@ def ensure_venues(date_str: str | None = None) -> None:
     PREFIX dd: <https://dance.wikibase.cloud/entity/>
     PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-    SELECT ?item ?itemLabel ?alias ?geo WHERE {
+    SELECT ?item ?itemLabel (GROUP_CONCAT(?svAlias; SEPARATOR = "|") AS ?aliasStr) ?geo WHERE {
       ?item ddt:P1 dd:Q20 .
       OPTIONAL { ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel) = "sv") }
-      OPTIONAL { ?item rdfs:alias ?alias FILTER(LANG(?alias) = "sv") }
+      OPTIONAL { ?item skos:altLabel ?svAlias FILTER(LANG(?svAlias) = "sv") }
       OPTIONAL { ?item ddt:P4 ?geo }
     }
+    GROUP BY ?item ?itemLabel ?geo
+    ORDER BY ?itemLabel
     """
     results = execute_sparql_query(query=sparql)
     existing_venues = {}
     for binding in results["results"]["bindings"]:
         qid = binding["item"]["value"].rsplit("/", 1)[-1]
         label = binding.get("itemLabel", {}).get("value", "")
-        alias = binding.get("alias", {}).get("value", "")
+        alias_str = binding.get("aliasStr", {}).get("value", "")
+        aliases = [a.lower() for a in alias_str.split("|") if a] if alias_str else []
         geo = binding.get("geo", {}).get("value", "")
         lat, lng = None, None
         if geo:
@@ -188,9 +192,9 @@ def ensure_venues(date_str: str | None = None) -> None:
             lng, lat = float(coords[0]), float(coords[1])
         label_lower = label.lower()
         if label_lower not in existing_venues:
-            existing_venues[label_lower] = {"qid": qid, "lat": lat, "lng": lng, "aliases": []}
-        if alias:
-            existing_venues[label_lower].setdefault("aliases", []).append(alias.lower())
+            existing_venues[label_lower] = {"qid": qid, "lat": lat, "lng": lng, "aliases": aliases}
+        elif aliases:
+            existing_venues[label_lower].setdefault("aliases", []).extend(aliases)
 
     print(f"Found {len(existing_venues)} existing venues in DanceDB")
 
@@ -506,9 +510,10 @@ def ensure_venues(date_str: str | None = None) -> None:
                     for m in dancedb_matches:
                         if selected.startswith(m["label"]):
                             existing_qid = m["qid"]
+                            matched_aliases = m.get("aliases", [])
                             logger.info(f"Matched '{venue_name}' to DanceDB venue {existing_qid} by coordinates")
                             print(f"Using existing DanceDB venue: {m['label']} ({m['qid']})")
-                            existing_venues[venue_name.lower()] = {"qid": existing_qid, "lat": coords["lat"], "lng": coords["lng"]}
+                            existing_venues[venue_name.lower()] = {"qid": existing_qid, "lat": coords["lat"], "lng": coords["lng"], "aliases": matched_aliases}
                             venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
                             venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
                             with open(venue_mapping_file, "a") as f:

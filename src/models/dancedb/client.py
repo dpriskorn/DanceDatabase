@@ -209,8 +209,9 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         PREFIX geo: <http://www.opengis.net/ont/geosparql#>
         PREFIX bd: <http://www.bigdata.com/rdf#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-        SELECT ?item ?itemLabel ?location WHERE {{
+        SELECT ?item ?itemLabel (GROUP_CONCAT(?svAlias; SEPARATOR = "|") AS ?aliasStr) ?location WHERE {{
           SERVICE wikibase:box {{
             ?item ddt:P4 ?location .
             bd:serviceParam wikibase:cornerWest "Point({lng_min} {lat_min})"^^geo:wktLiteral .
@@ -218,7 +219,9 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
           }}
           ?item ddt:P1 dd:Q20 .
           OPTIONAL {{ ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel) = "sv") }}
+          OPTIONAL {{ ?item skos:altLabel ?svAlias FILTER(LANG(?svAlias) = "sv") }}
         }}
+        GROUP BY ?item ?itemLabel ?location
         """
         try:
             results = execute_sparql_query(query=sparql)
@@ -230,6 +233,8 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
         for binding in results.get("results", {}).get("bindings", []):
             qid = binding.get("item", {}).get("value", "").rsplit("/", 1)[-1]
             label = binding.get("itemLabel", {}).get("value", "")
+            alias_str = binding.get("aliasStr", {}).get("value", "")
+            aliases = [a.lower() for a in alias_str.split("|") if a] if alias_str else []
             geo_str = binding.get("location", {}).get("value", "")
             if not qid or not geo_str:
                 continue
@@ -244,6 +249,7 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
                         "lat": venue_lat,
                         "lng": venue_lng,
                         "distance_km": dist,
+                        "aliases": aliases,
                     })
             except Exception as e:
                 logger.warning(f"Parse error for {geo_str}: {e}")

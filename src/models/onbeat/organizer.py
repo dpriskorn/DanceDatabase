@@ -6,7 +6,6 @@ from pydantic import BaseModel, Field
 
 from src.models.export.dance_event import DanceEvent
 
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

@@ -13,7 +13,6 @@ from src.models._utils.datetime_utils import parse_datetime_with_range, parse_is
 from src.models.export.dance_event import DanceDatabaseIdentifiers, DanceEvent, EventLinks, Identifiers, Organizer, Registration
 from src.models.onbeat.venue_resolver import VenueResolver
 
-logging.basicConfig(level=config.loglevel)
 logger = logging.getLogger(__name__)
 
 

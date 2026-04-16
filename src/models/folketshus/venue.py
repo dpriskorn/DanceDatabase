@@ -26,7 +26,6 @@ def require_tty():
     return True
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=config.loglevel)
 
 API_URL = "https://www.folketshusochparker.se/wp-content/themes/fhp/inc/ajax.php"
 HEADERS = {
