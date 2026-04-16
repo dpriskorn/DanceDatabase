@@ -322,35 +322,6 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             logger.error(f"Error setting P46 on '{qid}': {e}")
             return False
 
-    def add_event(self, band_qid: str, venue_qid: str, start: datetime, end: datetime, status_qid: str = config.DANCE_STATUS_PLANNED) -> bool:
-        """Add/创建一个新的活动事件.
-
-        Args:
-            band_qid: Band QID
-            venue_qid: Venue QID
-            start: Start datetime
-            end: End datetime
-            status_qid: Q566 (planned), Q567 (cancelled), etc.
-
-        Returns True on success.
-        """
-        try:
-            event = self.wbi.item.new()
-            event.labels.set("sv", f"Event {start.isoformat()}")
-            event.labels.set("en", f"Event {start.isoformat()}")
-            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_INSTANCE_OF, value=config.DANCE_INSTANCE_EVENT))
-            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_VENUE, value=venue_qid))
-            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_START, value=start.strftime("+%Y-%m-%dT%H:%M:00Z")))
-            event.claims.add(datatypes.String(prop_nr=config.DANCE_PROP_END, value=end.strftime("+%Y-%m-%dT%H:%M:00Z")))
-            event.claims.add(datatypes.Item(prop_nr=config.DANCE_PROP_STATUS, value=status_qid))
-            event.write(login=self.wbi.login)
-            item_qid = event.id
-            logger.info(f"Created event {item_qid} for band {band_qid} at venue {venue_qid}")
-            return True
-        except Exception as e:
-            logger.error(f"Error creating event: {e}")
-            return False
-
     def create_event(
         self,
         label_sv: str,
