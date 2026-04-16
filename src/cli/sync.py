@@ -333,14 +333,11 @@ def _merge_duplicate_venues(args) -> None:
                 print(f"  Merged {from_qid} into {to_qid}")
 
                 edit_entity(
-                    entity_id=from_qid,
-                    data={
-                        "labels": {"remove": ""},
-                        "descriptions": {"remove": ""},
-                        "aliases": {"remove": ""},
-                    },
+                    id=from_qid,
+                    data={},
+                    clear=True,
                     login=client.login,
-                    bot=True,
+                    is_bot=True,
                 )
                 print(f"  Cleared {from_qid}")
 
