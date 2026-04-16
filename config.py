@@ -56,3 +56,10 @@ FUZZY_FALSE_FRIENDS = {
     "ramnäs": ["ramlösa"],
     "sala folkets park": ["sala folkets hus"],
 }
+
+SHIP_COORDINATES = {
+    "stena": {"lat": 59.31681013367709, "lng": 18.09538237657978},
+    "viking": {"lat": 59.31681013367709, "lng": 18.09538237657978},
+    "birka": {"lat": 59.31681013367709, "lng": 18.09538237657978},
+    "tallink": {"lat": 59.35260329949055, "lng": 18.117075933870833},
+}

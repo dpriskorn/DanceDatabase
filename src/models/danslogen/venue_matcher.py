@@ -155,6 +155,14 @@ class VenueMatcher:
                     raise KeyboardInterrupt()
 
         if lat is None or lng is None:
+            from src.utils.geodb import get_ship_coordinates
+            ship_coords = get_ship_coordinates(venue_name)
+            if ship_coords:
+                lat = ship_coords["lat"]
+                lng = ship_coords["lng"]
+                logger.info("Matched '%s' to ship pattern, using default coordinates", venue_name)
+
+        if lat is None or lng is None:
             return None
 
         if not self.interactive:

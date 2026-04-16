@@ -326,3 +326,12 @@ def rebuild():
     load_folketshus()
     load_dancedb()
     print(f"Geodb rebuilt. Stats: {get_stats()}")
+
+
+def get_ship_coordinates(venue_name: str) -> Optional[dict]:
+    """Check if venue name matches ship patterns and return default coordinates."""
+    name_lower = venue_name.lower()
+    for pattern, coords in config.SHIP_COORDINATES.items():
+        if pattern in name_lower:
+            return {"lat": coords["lat"], "lng": coords["lng"]}
+    return None

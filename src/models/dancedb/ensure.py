@@ -508,6 +508,14 @@ def ensure_venues(date_str: str | None = None) -> None:
                 if not coords:
                     print("Invalid format, skipping")
 
+        if not coords:
+            from src.utils.geodb import get_ship_coordinates
+            ship_coords = get_ship_coordinates(venue_name)
+            if ship_coords:
+                coords = ship_coords
+                logger.info(f"Matched '{venue_name}' to ship pattern, using default coordinates: {coords['lat']}, {coords['lng']}")
+                print(f"Using default ship coordinates: {coords['lat']}, {coords['lng']}")
+
         if coords:
             from src.utils import geodb
             logger.info(f"Searching local geodb for venues near ({coords['lat']}, {coords['lng']}) within {config.COORD_MATCH_THRESHOLD_KM}km...")
