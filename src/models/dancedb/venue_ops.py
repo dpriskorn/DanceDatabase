@@ -438,7 +438,7 @@ def ensure_venues(date_str: str | None = None) -> None:
         gmaps = f'https://www.google.com/maps/search/{urllib.parse.quote(venue_name, safe="")}'
         osm = f'https://www.openstreetmap.org/search?query={urllib.parse.quote(venue_name, safe="")}'
         print(f"Google: {gmaps}")
-        from utils.coords import parse_coords
+
         if folketshus_match:
             use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
             if use_coords:
