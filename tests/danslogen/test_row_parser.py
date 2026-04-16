@@ -274,7 +274,7 @@ class TestRowParserParseDatetime:
 
         dance_styles, instance_of = parser._detect_dance_styles_and_instance("pro")
 
-        assert dance_styles == []
+        assert dance_styles == ["Q4"]  # defaults to Q4 for unrecognized input
         assert instance_of == "Q2"
 
     def test_no_match_spf_mixed_case(self):
@@ -287,7 +287,7 @@ class TestRowParserParseDatetime:
 
         dance_styles, instance_of = parser._detect_dance_styles_and_instance("SpF")
 
-        assert dance_styles == []
+        assert dance_styles == ["Q4"]  # defaults to Q4 for unrecognized input
         assert instance_of == "Q2"
 
     def test_empty_ovrigt_default(self):
@@ -300,5 +300,5 @@ class TestRowParserParseDatetime:
 
         dance_styles, instance_of = parser._detect_dance_styles_and_instance("")
 
-        assert dance_styles == []
+        assert dance_styles == ["Q4"]  # defaults to Q4 for regular events
         assert instance_of == "Q2"
