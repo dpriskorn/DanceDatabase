@@ -328,19 +328,37 @@ def _merge_duplicate_venues(args) -> None:
             continue
         elif "Merge" in choice:
             try:
-                from wikibaseintegrator.wbi_helpers import merge_items, mediawiki_api_call
+                from wikibaseintegrator.wbi_helpers import merge_items, edit_entity
                 merge_items(from_id=from_qid, to_id=to_qid, login=client.login, is_bot=True, ignore_conflicts=["description"])
                 print(f"  Merged {from_qid} into {to_qid}")
-                mediawiki_api_call(
-                    method='POST',
-                    action='wbcreateredirect',
-                    fromid=from_qid,
-                    toid=to_qid,
-                    token=client.login.edit_token,
+
+                edit_entity(
+                    entity_id=from_qid,
+                    data={
+                        "labels": {"remove": ""},
+                        "descriptions": {"remove": ""},
+                        "aliases": {"remove": ""},
+                    },
+                    login=client.login,
                     bot=True,
-                    login=client.login
                 )
-                print(f"  Created redirect: {from_qid} -> {to_qid}")
+                print(f"  Cleared {from_qid}")
+
+                session = client.login.get_session()
+                api_url = client.login.mediawiki_api_url
+                data = {
+                    "action": "wbcreateredirect",
+                    "from": from_qid,
+                    "to": to_qid,
+                    "token": client.login.get_edit_token(),
+                    "bot": "1",
+                }
+                response = session.post(api_url, data=data)
+                result = response.json()
+                if "error" in result:
+                    print(f"  Redirect error: {result['error']['info']}")
+                else:
+                    print(f"  Created redirect: {from_qid} -> {to_qid}")
             except Exception as e:
                 print(f"  ERROR: {e}")
         print()
