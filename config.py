@@ -30,6 +30,8 @@ FUZZY_THRESHOLD_VENUE_ONBEAT = 90
 FUZZY_THRESHOLD_ARTIST_DANSLOGEN = 90
 FUZZY_THRESHOLD_ARTIST_ONBEAT = 90
 
+COORD_MATCH_THRESHOLD_KM = 0.1
+
 FUZZY_REMOVE_TERMS_BYGDEGARDARNA = ["folkets park", "folkets hus", "förening", "gård", "lösa", "arp", "hult"]
 FUZZY_REMOVE_TERMS_DANSLOGEN = ["folkets park", "folkets hus", "förening", "gård", "lösa", "arp", "hult"]
 FUZZY_REMOVE_TERMS_FOLKETSHUS = ["folkets park", "folkets hus", "förening", "gård", "lösa", "arp", "hult"]

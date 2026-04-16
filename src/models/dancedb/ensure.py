@@ -1,6 +1,7 @@
 """Ensure venues exist in DanceDB."""
 import json
 import logging
+import math
 import sys
 import urllib.parse
 from datetime import date
@@ -16,6 +17,17 @@ from src.utils.google_maps import GoogleMaps
 from src.utils.qid import Qid
 
 logger = logging.getLogger(__name__)
+
+
+def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """Calculate distance between two points in km."""
+    R = 6371
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lng2 - lng1)
+    a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c
 
 
 def require_tty():
@@ -396,8 +408,35 @@ def ensure_venues(date_str: str | None = None) -> None:
                 if not coords:
                     print("Invalid format, skipping")
 
+        if coords and not folketshus_match and folketshus_venues:
+            for fh_name, fh_venue in folketshus_venues.items():
+                fh_lat = fh_venue.get("lat")
+                fh_lng = fh_venue.get("lng")
+                if fh_lat and fh_lng:
+                    dist = haversine_distance(coords["lat"], coords["lng"], fh_lat, fh_lng)
+                    if dist <= config.COORD_MATCH_THRESHOLD_KM:
+                        folketshus_match = fh_venue
+                        logger.info(f"Coord match: '{venue_name}' matches folketshus '{fh_name}' at {dist:.3f}km")
+                        print(f"Matched by coordinates: {fh_name} ({dist:.3f}km, external_id: {fh_venue['external_id']}, qid: {fh_venue.get('qid', 'N/A')})")
+                        break
+
         if not coords:
             print("Skipping venue creation (no coordinates)")
+            continue
+
+        if folketshus_match and folketshus_match.get("qid"):
+            existing_qid = folketshus_match["qid"]
+            logger.info(f"Skipping creation: using existing folketshus venue Q{existing_qid}")
+            print(f"Using existing venue: Q{existing_qid}")
+            existing_venues[venue_name.lower()] = {"qid": existing_qid, "lat": coords["lat"], "lng": coords["lng"]}
+            venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
+            venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(venue_mapping_file, "a") as f:
+                f.write(json.dumps({
+                    "venue_name": venue_name, "qid": existing_qid, "lat": coords["lat"], "lng": coords["lng"],
+                    "source": "folketshus", "external_id": folketshus_match.get("external_id"), "created_at": date_str
+                }) + "\n")
+            print(f"  -> Saved mapping to {venue_mapping_file.name}")
             continue
 
         external_ids = None
