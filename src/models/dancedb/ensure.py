@@ -480,9 +480,19 @@ def ensure_venues(date_str: str | None = None) -> None:
                         break
 
         if coords and not folketshus_match and db_client:
+            lat, lng = coords["lat"], coords["lng"]
+            threshold = config.COORD_MATCH_THRESHOLD_KM
+            lat_delta = threshold / 111
+            lng_delta = threshold / (111 * math.cos(math.radians(lat)))
+            lng_min, lng_max = lng - lng_delta, lng + lng_delta
+            lat_min, lat_max = lat - lat_delta, lat + lat_delta
+            debug_url = f"https://dance.wikibase.cloud/query/sparql?query=PREFIX+dd:+%3Chttps://dance.wikibase.cloud/entity/%3E+PREFIX+ddt:+%3Chttps://dance.wikibase.cloud/prop/direct/%3E+SELECT+?item+?itemLabel+?location+WHERE+%7B+SERVICE+wikibase:box+%7B+%3Fitem+ddt:P4+?location+.+bd:serviceParam+wikibase:cornerWest+%22Point({lng_min}+{lat_min})%22%5E%5Egeo:wktLiteral+.+bd:serviceParam+wikibase:cornerEast+%22Point({lng_max}+{lat_max})%22%5E%5Egeo:wktLiteral+.+%7D+%3Fitem+ddt:P1+dd:Q20+.+OPTIONAL+%7B+%3Fitem+rdfs:label+?itemLabel+FILTER(LANG(%3FitemLabel)+%3D+%22sv%22)%7D%7D"
+            logger.debug(f"Searching DanceDB for venues near ({lat}, {lng}) within {threshold}km... Query: {debug_url}")
             dancedb_matches = db_client.find_venues_by_coordinates(
-                coords["lat"], coords["lng"], threshold_km=config.COORD_MATCH_THRESHOLD_KM
+                lat, lng, threshold_km=threshold
             )
+            if not dancedb_matches:
+                logger.debug(f"No DanceDB venues found within {threshold}km of ({lat}, {lng})")
             if dancedb_matches:
                 print(f"\nFound {len(dancedb_matches)} DanceDB venue(s) within {config.COORD_MATCH_THRESHOLD_KM}km:")
                 choices = [f"{m['label']} ({m['distance_km']*1000:.0f}m, {m['qid']})" for m in dancedb_matches]
