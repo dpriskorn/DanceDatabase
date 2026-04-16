@@ -1,17 +1,15 @@
 """Unified sync commands for all data sources."""
 
-import json
 import logging
 import sys
-from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Callable
 
 from src.models.dancedb.client import DancedbClient
 from src.models.dancedb.ensure_events import EVENTS_DIR, configure_wbi, fetch_events_from_dancedb
 from src.models.danslogen.artists.scrape import scrape_artists
 from src.models.danslogen.data import DANCEDB_ARTISTS_DIR
+from src.models.pipeline import Pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -51,63 +49,11 @@ def get_current_month_year() -> tuple[str, int]:
     return month_names[today.month - 1], today.year
 
 
-@dataclass
-class SyncStep:
-    name: str
-    func: Callable
-    input_files: list[Path]
-    output_files: list[Path]
-
-    def _has_content(self, f: Path) -> bool:
-        """Check if file exists and has content (not empty)."""
-        if not f.exists():
-            return False
-        if f.suffix == ".json":
-            try:
-                content = f.read_text()
-                if content == "[]" or content == "{}" or content.strip() == "":
-                    return False
-                data = json.loads(content)
-                if isinstance(data, (list, dict)) and len(data) == 0:
-                    return False
-            except json.JSONDecodeError:
-                pass
-        return True
-
-    def needs_run(self, force: bool = False) -> bool:
-        """Check if step needs to run (missing input OR missing output OR empty input)."""
-        if force:
-            return True
-        if not self.input_files:
-            return not all(f.exists() for f in self.output_files) if self.output_files else True
-        if any(not f.exists() for f in self.input_files):
-            return True
-        if any(not self._has_content(f) for f in self.input_files):
-            return True
-        if not self.output_files:
-            return True
-        return any(not f.exists() for f in self.output_files)
-
-    def run(self, force: bool = False) -> None:
-        """Run the step if needed."""
-        print(f"\n[RUN] {self.name}")
-        self.func()
-
-
 def get_data_dir() -> Path:
     """Get the data directory path."""
     import config
 
     return config.data_dir
-
-
-def run_sync_steps(
-    steps: list[SyncStep],
-    only_scrape: bool = False,
-) -> None:
-    """Run a list of sync steps with prerequisite checking."""
-    for step in steps:
-        step.run()
 
 
 def scrape_all(month: str, year: int) -> None:
@@ -160,6 +106,7 @@ def sync_danslogen(
     from src.models.danslogen.events.scrape import scrape_danslogen, upload_events
     from src.models.folketshus.venue import run as scrape_folketshus
     from src.models.wikidata.operations import scrape_wikidata_artists, sync_wikidata_artists
+    from src.models.pipeline import Pipeline
 
     if month is None or year is None:
         month, year = get_current_month_year()
@@ -181,93 +128,79 @@ def sync_danslogen(
     print(f"SYNC DANSLOGEN: {month} {year}")
     print("=" * 50)
 
-    steps = [
-        SyncStep(
-            "0. Fetch DanceDB artists",
-            lambda: fetch_dancedb_artists(date_str=date_str),
-            input_files=[],
-            output_files=[dancedb_artists_file],
+    pipeline = Pipeline(name="danslogen")
+    pipeline.add_step(
+        "0. Fetch DanceDB artists",
+        lambda: fetch_dancedb_artists(date_str=date_str),
+        output_files=[dancedb_artists_file],
+    )
+    pipeline.add_step(
+        "1. Scrape danslogen artists",
+        lambda: scrape_artists(date_str=date_str),
+    )
+    pipeline.add_step(
+        "2. Scrape Wikidata artists",
+        lambda: scrape_wikidata_artists(date_str=date_str),
+        output_files=[wikidata_file],
+    )
+    pipeline.add_step(
+        "3. Sync Wikidata artists",
+        lambda: sync_wikidata_artists(date_str=date_str),
+        input_files=[dancedb_artists_file, wikidata_file],
+    )
+    pipeline.add_step(
+        "4. Scrape danslogen events",
+        lambda: scrape_danslogen(month=month, year=year),
+        output_files=[danslogen_event_file],
+    )
+    pipeline.add_step(
+        "5. Scrape bygdegardarna venues",
+        lambda: scrape_bygdegardarna(date_str=date_str),
+        output_files=[bygdegardarna_file],
+    )
+    pipeline.add_step(
+        "6. Scrape folketshus venues",
+        lambda: scrape_folketshus(date_str=date_str),
+    )
+    pipeline.add_step(
+        "7. Fetch DanceDB venues",
+        lambda: scrape_dancedb_venues(date_str=date_str),
+        output_files=[dancedb_venues_file],
+    )
+    pipeline.add_step(
+        "8. Match venues to DanceDB",
+        lambda: match_venues(date_str=date_str, skip_prompts=True),
+        input_files=[bygdegardarna_file, dancedb_venues_file],
+        output_files=[enriched_file],
+    )
+    pipeline.add_step(
+        "9. Ensure venues exist",
+        lambda: ensure_venues(date_str=date_str),
+        input_files=[danslogen_event_file],
+        output_files=[venues_file],
+    )
+    pipeline.add_step(
+        "10. Ensure artists exist",
+        lambda: ensure_artists(date_str=date_str),
+        input_files=[danslogen_event_file],
+    )
+    pipeline.add_step(
+        "11. Fetch DanceDB events",
+        lambda: fetch_dancedb_events(date_str=date_str),
+        output_files=[dancedb_events_file],
+    )
+    pipeline.add_step(
+        "12. Upload events",
+        lambda: upload_events(
+            input_file=str(danslogen_event_file),
+            date_str=date_str,
+            month=month,
+            limit=limit,
         ),
-        SyncStep(
-            "1. Scrape danslogen artists",
-            lambda: scrape_artists(date_str=date_str),
-            input_files=[],
-            output_files=[],
-        ),
-        SyncStep(
-            "2. Scrape Wikidata artists",
-            lambda: scrape_wikidata_artists(date_str=date_str),
-            input_files=[],
-            output_files=[wikidata_file],
-        ),
-        SyncStep(
-            "3. Sync Wikidata artists",
-            lambda: sync_wikidata_artists(date_str=date_str),
-            input_files=[dancedb_artists_file, wikidata_file],
-            output_files=[],
-        ),
-        SyncStep(
-            "4. Scrape danslogen events",
-            lambda: scrape_danslogen(month=month, year=year),
-            input_files=[],
-            output_files=[danslogen_event_file],
-        ),
-        SyncStep(
-            "5. Scrape bygdegardarna venues",
-            lambda: scrape_bygdegardarna(date_str=date_str),
-            input_files=[],
-            output_files=[bygdegardarna_file],
-        ),
-        SyncStep(
-            "6. Scrape folketshus venues",
-            lambda: scrape_folketshus(date_str=date_str),
-            input_files=[],
-            output_files=[],
-        ),
-        SyncStep(
-            "7. Fetch DanceDB venues",
-            lambda: scrape_dancedb_venues(date_str=date_str),
-            input_files=[],
-            output_files=[dancedb_venues_file],
-        ),
-        SyncStep(
-            "8. Match venues to DanceDB",
-            lambda: match_venues(date_str=date_str, skip_prompts=True),
-            input_files=[bygdegardarna_file, dancedb_venues_file],
-            output_files=[enriched_file],
-        ),
-        SyncStep(
-            "9. Ensure venues exist",
-            lambda: ensure_venues(date_str=date_str),
-            input_files=[danslogen_event_file],
-            output_files=[venues_file],
-        ),
-        SyncStep(
-            "10. Ensure artists exist",
-            lambda: ensure_artists(date_str=date_str),
-            input_files=[danslogen_event_file],
-            output_files=[],
-        ),
-        SyncStep(
-            "11. Fetch DanceDB events",
-            lambda: fetch_dancedb_events(date_str=date_str),
-            input_files=[],
-            output_files=[dancedb_events_file],
-        ),
-        SyncStep(
-            "12. Upload events",
-            lambda: upload_events(
-                input_file=str(danslogen_event_file),
-                date_str=date_str,
-                month=month,
-                limit=limit,
-            ),
-            input_files=[danslogen_event_file, dancedb_events_file],
-            output_files=[],
-        ),
-    ]
+        input_files=[danslogen_event_file, dancedb_events_file],
+    )
 
-    run_sync_steps(steps, only_scrape=only_scrape)
+    pipeline.run(only_scrape=only_scrape)
 
     print("\n" + "=" * 50)
     print("DANSLOGEN SYNC COMPLETE")
@@ -280,6 +213,7 @@ def sync_bygdegardarna(
 ) -> bool:
     """Sync bygdegardarna venues with prerequisite checking."""
     from src.models.dancedb.venue_ops import match_venues, scrape_bygdegardarna, scrape_dancedb_venues
+    from src.models.pipeline import Pipeline
 
     date_str = date.today().strftime("%Y-%m-%d")
     data_dir = get_data_dir()
@@ -292,28 +226,25 @@ def sync_bygdegardarna(
     print("SYNC BYGDEGARDARNA")
     print("=" * 50)
 
-    steps = [
-        SyncStep(
-            "1. Scrape bygdegardarna venues",
-            lambda: scrape_bygdegardarna(date_str=date_str),
-            input_files=[],
-            output_files=[bygdegardarna_file],
-        ),
-        SyncStep(
-            "2. Fetch existing DanceDB venues",
-            lambda: scrape_dancedb_venues(date_str=date_str),
-            input_files=[],
-            output_files=[dancedb_venues_file],
-        ),
-        SyncStep(
-            "3. Match venues to DanceDB",
-            lambda: match_venues(date_str=date_str, skip_prompts=True),
-            input_files=[bygdegardarna_file, dancedb_venues_file],
-            output_files=[enriched_file],
-        ),
-    ]
+    pipeline = Pipeline(name="bygdegardarna")
+    pipeline.add_step(
+        "1. Scrape bygdegardarna venues",
+        lambda: scrape_bygdegardarna(date_str=date_str),
+        output_files=[bygdegardarna_file],
+    )
+    pipeline.add_step(
+        "2. Fetch existing DanceDB venues",
+        lambda: scrape_dancedb_venues(date_str=date_str),
+        output_files=[dancedb_venues_file],
+    )
+    pipeline.add_step(
+        "3. Match venues to DanceDB",
+        lambda: match_venues(date_str=date_str, skip_prompts=True),
+        input_files=[bygdegardarna_file, dancedb_venues_file],
+        output_files=[enriched_file],
+    )
 
-    run_sync_steps(steps, only_scrape=only_scrape)
+    pipeline.run(only_scrape=only_scrape)
 
     print("\n" + "=" * 50)
     print("BYGDEGARDARNA SYNC COMPLETE")
