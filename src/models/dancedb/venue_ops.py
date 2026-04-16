@@ -395,11 +395,15 @@ def ensure_venues(date_str: str | None = None) -> None:
             for addr_key, addr_data in bygdegardarna_addresses.items():
                 if venue_lower in addr_key or addr_key in venue_lower:
                     gmaps_url = addr_data.get("gmaps_url", "")
-                    confirm = questionary.confirm(
-                        f"Match '{venue_name}' to bygdegardarna address '{addr_data.get('address')}'?\n→ {gmaps_url}"
+                    confirm = questionary.rawselect(
+                        f"Match '{venue_name}' to bygdegardarna address '{addr_data.get('address')}'?\n→ {gmaps_url}",
+                        choices=["Yes (Recommended)", "No", "Abort"],
                     ).ask()
-                    if not confirm:
+                    if confirm == "No":
                         continue
+                    elif confirm == "Abort":
+                        print("Aborting...")
+                        sys.exit(0)
                     existing_venues[venue_lower] = {
                         "qid": addr_data.get("qid", ""),
                         "lat": addr_data.get("lat"),
@@ -423,25 +427,26 @@ def ensure_venues(date_str: str | None = None) -> None:
                             city_matches.append((city, city_venue))
                     if city_matches:
                         gmaps_url = city_matches[0][1].get("gmaps_url", "")
-                        confirm = questionary.confirm(
-                            f"Match '{venue_name}' to bygdegardarna city '{city_matches[0][0]}'?\n→ {gmaps_url}"
+                        confirm = questionary.rawselect(
+                            f"Match '{venue_name}' to bygdegardarna city '{city_matches[0][0]}'?\n→ {gmaps_url}",
+                            choices=["Yes (Recommended)", "No", "Abort"],
                         ).ask()
-                        if confirm:
-                            city, city_venue = city_matches[0]
-                            existing_venues[venue_lower] = {
-                                "qid": city_venue.get("qid", ""),
-                                "lat": city_venue.get("lat"),
-                                "lng": city_venue.get("lng"),
-                                "aliases": [],
-                            }
-                            logger.info(f"Matched '{venue_name}' to bygdegardarna city '{city}'")
-                            matched_city = True
-                            matched += 1
-                            
-                            venue_mapping_file = config.data_dir / "dancedb" / "venue_mappings.jsonl"
-                            venue_mapping_file.parent.mkdir(parents=True, exist_ok=True)
-                            with open(venue_mapping_file, "a") as f:
-                                f.write(json.dumps({"venue_name": venue_name, "qid": city_venue.get("qid", ""), "lat": city_venue.get("lat"), "lng": city_venue.get("lng"), "gmaps_url": gmaps_url, "created_at": date_str}) + "\n")
+                        if confirm == "No":
+                            continue
+                        elif confirm == "Abort":
+                            print("Aborting...")
+                            sys.exit(0)
+                        city, city_venue = city_matches[0]
+                        existing_venues[venue_lower] = {
+                            "qid": city_venue.get("qid", ""),
+                            "lat": city_venue.get("lat"),
+                            "lng": city_venue.get("lng"),
+                            "aliases": [],
+                        }
+                        logger.info(f"Matched '{venue_name}' to bygdegardarna city '{city}'")
+                        matched_city = True
+                        matched += 1
+
                 if not matched_city:
                     new_venues.append(venue_name)
         else:
@@ -485,9 +490,15 @@ def ensure_venues(date_str: str | None = None) -> None:
         print(f"Google: {gmaps}")
 
         if folketshus_match:
-            use_coords = questionary.confirm(f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?").ask()
-            if use_coords:
+            use_coords = questionary.rawselect(
+                f"Use folketshus coordinates ({folketshus_match['lat']}, {folketshus_match['lng']})?",
+                choices=["Yes (Recommended)", "No", "Abort"],
+            ).ask()
+            if use_coords == "Yes (Recommended)":
                 coords = {"lat": folketshus_match["lat"], "lng": folketshus_match["lng"]}
+            elif use_coords == "Abort":
+                print("Aborting...")
+                sys.exit(0)
 
         if not folketshus_match or not coords:
             print("Enter coordinates (lat, lng) or press Enter to skip:")
@@ -649,13 +660,19 @@ def onbeat_ensure_venues(date_str: str | None = None, dry_run: bool = False) -> 
             print(f"Google: {gmaps}")
 
         try:
-            confirm = questionary.confirm(f"Create venue '{venue_name}' in DanceDB?", default=True).ask()
+            confirm = questionary.rawselect(
+                f"Create venue '{venue_name}' in DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
+            ).ask()
         except Exception:
             print("Non-interactive mode - skipping creation")
-            confirm = False
+            continue
 
-        if not confirm:
+        if confirm == "No":
             print("Skipping...")
+            continue
+        elif confirm == "Abort":
+            print("Aborting...")
+            sys.exit(0)
             continue
 
         if not coords:

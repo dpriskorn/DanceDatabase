@@ -1,5 +1,6 @@
 import logging
 import re
+import sys
 from datetime import datetime
 from typing import Optional, cast
 
@@ -237,9 +238,15 @@ class CogworkEvent(BaseModel):
         venue_qid = self.map_venue_qid(venue_text)
         if not venue_qid:
             logger.warning(f"Could not map to a venue QID from this text: '{venue_text}' see {self.shop_url}")
-            if questionary.confirm(f"Skip event? Could not map venue: '{venue_text[:50]}...'", default=True).ask():
+            confirm = questionary.rawselect(
+                f"Could not map venue: '{venue_text[:50]}...'", choices=["Skip", "Continue", "Abort"]
+            ).ask()
+            if confirm == "Skip":
                 self.skip = True
                 return
+            elif confirm == "Abort":
+                print("Aborting...")
+                sys.exit(0)
             raise Exception(f"Could not map venue QID from: '{venue_text}'")
         style_text = f"{self.event_metadata['label_sv']} {self.description}"
         if self.event_type == EventType.DANCE:
@@ -255,13 +262,21 @@ class CogworkEvent(BaseModel):
                     if default_style not in style_choices:
                         default_style = style_choices[0] if style_choices else None
                     if default_style:
-                        chosen = questionary.select(f"Select dance style for: '{style_text[:50]}...'", choices=style_choices, default=default_style).ask()
+                        chosen = questionary.select(
+                            f"Select dance style for: '{style_text[:50]}...'", choices=style_choices, default=default_style
+                        ).ask()
                         self.dance_styles_qids.add(self.dance_style_qid_map[chosen])
                         logger.debug(f"User selected dance style: {chosen} ({self.dance_style_qid_map[chosen]})")
                     else:
-                        if questionary.confirm(f"Skip event? Could not map dance style from: '{style_text[:50]}...'", default=True).ask():
+                        confirm = questionary.rawselect(
+                            f"Could not map dance style from: '{style_text[:50]}...'", choices=["Skip", "Continue", "Abort"]
+                        ).ask()
+                        if confirm == "Skip":
                             self.skip = True
                             return
+                        elif confirm == "Abort":
+                            print("Aborting...")
+                            sys.exit(0)
                         raise Exception(f"Could not map dance style QIDs from: '{style_text}'")
         now = datetime.now().replace(microsecond=0).isoformat()
 

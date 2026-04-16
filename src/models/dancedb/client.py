@@ -1,4 +1,5 @@
 import logging
+import sys
 from datetime import datetime
 from typing import Optional
 
@@ -51,8 +52,14 @@ class DancedbClient:
             return None
 
     def create_band(self, band_name: str, spelplan_id: str = "") -> str:
-        if not questionary.confirm(f"Create new band '{band_name}' on DanceDB?", default=True).ask():
+        confirm = questionary.rawselect(
+            f"Create new band '{band_name}' on DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
+        ).ask()
+        if confirm == "No":
             raise Exception(f"User declined to create band: {band_name}")
+        elif confirm == "Abort":
+            print("Aborting...")
+            sys.exit(0)
 
         try:
             new_item = self.wbi.item.new()
@@ -181,8 +188,14 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
 
     def create_venue(self, venue_name: str, latitude: float = 0.0, longitude: float = 0.0, external_ids: dict[str, str] | None = None) -> str:
         """Create a new venue on DanceDB with optional coordinates."""
-        if not questionary.confirm(f"Create new venue '{venue_name}' on DanceDB?", default=True).ask():
+        confirm = questionary.rawselect(
+            f"Create new venue '{venue_name}' on DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
+        ).ask()
+        if confirm == "No":
             raise Exception(f"User declined to create venue: {venue_name}")
+        elif confirm == "Abort":
+            print("Aborting...")
+            sys.exit(0)
 
         try:
             new_item = self.wbi.item.new()
@@ -280,8 +293,14 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
 
         Returns the created event QID or None on failure.
         """
-        if not questionary.confirm(f"Create new event '{label_sv}' on DanceDB?", default=True).ask():
+        confirm = questionary.rawselect(
+            f"Create new event '{label_sv}' on DanceDB?", choices=["Yes (Recommended)", "No", "Abort"]
+        ).ask()
+        if confirm == "No":
             raise Exception(f"User declined to create event: {label_sv}")
+        elif confirm == "Abort":
+            print("Aborting...")
+            sys.exit(0)
 
         try:
             event = self.wbi.item.new()
