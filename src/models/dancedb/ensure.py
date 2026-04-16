@@ -81,23 +81,29 @@ def ensure_venues(date_str: str | None = None) -> None:
                     bygdegardarna_cities[city] = v
             print(f"Loaded {len(bygdegardarna_venues)} bygdegardarna venues ({len(bygdegardarna_cities)} cities) for auto-match")
 
-    folketshus_dir = config.data_dir / "folketshus" / "enriched"
+    folketshus_dir = config.data_dir / "folketshus"
     folketshus_venues = {}
     folketshus_names = []
-    if folketshus_dir.exists():
-        folketshus_files = sorted(folketshus_dir.glob("*.json"), reverse=True)
-        if folketshus_files:
-            folketshus_file = folketshus_files[0]
-            folketshus_data = json.loads(folketshus_file.read_text())
-            for v in folketshus_data:
-                address = v.get("address", "")
-                lat = v.get("lat")
-                lng = v.get("lng")
-                gmaps = GoogleMaps(address=address, lat=lat, lng=lng)
-                v["gmaps_url"] = gmaps.url
-            folketshus_venues = {v["name"].lower(): v for v in folketshus_data}
-            folketshus_names = list(folketshus_venues.keys())
-            print(f"Loaded {len(folketshus_venues)} folketshus venues for auto-match")
+    for subdir in ["enriched", "unmatched"]:
+        subdir_path = folketshus_dir / subdir
+        if subdir_path.exists():
+            folketshus_files = sorted(subdir_path.glob("*.json"), reverse=True)
+            if folketshus_files:
+                folketshus_file = folketshus_files[0]
+                folketshus_data = json.loads(folketshus_file.read_text())
+                for v in folketshus_data:
+                    v["source_dir"] = subdir
+                    address = v.get("address", "")
+                    lat = v.get("lat")
+                    lng = v.get("lng")
+                    gmaps = GoogleMaps(address=address, lat=lat, lng=lng)
+                    v["gmaps_url"] = gmaps.url
+                    name_lower = v["name"].lower()
+                    if name_lower not in folketshus_venues:
+                        folketshus_venues[name_lower] = v
+                print(f"Loaded {len(folketshus_data)} folketshus venues from {subdir}/")
+    folketshus_names = list(folketshus_venues.keys())
+    print(f"Loaded {len(folketshus_venues)} total folketshus venues for auto-match")
 
     from wikibaseintegrator.wbi_helpers import execute_sparql_query
 
