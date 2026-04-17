@@ -1,7 +1,14 @@
-"""Base classes for data sources."""
+"""Base classes for data sources and models."""
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
+
+from pydantic import BaseModel, ConfigDict
+
+
+class DanceBaseModel(BaseModel):
+    """Base model for all DanceDB Pydantic models."""
+    model_config = ConfigDict(extra="forbid")
 
 
 class DataSource(ABC):

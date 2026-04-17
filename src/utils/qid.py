@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from pydantic import ConfigDict
+
+from src.models.base import DanceBaseModel
 
 
-class Qid(BaseModel):
+class Qid(DanceBaseModel):
     """Represents a DanceDB wikibase entity ID with URL generation."""
 
     qid: str
@@ -12,4 +14,4 @@ class Qid(BaseModel):
     def url(self) -> str:
         return f"{self.BASE_URL}/wiki/Item:{self.qid}"
 
-    model_config = {"frozen": True}
+    model_config = ConfigDict(extra="forbid", frozen=True)

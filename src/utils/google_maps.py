@@ -1,8 +1,10 @@
-from pydantic import BaseModel, computed_field
+from pydantic import ConfigDict, computed_field
 from urllib.parse import quote
 
+from src.models.base import DanceBaseModel
 
-class GoogleMaps(BaseModel):
+
+class GoogleMaps(DanceBaseModel):
     """Google Maps URL generator."""
 
     address: str = ""
@@ -21,4 +23,4 @@ class GoogleMaps(BaseModel):
             return f"{self.BASE_URL}{quote(self.address)}"
         return ""
 
-    model_config = {"frozen": True}
+    model_config = ConfigDict(extra="forbid", frozen=True)

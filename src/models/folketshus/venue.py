@@ -9,10 +9,10 @@ from pathlib import Path
 import questionary
 import requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel
 from wikibaseintegrator import WikibaseIntegrator
 
 import config
+from src.models.base import DanceBaseModel
 from src.models.dancedb.client import DancedbClient
 
 
@@ -42,7 +42,7 @@ UNMATCHED_DIR = config.folketshus_unmatched_dir
 ENRICHED_DIR = config.folketshus_enriched_dir
 
 
-class FolketshusVenue(BaseModel):
+class FolketshusVenue(DanceBaseModel):
     name: str
     url: str
     lat: float

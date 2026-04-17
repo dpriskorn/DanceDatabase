@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
 
-from pydantic import BaseModel
+from src.models.base import DanceBaseModel
 
 
-class Organizer(BaseModel):
+class Organizer(DanceBaseModel):
     json_output_folder: Path
 
     # === Export ===

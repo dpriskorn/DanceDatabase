@@ -4,9 +4,10 @@ from pathlib import Path
 from typing import ClassVar, Optional
 
 from bs4 import Tag
-from pydantic import BaseModel, field_validator
+from pydantic import field_validator
 
 import config as root_config
+from src.models.base import DanceBaseModel
 from src.models.exceptions import InvalidRowError
 
 TIME_RANGE_PATTERN = re.compile(r"^\d{1,2}[:\.]\d{2}-\d{1,2}[:\.]\d{2}$")
@@ -47,7 +48,7 @@ def _load_static_data() -> None:
         URBAN_AREAS.update({item["label"]: item["qid"] for item in urban_areas_list})
 
 
-class DanslogenTableRow(BaseModel):
+class DanslogenTableRow(DanceBaseModel):
     weekday: str
     day: str
     time: str = ""

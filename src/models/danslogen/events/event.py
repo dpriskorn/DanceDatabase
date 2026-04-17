@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from src.models.base import DanceBaseModel
 
 
-class DanslogenEvent(BaseModel):
+class DanslogenEvent(DanceBaseModel):
     organizer_qid: str = ""

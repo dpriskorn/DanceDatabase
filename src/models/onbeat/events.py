@@ -5,18 +5,19 @@ from typing import List, Optional
 
 import requests
 from bs4 import BeautifulSoup, Tag
-from pydantic import AnyUrl, BaseModel, Field
+from pydantic import AnyUrl, ConfigDict, Field
 
 import config
 from config import CET
 from src.models._utils.datetime_utils import parse_datetime_with_range, parse_iso_datetime
+from src.models.base import DanceBaseModel
 from src.models.export.dance_event import DanceDatabaseIdentifiers, DanceEvent, EventLinks, Identifiers, Organizer, Registration
 from src.models.onbeat.venue_resolver import VenueResolver
 
 logger = logging.getLogger(__name__)
 
 
-class OnbeatApiEvent(BaseModel):
+class OnbeatApiEvent(DanceBaseModel):
     id: str
     name: str
     place: str
@@ -28,7 +29,7 @@ class OnbeatApiEvent(BaseModel):
     club_image: Optional[str] = None
 
 
-class OnbeatEvents(BaseModel):
+class OnbeatEvents(DanceBaseModel):
     """
     Parses Onbeat club pages to extract courses and social dance events.
     """
@@ -71,7 +72,7 @@ class OnbeatEvents(BaseModel):
     start_time: str = ""
     end_time: str = ""
     registration_open: bool = False
-    model_config = {"arbitrary_types_allowed": True}  # <-- allow BeautifulSoup and Tag
+    model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
     def _get_venue_resolver(self) -> VenueResolver:
         """Get or create VenueResolver instance."""

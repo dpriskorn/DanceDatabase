@@ -2,14 +2,15 @@ import logging
 from typing import List, Optional
 
 from bs4 import Tag
-from pydantic import BaseModel, Field
+from pydantic import Field
 
+from src.models.base import DanceBaseModel
 from src.models.export.dance_event import DanceEvent
 
 logger = logging.getLogger(__name__)
 
 
-class OnbeatCommunity(BaseModel):
+class OnbeatCommunity(DanceBaseModel):
     """Represents a community and its related events scraped from Onbeat."""
 
     title: str = ""

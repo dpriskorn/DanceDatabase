@@ -4,19 +4,21 @@ import logging
 from pathlib import Path
 from typing import Any, Callable
 
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, Field
+
+from src.models.base import DanceBaseModel
 
 logger = logging.getLogger(__name__)
 
 
-class PipelineStep(BaseModel):
+class PipelineStep(DanceBaseModel):
     """A single step in a data pipeline."""
 
     name: str
     func: Callable
     input_files: list[Path] = Field(default_factory=list)
     output_files: list[Path] = Field(default_factory=list)
-    model_config = {"arbitrary_types_allowed": True}
+    model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
     def _has_content(self, f: Path) -> bool:
         """Check if file exists and has content (not empty)."""
@@ -54,12 +56,12 @@ class PipelineStep(BaseModel):
         self.func()
 
 
-class Pipeline(BaseModel):
+class Pipeline(DanceBaseModel):
     """A pipeline that runs multiple steps in sequence."""
 
     name: str
     steps: list[PipelineStep] = Field(default_factory=list)
-    model_config = {"arbitrary_types_allowed": True}
+    model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
     def add_step(
         self,

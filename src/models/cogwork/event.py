@@ -7,10 +7,11 @@ from typing import Optional, cast
 import questionary
 import requests
 from bs4 import BeautifulSoup
-from pydantic import AnyUrl, BaseModel, Field
+from pydantic import AnyUrl, Field
 
 from config import CET
 from src.models._utils.dance_styles import DANCE_STYLE_MAP, get_style_qid
+from src.models.base import DanceBaseModel
 from src.models.cogwork.enums import EventType
 from src.models.cogwork.price import PriceExtractor, PriceMismatchError
 from src.models.export.dance_event import DanceDatabaseIdentifiers, DanceEvent, EventLinks, Identifiers, Organizer, Registration
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 FULL_MAPPING = ["FULLT", "FULLBOKAD"]
 
 
-class CogworkEvent(BaseModel):
+class CogworkEvent(DanceBaseModel):
     """This class maps between an event in CogWork and DanceDatabase"""
 
     organizer_slug: str = Field(description="Organizer in Cogwork, e.g. 'dansgladje'")

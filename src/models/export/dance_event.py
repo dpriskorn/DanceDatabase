@@ -1,16 +1,18 @@
 from datetime import datetime
 
-from pydantic import AnyUrl, BaseModel, ConfigDict, Field, condecimal
+from pydantic import AnyUrl, ConfigDict, Field, condecimal
+
+from src.models.base import DanceBaseModel
 
 # TODO adapt this to schema.org?
 
 
-class Organizer(BaseModel):
+class Organizer(DanceBaseModel):
     description: str = ""
     official_website: str = ""
 
 
-class EventItem(BaseModel):
+class EventItem(DanceBaseModel):
     """Represents a single scheduled item like a course, workshop, or social dance.
     Times are in CEST/CET"""
 
@@ -19,20 +21,20 @@ class EventItem(BaseModel):
     end_time: datetime
 
 
-class ScheduleDay(BaseModel):
+class ScheduleDay(DanceBaseModel):
     """Represents the schedule for a single day."""
 
     date: datetime
     items: list[EventItem] = []
 
 
-class Schedule(BaseModel):
+class Schedule(DanceBaseModel):
     """Represents the full schedule for the event."""
 
     days: list[ScheduleDay] = []
 
 
-class WikidataIdentifiers(BaseModel):
+class WikidataIdentifiers(DanceBaseModel):
     """Wikidata does not have compatible items and properties for everything in our model"""
 
     dance_style: str = Field("", description="Wikidata QID for dance type (e.g. Q1057898)")
@@ -40,7 +42,7 @@ class WikidataIdentifiers(BaseModel):
     event_series: str = Field("", description="Wikidata QID for event series")
 
 
-class DanceDatabaseIdentifiers(BaseModel):
+class DanceDatabaseIdentifiers(DanceBaseModel):
     """DanceDatabase should have identifiers for everything in our model, but might not"""
 
     event: str = Field("", description="DanceDatabase QID for the event")
@@ -52,13 +54,12 @@ class DanceDatabaseIdentifiers(BaseModel):
     artist: str = Field("", description="DanceDatabase QID for the artist/band")
 
 
-# noinspection PyArgumentList
-class Identifiers(BaseModel):
+class Identifiers(DanceBaseModel):
     wikidata: WikidataIdentifiers = WikidataIdentifiers()
     dancedatabase: DanceDatabaseIdentifiers = DanceDatabaseIdentifiers()
 
 
-class EventLinks(BaseModel):
+class EventLinks(DanceBaseModel):
     facebook: AnyUrl | None = Field(default=None, description="URL to the event's Facebook page")
     official_website: AnyUrl | None = Field(default=None, description="URL to the official event website")
     registration_website: AnyUrl | None = Field(default=None, description="URL to the registration page for the event")
@@ -68,7 +69,7 @@ class EventLinks(BaseModel):
     sources: list[AnyUrl] = Field(default_factory=list, description="List of URLs to the source of this event information")
 
 
-class Registration(BaseModel):
+class Registration(DanceBaseModel):
     cancelled: bool = Field(False, description="Whether the event was cancelled at scrape time")
     fully_booked: bool = Field(False, description="Whether it was fully booked at scrape time")
     registration_opens: datetime | None = Field(None, description="When registration opens")
@@ -77,11 +78,9 @@ class Registration(BaseModel):
     registration_open: bool = Field(False, description="Whether registration was open at scrape time")
 
 
-class DanceEvent(BaseModel):
+class DanceEvent(DanceBaseModel):
     """Structured representation of a dance event.
     Times are in CEST/CET"""
-
-    model_config = ConfigDict(extra="forbid")
 
     id: str = Field(..., description="Unique identifier for the event")
     # source: str = Field(default_factory=str, description="Source for event")

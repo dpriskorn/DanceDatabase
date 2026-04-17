@@ -1,10 +1,12 @@
 from typing import Optional
 
 from bs4 import Tag
-from pydantic import BaseModel, field_validator
+from pydantic import field_validator
+
+from src.models.base import DanceBaseModel
 
 
-class DanslogenArtistRow(BaseModel):
+class DanslogenArtistRow(DanceBaseModel):
     name: str
     website: str = ""
     facebook: str = ""
