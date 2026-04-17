@@ -31,8 +31,8 @@ def _load_existing_events(date_str: str) -> dict[str, dict]:
         events_files = sorted((config.dancedb_dir / "events").glob("*.json"), reverse=True)
         if events_files:
             raise MissingEventsFileError(
-                f"No events file for {date_str}. Run 'scrape-dancedb-events -d {date_str}' first, "
-                f"or use latest: scrape-dancedb-events"
+                f"No events file for {date_str}. Run 'scrape-dancedb-events' first, "
+                "then retry upload."
             )
         raise MissingEventsFileError(
             f"No DanceDB events file found. Run 'scrape-dancedb-events' first."
