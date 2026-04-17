@@ -310,6 +310,26 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             logger.error(f"Error setting property on '{qid}': {e}")
             return False
 
+    def set_coordinates(self, qid: str, latitude: float, longitude: float) -> bool:
+        """Set P4 (coordinates) on an existing venue. Returns True on success."""
+        try:
+            item = self.wbi.item.get(qid)
+            item.claims.add(
+                datatypes.GlobeCoordinate(
+                    prop_nr=config.DANCE_PROP_COORDINATES,
+                    latitude=latitude,
+                    longitude=longitude,
+                    precision=0.0001,
+                    globe="http://www.wikidata.org/entity/Q2"
+                )
+            )
+            item.write(login=self.wbi.login)
+            logger.info(f"Set coordinates ({latitude}, {longitude}) on {qid}")
+            return True
+        except Exception as e:
+            logger.error(f"Error setting coordinates on '{qid}': {e}")
+            return False
+
     def set_artist_spelplan(self, qid: str, spelplan_id: str) -> bool:
         """Set P46 (spelplan ID) on existing artist item. Returns True on success."""
         try:

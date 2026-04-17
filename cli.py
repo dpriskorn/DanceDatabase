@@ -47,6 +47,7 @@ COMMANDS = {
         ("find-duplicate-venues", "Find venues within 100m of each other"),
         ("find-venues-without-coordinates", "List venues without coordinates as URLs"),
         ("check-dancedb", "Check DanceDB: duplicates and venues without coordinates"),
+        ("ensure-venue-coordinates", "Ensure all venues have coordinates"),
         ("merge-duplicate-venues", "Merge duplicate venues (close + similar names)"),
     ],
     "SYNC (FULL WORKFLOWS)": [

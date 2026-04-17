@@ -65,6 +65,9 @@ def add_sync_subparsers(sub) -> dict:
     p = sub.add_parser("check-dancedb", help="Check DanceDB: duplicates and venues without coordinates")
     handlers["check-dancedb"] = _check_dancedb
 
+    p = sub.add_parser("ensure-venue-coordinates", help="Ensure all venues have coordinates")
+    handlers["ensure-venue-coordinates"] = _ensure_venue_coordinates
+
     p = sub.add_parser("merge-duplicate-venues", help="Merge duplicate venues (close + similar names)")
     p.add_argument("-t", "--threshold", type=float, default=0.1, help="Distance threshold in km (default: 0.1 = 100m)")
     p.add_argument("--fuzzy", type=float, default=90, help="Fuzzy match threshold for label similarity (default: 90)")
@@ -316,6 +319,115 @@ def _check_dancedb(args) -> None:
             print(f"    {base_url}{v2['qid']}")
         if len(duplicates) > 10:
             print(f"  ... and {len(duplicates) - 10} more")
+
+
+def _ensure_venue_coordinates(args) -> None:
+    from src.models.dancedb.client import DancedbClient
+    from src.utils.geodb import ensure_db, get_ship_coordinates
+    from src.utils.fuzzy import normalize_for_fuzzy
+    from src.utils.google_maps import GoogleMaps
+    from rapidfuzz import fuzz
+    import questionary
+
+    print("\n=== Ensuring venue coordinates ===\n")
+
+    client = DancedbClient()
+    venues = client.fetch_venues_from_dancedb()
+
+    venues_without_coords = [v for v in venues if not v.get("p4")]
+    print(f"Found {len(venues_without_coords)} venues without coordinates\n")
+
+    if not venues_without_coords:
+        print("All venues already have coordinates!")
+        return
+
+    conn = ensure_db()
+    cursor = conn.execute("SELECT name, source, lat, lng FROM venues WHERE lat IS NOT NULL AND lng IS NOT NULL")
+    geodb_venues = {row["name"].lower(): row for row in cursor}
+    conn.close()
+
+    updated_count = 0
+    skipped_count = 0
+
+    for i, venue in enumerate(venues_without_coords, 1):
+        qid = venue["qid"]
+        label = venue.get("label", "Unknown")
+        print(f"{i}. {label} ({qid})")
+
+        normalized_label = normalize_for_fuzzy(label.lower(), [])
+        best_match = None
+        best_score = 0
+
+        for geodb_name, geodb_row in geodb_venues.items():
+            normalized_geodb = normalize_for_fuzzy(geodb_name, [])
+            score = fuzz.ratio(normalized_label, normalized_geodb)
+            if score >= 80 and score > best_score:
+                best_match = geodb_row
+                best_score = score
+
+        ship_coords = get_ship_coordinates(label)
+
+        if best_match:
+            print(f"   geodb: {best_match['name']} ({best_match['source']}, {best_match['lat']:.3f}, {best_match['lng']:.3f}) [Y]es/[S]kip/[A]bort: ", end="")
+            choice = questionary.select(
+                "Choose action",
+                choices=["Yes", "Skip", "Abort"]
+            ).ask()
+            if choice == "Yes":
+                if client.set_coordinates(qid, best_match["lat"], best_match["lng"]):
+                    print(f"   ✓ Updated {qid}")
+                    updated_count += 1
+                else:
+                    print(f"   ✗ Failed to update {qid}")
+                    skipped_count += 1
+            elif choice == "Skip":
+                skipped_count += 1
+            else:
+                print("Aborted.")
+                return
+        elif ship_coords:
+            print(f"   ship: {ship_coords['lat']:.3f}, {ship_coords['lng']:.3f} [Y]es/[S]kip/[A]bort: ", end="")
+            choice = questionary.select(
+                "Choose action",
+                choices=["Yes", "Skip", "Abort"]
+            ).ask()
+            if choice == "Yes":
+                if client.set_coordinates(qid, ship_coords["lat"], ship_coords["lng"]):
+                    print(f"   ✓ Updated {qid}")
+                    updated_count += 1
+                else:
+                    print(f"   ✗ Failed to update {qid}")
+                    skipped_count += 1
+            elif choice == "Skip":
+                skipped_count += 1
+            else:
+                print("Aborted.")
+                return
+        else:
+            gmaps_url = GoogleMaps(address=label).url
+            print("   No match in geodb or ship patterns")
+            print(f"   Google Maps: {gmaps_url}")
+            coords_input = questionary.text(
+                "Enter coords (lat,lng) or press Enter to skip",
+            ).ask()
+            if coords_input and "," in coords_input:
+                try:
+                    lat_str, lng_str = coords_input.split(",")
+                    lat, lng = float(lat_str.strip()), float(lng_str.strip())
+                    if client.set_coordinates(qid, lat, lng):
+                        print(f"   ✓ Updated {qid}")
+                        updated_count += 1
+                    else:
+                        print(f"   ✗ Failed to update {qid}")
+                        skipped_count += 1
+                except ValueError:
+                    print("   Invalid coordinates, skipping")
+                    skipped_count += 1
+            else:
+                skipped_count += 1
+        print()
+
+    print(f"Summary: {len(venues_without_coords)} checked, {updated_count} updated, {skipped_count} skipped")
 
 
 def _merge_duplicate_venues(args) -> None:
