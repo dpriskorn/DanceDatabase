@@ -23,13 +23,7 @@ def _load_existing_events(date_str: str) -> dict[str, dict]:
     """Load existing events from DanceDB for deduplication."""
     events_file = config.dancedb_dir / "events" / f"{date_str}.json"
     if not events_file.exists():
-        events_files = sorted((config.dancedb_dir / "events").glob("*.json"), reverse=True)
-        events_file = events_files[0] if events_files else None
-        if events_file:
-            print(f"Using latest events file: {events_file.name}")
-
-    if not events_file or not events_file.exists():
-        print(f"Warning: No existing events file found")
+        print(f"Warning: No existing events file at {events_file}")
         return {}
 
     existing_events = json.loads(events_file.read_text())
