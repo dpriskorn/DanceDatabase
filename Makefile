@@ -1,4 +1,4 @@
-.PHONY: lint test coverage clean
+.PHONY: lint test coverage clean check
 
 lint:
 	poetry run ruff check .
@@ -11,3 +11,6 @@ test:
 coverage:
 	coverage run -m pytest
 	coverage report --include="src/**"
+
+check:
+	poetry run python cli.py check-dancedb

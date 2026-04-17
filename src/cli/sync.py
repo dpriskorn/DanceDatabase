@@ -59,6 +59,12 @@ def add_sync_subparsers(sub) -> dict:
     p.add_argument("-t", "--threshold", type=float, default=0.1, help="Distance threshold in km (default: 0.1 = 100m)")
     handlers["find-duplicate-venues"] = _find_duplicate_venues
 
+    p = sub.add_parser("find-venues-without-coordinates", help="List venues without coordinates as URLs")
+    handlers["find-venues-without-coordinates"] = _find_venues_without_coordinates
+
+    p = sub.add_parser("check-dancedb", help="Check DanceDB: duplicates and venues without coordinates")
+    handlers["check-dancedb"] = _check_dancedb
+
     p = sub.add_parser("merge-duplicate-venues", help="Merge duplicate venues (close + similar names)")
     p.add_argument("-t", "--threshold", type=float, default=0.1, help="Distance threshold in km (default: 0.1 = 100m)")
     p.add_argument("--fuzzy", type=float, default=90, help="Fuzzy match threshold for label similarity (default: 90)")
@@ -241,6 +247,75 @@ def _find_duplicate_venues(args) -> None:
         print(f"   {url1}")
         print(f"   {url2}")
         print()
+
+
+def _find_venues_without_coordinates(args) -> None:
+    from src.models.dancedb.client import DancedbClient
+
+    print("\n=== Finding venues without coordinates ===")
+
+    client = DancedbClient()
+    venues = client.fetch_venues_from_dancedb()
+
+    base_url = "https://dance.wikibase.cloud/wiki/Item:"
+    venues_without_coords = [v for v in venues if not v.get("p4")]
+
+    print(f"\nFound {len(venues_without_coords)} venues without coordinates:\n")
+    for v in venues_without_coords:
+        print(f"{base_url}{v['qid']}")
+
+    print(f"\nTotal: {len(venues_without_coords)} venues without coordinates")
+
+
+def _check_dancedb(args) -> None:
+    from src.models.dancedb.client import DancedbClient
+    from src.utils.distance import haversine_distance
+    import config
+
+    print("\n=== Checking DanceDB ===\n")
+
+    client = DancedbClient()
+    venues = client.fetch_venues_from_dancedb()
+
+    base_url = "https://dance.wikibase.cloud/wiki/Item:"
+    venues_without_coords = [v for v in venues if not v.get("p4")]
+    print(f"Venues without coordinates: {len(venues_without_coords)}")
+    if venues_without_coords:
+        for v in venues_without_coords:
+            print(f"  {base_url}{v['qid']}")
+
+    venues_with_coords = []
+    seen_qids = set()
+    for v in venues:
+        if v["qid"] in seen_qids:
+            continue
+        p4 = v.get("p4", "")
+        if p4:
+            try:
+                coords = p4.replace("Point(", "").replace(")", "").split(" ")
+                lng, lat = float(coords[0]), float(coords[1])
+                venues_with_coords.append({"qid": v["qid"], "label": v["label"], "lat": lat, "lng": lng})
+                seen_qids.add(v["qid"])
+            except Exception:
+                continue
+
+    threshold_km = 0.1
+    duplicates = []
+    for i, v1 in enumerate(venues_with_coords):
+        for v2 in venues_with_coords[i+1:]:
+            dist = haversine_distance(v1["lat"], v1["lng"], v2["lat"], v2["lng"])
+            if dist <= threshold_km:
+                duplicates.append({"v1": v1, "v2": v2, "distance_km": dist})
+
+    print(f"\nDuplicate venues (within {threshold_km*1000:.0f}m): {len(duplicates)}")
+    if duplicates:
+        for dup in duplicates[:10]:
+            v1, v2 = dup["v1"], dup["v2"]
+            print(f"  {v1['label']} ({v1['qid']}) <-> {v2['label']} ({v2['qid']})")
+            print(f"    {base_url}{v1['qid']}")
+            print(f"    {base_url}{v2['qid']}")
+        if len(duplicates) > 10:
+            print(f"  ... and {len(duplicates) - 10} more")
 
 
 def _merge_duplicate_venues(args) -> None:
