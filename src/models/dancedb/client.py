@@ -140,6 +140,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 SELECT ?item ?label ?altLabel ?p4 WHERE {
     ?item ddt:P1 dd:Q20 .
+    MINUS { ?item ddt:P1 dd:Q816 }
     OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
     OPTIONAL { ?item skos:altLabel ?altLabel FILTER(LANG(?altLabel) = "sv") }
     OPTIONAL { ?item ddt:P4 ?p4 }
@@ -173,6 +174,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?item ?label ?p4 ?p3 ?p42 ?p44 ?p46 ?p12 WHERE {
     ?item ddt:P1 dd:Q20 .
+    MINUS { ?item ddt:P1 dd:Q816 }
     ?item ddt:P4 ?p4 .
     OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
     OPTIONAL { ?item ddt:P3 ?p3 }
