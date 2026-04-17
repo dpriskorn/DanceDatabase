@@ -1,6 +1,5 @@
 import json
 import logging
-import math
 import sys
 import urllib.parse
 from datetime import date
@@ -14,6 +13,7 @@ from wikibaseintegrator import WikibaseIntegrator
 import config
 from src.models.base import DanceBaseModel
 from src.models.dancedb.client import DancedbClient
+from src.utils.distance import haversine_distance
 
 
 def require_tty():
@@ -67,15 +67,7 @@ def extract_external_id(url: str) -> str:
         return ""
 
 
-def haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
-    """Calculate distance between two points in km."""
-    R = 6371
-    phi1, phi2 = math.radians(lat1), math.radians(lat2)
-    dphi = math.radians(lat2 - lat1)
-    dlambda = math.radians(lng2 - lng1)
-    a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    return R * c
+
 
 
 from src.utils.fuzzy import is_false_fuzzy_match, normalize_for_fuzzy
