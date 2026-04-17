@@ -311,19 +311,39 @@ def _list_venues_with_too_little_information(args) -> None:
 def _check_dancedb(args) -> None:
     from src.models.dancedb.client import DancedbClient
     from src.utils.distance import haversine_distance
-    import config
 
     print("\n=== Checking DanceDB ===\n")
 
     client = DancedbClient()
-    venues = client.fetch_venues_from_dancedb()
+    venues = client.fetch_venues_with_external_ids()
 
     base_url = "https://dance.wikibase.cloud/wiki/Item:"
     venues_without_coords = [v for v in venues if not v.get("p4")]
     print(f"Venues without coordinates: {len(venues_without_coords)}")
     if venues_without_coords:
-        for v in venues_without_coords:
+        for v in venues_without_coords[:10]:
             print(f"  {base_url}{v['qid']}")
+        if len(venues_without_coords) > 10:
+            print(f"  ... and {len(venues_without_coords) - 10} more")
+
+    venues_with_little_info = []
+    for v in venues:
+        has_external_info = any([
+            v.get("p3"),
+            v.get("p42"),
+            v.get("p44"),
+            v.get("p46"),
+            v.get("p12"),
+        ])
+        if not has_external_info:
+            venues_with_little_info.append(v)
+
+    print(f"\nVenues with too little information: {len(venues_with_little_info)}")
+    if venues_with_little_info:
+        for v in venues_with_little_info[:10]:
+            print(f"  {v['label']} ({v['qid']})")
+        if len(venues_with_little_info) > 10:
+            print(f"  ... and {len(venues_with_little_info) - 10} more")
 
     venues_with_coords = []
     seen_qids = set()
