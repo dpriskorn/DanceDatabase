@@ -19,12 +19,24 @@ from src.models.export.dance_event import DanceEvent
 logger = logging.getLogger(__name__)
 
 
+class MissingEventsFileError(Exception):
+    """Raised when no DanceDB events file is found."""
+    pass
+
+
 def _load_existing_events(date_str: str) -> dict[str, dict]:
     """Load existing events from DanceDB for deduplication."""
     events_file = config.dancedb_dir / "events" / f"{date_str}.json"
     if not events_file.exists():
-        print(f"Warning: No existing events file at {events_file}")
-        return {}
+        events_files = sorted((config.dancedb_dir / "events").glob("*.json"), reverse=True)
+        if events_files:
+            raise MissingEventsFileError(
+                f"No events file for {date_str}. Run 'scrape-dancedb-events -d {date_str}' first, "
+                f"or use latest: scrape-dancedb-events"
+            )
+        raise MissingEventsFileError(
+            f"No DanceDB events file found. Run 'scrape-dancedb-events' first."
+        )
 
     existing_events = json.loads(events_file.read_text())
     print(f"Loaded {len(existing_events)} existing events from {events_file.name}")
@@ -235,7 +247,11 @@ def upload_events(
         print("No events to upload.")
         return
 
-    existing_lookup = _load_existing_events(date_str)
+    try:
+        existing_lookup = _load_existing_events(date_str)
+    except MissingEventsFileError as e:
+        print(str(e))
+        return
     artists_lookup = _load_artists_lookup(date_str)
     venues_lookup = _load_venues_lookup(date_str)
     venue_mappings = _load_venue_mappings()
