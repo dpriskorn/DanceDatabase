@@ -1,4 +1,20 @@
-.PHONY: lint test coverage clean check cli-help cli-commands sync-all sync-danslogen sync-bygdegardarna sync-onbeat sync-cogwork sync-folketshus
+.PHONY: help lint test coverage clean check cli-help cli-commands sync-all sync-danslogen sync-bygdegardarna sync-onbeat sync-cogwork sync-folketshus
+
+help:
+	@echo "Available targets:"
+	@echo "  lint             - Run ruff, black, isort"
+	@echo "  test             - Run pytest"
+	@echo "  coverage        - Run tests with coverage"
+	@echo "  clean            - Remove cache files"
+	@echo "  check            - Check DanceDB connection"
+	@echo "  cli-help         - Show CLI help"
+	@echo "  cli-commands    - List CLI commands"
+	@echo "  sync-all         - Run full sync workflow"
+	@echo "  sync-danslogen   - Sync danslogen events"
+	@echo "  sync-bygdegardarna - Sync bygdegardarna venues"
+	@echo "  sync-onbeat      - Sync onbeat events"
+	@echo "  sync-cogwork    - Sync cogwork events"
+	@echo "  sync-folketshus - Sync folketshus venues"
 
 lint:
 	poetry run ruff check .
