@@ -13,6 +13,11 @@ from wikibaseintegrator.wbi_login import Login
 
 import config
 
+DUPLICATE_CHECK_FILTER = " || ".join([
+    f"EXISTS {{ ?item ddt:{getattr(config, prop)} ?v }}"
+    for prop in config.DUPLICATE_CHECK_PROPERTIES
+])
+
 wbi_config["MEDIAWIKI_API_URL"] = "https://dance.wikibase.cloud/w/api.php"
 wbi_config["SPARQL_ENDPOINT_URL"] = "https://dance.wikibase.cloud/query/sparql"
 wbi_config["WIKIBASE_URL"] = "https://dance.wikibase.cloud"
@@ -140,10 +145,10 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 SELECT ?item ?label ?altLabel ?p4 WHERE {
     ?item ddt:P1 dd:Q20 .
-    MINUS { ?item ddt:P1 dd:Q816 }
     OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
     OPTIONAL { ?item skos:altLabel ?altLabel FILTER(LANG(?altLabel) = "sv") }
     OPTIONAL { ?item ddt:P4 ?p4 }
+    FILTER (""" + DUPLICATE_CHECK_FILTER + """)
 }
 """
         try:
@@ -174,7 +179,6 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?item ?label ?p4 ?p3 ?p42 ?p44 ?p46 ?p12 WHERE {
     ?item ddt:P1 dd:Q20 .
-    MINUS { ?item ddt:P1 dd:Q816 }
     ?item ddt:P4 ?p4 .
     OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
     OPTIONAL { ?item ddt:P3 ?p3 }
@@ -182,6 +186,7 @@ SELECT ?item ?label ?p4 ?p3 ?p42 ?p44 ?p46 ?p12 WHERE {
     OPTIONAL { ?item ddt:P44 ?p44 }
     OPTIONAL { ?item ddt:P46 ?p46 }
     OPTIONAL { ?item ddt:P12 ?p12 }
+    FILTER (""" + DUPLICATE_CHECK_FILTER + """)
 }
 """
         try:
