@@ -160,6 +160,56 @@ SELECT ?item ?label ?altLabel ?p4 WHERE {
             logger.error(f"Error fetching venues: {e}")
             return []
 
+    def fetch_venues_with_external_ids(self) -> list[dict]:
+        """Fetch all venue items from DanceDB with external IDs and website.
+
+        Returns list of {qid, label, p4, p3, p42, p44, p46, p12}.
+        Only returns venues that have P4 (coordinates).
+        """
+        sparql = """
+PREFIX dd: <https://dance.wikibase.cloud/entity/>
+PREFIX ddt: <https://dance.wikibase.cloud/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?item ?label ?p4 ?p3 ?p42 ?p44 ?p46 ?p12 WHERE {
+    ?item ddt:P1 dd:Q20 .
+    ?item ddt:P4 ?p4 .
+    OPTIONAL { ?item rdfs:label ?label FILTER(LANG(?label) = "sv") }
+    OPTIONAL { ?item ddt:P3 ?p3 }
+    OPTIONAL { ?item ddt:P42 ?p42 }
+    OPTIONAL { ?item ddt:P44 ?p44 }
+    OPTIONAL { ?item ddt:P46 ?p46 }
+    OPTIONAL { ?item ddt:P12 ?p12 }
+}
+"""
+        try:
+            results = execute_sparql_query(sparql)
+            venues = []
+            for row in results.get("results", {}).get("bindings", []):
+                qid = row["item"]["value"].rsplit("/", 1)[-1]
+                label = row.get("label", {}).get("value", "")
+                p4 = row.get("p4", {}).get("value", "")
+                p3 = row.get("p3", {}).get("value", "")
+                p42 = row.get("p42", {}).get("value", "")
+                p44 = row.get("p44", {}).get("value", "")
+                p46 = row.get("p46", {}).get("value", "")
+                p12 = row.get("p12", {}).get("value", "")
+                venues.append({
+                    "qid": qid,
+                    "label": label,
+                    "p4": p4,
+                    "p3": p3,
+                    "p42": p42,
+                    "p44": p44,
+                    "p46": p46,
+                    "p12": p12,
+                })
+            logger.info(f"Fetched {len(venues)} venues with coordinates from DanceDB")
+            return venues
+        except Exception as e:
+            logger.error(f"Error fetching venues with external IDs: {e}")
+            return []
+
     def search_venue(self, venue_name: str) -> Optional[str]:
         """Search for venue by exact label match."""
         sparql = f"""

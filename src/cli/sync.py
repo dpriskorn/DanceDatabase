@@ -62,6 +62,9 @@ def add_sync_subparsers(sub) -> dict:
     p = sub.add_parser("find-venues-without-coordinates", help="List venues without coordinates as URLs")
     handlers["find-venues-without-coordinates"] = _find_venues_without_coordinates
 
+    p = sub.add_parser("list-venues-with-too-little-information", help="List venues with P1+P4 but missing external IDs/website")
+    handlers["list-venues-with-too-little-information"] = _list_venues_with_too_little_information
+    
     p = sub.add_parser("check-dancedb", help="Check DanceDB: duplicates and venues without coordinates")
     handlers["check-dancedb"] = _check_dancedb
 
@@ -268,6 +271,41 @@ def _find_venues_without_coordinates(args) -> None:
         print(f"{base_url}{v['qid']}")
 
     print(f"\nTotal: {len(venues_without_coords)} venues without coordinates")
+
+
+def _list_venues_with_too_little_information(args) -> None:
+    from src.models.dancedb.client import DancedbClient
+
+    print("\n=== Listing venues with too little information ===")
+    print("Criteria: has P1=Q20 (venue) + P4 (coordinates) but missing ALL of P3/P42/P44/P46/P12\n")
+
+    client = DancedbClient()
+    venues = client.fetch_venues_with_external_ids()
+
+    base_url = "https://dance.wikibase.cloud/wiki/Item:"
+
+    results = []
+    for v in venues:
+        has_external_info = any([
+            v.get("p3"),
+            v.get("p42"),
+            v.get("p44"),
+            v.get("p46"),
+            v.get("p12"),
+        ])
+
+        if not has_external_info:
+            results.append({
+                "qid": v["qid"],
+                "label": v["label"],
+            })
+
+    print(f"Found {len(results)} venues with coordinates but missing ALL external IDs/website:\n")
+    for v in results:
+        print(f"{v['label']} ({v['qid']})")
+        print(f"  {base_url}{v['qid']}")
+
+    print(f"\nTotal: {len(results)} venues with too little information")
 
 
 def _check_dancedb(args) -> None:
